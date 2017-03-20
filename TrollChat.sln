@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.BusinessLogic.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.DataAccess", "TrollChat.DataAccess\TrollChat.DataAccess.csproj", "{B514D9D6-3633-42C9-873A-780F5508BA50}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.BusinessLogic", "TrollChat.BusinessLogic\TrollChat.BusinessLogic.csproj", "{ECEBB164-257D-40E8-8E0C-F1E35769582A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B514D9D6-3633-42C9-873A-780F5508BA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B514D9D6-3633-42C9-873A-780F5508BA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B514D9D6-3633-42C9-873A-780F5508BA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
