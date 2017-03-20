@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.Web", "ITM.Chat\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.Web", "TrollChat.Web\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.BusinessLogic.Tests", "TrollChat.BusinessLogic.Tests\TrollChat.BusinessLogic.Tests.csproj", "{DFD35241-AC96-4C32-86E5-7E8E8693209B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{338B825B-2625-4436-BBCB-639CA72E33EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{338B825B-2625-4436-BBCB-639CA72E33EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{338B825B-2625-4436-BBCB-639CA72E33EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
