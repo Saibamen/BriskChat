@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITM.Chat", "ITM.Chat\ITM.Chat.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.Web", "ITM.Chat\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
