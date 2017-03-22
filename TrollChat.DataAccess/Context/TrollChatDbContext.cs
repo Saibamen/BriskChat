@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq;
 using TrollChat.DataAccess.Models;
 
 namespace TrollChat.DataAccess.Context
@@ -12,13 +14,21 @@ namespace TrollChat.DataAccess.Context
         public TrollChatDbContext(DbContextOptions<TrollChatDbContext> options) : base(options)
         {
         }
-
+             
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
                 optionsBuilder.UseSqlServer(
                     "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=TrollChat;Integrated Security=True;");
+            }
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
         }
 
@@ -39,7 +49,14 @@ namespace TrollChat.DataAccess.Context
 
         #region DbSet
 
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomTag> RoomTags { get; set; }
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRoom> UserRooms { get; set; }
+        public DbSet<UserRoomTag> UserRoomTags { get; set; }
 
         #endregion DbSet
     }
