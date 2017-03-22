@@ -44,7 +44,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                     }
                 });
             });
-            int countAfterInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(GlobalName));
+            int countAfterInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
 
             if (countGenericInterface != countAfterInjection)
             {
