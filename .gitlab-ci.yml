@@ -9,5 +9,5 @@ build_job:
      - dotnet restore
      - cd TrollChat.Web
      - bower install
-     - cd ..
+     - cd ../
      - dotnet build -c Debug
