@@ -5,4 +5,4 @@ build_job:
     stage: build
     script:
      - dotnet restore
-     - dotnet build **/**.csproj -c Release
+     - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe /consoleloggerparameters:ErrorsOnly /maxcpucount /nologo /property:Configuration=Release /verbosity:quiet "TrollChat.sln"
