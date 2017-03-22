@@ -5,5 +5,4 @@ build_job:
     stage: build
     script:
      - dotnet restore
-     - nuget restore
      - dotnet build -c Release
