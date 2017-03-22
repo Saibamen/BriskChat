@@ -21,15 +21,18 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
             Assembly.GetEntryAssembly().GetReferencedAssemblies().ToList().ForEach(assemblyType =>
             {
                 //find interfaces in assemblies
-                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
+                if (assemblyType.Name.Contains(globalName))
                 {
-                    // if interface inherits interface of type <T> increment counter
-                    if (myInterface.GetInterfaces().Contains(typeof(T)))
-                    {
-                        countGenericInterface++;
-                        list.Add(myInterface, false);
-                    }
-                });
+                    Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
+                    {                        
+                        // if interface inherits interface of type <T> increment counter
+                        if (myInterface.GetInterfaces().Contains(typeof(T)))
+                        {                            
+                            countGenericInterface++;
+                            list.Add(myInterface, false);
+                        }
+                    });
+                } 
 
                 //find classes in assemblies
                 Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
