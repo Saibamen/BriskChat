@@ -7,5 +7,7 @@ build_job:
     stage: build
     script:
      - dotnet restore
+     - cd TrollChat.Web
      - bower install
+     - cd ..
      - dotnet build -c Debug
