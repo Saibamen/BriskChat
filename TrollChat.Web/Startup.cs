@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TrollChat.DataAccess.Context;
+using TrollChat.Web.Helpers.Implementations;
+using TrollChat.Web.Helpers.Interfaces;
 
 namespace TrollChat.Web
 {
@@ -25,10 +28,12 @@ namespace TrollChat.Web
         {
             // Add framework services.
             services.AddMvc();
+            services.AddScoped<ITrollChatDbContext, TrollChatDbContext>();
+            services.AddScoped<IMigrationHelper, MigrationHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -51,6 +56,10 @@ namespace TrollChat.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+
+
+            migrationHelper.Migrate();
         }
     }
 }

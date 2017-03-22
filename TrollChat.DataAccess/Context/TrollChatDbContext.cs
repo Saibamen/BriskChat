@@ -32,6 +32,11 @@ namespace TrollChat.DataAccess.Context
             Entry(entity).State = EntityState.Modified;
         }
 
+        public void PerformMigration()
+        {
+            Database.Migrate();
+        }
+
         #region DbSet
 
         public DbSet<User> Users { get; set; }
