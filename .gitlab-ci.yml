@@ -1,5 +1,3 @@
-image: mono:3.12.0
-
 stages:
 - build
 
@@ -7,4 +5,5 @@ build_job:
     stage: build
     script:
      - dotnet restore
+     - nuget restore
      - dotnet build -c Release
