@@ -2,7 +2,7 @@ stages:
     - build
 
 before_script:
-    - 'dotnet restore'
+    - 'dotnet restore TrollChat.sln'
 
 build:
     stage: build
