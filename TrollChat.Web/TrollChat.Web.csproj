@@ -30,6 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TrollChat.BusinessLogic\TrollChat.BusinessLogic.csproj" />
     <ProjectReference Include="..\TrollChat.DataAccess\TrollChat.DataAccess.csproj" />
   </ItemGroup>
 

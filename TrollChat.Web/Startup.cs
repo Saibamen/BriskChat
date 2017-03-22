@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TrollChat.BusinessLogic.Configuration.Interfaces;
 using TrollChat.DataAccess.Context;
-using TrollChat.Web.Helpers.Implementations;
-using TrollChat.Web.Helpers.Interfaces;
+using TrollChat.BusinessLogic.Configuration.Implementations;
 
 namespace TrollChat.Web
 {
@@ -28,8 +30,12 @@ namespace TrollChat.Web
         {
             // Add framework services.
             services.AddMvc();
-            services.AddScoped<ITrollChatDbContext, TrollChatDbContext>();
-            services.AddScoped<IMigrationHelper, MigrationHelper>();
+
+            services.AddEntityFramework().AddDbContext<TrollChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+
+            DependencyRegister.RegisterDependecy.Register(services);
+
+          
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,8 +62,6 @@ namespace TrollChat.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
 
             migrationHelper.Migrate();
         }
