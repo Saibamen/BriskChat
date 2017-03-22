@@ -8,11 +8,11 @@ namespace TrollChat.DataAccess.Models
     {
         [Required]
         [Column(TypeName = "NVARCHAR(256)")]
-        public String Email { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(256)")]
-        public String PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(128)")]
@@ -21,7 +21,7 @@ namespace TrollChat.DataAccess.Models
         public DateTime? EmailConfirmedOn { get; set; }
 
         [Column(TypeName = "NVARCHAR(100)")]
-        public String Name { get; set; }      
+        public string Name { get; set; }      
 
         public DateTime? LockedOn { get; set; }
     }
