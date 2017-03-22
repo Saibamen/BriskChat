@@ -18,36 +18,33 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
             int countGenericInterface = countBeforeInjection;
             var list = new Dictionary<Type, bool>();
 
-            Assembly.GetEntryAssembly().GetReferencedAssemblies().ToList().ForEach(assemblyType =>
-            {
+            Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assemly => assemly.Name.StartsWith(globalName)).ToList().ForEach(assemblyType =>
+              {
                 //find interfaces in assemblies
-                if (assemblyType.Name.Contains(globalName))
+
+                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
                 {
-                    Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
-                    {
-                        Debug.WriteLine(assemblyType);
                         // if interface inherits interface of type <T> increment counter
                         if (myInterface.GetInterfaces().Contains(typeof(T)))
-                        {
-                            countGenericInterface++;
-                            list.Add(myInterface, false);
-                        }
-                    });
+                          {
+                              countGenericInterface++;
+                              list.Add(myInterface, false);
+                          }
+                      });
 
-                    //find classes in assemblies
-                    Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
-                    {
+                //find classes in assemblies
+                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
+                {
                         //if class's interface inherits <T> register it
                         var myInterface = implementation.GetInterfaces().FirstOrDefault(Iimplementation => Iimplementation.GetInterfaces().Contains(typeof(T)));
-                        if (myInterface != null)
-                        {
-                            services.AddScoped(myInterface, implementation);
-                            list[myInterface] = true;
-                            Debug.WriteLine($"Registered {typeof(T).Name} interface {myInterface.Name} to {implementation.Name}");
-                        }
-                    });
-                }
-            });
+                          if (myInterface != null)
+                          {
+                              services.AddScoped(myInterface, implementation);
+                              list[myInterface] = true;
+                              Debug.WriteLine($"Registered {typeof(T).Name} interface {myInterface.Name} to {implementation.Name}");
+                          }
+                      });
+              });
             int countAfterInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
 
             if (countGenericInterface != countAfterInjection)
