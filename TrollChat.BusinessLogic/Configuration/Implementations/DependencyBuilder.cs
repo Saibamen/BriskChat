@@ -24,28 +24,29 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                 if (assemblyType.Name.Contains(globalName))
                 {
                     Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
-                    {                        
+                    {
+                        Debug.WriteLine(assemblyType);
                         // if interface inherits interface of type <T> increment counter
                         if (myInterface.GetInterfaces().Contains(typeof(T)))
-                        {                            
+                        {
                             countGenericInterface++;
                             list.Add(myInterface, false);
                         }
                     });
-                } 
 
-                //find classes in assemblies
-                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
-                {
-                    //if class's interface inherits <T> register it
-                    var myInterface = implementation.GetInterfaces().FirstOrDefault(Iimplementation => Iimplementation.GetInterfaces().Contains(typeof(T)));
-                    if (myInterface != null)
+                    //find classes in assemblies
+                    Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
                     {
-                        services.AddScoped(myInterface, implementation);
-                        list[myInterface] = true;
-                        Debug.WriteLine($"Registered {typeof(T).Name} interface {myInterface.Name} to {implementation.Name}");
-                    }
-                });
+                        //if class's interface inherits <T> register it
+                        var myInterface = implementation.GetInterfaces().FirstOrDefault(Iimplementation => Iimplementation.GetInterfaces().Contains(typeof(T)));
+                        if (myInterface != null)
+                        {
+                            services.AddScoped(myInterface, implementation);
+                            list[myInterface] = true;
+                            Debug.WriteLine($"Registered {typeof(T).Name} interface {myInterface.Name} to {implementation.Name}");
+                        }
+                    });
+                }
             });
             int countAfterInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
 
