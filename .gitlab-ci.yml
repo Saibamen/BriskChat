@@ -6,5 +6,5 @@ stages:
 build_job:
     stage: build
     script:
-     - nuget restore
+     - dotnet restore
      - MONO_IOMAP=case xbuild /t:Build /p:Configuration="Release" /p:Platform="Any CPU" TrollChat.sln
