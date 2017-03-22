@@ -1,8 +1,10 @@
 stages:
-- build
+    - build
 
-build_job:
+before_script:
+    - 'dotnet restore TrollChat.sln'
+
+build:
     stage: build
     script:
-     - dotnet restore
-     - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe /consoleloggerparameters:ErrorsOnly /maxcpucount /nologo /property:Configuration=Release /verbosity:quiet "TrollChat.sln"
+        - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe "TrollChat.sln"
