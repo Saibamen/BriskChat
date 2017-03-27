@@ -2,7 +2,7 @@
 
 namespace TrollChat.Web.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         public IActionResult Register()
         {
