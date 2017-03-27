@@ -6,7 +6,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class RoleRepository : GenericRepository<Role>, IRoleRepository
     {
-        public RoleRepository(TrollChatDbContext context)
+        public RoleRepository(ITrollChatDbContext context)
            : base(context)
         {
         }

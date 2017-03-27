@@ -6,7 +6,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class RoomTagRepository : GenericRepository<RoomTag>, IRoomTagRepository
     {
-        public RoomTagRepository(TrollChatDbContext context)
+        public RoomTagRepository(ITrollChatDbContext context)
            : base(context)
         {
         }

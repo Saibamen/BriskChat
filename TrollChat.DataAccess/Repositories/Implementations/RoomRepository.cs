@@ -10,7 +10,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class RoomRepository : GenericRepository<Room>, IRoomRepository
     {
-        public RoomRepository(TrollChatDbContext context)
+        public RoomRepository(ITrollChatDbContext context)
            : base(context)
         {
             
