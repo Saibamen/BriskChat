@@ -18,5 +18,10 @@ namespace TrollChat.BusinessLogic.Models
         public string Name { get; set; }
 
         public DateTime? LockedOn { get; set; }
+
+        public override bool IsValid()
+        {
+            return !(string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Name));
+        }
     }
 }

@@ -11,5 +11,10 @@ namespace TrollChat.BusinessLogic.Models
         public DateTime ModifiedOn { get; set; }
 
         public DateTime? DeletedOn { get; set; }
+
+        public virtual bool IsValid()
+        {
+            return true;
+        }
     }
 }

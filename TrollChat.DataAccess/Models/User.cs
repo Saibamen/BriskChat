@@ -28,6 +28,7 @@ namespace TrollChat.DataAccess.Models
 
         public DateTime? EmailConfirmedOn { get; set; }
 
+        [Required]
         [Column(TypeName = "NVARCHAR(100)")]
         public string Name { get; set; }
 
