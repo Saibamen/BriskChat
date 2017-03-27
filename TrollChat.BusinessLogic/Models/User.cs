@@ -7,11 +7,6 @@ namespace TrollChat.BusinessLogic.Models
 {
     public class User : BaseModel
     {
-        public User()
-        {
-            Rooms = new HashSet<UserRoom>();
-        }
-
         public List<UserRoom> Rooms { get; set; }
 
         public string Email { get; set; }

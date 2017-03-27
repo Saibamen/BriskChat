@@ -6,12 +6,6 @@ namespace TrollChat.BusinessLogic.Models
 {
     public class UserRoom : BaseModel
     {
-        public UserRoom()
-        {
-            Messages = new HashSet<Message>();
-            Tags = new HashSet<Tag>();
-        }
-
         public List<Message> Messages { get; set; }
 
         public List<Tag> Tags { get; set; }
