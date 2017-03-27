@@ -10,10 +10,13 @@ namespace TrollChat.DataAccess.Models
         public UserRoom()
         {
             Messages = new HashSet<Message>();
+            Tags = new HashSet<Tag>();
         }
 
         [InverseProperty(nameof(Message.UserRoom))]
         public virtual ICollection<Message> Messages { get; set; }
+                
+        public virtual ICollection<Tag> Tags { get; set; }
 
         [Required]
         public User User { get; set; }

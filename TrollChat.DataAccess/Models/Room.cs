@@ -1,12 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrollChat.DataAccess.Models
 {
     public class Room : BaseEntity
     {
+        public Room()
+        {
+            Tags = new HashSet<Tag>();
+        }
+
         [Required]
         public User Owner { get; set; }
+
+        public virtual ICollection<Tag> Tags { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(100)")]
