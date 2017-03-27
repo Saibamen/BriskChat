@@ -2,7 +2,7 @@
 
 namespace TrollChat.BusinessLogic.Models
 {
-    class Room : BaseModel
+    public class Room : BaseModel
     {
         public User Owner { get; set; }
 

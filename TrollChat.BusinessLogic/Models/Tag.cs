@@ -2,7 +2,7 @@
 
 namespace TrollChat.BusinessLogic.Models
 {
-    class Tag : BaseModel
+    public class Tag : BaseModel
     {
         public List<UserRoomTag> UserRoom { get; set; }
         public List<RoomTag> Room { get; set; }
