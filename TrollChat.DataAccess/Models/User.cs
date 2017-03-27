@@ -33,6 +33,7 @@ namespace TrollChat.DataAccess.Models
 
         public DateTime? LockedOn { get; set; }
 
+        [Column(TypeName = "NVARCHAR(256)")]
         public string ResetPasswordToken { get; set; }
 
         public DateTime? ResetPasswordTimeStamp { get; set; }
