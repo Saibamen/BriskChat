@@ -50,6 +50,20 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             return DbSet.AsQueryable();
         }
 
+        public IQueryable<T> Include(params Expression<Func<T, object>>[] includeExpressions)
+        {
+            DbSet<T> dbSet = context.Set<T>();
+
+            IQueryable<T> query = null;
+            foreach (var includeExpression in includeExpressions)
+            {
+                query = dbSet.Include(includeExpression);
+            }
+
+            return query ?? dbSet;
+        }
+
+
         public virtual T GetById(int id)
         {
             return DbSet.FirstOrDefault(m => m.Id == id);
