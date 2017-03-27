@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrollChat.DataAccess.Models
 {
@@ -11,6 +12,7 @@ namespace TrollChat.DataAccess.Models
             Messages = new HashSet<Message>();
         }
 
+        [InverseProperty(nameof(Message.UserRoom))]
         public virtual ICollection<Message> Messages { get; set; }
 
         [Required]
@@ -24,6 +26,7 @@ namespace TrollChat.DataAccess.Models
 
         public DateTime? LockedUntil { get; set; }
 
+        [InverseProperty(nameof(Message.LastMessageFor))]
         public Message LastMessage { get; set; }
     }
 }

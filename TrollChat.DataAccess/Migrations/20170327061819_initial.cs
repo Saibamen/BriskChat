@@ -166,6 +166,7 @@ namespace TrollChat.DataAccess.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
+                    LastMessageForId = table.Column<int>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Text = table.Column<string>(nullable: false),
                     UserRoomId = table.Column<int>(nullable: false)
@@ -173,6 +174,12 @@ namespace TrollChat.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_UserRooms_LastMessageForId",
+                        column: x => x.LastMessageForId,
+                        principalTable: "UserRooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Messages_UserRooms_UserRoomId",
                         column: x => x.UserRoomId,
@@ -211,10 +218,15 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_LastMessageForId",
+                table: "Messages",
+                column: "LastMessageForId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_UserRoomId",
                 table: "Messages",
-                column: "UserRoomId",
-                unique: true);
+                column: "UserRoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Rooms_OwnerId",

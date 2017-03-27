@@ -8,7 +8,7 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170322130927_initial")]
+    [Migration("20170327061819_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,8 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<int>("LastMessageForId");
+
                     b.Property<DateTime>("ModifiedOn");
 
                     b.Property<string>("Text")
@@ -35,8 +37,10 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserRoomId")
+                    b.HasIndex("LastMessageForId")
                         .IsUnique();
+
+                    b.HasIndex("UserRoomId");
 
                     b.ToTable("Messages");
                 });
@@ -239,9 +243,13 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "UserRoom")
+                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "LastMessageFor")
                         .WithOne("LastMessage")
-                        .HasForeignKey("TrollChat.DataAccess.Models.Message", "UserRoomId");
+                        .HasForeignKey("TrollChat.DataAccess.Models.Message", "LastMessageForId");
+
+                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "UserRoom")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserRoomId");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
