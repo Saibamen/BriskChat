@@ -38,6 +38,4 @@
     <ProjectReference Include="..\TrollChat.DataAccess\TrollChat.DataAccess.csproj" />
   </ItemGroup>
 
-  <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
-
 </Project>
