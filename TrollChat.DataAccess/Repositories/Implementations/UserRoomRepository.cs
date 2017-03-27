@@ -10,7 +10,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class UserRoomRepository : GenericRepository<UserRoom>, IUserRoomRepository
     {
-        public UserRoomRepository(TrollChatDbContext context)
+        public UserRoomRepository(ITrollChatDbContext context)
            : base(context)
         {
         }

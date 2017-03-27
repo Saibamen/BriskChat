@@ -32,5 +32,9 @@ namespace TrollChat.DataAccess.Models
         public string Name { get; set; }
 
         public DateTime? LockedOn { get; set; }
+
+        public string ResetPasswordToken { get; set; }
+
+        public DateTime? ResetPasswordTimeStamp { get; set; }
     }
 }

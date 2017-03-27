@@ -10,7 +10,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class TagRepository : GenericRepository<Tag>, ITagRepository
     {
-        public TagRepository(TrollChatDbContext context)
+        public TagRepository(ITrollChatDbContext context)
            : base(context)
         {
         }

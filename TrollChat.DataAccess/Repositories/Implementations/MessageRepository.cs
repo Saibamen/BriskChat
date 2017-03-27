@@ -6,7 +6,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 {
     public class MessageRepository : GenericRepository<Message>, IMessageRepository
     {
-        public MessageRepository(TrollChatDbContext context)
+        public MessageRepository(ITrollChatDbContext context)
            : base(context)
         {
         }
