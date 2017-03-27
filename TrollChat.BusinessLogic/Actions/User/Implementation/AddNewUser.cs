@@ -20,8 +20,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 
         public int Invoke(Models.User user)
         {
-            // TODO: !user.IsValid()
-            if (userRepository.FindBy(x => x.Email == user.Email).Any())
+            if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Any())
             {
                 return 0;
             }
