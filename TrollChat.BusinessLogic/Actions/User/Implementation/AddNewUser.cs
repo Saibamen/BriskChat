@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Helpers.Implementations;
+using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementation
@@ -7,10 +9,13 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
     public class AddNewUser : IAddNewUser
     {
         private readonly IUserRepository userRepository;
+        private readonly IHasher hasher;
 
-        public AddNewUser(IUserRepository userRepository)
+        public AddNewUser(IUserRepository userRepository,
+            IHasher hasher = null)
         {
             this.userRepository = userRepository;
+            this.hasher = hasher ?? new Hasher();
         }
 
         public int Invoke(Models.User user)
@@ -21,10 +26,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return 0;
             }
 
-            // FIXME
+            var salt = hasher.GenerateRandomSalt();
+            var passwordHash = hasher.CreateHash(user.Password, salt);
+
             var newUser = new DataAccess.Models.User
             {
                 Email = user.Email,
+                PasswordSalt = salt,
+                PasswordHash = passwordHash,
                 Name = user.Name
             };
 
