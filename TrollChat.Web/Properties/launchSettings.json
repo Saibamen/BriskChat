@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ITM.Chat": {
+    "TrollChat.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
