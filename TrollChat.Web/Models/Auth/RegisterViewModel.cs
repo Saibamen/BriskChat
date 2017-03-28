@@ -12,6 +12,7 @@ namespace TrollChat.Web.Models.Auth
         public string Password { get; set; }
 
         [Required]
+        [Display(Name = "Confirm Password")]
         [Compare(nameof(RegisterViewModel.Password))]
         public string ConfirmPassword { get; set; }
 
