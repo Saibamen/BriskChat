@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace TrollChat.BusinessLogic.Models
+﻿namespace TrollChat.BusinessLogic.Models
 {
     public class Message : BaseModel
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TrollChat.BusinessLogic.Models
+﻿namespace TrollChat.BusinessLogic.Models
 {
     public class Role : BaseModel
     {
