@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.Web.Models.Auth;
 using TrollChat.BusinessLogic.Models;
@@ -16,13 +17,15 @@ namespace TrollChat.Web.Controllers
             this.authorizeUser = authorizeUser;
             this.addNewUser = addNewUser;
         }
-        
+
+        [AllowAnonymous]
         [HttpGet("register")]
         public IActionResult Register()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost("register")]
         public IActionResult Register(RegisterViewModel model)
@@ -37,15 +40,20 @@ namespace TrollChat.Web.Controllers
             }
 
             // TODO: Alert: Confirmation email has been sent to your email address
+
+            // TODO: Authorize User (TC-3) and redirect to sth
+
             return RedirectToAction("Login", "Auth");
         }
 
+        [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost("login")]
         public IActionResult Login(LoginViewModel model)
@@ -58,6 +66,17 @@ namespace TrollChat.Web.Controllers
             var access = authorizeUser.Invoke(model.Email, model.Password);
 
             return View();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+
+            // TODO: Alert.Success Logged out
+
+            return RedirectToAction("Login");
         }
     }
 }
