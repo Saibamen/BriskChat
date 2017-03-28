@@ -15,7 +15,7 @@
         <div class="form-group">
             @Html.LabelFor(m => m.Name, new { @class = "control-label col-sm-2" })
             <div class="col-sm-10">
-                @Html.PasswordFor(m => m.Name, new { @class = "form-control", placeholder = "Name", required = "required" })
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", required = "required" })
                 @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
             </div>
         </div>

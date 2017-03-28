@@ -35,11 +35,12 @@ namespace TrollChat.Web.Controllers
 
             if (userAddAction == 0)
             {
-                // TODO: Alert.Danger: User Already exists
+                Alert.Danger("User already exists");
                 return View();
             }
 
-            // TODO: Alert: Confirmation email has been sent to your email address
+            // TODO: Alert: Confirmation email
+            //Alert.Success("Confirmation email has been sent to your email address");
 
             // TODO: Authorize User (TC-3) and redirect to sth
 
