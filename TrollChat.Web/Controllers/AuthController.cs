@@ -71,6 +71,7 @@ namespace TrollChat.Web.Controllers
 
             if (!access) return View();
 
+            //TODO: Create actual claims
             var claims = new List<Claim>
             {
                 new Claim("Role", "User"),
