@@ -1,0 +1,22 @@
+﻿@using TrollChat.Web.Helpers
+@using TrollChat.Web.Models.Common
+
+@{
+    var alertMessages = TempData.Get<List<AlertModel>>("alertMessages");
+
+    if (alertMessages.Any())
+    {
+        foreach (var alert in alertMessages)
+        {
+            <div class="alert alert-@alert.Type.ToString().ToLower() alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                @if (!string.IsNullOrEmpty(alert.Title))
+                    {
+                    <a href="#" class="alert-link">@alert.Title</a>
+                }
+                @alert.Message
+            </div>
+        }
+    }
+}

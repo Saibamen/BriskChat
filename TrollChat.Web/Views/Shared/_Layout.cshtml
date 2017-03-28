@@ -40,7 +40,13 @@
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+            @Html.Partial("_AlertsPartial")
+        }
+
         @RenderBody()
         <hr />
         <footer>

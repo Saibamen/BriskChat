@@ -36,6 +36,8 @@ namespace TrollChat.Web
 
             services.AddEntityFramework().AddDbContext<TrollChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
 
+            services.AddSession();
+
             DependencyRegister.RegisterDependecy.Register(services);
 
             services.AddAuthorization(options =>
@@ -71,6 +73,7 @@ namespace TrollChat.Web
             }
 
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
