@@ -64,12 +64,20 @@ namespace TrollChat.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                Alert.Warning();
+
                 return View(model);
             }
 
             var access = authorizeUser.Invoke(model.Email, model.Password);
 
-            if (!access) return View();
+            if (!access)
+            {
+                ModelState.AddModelError("Email", "Invalid email or password");
+                Alert.Warning();
+
+                return View();
+            }
 
             //TODO: Create actual claims
             var claims = new List<Claim>
@@ -82,6 +90,8 @@ namespace TrollChat.Web.Controllers
 
             await HttpContext.Authentication.SignInAsync("CookieMiddleware", claimsPrinciple);
 
+            Alert.Success("Logged in");
+
             return RedirectToAction("Index", "User");
         }
 
@@ -90,6 +100,9 @@ namespace TrollChat.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.Authentication.SignOutAsync("CookieMiddleware");
+
+            Alert.Success("Logged out");
+
             return RedirectToAction("Login");
         }
     }

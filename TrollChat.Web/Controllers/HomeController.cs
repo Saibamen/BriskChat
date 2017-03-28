@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TrollChat.Web.Controllers
 {
-  
     public class HomeController : BaseController
     {
         [AllowAnonymous]
@@ -18,14 +17,14 @@ namespace TrollChat.Web.Controllers
 
             return View();
         }
-        
+
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
             return View();
         }
-        
+
         [AllowAnonymous]
         public IActionResult Error()
         {
