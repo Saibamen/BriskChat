@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.Web.Models.Auth;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.Web.Models.Auth;
 
 namespace TrollChat.Web.Controllers
 {
@@ -56,7 +59,7 @@ namespace TrollChat.Web.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost("login")]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -65,17 +68,26 @@ namespace TrollChat.Web.Controllers
 
             var access = authorizeUser.Invoke(model.Email, model.Password);
 
-            return View();
+            if (!access) return View();
+
+            var claims = new List<Claim>
+            {
+                new Claim("Role", "User"),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, "role");
+            var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.Authentication.SignInAsync("CookieMiddleware", claimsPrinciple);
+
+            return RedirectToAction("Index", "User");
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost("logout")]
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
-
-            // TODO: Alert.Success Logged out
-
+            await HttpContext.Authentication.SignOutAsync("CookieMiddleware");
             return RedirectToAction("Login");
         }
     }
