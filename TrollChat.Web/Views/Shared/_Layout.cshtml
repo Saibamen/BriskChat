@@ -1,10 +1,10 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+﻿
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ITM.Chat</title>
+    <title>@ViewData["Title"] - TrollChat</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -16,7 +16,6 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -28,7 +27,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">ITM.Chat</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">TrollChat</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -36,14 +35,22 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
+
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
+
     <div class="container body-content">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+            @Html.Partial("_AlertsPartial")
+        }
+
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2017 - ITM.Chat</p>
+            <p>&copy; 2017 - TrollChat</p>
         </footer>
     </div>
 

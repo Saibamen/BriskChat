@@ -1,0 +1,25 @@
+﻿@{
+    if (Context.Authentication.HttpContext.User.Identity.IsAuthenticated)
+    {
+        using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
+        {
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Log off</button>
+                </li>
+            </ul>
+        }
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-controller="Auth" asp-action="Register">Register</a>
+            </li>
+            <li>
+                <a asp-controller="Auth" asp-action="Login">Log in</a>
+            </li>
+        </ul>
+    }
+}
+

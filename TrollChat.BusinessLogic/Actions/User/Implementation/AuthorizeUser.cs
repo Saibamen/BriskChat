@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
@@ -29,7 +26,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return false;
             }
 
-            var dbUser = userRepository.FindBy(x => x.Email == email && x.EmailConfirmedOn != null).FirstOrDefault();
+            var dbUser = userRepository.FindBy(x => x.Email == email
+           // && x.EmailConfirmedOn != null
+            ).FirstOrDefault();
 
             if (dbUser == null)
             {
