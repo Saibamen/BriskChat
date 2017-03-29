@@ -1,6 +1,6 @@
 ﻿namespace TrollChat.BusinessLogic.Models
 {
-    public class Role : BaseModel
+    public class RoleModel : BaseModel
     {
         public string Name { get; set; }
 

@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
         {
             foreach (var user in users)
             {
-                var model = new User
+                var model = new UserModel
                 {
                     Email = $"{user}@test.com",
                     Password = "test",

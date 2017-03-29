@@ -43,7 +43,7 @@ namespace TrollChat.Web.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterViewModel model)
         {
-            var userModel = new User { Email = model.Email, Password = model.Password, Name = model.Name };
+            var userModel = new UserModel { Email = model.Email, Password = model.Password, Name = model.Name };
             var userAddAction = addNewUser.Invoke(userModel);
 
             if (userAddAction == null)
@@ -53,7 +53,7 @@ namespace TrollChat.Web.Controllers
             }
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-            var htmlSource = RenderViewToString("ConfirmEmail", "", callbackUrl);
+            var htmlSource = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
             var result = PreMailer.Net.PreMailer.MoveCssInline(htmlSource);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", result.Html);
@@ -141,6 +141,25 @@ namespace TrollChat.Web.Controllers
 
             Alert.Danger("Invalid token");
             return View("Error");
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resetpassword")]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetpassword")]
+        public IActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            return View(model);
         }
     }
 }

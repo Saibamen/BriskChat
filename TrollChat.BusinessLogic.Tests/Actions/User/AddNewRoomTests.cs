@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_AddsRoomToDatabaseWithCorrectValues()
         {
             // prepare
-            var roomData = new Models.Room
+            var roomData = new Models.RoomModel
             {
                 Name = "TestRoom",
                 Topic = "RoomTrool",
@@ -51,7 +51,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_AddAndSaveAreCalled()
         {
             // prepare
-            var roomToAdd = new Models.Room { Name = "TestTrool", Topic = "Trollchat", Description = "Romms", Customization = 2, IsPublic = true };
+            var roomToAdd = new Models.RoomModel { Name = "TestTrool", Topic = "Trollchat", Description = "Romms", Customization = 2, IsPublic = true };
             var mockedRoomRepository = new Mock<IRoomRepository>();
 
             var action = new AddNewRoom(mockedRoomRepository.Object);
@@ -68,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
-            var roomToAdd = new Models.Room();
+            var roomToAdd = new Models.RoomModel();
             var mockedRoomRepository = new Mock<IRoomRepository>();
 
             var action = new AddNewRoom(mockedRoomRepository.Object);
@@ -86,7 +86,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_AlreadyExists_AddNorSaveAreCalled()
         {
             // prepare
-            var roomToAdd = new Models.Room
+            var roomToAdd = new Models.RoomModel
             {
                 Name = "TestRoom",
                 Topic = "RoomTrool",

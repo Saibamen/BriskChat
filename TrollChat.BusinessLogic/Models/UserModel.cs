@@ -4,9 +4,9 @@ using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Models
 {
-    public class User : BaseModel
+    public class UserModel : BaseModel
     {
-        public List<UserRoom> Rooms { get; set; }
+        public List<UserRoomModel> Rooms { get; set; }
 
         public List<UserToken> Tokens { get; set; }
 

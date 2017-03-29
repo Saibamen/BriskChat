@@ -16,7 +16,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementation
             this.roomRepository = roomRepository;
         }
 
-        public int Invoke(Models.Room room)
+        public int Invoke(Models.RoomModel room)
         {
             if (!room.IsValid())
             {
