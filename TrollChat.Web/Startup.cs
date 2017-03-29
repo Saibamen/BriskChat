@@ -40,6 +40,8 @@ namespace TrollChat.Web
 
             DependencyRegister.RegisterDependecy.Register(services);
 
+            services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("UserPolicy", policyBuilder =>
@@ -90,9 +92,7 @@ namespace TrollChat.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-           
-
+            
             migrationHelper.Migrate();
         }
     }

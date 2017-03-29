@@ -27,8 +27,8 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                     Name = user
                 };
 
-                var userid = addNewUser.Invoke(model);
-                confirmUserEmail.Invoke(userid);
+                var userGuid = addNewUser.Invoke(model).SecretToken;
+                confirmUserEmail.Invoke(userGuid);
             }
         }
     }

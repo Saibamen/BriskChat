@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
@@ -18,28 +19,30 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.hasher = hasher ?? new Hasher();
         }
 
-        public int Invoke(Models.User user)
+        public DataAccess.Models.User Invoke(Models.User user)
         {
             if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Any())
             {
-                return 0;
+                return null;
             }
 
             var salt = hasher.GenerateRandomSalt();
-            var passwordHash = hasher.CreateHash(user.Password, salt);
+            var passwordHash = hasher.CreatePasswordHash(user.Password, salt);
 
             var newUser = new DataAccess.Models.User
             {
                 Email = user.Email,
                 PasswordSalt = salt,
                 PasswordHash = passwordHash,
-                Name = user.Name
+                Name = user.Name,
+                SecretToken = hasher.GenerateRandomGuid(),
+                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(14),
             };
 
             userRepository.Add(newUser);
             userRepository.Save();
 
-            return newUser.Id;
+            return newUser;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             }
 
             var salt = dbUser.PasswordSalt;
-            var hashedPassword = hasher.CreateHash(password, salt);
+            var hashedPassword = hasher.CreatePasswordHash(password, salt);
 
             return Equals(hashedPassword, dbUser.PasswordHash);
         }

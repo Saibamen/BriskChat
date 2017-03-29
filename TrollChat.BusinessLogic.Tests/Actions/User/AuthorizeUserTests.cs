@@ -28,7 +28,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 .Returns(findByResult.AsQueryable);
 
             var mockedHasher = new Mock<IHasher>();
-            mockedHasher.Setup(h => h.CreateHash("plain", "salt-generated")).Returns("plain-hashed");
+            mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
 
             var action = new AuthorizeUser(mockedUserRepository.Object, mockedHasher.Object);
 

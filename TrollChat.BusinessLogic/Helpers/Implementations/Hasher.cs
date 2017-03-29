@@ -10,7 +10,7 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
         private const int SaltSize = 96; //128 chars
         private const int Iterations = 10000;
 
-        public string CreateHash(string plaintext, string salt)
+        public string CreatePasswordHash(string plaintext, string salt)
         {
             if (string.IsNullOrEmpty(plaintext) || string.IsNullOrEmpty(salt)) return null;
 
@@ -19,6 +19,11 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             var key = deriveBytes.GetBytes(KeySize);
 
             return Convert.ToBase64String(key);
+        }
+
+        public string GenerateRandomGuid()
+        {
+            return Guid.NewGuid().ToString();
         }
 
         public string GenerateRandomSalt()

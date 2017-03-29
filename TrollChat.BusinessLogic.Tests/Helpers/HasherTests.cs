@@ -11,7 +11,7 @@ namespace TrollChat.BusinessLogic.Tests.Helpers
             const string password = "Other test data";
             var hasher = new Hasher();
             var salt = hasher.GenerateRandomSalt();
-            var hashedPassowrd = hasher.CreateHash(password, salt);
+            var hashedPassowrd = hasher.CreatePasswordHash(password, salt);
             Assert.NotNull(hashedPassowrd);
         }
 
@@ -21,7 +21,7 @@ namespace TrollChat.BusinessLogic.Tests.Helpers
         public void ValidateHash_ForValidInput_ReturnsTrue(string password, string salt, string expectedHashedPassword)
         {
             var hasher = new Hasher();
-            var hashedPassowrd = hasher.CreateHash(password, salt);
+            var hashedPassowrd = hasher.CreatePasswordHash(password, salt);
             Assert.Equal(hashedPassowrd, expectedHashedPassword);
         }
 
@@ -31,7 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Helpers
             const string password = "";
             var hasher = new Hasher();
             var salt = hasher.GenerateRandomSalt();
-            var hashedPassowrd = hasher.CreateHash(password, salt);
+            var hashedPassowrd = hasher.CreatePasswordHash(password, salt);
             Assert.Null(hashedPassowrd);
         }
     }

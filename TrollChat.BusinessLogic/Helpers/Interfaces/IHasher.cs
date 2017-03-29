@@ -4,8 +4,10 @@ namespace TrollChat.BusinessLogic.Helpers.Interfaces
 {
     public interface IHasher : IAction
     {
-        string CreateHash(string password, string salt);
+        string CreatePasswordHash(string password, string salt);
 
         string GenerateRandomSalt();
+
+        string GenerateRandomGuid();
     }
 }

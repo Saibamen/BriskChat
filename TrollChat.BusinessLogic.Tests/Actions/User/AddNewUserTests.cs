@@ -30,7 +30,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             var mockedHasher = new Mock<IHasher>();
             mockedHasher.Setup(h => h.GenerateRandomSalt()).Returns("salt-generated");
-            mockedHasher.Setup(h => h.CreateHash("plain", "salt-generated")).Returns("plain-hashed");
+            mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
 
             var action = new AddNewUser(mockedUserRepo.Object, mockedHasher.Object);
 
@@ -75,7 +75,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var actionResult = action.Invoke(userToAdd);
 
             // assert
-            Assert.Equal(0, actionResult);
+            Assert.Equal(null, actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);
         }
@@ -105,7 +105,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var actionResult = action.Invoke(userToAdd);
 
             // assert
-            Assert.Equal(0, actionResult);
+            Assert.Equal(null, actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);
         }
