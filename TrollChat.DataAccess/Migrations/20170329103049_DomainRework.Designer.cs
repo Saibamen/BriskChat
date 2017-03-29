@@ -8,9 +8,10 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    partial class TrollChatDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170329103049_DomainRework")]
+    partial class DomainRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1")
@@ -34,9 +35,6 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<int>("OwnerId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .HasName("Email");
 
                     b.HasIndex("OwnerId");
 
@@ -202,9 +200,6 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<int?>("UserRoomId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .HasName("Email");
 
                     b.HasIndex("RoomId");
 
@@ -414,7 +409,7 @@ namespace TrollChat.DataAccess.Migrations
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserToken", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.User", "User")
-                        .WithMany("Tokens")
+                        .WithMany()
                         .HasForeignKey("UserId");
                 });
         }

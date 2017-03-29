@@ -14,7 +14,7 @@ namespace TrollChat.DataAccess.Context
         public TrollChatDbContext(DbContextOptions<TrollChatDbContext> options) : base(options)
         {
         }
-             
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -30,6 +30,22 @@ namespace TrollChat.DataAccess.Context
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            modelBuilder.Entity<UserToken>()
+             .HasIndex(b => b.SecretToken)
+             .HasName("SecretToken");
+
+            modelBuilder.Entity<User>()
+             .HasIndex(b => b.Email)
+             .HasName("Email");
+
+            modelBuilder.Entity<Domain>()
+            .HasIndex(b => b.Name)
+            .HasName("Email");
+
+            modelBuilder.Entity<Tag>()
+            .HasIndex(b => b.Name)
+            .HasName("Email");
         }
 
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
@@ -49,6 +65,8 @@ namespace TrollChat.DataAccess.Context
 
         #region DbSet
 
+        public DbSet<Domain> Domains { get; set; }
+        public DbSet<DomainRoom> DomainRooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -57,6 +75,7 @@ namespace TrollChat.DataAccess.Context
         public DbSet<User> Users { get; set; }
         public DbSet<UserRoom> UserRooms { get; set; }
         public DbSet<UserRoomTag> UserRoomTags { get; set; }
+        public DbSet<UserToken> UserToken { get; set; }
 
         #endregion DbSet
     }

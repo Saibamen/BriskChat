@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrollChat.DataAccess.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrollChat.DataAccess.Models
 {
-    internal class Domain : BaseEntity
+    public class Domain : BaseEntity
     {
+        [Required]
+        [Column(TypeName = "NVARCHAR(100)")]
+        public string Name { get; set; }
+
+        [Required]
+        public User Owner { get; set; }
     }
 }

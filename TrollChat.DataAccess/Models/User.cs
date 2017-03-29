@@ -10,9 +10,11 @@ namespace TrollChat.DataAccess.Models
         public User()
         {
             Rooms = new HashSet<UserRoom>();
+            Tokens = new HashSet<UserToken>();
         }
 
         public virtual ICollection<UserRoom> Rooms { get; set; }
+        public virtual ICollection<UserToken> Tokens { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(256)")]
@@ -33,10 +35,5 @@ namespace TrollChat.DataAccess.Models
         public string Name { get; set; }
 
         public DateTime? LockedOn { get; set; }
-
-        [Column(TypeName = "NVARCHAR(256)")]
-        public string SecretToken { get; set; }
-
-        public DateTime? SecretTokenTimeStamp { get; set; }
     }
 }

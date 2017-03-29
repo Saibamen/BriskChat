@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
@@ -10,25 +8,30 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
     public class ConfirmUserEmail : IConfirmUserEmail
     {
         private readonly IUserRepository userRepository;
+        private readonly IUserTokenRepository userTokenRepository;
 
-        public ConfirmUserEmail(IUserRepository userRepository)
+        public ConfirmUserEmail(IUserTokenRepository userTokenRepository, IUserRepository userRepository)
         {
+            this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
         }
 
         public bool Invoke(string guid)
         {
-            var userToEdit = userRepository.FindBy(x=> x.SecretToken == guid).FirstOrDefault();
+            var userToken = userTokenRepository.FindBy(x => x.SecretToken == guid).FirstOrDefault();
 
-            if (userToEdit == null || userToEdit.EmailConfirmedOn != null)
+            if (userToken == null)
             {
                 return false;
             }
 
-            userToEdit.EmailConfirmedOn = DateTime.UtcNow;
+            userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
-            userRepository.Edit(userToEdit);
+            userRepository.Edit(userToken.User);
             userRepository.Save();
+
+            userTokenRepository.Delete(userToken);
+            userTokenRepository.Save();
 
             return true;
         }

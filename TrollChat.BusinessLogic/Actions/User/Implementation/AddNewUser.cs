@@ -10,12 +10,15 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
     public class AddNewUser : IAddNewUser
     {
         private readonly IUserRepository userRepository;
+        private readonly IUserTokenRepository userTokenRepository;
         private readonly IHasher hasher;
 
         public AddNewUser(IUserRepository userRepository,
+            IUserTokenRepository userTokenRepository,
             IHasher hasher = null)
         {
             this.userRepository = userRepository;
+            this.userTokenRepository = userTokenRepository;
             this.hasher = hasher ?? new Hasher();
         }
 
@@ -34,12 +37,20 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 Email = user.Email,
                 PasswordSalt = salt,
                 PasswordHash = passwordHash,
-                Name = user.Name,
-                SecretToken = hasher.GenerateRandomGuid(),
-                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(14),
+                Name = user.Name
             };
 
             userRepository.Add(newUser);
+            userRepository.Save();
+
+            var newUserToken = new DataAccess.Models.UserToken()
+            {
+                User = newUser,
+                SecretToken = hasher.GenerateRandomGuid(),
+                SecretTokenTimeStamp = DateTime.Now.AddDays(14),
+            };
+
+            userTokenRepository.Add(newUserToken);
             userRepository.Save();
 
             return newUser;

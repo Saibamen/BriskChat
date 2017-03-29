@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrollChat.BusinessLogic.Models;
+﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using System.Linq;
+using TrollChat.BusinessLogic.Models;
 
 namespace TrollChat.BusinessLogic.Configuration.Seeder
 {
@@ -27,8 +24,8 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                     Name = user
                 };
 
-                var userGuid = addNewUser.Invoke(model).SecretToken;
-                confirmUserEmail.Invoke(userGuid);
+                var token = addNewUser.Invoke(model).Tokens.FirstOrDefault().SecretToken;
+                confirmUserEmail.Invoke(token);
             }
         }
     }
