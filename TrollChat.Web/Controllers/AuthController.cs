@@ -43,7 +43,7 @@ namespace TrollChat.Web.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterViewModel model)
         {
-            var userModel = new User { Email = model.Email, Password = model.Password, Name = model.Name };
+            var userModel = new UserModel { Email = model.Email, Password = model.Password, Name = model.Name };
             var userAddAction = addNewUser.Invoke(userModel);
 
             if (userAddAction == null)

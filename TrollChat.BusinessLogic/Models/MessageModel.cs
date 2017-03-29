@@ -1,12 +1,12 @@
 ﻿namespace TrollChat.BusinessLogic.Models
 {
-    public class Message : BaseModel
+    public class MessageModel : BaseModel
     {
-        public UserRoom UserRoom { get; set; }
+        public UserRoomModel UserRoom { get; set; }
 
         public int LastMessageForId { get; set; }
 
-        public UserRoom LastMessageFor { get; set; }
+        public UserRoomModel LastMessageFor { get; set; }
 
         public string Text { get; set; }
     }

@@ -4,6 +4,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Interfaces
 {
     public interface IAddNewRoom : IAction
     {
-        int Invoke(Models.Room room);
+        int Invoke(Models.RoomModel room);
     }
 }

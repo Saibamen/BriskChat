@@ -22,7 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.hasher = hasher ?? new Hasher();
         }
 
-        public DataAccess.Models.User Invoke(Models.User user)
+        public DataAccess.Models.User Invoke(Models.UserModel user)
         {
             if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Any())
             {

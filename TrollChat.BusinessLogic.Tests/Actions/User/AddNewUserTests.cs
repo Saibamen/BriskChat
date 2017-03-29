@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_AddsUserToDatabaseWithCorrectValues()
         {
             // prepare
-            var userData = new Models.User
+            var userData = new Models.UserModel
             {
                 Email = "email",
                 Password = "plain",
@@ -52,7 +52,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_AddAndSaveAreCalled()
         {
             // prepare
-            var userToAdd = new Models.User { Email = "test@test.pl", Password = "test", Name = "Tester" };
+            var userToAdd = new Models.UserModel { Email = "test@test.pl", Password = "test", Name = "Tester" };
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
 
@@ -70,7 +70,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
-            var userToAdd = new Models.User();
+            var userToAdd = new Models.UserModel();
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
 
@@ -89,7 +89,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_AlreadyExists_AddNorSaveAreCalled()
         {
             // prepare
-            var userToAdd = new Models.User
+            var userToAdd = new Models.UserModel
             {
                 Email = "test",
                 Password = "Password"
