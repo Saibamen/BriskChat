@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using System.Linq;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementation
+namespace TrollChat.BusinessLogic.Actions.Room.Implementation
 {
     public class AddNewRoom : IAddNewRoom
     {
@@ -18,7 +18,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 
         public int Invoke(Models.Room room)
         {
-            if (!room.IsValid() || roomRepository.FindBy(x => x.Name == room.Name).Any())
+            if (!room.IsValid())
             {
                 return 0;
             }

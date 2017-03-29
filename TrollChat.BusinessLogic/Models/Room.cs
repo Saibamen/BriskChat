@@ -23,5 +23,10 @@ namespace TrollChat.BusinessLogic.Models
         public bool IsPublic { get; set; }
 
         public bool IsPrivateConversation { get; set; }
+
+        public override bool IsValid()
+        {
+            return !(string.IsNullOrEmpty(Name));
+        }
     }
 }

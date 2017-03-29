@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.BusinessLogic.Actions.Room.Implementation;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Moq;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using Xunit;
 using System.Linq.Expressions;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
     public class AddNewRoomTests
     {
@@ -64,7 +64,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedRoomRepository.Verify(r => r.Save(), Times.Once());
         }
 
-        //[Fact]
+        [Fact]
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
@@ -82,7 +82,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedRoomRepository.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
+        // [Fact]
         public void Invoke_AlreadyExists_AddNorSaveAreCalled()
         {
             // prepare
