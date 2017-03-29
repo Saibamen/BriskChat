@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Models.Auth;
@@ -50,7 +52,7 @@ namespace TrollChat.Web.Controllers
                 return View();
             }
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.SecretToken }, Request.Scheme);
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
             var htmlSource = RenderViewToString("ConfirmEmail", "", callbackUrl);
             var result = PreMailer.Net.PreMailer.MoveCssInline(htmlSource);
 

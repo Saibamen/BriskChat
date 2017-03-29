@@ -24,9 +24,6 @@ namespace TrollChat.DataAccess.Models
         [Required]
         public Room Room { get; set; }
 
-        [Required]
-        public Role Role { get; set; }
-
         public DateTime? LockedUntil { get; set; }
 
         [InverseProperty(nameof(Message.LastMessageFor))]

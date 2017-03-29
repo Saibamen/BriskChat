@@ -28,8 +28,10 @@ namespace TrollChat.DataAccess.Models
 
         public int Customization { get; set; }
 
+        [Required]
         public bool IsPublic { get; set; }
 
+        [Required]
         public bool IsPrivateConversation { get; set; }
     }
 }

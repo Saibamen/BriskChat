@@ -2,12 +2,12 @@
 
 namespace TrollChat.DataAccess.Models
 {
-    public class UserRoomTag : BaseEntity
+    public class DomainRoom : BaseEntity
     {
         [Required]
-        public UserRoom UserRoom { get; set; }
+        public Domain Domain { get; set; }
 
         [Required]
-        public Tag Tag { get; set; }
+        public Room Room { get; set; }
     }
 }
