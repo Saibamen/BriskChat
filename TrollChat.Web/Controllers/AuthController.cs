@@ -54,7 +54,7 @@ namespace TrollChat.Web.Controllers
             var htmlSource = RenderViewToString("ConfirmEmail", "", callbackUrl);
             var result = PreMailer.Net.PreMailer.MoveCssInline(htmlSource);
 
-            var message =  emailService.CreateMessage(model.Email, "Confirm your account", result.Html);
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", result.Html);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Confirmation email has been sent to your email address");
@@ -107,7 +107,7 @@ namespace TrollChat.Web.Controllers
 
             return RedirectToAction("Index", "User");
         }
-        
+
         [ValidateAntiForgeryToken]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
@@ -139,7 +139,6 @@ namespace TrollChat.Web.Controllers
 
             Alert.Danger("Invalid token");
             return View("Error");
-
         }
     }
 }

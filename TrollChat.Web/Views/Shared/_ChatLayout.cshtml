@@ -1,0 +1,43 @@
+﻿@{
+    Layout = "_MasterLayout";
+}
+
+@section CSS
+{
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+}
+
+@section Pre_Body
+{
+    <div class="container body-content">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+            @Html.Partial("_AlertsPartial")
+        }
+}
+
+@section Post_Body
+{
+    <hr />
+    <footer>
+        <p>&copy; 2017 - TrollChat</p>
+    </footer>
+</div>
+}
+
+@section Scripts
+{
+    <environment names="Development">
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+}
+@RenderBody()

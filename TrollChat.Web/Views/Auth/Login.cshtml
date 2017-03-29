@@ -1,4 +1,7 @@
-﻿@model TrollChat.Web.Models.Auth.LoginViewModel
+﻿@{
+    Layout = "_WebLayout";
+}
+@model TrollChat.Web.Models.Auth.LoginViewModel
 
 @using (Html.BeginForm("Login", "Auth", FormMethod.Post))
 {
