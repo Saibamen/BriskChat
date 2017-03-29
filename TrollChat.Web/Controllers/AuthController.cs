@@ -59,7 +59,7 @@ namespace TrollChat.Web.Controllers
             }
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-            var stringView = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
+            var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
             var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
