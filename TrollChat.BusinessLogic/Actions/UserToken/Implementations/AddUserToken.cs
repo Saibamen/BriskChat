@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             this.hasher = hasher;
         }
 
-        public bool Invoke(int userId)
+        public string Invoke(int userId)
         {
             var userToken = new DataAccess.Models.UserToken()
             {
@@ -26,7 +26,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             userTokenRepository.Add(userToken);
             userTokenRepository.Save();
 
-            return true;
+            return userToken.SecretToken;
         }
     }
 }
