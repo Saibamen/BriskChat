@@ -4,11 +4,11 @@ namespace TrollChat.BusinessLogic.Models
 {
     public class RoomModel : BaseModel
     {
-        public User Owner { get; set; }
+        public UserModel Owner { get; set; }
 
         public List<TagModel> Tags { get; set; }
 
-        public List<User> Users { get; set; }
+        public List<UserModel> Users { get; set; }
 
         public List<MessageModel> Messages { get; set; }
 
