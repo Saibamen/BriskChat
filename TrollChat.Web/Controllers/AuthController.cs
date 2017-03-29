@@ -19,16 +19,22 @@ namespace TrollChat.Web.Controllers
         private readonly IAddNewUser addNewUser;
         private readonly IEmailService emailService;
         private readonly IConfirmUserEmail confirmUserEmail;
+        private readonly IGetUserByEmail getuserByEmail;
+        private readonly IAddUserToken addUserToken;
 
         public AuthController(IAuthorizeUser authorizeUser,
             IAddNewUser addNewUser,
             IEmailService emailService,
-            IConfirmUserEmail confirmUserEmail)
+            IConfirmUserEmail confirmUserEmail,
+            IGetUserByEmail getUserByEmail,
+            IAddUserToken addUserToken)
         {
             this.authorizeUser = authorizeUser;
             this.addNewUser = addNewUser;
             this.emailService = emailService;
             this.confirmUserEmail = confirmUserEmail;
+            this.getuserByEmail = getUserByEmail;
+            this.addUserToken = addUserToken;
         }
 
         [AllowAnonymous]
@@ -53,10 +59,10 @@ namespace TrollChat.Web.Controllers
             }
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-            var htmlSource = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
-            var result = PreMailer.Net.PreMailer.MoveCssInline(htmlSource);
+            var stringView = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
+            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
 
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", result.Html);
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Confirmation email has been sent to your email address");
@@ -144,6 +150,40 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("resendconfirmationemail")]
+        public IActionResult ResendConfirmationEmail()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resendconfirmationemail")]
+        public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
+        {
+            var user = getuserByEmail.Invoke(model.Email);
+            if (user == null)
+            {
+                Alert.Danger("Something went wrong");
+                return View();
+            }
+            if (user.EmailConfirmedOn != null)
+            {
+                Alert.Danger("Email already confirmed");
+                return View();
+            }
+
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
+            var stringView = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
+            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
+
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
+            emailService.SendEmailAsync(message).ConfigureAwait(false);
+
+            Alert.Success("Check your inbox");
+            return RedirectToAction("Login");
+        }
+
+        [AllowAnonymous]
         [HttpGet("resetpassword")]
         public IActionResult ResetPassword()
         {
@@ -159,7 +199,38 @@ namespace TrollChat.Web.Controllers
                 return View();
             }
 
+            var user = getuserByEmail.Invoke(model.Email);
+
+            if (user == null)
+            {
+                return View();
+            }
+
+            var token = addUserToken.Invoke(user.Id);
+            var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
+            var stringView = RenderViewToString("Email_EmailAccountConfirmation", "", callbackUrl);
+            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
+
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
+            emailService.SendEmailAsync(message).ConfigureAwait(false);
+
             return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("resetpasswordbytoken")]
+        public IActionResult ResetPasswordByToken(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                Alert.Danger("Invalid token");
+                return View("Error");
+            }
+
+            //TODO: Write reset password action
+
+            Alert.Danger("Invalid token");
+            return View("Error");
         }
     }
 }

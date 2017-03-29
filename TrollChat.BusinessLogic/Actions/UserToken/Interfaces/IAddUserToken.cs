@@ -4,6 +4,6 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
 {
     public interface IAddUserToken : IAction
     {
-        bool Invoke(int userId);
+        string Invoke(int userId);
     }
 }
