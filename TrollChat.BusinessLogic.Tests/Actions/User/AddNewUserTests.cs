@@ -8,6 +8,7 @@ using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
+//TODO: Update tests to use tokens
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
     public class AddNewUserTests
@@ -24,6 +25,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             };
             DataAccess.Models.User userSaved = null;
 
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Add(It.IsAny<DataAccess.Models.User>()))
                 .Callback<DataAccess.Models.User>(u => userSaved = u);
@@ -32,7 +35,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedHasher.Setup(h => h.GenerateRandomSalt()).Returns("salt-generated");
             mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
 
-            var action = new AddNewUser(mockedUserRepo.Object, mockedHasher.Object);
+            var action = new AddNewUser(mockedUserRepo.Object, mockedUserTokenRepository.Object, mockedHasher.Object);
 
             // action
             action.Invoke(userData);
@@ -42,7 +45,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Equal("salt-generated", userSaved.PasswordSalt);
             Assert.Equal("Ryszard", userSaved.Name);
             mockedUserRepo.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserRepo.Verify(r => r.Save(), Times.Once());
+            mockedUserRepo.Verify(r => r.Save(), Times.Exactly(2));
         }
 
         [Fact]
@@ -51,15 +54,16 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // prepare
             var userToAdd = new Models.User { Email = "test@test.pl", Password = "test", Name = "Tester" };
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
 
-            var action = new AddNewUser(mockedUserRepository.Object);
+            var action = new AddNewUser(mockedUserRepository.Object, mockedUserTokenRepository.Object);
 
             // action
             action.Invoke(userToAdd);
 
             // assert
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserRepository.Verify(r => r.Save(), Times.Once());
+            mockedUserRepository.Verify(r => r.Save(), Times.Exactly(2));
         }
 
         [Fact]
@@ -68,8 +72,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // prepare
             var userToAdd = new Models.User();
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
 
-            var action = new AddNewUser(mockedUserRepository.Object);
+            var action = new AddNewUser(mockedUserRepository.Object, mockedUserTokenRepository.Object);
 
             // action
             var actionResult = action.Invoke(userToAdd);
@@ -96,10 +101,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var findByResult = new List<DataAccess.Models.User> { userFromDb };
 
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable());
 
-            var action = new AddNewUser(mockedUserRepository.Object);
+            var action = new AddNewUser(mockedUserRepository.Object, mockedUserTokenRepository.Object);
 
             // action
             var actionResult = action.Invoke(userToAdd);
