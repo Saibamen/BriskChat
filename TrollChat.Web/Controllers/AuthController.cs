@@ -89,6 +89,7 @@ namespace TrollChat.Web.Controllers
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.Authentication.SignInAsync("CookieMiddleware", claimsPrinciple);
+            await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
 
             Alert.Success("Logged in");
 
@@ -100,6 +101,7 @@ namespace TrollChat.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.Authentication.SignOutAsync("CookieMiddleware");
+            await HttpContext.Authentication.SignOutAsync("Cookies");
 
             Alert.Success("Logged out");
 
