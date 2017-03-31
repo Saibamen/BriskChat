@@ -1,4 +1,4 @@
-﻿@model string
+﻿@model TrollChat.Web.Models.Common.BodyEmailModel
 @{
     Layout = "";
 }
@@ -9,7 +9,7 @@
         padding: 5px;
     }
 
-    .col-sm-offset-3 {
+    .topic {
         text-align: center;
     }
 
@@ -23,11 +23,33 @@
     h1 {
         font-size: 38px;
     }
+
+    .button1 {
+        background-color: white;
+        color: black;
+        display: inline-block;
+        border: 2px solid #4CAF50;
+        padding: 16px 32px;
+        text-align: center;
+        margin-top: 11px;
+        margin-bottom: 11px;
+    }
+
+    .button1 {
+        background-color: white;
+        color: black;
+        border: 2px solid #4CAF50;
+    }
+
+        .button1:hover {
+            background-color: #4CAF50;
+            color: white;
+        }
 </style>
 <body>
-    <div class="ui container">
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-3">
+    <div>
+        <div>
+            <div class="topic">
                 <div class="pages">
                     <h1>
                         T͇̟̺r̼̮͉̘̘͕͜o̭̗̙̻͝l͈͙ͅl̡͖̘ C͍̥h̝a͍t
@@ -37,12 +59,14 @@
                     </h5><br />
                 </div>
                 <div class="mywrapper">
-                    <img class="ui centered medium image" src="http://archer.gamebanana.com/img/ico/sprays/4e68599f1e1ec.png">
-                    <div class="ui medium header">We are ready to activate your account.<br /> Only we have to check if the email is yours.</div><p></p>
-                    <div class="row">
-                        <a class="ui inverted green button" href="@Model">Confirm Email</a>
+                    <img class="image" src="http://archer.gamebanana.com/img/ico/sprays/4e68599f1e1ec.png">
+                    <h4>@Model.TopicFirst<br />@Model.TopicSecend </h4>
+                    <div>
+                        <a class="button button1" href=@Model.ButtonValue>@Model.Buttontext</a>
                     </div>
-                    <div class="ui tiny header">If you do not create a TrollChat account,<br /> remove this email and everything will return to normal.</div><p></p>
+                    <h6>
+                        @Model.AditionalNotesFirst<br /> @Model.AditionalNotesSecend
+                    </h6>
                 </div>
             </div>
         </div>
