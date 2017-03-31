@@ -47,7 +47,6 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             {
                 User = newUser,
                 SecretToken = hasher.GenerateRandomGuid(),
-                SecretTokenTimeStamp = DateTime.Now.AddDays(14),
             };
 
             userTokenRepository.Add(newUserToken);
