@@ -72,19 +72,22 @@ namespace TrollChat.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
+
             return View();
         }
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
             {
                 Alert.Warning();
+                ViewBag.ReturnUrl = returnUrl;
 
                 return View(model);
             }
@@ -96,6 +99,7 @@ namespace TrollChat.Web.Controllers
             {
                 ModelState.AddModelError("Email", "Invalid email or password");
                 Alert.Warning();
+                ViewBag.ReturnUrl = returnUrl;
 
                 return View();
             }
@@ -113,7 +117,12 @@ namespace TrollChat.Web.Controllers
 
             Alert.Success("Logged in");
 
-            return RedirectToAction("Index", "User");
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                return RedirectToAction("Index", "User");
+            }
+
+            return Redirect(returnUrl);
         }
 
         [ValidateAntiForgeryToken]
