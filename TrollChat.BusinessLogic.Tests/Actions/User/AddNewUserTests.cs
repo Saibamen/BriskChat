@@ -8,7 +8,6 @@ using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-//TODO: Update tests to use tokens
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
     public class AddNewUserTests
