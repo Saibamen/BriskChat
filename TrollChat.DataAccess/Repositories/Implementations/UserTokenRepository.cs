@@ -12,9 +12,10 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
         }
 
-        //public override void Add(UserToken entity)
-        //{
-        //    entity.SecretTokenTimeStamp = DateTime.UtcNow.AddDays(14);
-        //}
+        public override void Add(UserToken entity)
+        {
+            entity.SecretTokenTimeStamp = DateTime.UtcNow.AddDays(14);
+            context.Set<UserToken>().Add(entity);
+        }
     }
 }

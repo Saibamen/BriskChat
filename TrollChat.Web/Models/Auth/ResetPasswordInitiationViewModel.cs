@@ -2,7 +2,7 @@
 
 namespace TrollChat.Web.Models.Auth
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordInitiationViewModel
     {
         [Required]
         [EmailAddress]

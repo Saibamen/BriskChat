@@ -2,7 +2,7 @@
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
 {
-    public interface IGetUserToken : IRepository
+    public interface IGetUserTokenByUserId : IRepository
     {
         string Invoke(int userId);
     }
