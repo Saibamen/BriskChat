@@ -21,7 +21,7 @@ namespace TrollChat.Web.Controllers
         private readonly IConfirmUserEmail confirmUserEmail;
         private readonly IGetUserByEmail getuserByEmail;
         private readonly IAddUserToken addUserToken;
-        private readonly IGetUserByToken getuserByToken;
+        private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
 
@@ -41,7 +41,7 @@ namespace TrollChat.Web.Controllers
             this.confirmUserEmail = confirmUserEmail;
             this.getuserByEmail = getUserByEmail;
             this.addUserToken = addUserToken;
-            this.getuserByToken = getUserByToken;
+            this.getUserByToken = getUserByToken;
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
         }
@@ -186,7 +186,7 @@ namespace TrollChat.Web.Controllers
             if (user.EmailConfirmedOn != null)
             {
                 Alert.Danger("Email already confirmed");
-                return View(model);
+                return RedirectToAction("Login");
             }
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
@@ -226,7 +226,7 @@ namespace TrollChat.Web.Controllers
 
             var token = addUserToken.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
-            var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
+            var stringView = RenderViewToString("Reset Password", "", callbackUrl);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
@@ -245,7 +245,7 @@ namespace TrollChat.Web.Controllers
                 return View("Error");
             }
 
-            var user = getuserByToken.Invoke(token);
+            var user = getUserByToken.Invoke(token);
 
             if (user == null)
             {
@@ -271,7 +271,7 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getuserByToken.Invoke(model.Token);
+            var user = getUserByToken.Invoke(model.Token);
 
             if (user == null)
             {

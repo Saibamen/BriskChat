@@ -24,8 +24,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 Name = "Ryszard"
             };
             DataAccess.Models.User userSaved = null;
+            DataAccess.Models.UserToken userTokenSaved = null;
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+            mockedUserTokenRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()))
+                .Callback<DataAccess.Models.UserToken>(u => userTokenSaved = u);
 
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Add(It.IsAny<DataAccess.Models.User>()))
@@ -45,25 +49,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Equal("salt-generated", userSaved.PasswordSalt);
             Assert.Equal("Ryszard", userSaved.Name);
             mockedUserRepo.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
+            mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
             mockedUserRepo.Verify(r => r.Save(), Times.Exactly(2));
-        }
-
-        [Fact]
-        public void Invoke_ValidData_AddAndSaveAreCalled()
-        {
-            // prepare
-            var userToAdd = new Models.UserModel { Email = "test@test.pl", Password = "test", Name = "Tester" };
-            var mockedUserRepository = new Mock<IUserRepository>();
-            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
-
-            var action = new AddNewUser(mockedUserRepository.Object, mockedUserTokenRepository.Object);
-
-            // action
-            action.Invoke(userToAdd);
-
-            // assert
-            mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserRepository.Verify(r => r.Save(), Times.Exactly(2));
+            Assert.NotNull(userTokenSaved);
         }
 
         [Fact]
@@ -82,6 +70,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.Equal(null, actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);
         }
 
@@ -114,6 +103,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.Equal(null, actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);
         }
     }
