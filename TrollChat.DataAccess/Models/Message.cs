@@ -8,10 +8,10 @@ namespace TrollChat.DataAccess.Models
         [Required]
         public UserRoom UserRoom { get; set; }
 
-        [ForeignKey(nameof(Message.LastMessageFor))]
+        [ForeignKey(nameof(LastMessageFor))]
         public int LastMessageForId { get; set; }
-      
-        public UserRoom LastMessageFor {get;set;}
+
+        public UserRoom LastMessageFor { get; set; }
 
         [Required]
         public string Text { get; set; }

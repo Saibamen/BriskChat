@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Implementation;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
 using Xunit;
 using System.Linq.Expressions;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
