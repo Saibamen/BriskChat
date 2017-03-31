@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using TrollChat.DataAccess.Repositories.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using System.Linq;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementation
 {
     public class AddNewRoom : IAddNewRoom
     {
-        private IRoomRepository roomRepository;
+        private readonly IRoomRepository roomRepository;
 
         public AddNewRoom(IRoomRepository roomRepository)
         {
@@ -34,6 +30,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementation
 
             roomRepository.Add(newRoom);
             roomRepository.Save();
+
             return newRoom.Id;
         }
     }
