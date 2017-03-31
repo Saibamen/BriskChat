@@ -43,8 +43,12 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             userRepository.Edit(userToEdit);
             userRepository.Save();
 
-            userTokenRepository.Delete(userToEdit.Tokens.FirstOrDefault());
-            userTokenRepository.Save();
+            var tokenToDelete = userToEdit.Tokens.FirstOrDefault();
+            if (tokenToDelete != null)
+            {
+                userTokenRepository.Delete(tokenToDelete);
+                userTokenRepository.Save();
+            }
 
             return true;
         }

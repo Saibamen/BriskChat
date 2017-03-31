@@ -69,9 +69,8 @@ namespace TrollChat.Web.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
             var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
-            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
 
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Confirmation email has been sent to your email address");
@@ -157,14 +156,14 @@ namespace TrollChat.Web.Controllers
 
             var confirmAction = confirmUserEmail.Invoke(token);
 
-            if (confirmAction)
+            if (!confirmAction)
             {
-                Alert.Success("Email confirmed");
+                Alert.Danger("Couldn't finish this action");
                 return RedirectToAction("Login", "Auth");
             }
 
-            Alert.Danger("Invalid token");
-            return View("Error");
+            Alert.Success("Email confirmed");
+            return RedirectToAction("Login", "Auth");
         }
 
         [AllowAnonymous]
@@ -192,9 +191,8 @@ namespace TrollChat.Web.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
             var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
-            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
 
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Check your inbox");
@@ -229,9 +227,8 @@ namespace TrollChat.Web.Controllers
             var token = addUserToken.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
             var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
-            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
 
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", viewWithInlineCss.Html);
+            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Email was sent to your Email account");
