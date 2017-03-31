@@ -1,6 +1,6 @@
 ﻿namespace TrollChat.Web.Models.Common
 {
-    public class BodyEmailModel
+    public class EmailBodyModel
     {
         public string TopicFirst { get; set; }
         public string TopicSecend { get; set; }

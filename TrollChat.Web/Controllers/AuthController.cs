@@ -70,7 +70,7 @@ namespace TrollChat.Web.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
 
-            var emailinfo = new BodyEmailModel
+            var emailinfo = new EmailBodyModel
             {
                 TopicFirst = "We are ready to activate your account.",
                 TopicSecend = "Only we have to check if the email is yours.",
@@ -80,8 +80,7 @@ namespace TrollChat.Web.Controllers
                 AditionalNotesSecend = "remove this email and everything will return to normal."
             };
 
-            var stringView = RenderViewToString<BodyEmailModel>("ConfirmEmail", "", emailinfo);
-            var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
@@ -203,7 +202,7 @@ namespace TrollChat.Web.Controllers
             }
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
 
-            var emailinfo = new BodyEmailModel
+            var emailinfo = new EmailBodyModel
             {
                 TopicFirst = "We are ready to activate your account.",
                 TopicSecend = "Only we have to check if the email is yours.",
@@ -213,7 +212,7 @@ namespace TrollChat.Web.Controllers
                 AditionalNotesSecend = "remove this email and everything will return to normal."
             };
 
-            var stringView = RenderViewToString<BodyEmailModel>("ConfirmEmail", "", emailinfo);
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
@@ -248,7 +247,7 @@ namespace TrollChat.Web.Controllers
             }
             var token = addUserToken.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
-            var emailinfo = new BodyEmailModel
+            var emailinfo = new EmailBodyModel
             {
                 TopicFirst = "We are ready to activate your account.",
                 TopicSecend = "Only we have to check if the email is yours.",
@@ -258,7 +257,7 @@ namespace TrollChat.Web.Controllers
                 AditionalNotesSecend = "remove this email and everything will return to normal."
             };
 
-            var stringView = RenderViewToString<BodyEmailModel>("Reset Password", "", emailinfo);
+            var stringView = RenderViewToString<EmailBodyModel>("Reset Password", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
