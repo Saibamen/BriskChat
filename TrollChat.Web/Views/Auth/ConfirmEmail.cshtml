@@ -3,35 +3,14 @@
     Layout = "";
 }
 <style>
-    h1 {
-        font-size: 44px;
-        font-family: cursive;
-    }
-
-    h5 {
-        font-family: cursive;
-    }
-
     .pages {
-        background-color: #4779ce;
+        background-color: #1377db;
         text-align: center;
         padding: 5px;
     }
 
-    .btn-primary {
-        border: green;
-        background-color: green;
-        width: 200px;
-        height: 45px;
-        padding: 13px;
-    }
-
     .col-sm-offset-3 {
         text-align: center;
-    }
-
-    .image {
-        vertical-align: middle;
     }
 
     .mywrapper {
@@ -40,24 +19,30 @@
         border-color: black;
         border-top: 0px;
     }
+
+    h1 {
+        font-size: 38px;
+    }
 </style>
 <body>
-    <div class="contanier">
+    <div class="ui container">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
                 <div class="pages">
-                    <h1>TrollChat</h1><h5>Communicator for Trolls</h5><br />
+                    <h1>
+                        T͇̟̺r̼̮͉̘̘͕͜o̭̗̙̻͝l͈͙ͅl̡͖̘ C͍̥h̝a͍t
+                        ̩̰̱
+                    </h1><h5>
+                        C͚̬̹͍o̸m̫͚͎̻ͅm̮̟͔ͅͅu̦̳͔ń̹̜̰̩̜i̛̱c͝a̝̬̬t̷͍̬ò̬̲̮̤̟̙ŗ̹̻̙̦̜͙̞ ̫̮̙f̟̼o̧͔̤̦̼̣͙̜r ̼T͔͇̰͙̺r͖̘̟͕̬̫̲o̖͕̫̭̖͈̟l̜̖͇͍̞̟̝l̥̜̬̲̺͉̀s̢̰̩̺̠̥̙
+                    </h5><br />
                 </div>
                 <div class="mywrapper">
-
-                    <div class="image">
-                        <img src="http://archer.gamebanana.com/img/ico/sprays/4e68599f1e1ec.png" alt="Cinque Terre">
-                    </div>
-                    <h4>We are ready to activate your account.<br /> Only we have to check if the email is yours.</h4><br />
+                    <img class="ui centered medium image" src="http://archer.gamebanana.com/img/ico/sprays/4e68599f1e1ec.png">
+                    <div class="ui medium header">We are ready to activate your account.<br /> Only we have to check if the email is yours.</div><p></p>
                     <div class="row">
-                        <a class="btn btn-primary" href="@Model">Confirm Email</a>
+                        <a class="ui inverted green button" href="@Model">Confirm Email</a>
                     </div>
-                    <h6>If you do not create a TrollChat account,<br /> remove this email and everything will return to normal.</h6>
+                    <div class="ui tiny header">If you do not create a TrollChat account,<br /> remove this email and everything will return to normal.</div><p></p>
                 </div>
             </div>
         </div>
