@@ -9,6 +9,7 @@ using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Models.Auth;
+using TrollChat.Web.Models.Common;
 
 namespace TrollChat.Web.Controllers
 {
@@ -68,7 +69,18 @@ namespace TrollChat.Web.Controllers
             }
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-            var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
+
+            var emailinfo = new EmailBodyModel
+            {
+                TopicFirst = "We are ready to activate your account.",
+                TopicSecend = "Only we have to check if the email is yours.",
+                ButtonValue = callbackUrl,
+                Buttontext = "Confirm Email",
+                AditionalNotesFirst = "If you do not create a TrollChat account,",
+                AditionalNotesSecend = "remove this email and everything will return to normal."
+            };
+
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
@@ -188,9 +200,19 @@ namespace TrollChat.Web.Controllers
                 Alert.Danger("Email already confirmed");
                 return RedirectToAction("Login");
             }
-
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-            var stringView = RenderViewToString("ConfirmEmail", "", callbackUrl);
+
+            var emailinfo = new EmailBodyModel
+            {
+                TopicFirst = "We are ready to activate your account.",
+                TopicSecend = "Only we have to check if the email is yours.",
+                ButtonValue = callbackUrl,
+                Buttontext = "Confirm Email",
+                AditionalNotesFirst = "If you do not create a TrollChat account,",
+                AditionalNotesSecend = "remove this email and everything will return to normal."
+            };
+
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);
@@ -223,10 +245,19 @@ namespace TrollChat.Web.Controllers
                 Alert.Danger("Something went wrong");
                 return View();
             }
-
             var token = addUserToken.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
-            var stringView = RenderViewToString("Reset Password", "", callbackUrl);
+            var emailinfo = new EmailBodyModel
+            {
+                TopicFirst = "We are ready to activate your account.",
+                TopicSecend = "Only we have to check if the email is yours.",
+                ButtonValue = callbackUrl,
+                Buttontext = "Confirm Email",
+                AditionalNotesFirst = "If you do not create a TrollChat account,",
+                AditionalNotesSecend = "remove this email and everything will return to normal."
+            };
+
+            var stringView = RenderViewToString<EmailBodyModel>("Reset Password", "", emailinfo);
 
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             emailService.SendEmailAsync(message).ConfigureAwait(false);

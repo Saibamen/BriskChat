@@ -46,23 +46,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         }
 
         [Fact]
-        public void Invoke_ValidData_AddAndSaveAreCalled()
-        {
-            // prepare
-            var roomToAdd = new Models.RoomModel { Name = "TestTrool", Topic = "Trollchat", Description = "Romms", Customization = 2, IsPublic = true };
-            var mockedRoomRepository = new Mock<IRoomRepository>();
-
-            var action = new AddNewRoom(mockedRoomRepository.Object);
-
-            // action
-            action.Invoke(roomToAdd);
-
-            // assert
-            mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Once());
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once());
-        }
-
-        [Fact]
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
