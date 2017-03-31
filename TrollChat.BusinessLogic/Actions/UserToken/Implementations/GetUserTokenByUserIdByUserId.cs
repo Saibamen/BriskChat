@@ -4,11 +4,11 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 {
-    public class GetUserToken : IGetUserToken
+    public class GetUserTokenByUserIdByUserId : IGetUserTokenByUserId
     {
         private readonly IUserTokenRepository userRepository;
 
-        public GetUserToken(IUserTokenRepository userRepository)
+        public GetUserTokenByUserIdByUserId(IUserTokenRepository userRepository)
         {
             this.userRepository = userRepository;
         }

@@ -15,7 +15,6 @@ namespace TrollChat.Web.Controllers
     {
         public AlertHelper Alert = new AlertHelper();
 
-       
         public override void OnActionExecuted(ActionExecutedContext context)
         {
             base.OnActionExecuted(context);
@@ -44,7 +43,10 @@ namespace TrollChat.Web.Controllers
                     viewResult.View.RenderAsync(viewContext);
                 }
 
-                return sw.GetStringBuilder().ToString();
+                var stringView = sw.GetStringBuilder().ToString();
+                //Move css inline
+                var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
+                return viewWithInlineCss.Html;
             }
         }
     }
