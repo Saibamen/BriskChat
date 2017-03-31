@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Moq;
 using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
+using TrollChat.DataAccess.Repositories.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
@@ -49,7 +50,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Equal("Ryszard", userSaved.Name);
             mockedUserRepo.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserRepo.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUserRepo.Verify(r => r.Save(), Times.Exactly(1));
             Assert.NotNull(userTokenSaved);
         }
 

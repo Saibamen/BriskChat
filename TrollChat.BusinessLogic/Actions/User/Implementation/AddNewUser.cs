@@ -2,6 +2,7 @@
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
+using TrollChat.DataAccess.Repositories.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementation
@@ -40,7 +41,6 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             };
 
             userRepository.Add(newUser);
-            userRepository.Save();
 
             var newUserToken = new DataAccess.Models.UserToken()
             {

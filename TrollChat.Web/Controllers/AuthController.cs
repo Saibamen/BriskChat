@@ -19,7 +19,7 @@ namespace TrollChat.Web.Controllers
         private readonly IAuthorizeUser authorizeUser;
         private readonly IAddNewUser addNewUser;
         private readonly IEmailService emailService;
-        private readonly IConfirmUserEmail confirmUserEmail;
+        private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
         private readonly IGetUserByEmail getuserByEmail;
         private readonly IAddUserToken addUserToken;
         private readonly IGetUserByToken getUserByToken;
@@ -29,7 +29,7 @@ namespace TrollChat.Web.Controllers
         public AuthController(IAuthorizeUser authorizeUser,
             IAddNewUser addNewUser,
             IEmailService emailService,
-            IConfirmUserEmail confirmUserEmail,
+            IConfirmUserEmailByToken confirmUserEmailByToken,
             IGetUserByEmail getUserByEmail,
             IAddUserToken addUserToken,
             IGetUserByToken getUserByToken,
@@ -39,7 +39,7 @@ namespace TrollChat.Web.Controllers
             this.authorizeUser = authorizeUser;
             this.addNewUser = addNewUser;
             this.emailService = emailService;
-            this.confirmUserEmail = confirmUserEmail;
+            this.confirmUserEmailByToken = confirmUserEmailByToken;
             this.getuserByEmail = getUserByEmail;
             this.addUserToken = addUserToken;
             this.getUserByToken = getUserByToken;
@@ -166,7 +166,7 @@ namespace TrollChat.Web.Controllers
                 return View("Error");
             }
 
-            var confirmAction = confirmUserEmail.Invoke(token);
+            var confirmAction = confirmUserEmailByToken.Invoke(token);
 
             if (!confirmAction)
             {

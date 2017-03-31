@@ -5,12 +5,12 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementation
 {
-    public class ConfirmUserEmail : IConfirmUserEmail
+    public class ConfirmUserEmailByToken : IConfirmUserEmailByToken
     {
         private readonly IUserRepository userRepository;
         private readonly IUserTokenRepository userTokenRepository;
 
-        public ConfirmUserEmail(IUserTokenRepository userTokenRepository, IUserRepository userRepository)
+        public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository)
         {
             this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
@@ -28,10 +28,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);
-            userRepository.Save();
 
             userTokenRepository.Delete(userToken);
-            userTokenRepository.Save();
+            userRepository.Save();
 
             return true;
         }

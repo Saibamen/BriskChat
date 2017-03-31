@@ -1,0 +1,114 @@
+﻿using Moq;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Linq.Expressions;
+using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.DataAccess.Models;
+using TrollChat.DataAccess.Repositories.Interfaces;
+using Xunit;
+
+namespace TrollChat.BusinessLogic.Tests.Actions.User
+{
+    public class ConfirmUserEmailTests
+    {
+        [Fact]
+        public void Invoke_ValidData_UpdatesEmailConfirmedOn()
+        {
+            // prepare
+            var userFromDb = new DataAccess.Models.User()
+            {
+                Id = 1,
+                EmailConfirmedOn = null,
+            };
+
+            var userTokenFromDb = new UserToken
+            {
+                User = userFromDb,
+                SecretToken = "123"
+            };
+
+            DataAccess.Models.User userSaved = null;
+
+            var getAllResults = new List<UserToken> { userTokenFromDb };
+
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<UserToken, bool>>>()))
+             .Returns(getAllResults.AsQueryable());
+
+            var mockedUserRepo = new Mock<IUserRepository>();
+            mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
+                .Callback<DataAccess.Models.User>(u => userSaved = u);
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+
+            // action
+            var actionResult = action.Invoke("1");
+
+            // assert
+            Assert.True(actionResult);
+            Assert.NotNull(userSaved.EmailConfirmedOn);
+            mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<UserToken>()), Times.Once());
+            mockedUserRepo.Verify(r => r.Save(), Times.Once);
+        }
+
+        [Fact]
+        public void Verify_EmailAlreadyConfirmed_SaveNorEditCalled()
+        {
+            // prepare
+            DateTime dateNow = DateTime.UtcNow;
+            var userFromDb = new DataAccess.Models.User()
+            {
+                Id = 1,
+                EmailConfirmedOn = dateNow,
+            };
+
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+            var mockedUserRepo = new Mock<IUserRepository>();
+            mockedUserRepo.Setup(r => r.GetById(1))
+                .Returns(userFromDb);
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+
+            // action
+            action.Invoke("123");
+
+            // assert
+            Assert.Equal(userFromDb.EmailConfirmedOn, dateNow);
+            mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
+            mockedUserRepo.Verify(r => r.Save(), Times.Never);
+        }
+
+        public void Verify_ForDoubledAction_UpdatesEmailConfirmedOnOnce()
+        {
+            // prepare
+            var userFromDb = new DataAccess.Models.User()
+            {
+                Id = 1,
+                EmailConfirmedOn = null,
+            };
+            DataAccess.Models.User userSaved = null;
+
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+            var mockedUserRepo = new Mock<IUserRepository>();
+            mockedUserRepo.Setup(r => r.GetById(1))
+                .Returns(userFromDb);
+            mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
+                .Callback<DataAccess.Models.User>(u => userSaved = u);
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+
+            // action
+            action.Invoke("123");
+            action.Invoke("123");
+
+            // assert
+            Assert.NotNull(userSaved.EmailConfirmedOn);
+            mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once);
+            mockedUserRepo.Verify(r => r.Save(), Times.Once());
+        }
+    }
+}

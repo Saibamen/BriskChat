@@ -1,14 +1,15 @@
 ﻿using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using System.Linq;
+using TrollChat.DataAccess.Repositories.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 {
-    public class GetUserTokenByUserIdByUserId : IGetUserTokenByUserId
+    public class GetUserTokenByUserId : IGetUserTokenByUserId
     {
         private readonly IUserTokenRepository userRepository;
 
-        public GetUserTokenByUserIdByUserId(IUserTokenRepository userRepository)
+        public GetUserTokenByUserId(IUserTokenRepository userRepository)
         {
             this.userRepository = userRepository;
         }

@@ -6,14 +6,14 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
 {
     public class DbSeeder
     {
-        public void Seed(IAddNewUser addNewUser, IConfirmUserEmail confirmUserEmail)
+        public void Seed(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken)
         {
-            SeedUsers(addNewUser, confirmUserEmail);
+            SeedUsers(addNewUser, confirmUserEmailByToken);
         }
 
         private readonly string[] users = { "owner", "user" };
 
-        public void SeedUsers(IAddNewUser addNewUser, IConfirmUserEmail confirmUserEmail)
+        public void SeedUsers(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken)
         {
             foreach (var user in users)
             {
@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                 };
 
                 var token = addNewUser.Invoke(model).Tokens.FirstOrDefault().SecretToken;
-                confirmUserEmail.Invoke(token);
+                confirmUserEmailByToken.Invoke(token);
             }
         }
     }

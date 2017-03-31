@@ -2,7 +2,7 @@
 
 namespace TrollChat.BusinessLogic.Actions.User.Interfaces
 {
-    public interface IConfirmUserEmail : IAction
+    public interface IConfirmUserEmailByToken : IAction
     {
         bool Invoke(string userId);
     }
