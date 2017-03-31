@@ -14,25 +14,58 @@
 
 @section Pre_Body
 {
-    <div class="container body-content">
-        @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
-        {
-            <button type="submit" class="btn btn-danger">Log off</button>
-        }
+    <div class="ui vertical menu">
+        <a class="active teal item">
+            Inbox
+            <div class="ui teal left pointing label">1</div>
+        </a>
+        <a class="item">
+            Spam
+            <div class="ui label">51</div>
+        </a>
+        <a class="item">
+            Updates
+            <div class="ui label">1</div>
+        </a>
+        <div class="item">
+            <div class="header">Products</div>
+            <div class="menu">
+                <a class="item">Enterprise <div class="ui label">1</div></a>
+                <a class="item">Consumer</a>
+            </div>
+        </div>
+        <a class="item">
+            @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
+            {
+                <button type="submit" class="ui button">Log off</button>
+            }
+            </a>
+        <div class="item">
+            <div class="ui transparent icon input">
+                <input type="text" placeholder="Search mail...">
+                <i class="search icon"></i>
+            </div>
+        </div>
+</div>
+</div>
 
+    <div class="ui container">
         @if (TempData.ContainsKey("alertMessages"))
         {
             @Html.Partial("_AlertsPartial")
         }
-}
+    <div class="ui grid">
+        <div class="column"></div>
+    </div>
+    }
 
-@section Post_Body
+    @section Post_Body
 {
-    <hr />
-    <footer>
-        <p>&copy; 2017 - TrollChat</p>
-    </footer>
-</div>
+        <hr />
+        <footer>
+            <p>&copy; 2017 - TrollChat</p>
+        </footer>
+    </div>
 }
 
 @section Scripts
