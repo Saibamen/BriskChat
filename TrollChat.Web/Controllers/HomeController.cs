@@ -11,6 +11,7 @@ namespace TrollChat.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -18,6 +19,7 @@ namespace TrollChat.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
