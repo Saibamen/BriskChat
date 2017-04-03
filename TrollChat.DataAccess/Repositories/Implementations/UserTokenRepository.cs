@@ -20,5 +20,10 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             entity.SecretTokenTimeStamp = timeNow.AddHours(2);
             context.Set<UserToken>().Add(entity);
         }
+
+        public override void Delete(UserToken entity)
+        {
+            context.Set<UserToken>().Remove(entity);
+        }
     }
 }
