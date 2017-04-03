@@ -14,7 +14,7 @@
 
 @section Pre_Body
 {
-    <div class="ui vertical inverted sidebar menu">
+    <div class="ui vertical inverted sidebar menu visible">
         <div class="item">
             <a class="ui logo icon image" href="/">
                 <img src="/images/troll.png" alt="Logo">
@@ -63,8 +63,10 @@
             @Html.Partial("_AlertsPartial")
         }
 
-        <div id="chat-header">Header</div>
+        <div id="chat-header"><h2>Header</h2></div>
+
         <div id="chat-messages">Messages</div>
+
         <div id="chat-input">
             <div class="ui action input">
                 <input type="text" placeholder="Type message here...">
