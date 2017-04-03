@@ -6,19 +6,23 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 {
     public class GetUserByToken : IGetUserByToken
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserTokenRepository userTokenRepository;
 
-        public GetUserByToken(IUserRepository userRepository)
+        public GetUserByToken(IUserTokenRepository userTokenRepository)
         {
-            this.userRepository = userRepository;
+            this.userTokenRepository = userTokenRepository;
         }
 
         public DataAccess.Models.User Invoke(string token)
         {
-            // TODO: Move logic to repositry ??
-            var user = userRepository.FindBy(x => x.Tokens.Any(y => y.SecretToken == token && y.DeletedOn == null)).FirstOrDefault();
+            if (string.IsNullOrEmpty(token))
+            {
+                return null;
+            }
 
-            return user;
+            var result = userTokenRepository.FindBy(y => y.SecretToken == token).FirstOrDefault();
+
+            return result?.User;
         }
     }
 }
