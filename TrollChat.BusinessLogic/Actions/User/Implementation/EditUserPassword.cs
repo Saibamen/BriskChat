@@ -31,26 +31,29 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 
             var userToEdit = userRepository.GetById(id);
 
-            if (userToEdit == null)
+            switch (userToEdit)
             {
-                return false;
+                default:
+                    var salt = hasher.GenerateRandomSalt();
+                    userToEdit.PasswordHash = hasher.CreatePasswordHash(plainPassword, salt);
+                    userToEdit.PasswordSalt = salt;
+
+                    var tokenToDelete = userTokenRepository.FindBy(x => x.User == userToEdit).FirstOrDefault();
+                    if (tokenToDelete is null)
+                    {
+                        return false;
+                    }
+
+                    userTokenRepository.Delete(tokenToDelete);
+                    userTokenRepository.Save();
+
+                    userRepository.Edit(userToEdit);
+                    userRepository.Save();
+                    return true;
+
+                case null:
+                    return false;
             }
-
-            var salt = hasher.GenerateRandomSalt();
-            userToEdit.PasswordHash = hasher.CreatePasswordHash(plainPassword, salt);
-            userToEdit.PasswordSalt = salt;
-
-            userRepository.Edit(userToEdit);
-            userRepository.Save();
-
-            var tokenToDelete = userToEdit.Tokens.FirstOrDefault();
-            if (tokenToDelete != null)
-            {
-                userTokenRepository.Delete(tokenToDelete);
-                userTokenRepository.Save();
-            }
-
-            return true;
         }
     }
 }
