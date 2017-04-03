@@ -22,7 +22,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 EmailConfirmedOn = null,
             };
 
-            var userTokenFromDb = new UserToken
+            var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 User = userFromDb,
                 SecretToken = "123"
@@ -30,10 +30,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             DataAccess.Models.User userSaved = null;
 
-            var getAllResults = new List<UserToken> { userTokenFromDb };
+            var getAllResults = new List<DataAccess.Models.UserToken> { userTokenFromDb };
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
-            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<UserToken, bool>>>()))
+            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
              .Returns(getAllResults.AsQueryable());
 
             var mockedUserRepo = new Mock<IUserRepository>();
@@ -48,7 +48,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.True(actionResult);
             Assert.NotNull(userSaved.EmailConfirmedOn);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<UserToken>()), Times.Once());
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
             mockedUserRepo.Verify(r => r.Save(), Times.Once);
         }
 

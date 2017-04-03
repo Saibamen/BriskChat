@@ -46,7 +46,7 @@
         <div class="item">
             @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
             {
-                <button type="submit" class="ui button inverted">Log off</button>
+                <button type="submit" class="ui button negative">Log off</button>
             }
         </div>
         <div class="item down">
@@ -68,7 +68,7 @@
         <div id="chat-input">
             <div class="ui action input">
                 <input type="text" placeholder="Type message here...">
-                <div class="ui button">Go</div>
+                <div class="ui button primary">Go</div>
             </div>
         </div>
 }

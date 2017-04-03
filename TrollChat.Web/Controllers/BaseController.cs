@@ -44,8 +44,9 @@ namespace TrollChat.Web.Controllers
                 }
 
                 var stringView = sw.GetStringBuilder().ToString();
-                //Move css inline
+                // Move css inline
                 var viewWithInlineCss = PreMailer.Net.PreMailer.MoveCssInline(stringView);
+
                 return viewWithInlineCss.Html;
             }
         }

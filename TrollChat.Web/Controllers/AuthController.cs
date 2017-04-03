@@ -21,7 +21,7 @@ namespace TrollChat.Web.Controllers
         private readonly IEmailService emailService;
         private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
         private readonly IGetUserByEmail getuserByEmail;
-        private readonly IAddUserToken addUserToken;
+        private readonly IAddUserTokenToUser addUserTokenToUser;
         private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
@@ -31,7 +31,7 @@ namespace TrollChat.Web.Controllers
             IEmailService emailService,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IGetUserByEmail getUserByEmail,
-            IAddUserToken addUserToken,
+            IAddUserTokenToUser addUserTokenToUser,
             IGetUserByToken getUserByToken,
             IEditUserPassword editIUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString)
@@ -41,7 +41,7 @@ namespace TrollChat.Web.Controllers
             this.emailService = emailService;
             this.confirmUserEmailByToken = confirmUserEmailByToken;
             this.getuserByEmail = getUserByEmail;
-            this.addUserToken = addUserToken;
+            this.addUserTokenToUser = addUserTokenToUser;
             this.getUserByToken = getUserByToken;
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
@@ -65,6 +65,7 @@ namespace TrollChat.Web.Controllers
             if (userAddAction == null)
             {
                 Alert.Danger("User already exists");
+
                 return View();
             }
 
@@ -163,6 +164,7 @@ namespace TrollChat.Web.Controllers
             if (string.IsNullOrEmpty(token))
             {
                 Alert.Danger("Invalid token");
+
                 return View("Error");
             }
 
@@ -171,10 +173,12 @@ namespace TrollChat.Web.Controllers
             if (!confirmAction)
             {
                 Alert.Danger("Couldn't finish this action");
+
                 return RedirectToAction("Login", "Auth");
             }
 
             Alert.Success("Email confirmed");
+
             return RedirectToAction("Login", "Auth");
         }
 
@@ -190,16 +194,21 @@ namespace TrollChat.Web.Controllers
         public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
         {
             var user = getuserByEmail.Invoke(model.Email);
+
             if (user == null)
             {
                 Alert.Danger("Something went wrong");
+
                 return View(model);
             }
+
             if (user.EmailConfirmedOn != null)
             {
                 Alert.Danger("Email already confirmed");
+
                 return RedirectToAction("Login");
             }
+
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
 
             var emailinfo = new EmailBodyModel
@@ -218,6 +227,7 @@ namespace TrollChat.Web.Controllers
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Check your inbox");
+
             return RedirectToAction("Login");
         }
 
@@ -235,6 +245,7 @@ namespace TrollChat.Web.Controllers
             if (!ModelState.IsValid)
             {
                 Alert.Danger("Something went wrong");
+
                 return View(model);
             }
 
@@ -243,9 +254,10 @@ namespace TrollChat.Web.Controllers
             if (user == null)
             {
                 Alert.Danger("Something went wrong");
+
                 return View();
             }
-            var token = addUserToken.Invoke(user.Id);
+            var token = addUserTokenToUser.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
             var emailinfo = new EmailBodyModel
             {
@@ -263,6 +275,7 @@ namespace TrollChat.Web.Controllers
             emailService.SendEmailAsync(message).ConfigureAwait(false);
 
             Alert.Success("Email was sent to your Email account");
+
             return RedirectToAction("Login");
         }
 
@@ -273,6 +286,7 @@ namespace TrollChat.Web.Controllers
             if (string.IsNullOrEmpty(token))
             {
                 Alert.Danger("Invalid token");
+
                 return View("Error");
             }
 
@@ -281,6 +295,7 @@ namespace TrollChat.Web.Controllers
             if (user == null)
             {
                 Alert.Danger("You can't complete this action");
+
                 return View("Error");
             }
 
@@ -299,6 +314,7 @@ namespace TrollChat.Web.Controllers
             if (!ModelState.IsValid)
             {
                 Alert.Danger("Something went wrong");
+
                 return View(model);
             }
 
@@ -307,6 +323,7 @@ namespace TrollChat.Web.Controllers
             if (user == null)
             {
                 Alert.Danger("You can't complete this action");
+
                 return View("Login");
             }
 
@@ -315,10 +332,12 @@ namespace TrollChat.Web.Controllers
             if (!result)
             {
                 Alert.Danger("Something went wrong");
+
                 return View(model);
             }
 
             Alert.Success("Your password has been updated");
+
             return RedirectToAction("Login");
         }
     }

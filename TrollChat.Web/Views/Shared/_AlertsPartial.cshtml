@@ -8,14 +8,17 @@
     {
         foreach (var alert in alertMessages)
         {
-            <div class="alert alert-@alert.Type.ToString().ToLower() alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div class="ui @alert.Type.ToString().ToLower() message">
+                <i class="close icon"></i>
 
-                @if (!string.IsNullOrEmpty(alert.Title))
-                    {
-                    <a href="#" class="alert-link">@alert.Title</a>
+                <div class="header">
+                    @alert.Message
+                </div>
+                
+                @if (!string.IsNullOrEmpty(alert.MoreInfo))
+                {
+                    @alert.MoreInfo
                 }
-                @alert.Message
             </div>
         }
     }
