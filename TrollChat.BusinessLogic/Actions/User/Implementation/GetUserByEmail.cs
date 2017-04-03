@@ -15,6 +15,11 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 
         public DataAccess.Models.User Invoke(string email)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
             var dbUser = userRepository.FindBy(x => x.Email == email).FirstOrDefault();
             if (dbUser == null)
             {

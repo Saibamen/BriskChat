@@ -3,11 +3,11 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 {
-    public class DeleteUserToken : IDeleteUserToken
+    public class DeleteUserTokenById : IDeleteUserTokenById
     {
         private readonly IUserTokenRepository userTokenRepository;
 
-        public DeleteUserToken(IUserTokenRepository userTokenRepository)
+        public DeleteUserTokenById(IUserTokenRepository userTokenRepository)
         {
             this.userTokenRepository = userTokenRepository;
         }

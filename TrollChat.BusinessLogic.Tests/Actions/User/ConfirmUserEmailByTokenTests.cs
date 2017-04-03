@@ -1,7 +1,6 @@
 ﻿using Moq;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
 using TrollChat.BusinessLogic.Actions.User.Implementation;
@@ -11,7 +10,7 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class ConfirmUserEmailTests
+    public class ConfirmUserEmailByTokenTests
     {
         [Fact]
         public void Invoke_ValidData_UpdatesEmailConfirmedOn()

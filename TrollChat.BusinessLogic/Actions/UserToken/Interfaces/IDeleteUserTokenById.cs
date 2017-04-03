@@ -2,7 +2,7 @@
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
 {
-    public interface IDeleteUserToken : IAction
+    public interface IDeleteUserTokenById : IAction
     {
         bool Invoke(int userTokenId);
     }
