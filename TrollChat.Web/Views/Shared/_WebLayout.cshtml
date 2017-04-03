@@ -8,35 +8,25 @@
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </environment>
 }
 
 @section Pre_Body
 {
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">TrollChat</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
 
-                @await Html.PartialAsync("_LoginPartial")
-            </div>
-        </div>
-    </nav>
-
+<div class="ui secondary pointing menu">
+    <img class="logo" src="~/images/troll.png" asp-action="Index"/>
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
+        TrollChat
+    </a>
+    <div class="right menu">
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">Home</a>
+        <a asp-area="" asp-controller="Home" asp-action="About" class="ui item">About</a>
+        <a asp-area="" asp-controller="Home" asp-action="Contact" class="ui item">Contact</a>
+    </div>
+    @await Html.PartialAsync("_LoginPartial")
+</div>
     <div class="container body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
@@ -46,10 +36,12 @@
 
 @section Post_Body
 {
-    <hr />
-    <footer>
+    <div class="ui inverted vertical footer segment form-page">
+        <div class="container">
+        <hr />
         <p>&copy; 2017 - TrollChat</p>
-    </footer>
+    </div>
+        </div>
 </div>
 }
 
