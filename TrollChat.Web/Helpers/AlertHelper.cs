@@ -12,43 +12,43 @@ namespace TrollChat.Web.Helpers
             return Alerts;
         }
 
-        public void Success(string message = "Action completed", string title = null)
+        public void Success(string message = "Action completed", string moreInfo = null)
         {
             Alerts.Add(new AlertModel
             {
                 Message = message,
-                Title = title,
+                MoreInfo = moreInfo,
                 Type = AlertModel.Class.Success
             });
         }
 
-        public void Info(string message, string title = null)
+        public void Info(string message, string moreInfo = null)
         {
             Alerts.Add(new AlertModel
             {
                 Message = message,
-                Title = title,
+                MoreInfo = moreInfo,
                 Type = AlertModel.Class.Info
             });
         }
 
-        public void Warning(string message = "Your data is invalid", string title = null)
+        public void Warning(string message = "Your data is invalid", string moreInfo = null)
         {
             Alerts.Add(new AlertModel
             {
                 Message = message,
-                Title = title,
+                MoreInfo = moreInfo,
                 Type = AlertModel.Class.Warning
             });
         }
 
-        public void Danger(string message, string title = null)
+        public void Danger(string message, string moreInfo = null)
         {
             Alerts.Add(new AlertModel
             {
                 Message = message,
-                Title = title,
-                Type = AlertModel.Class.Danger
+                MoreInfo = moreInfo,
+                Type = AlertModel.Class.Error
             });
         }
     }

@@ -7,11 +7,11 @@
             Success,
             Info,
             Warning,
-            Danger
+            Error
         }
 
         public Class Type { get; set; }
-        public string Title { get; set; }
         public string Message { get; set; }
+        public string MoreInfo { get; set; }
     }
 }
