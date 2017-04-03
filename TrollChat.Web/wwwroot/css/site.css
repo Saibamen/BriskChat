@@ -1,6 +1,11 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 5px;
     padding-bottom: 20px;
+    background-color: #E3E4E5;
+    color: #4A4A4A;
+    background-image: url(../images/illustration.png);
+    background-repeat: no-repeat;
+    background-position:right;
 }
 
 /* Wrapping element */
@@ -35,3 +40,28 @@ textarea {
         display: none;
     }
 }
+
+.ui.inverted.menu {
+    background-color: #E3E4E5;
+}
+
+    .ui.inverted.menu.item {
+        color: #4A4A4A;
+    }
+
+.logo {
+    width: 35px; 
+    height: 35px;
+    position:relative;left: 10px;
+}
+
+@media (min-height: 320px) {
+    .ui.inverted.vertical.footer.segment.form-page { /* Increased specificity for SO snippet priority */
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: #E3E4E5;
+        color: #4A4A4A;
+    }
+    }
+

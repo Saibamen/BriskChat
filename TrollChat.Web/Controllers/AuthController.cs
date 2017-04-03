@@ -21,7 +21,7 @@ namespace TrollChat.Web.Controllers
         private readonly IEmailService emailService;
         private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
         private readonly IGetUserByEmail getuserByEmail;
-        private readonly IAddUserToken addUserToken;
+        private readonly IAddUserTokenToUser addUserTokenToUser;
         private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
@@ -31,7 +31,7 @@ namespace TrollChat.Web.Controllers
             IEmailService emailService,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IGetUserByEmail getUserByEmail,
-            IAddUserToken addUserToken,
+            IAddUserTokenToUser addUserTokenToUser,
             IGetUserByToken getUserByToken,
             IEditUserPassword editIUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString)
@@ -41,7 +41,7 @@ namespace TrollChat.Web.Controllers
             this.emailService = emailService;
             this.confirmUserEmailByToken = confirmUserEmailByToken;
             this.getuserByEmail = getUserByEmail;
-            this.addUserToken = addUserToken;
+            this.addUserTokenToUser = addUserTokenToUser;
             this.getUserByToken = getUserByToken;
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
@@ -257,7 +257,7 @@ namespace TrollChat.Web.Controllers
 
                 return View();
             }
-            var token = addUserToken.Invoke(user.Id);
+            var token = addUserTokenToUser.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
             var emailinfo = new EmailBodyModel
             {

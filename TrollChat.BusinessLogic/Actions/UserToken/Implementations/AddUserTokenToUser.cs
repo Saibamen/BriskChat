@@ -1,31 +1,42 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
+using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 {
-    public class AddUserToken : IAddUserToken
+    public class AddUserTokenToUser : IAddUserTokenToUser
     {
         private readonly IUserTokenRepository userTokenRepository;
         private readonly IUserRepository userRepository;
         private readonly IHasher hasher;
 
-        public AddUserToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository, IHasher hasher)
+        public AddUserTokenToUser(IUserTokenRepository userTokenRepository,
+            IUserRepository userRepository,
+            IHasher hasher = null)
         {
             this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
-            this.hasher = hasher;
+            this.hasher = hasher ?? new Hasher();
         }
 
         public string Invoke(int userId)
         {
             var user = userRepository.GetById(userId);
 
-            // TODO: Move logic to repository ??
-            if (user.Tokens.Any(x => x.DeletedOn == null))
+            if (user == null)
             {
-                userTokenRepository.Delete(user.Tokens.FirstOrDefault(x => x.DeletedOn == null));
+                return string.Empty;
+            }
+
+            var token = userTokenRepository.FindBy(x => x.User == user).FirstOrDefault();
+
+            if (token != null)
+            {
+                userTokenRepository.Delete(token);
+                userTokenRepository.Save();
             }
 
             var userToken = new DataAccess.Models.UserToken()
