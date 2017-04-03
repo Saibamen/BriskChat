@@ -8,38 +8,25 @@
     <h2>Register</h2>
 
     <div class="ui form">
-        <label>
-            @Html.LabelFor(m => m.Email, new { @class = "control-label col-sm-2" })
-        </label>
             <div class="field">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
             </div>
-
-        <label>
-            @Html.LabelFor(m => m.Name, new { @class = "control-label col-sm-2" })
-        </label>
             <div class="field">
                 @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", required = "required" })
                 @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
             </div>
-        <label>
-            @Html.LabelFor(m => m.Password, new { @class = "control-label col-sm-2" })
-            </label>
             <div class="field">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
             </div>
-        <label>
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "control-label col-sm-2" })
-            </label>
             <div class="field">
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password", required = "required" })
                 @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
             </div>
         <div class="field">
             <div class="col-sm-10 col-sm-offset-2">
-                <button class="ui button" type="submit" id="btnLogin">Register</button>
+                <button class="orginalbutton" type="submit" id="btnLogin">Register</button>
             </div>
         </div>
     </div>
