@@ -10,7 +10,8 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 {
-    public class GetUserTokenByUserIdTests : IClassFixture<AutoMapperFixture>
+    [Collection("mapper")]
+    public class GetUserTokenByUserIdTests
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()

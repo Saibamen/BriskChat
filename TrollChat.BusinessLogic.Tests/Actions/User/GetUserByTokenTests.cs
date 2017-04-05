@@ -10,7 +10,8 @@ using TrollChat.BusinessLogic.Tests.TestConfig;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class GetUserByTokenTests : IClassFixture<AutoMapperFixture>
+    [Collection("mapper")]
+    public class GetUserByTokenTests
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()

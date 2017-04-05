@@ -9,6 +9,7 @@ using TrollChat.BusinessLogic.Actions.User.Implementation;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
+    [Collection("mapper")]
     public class GetUserByEmailTests
     {
         [Fact]
