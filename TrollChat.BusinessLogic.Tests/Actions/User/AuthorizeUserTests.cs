@@ -40,6 +40,21 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         }
 
         [Fact]
+        public void Invoke_EmptyRepository_EmailIsEmpty()
+        {
+            // prepare
+            var mockedUserRepository = new Mock<IUserRepository>();
+
+            var action = new AuthorizeUser(mockedUserRepository.Object);
+
+            // action
+            var user = action.Invoke("", "test");
+
+            // check
+            Assert.Equal(false, user);
+        }
+
+        [Fact]
         public void Invoke_EmptyRepository_ReturnsFalse()
         {
             // prepare

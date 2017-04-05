@@ -3,9 +3,7 @@
     padding-bottom: 20px;
     background-color: #E3E4E5;
     color: #4A4A4A;
-    background-image: url(../images/illustration.png);
-    background-repeat: no-repeat;
-    background-position:right;
+
 }
 
 /* Wrapping element */
@@ -43,15 +41,17 @@ textarea {
 
 .ui.inverted.menu {
     background-color: #E3E4E5;
+    font-size: 20px;
 }
 
     .ui.inverted.menu.item {
         color: #4A4A4A;
+        font-size: 20px;
     }
 
 .logo {
-    width: 35px; 
-    height: 35px;
+    width: 50px; 
+    height: 50px;
     position:relative;left: 10px;
 }
 
@@ -64,4 +64,46 @@ textarea {
         color: #4A4A4A;
     }
     }
-
+.orginalbutton {
+    border: 0;
+    margin: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 35px;
+    width:100px;
+    display: inline-block;
+    background-color: #42c299;
+    color: #fff !important;
+    position: relative;
+}
+.backgrounds {
+    padding-top: 400px;
+    position: absolute;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    background-color: #E3E4E5;
+    border:none;
+    background-image: url(../images/illos-large.png);
+    background-position-y: bottom;
+    width: 800px;
+    height: 700px;
+    position: relative;
+    float: right;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+}
+.ui.form{
+    padding-left:50px;
+}
+.ui.grey.basic.button {
+    color: #4A4A4A;
+    margin-top: 9px;
+    height: 40px;
+    border-width: 4px;
+    color: #4A4A4A;
+    text-align: center;
+    font-size: medium;
+    line-height: 15px;
+    border-color: #4A4A4A;
+}

@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
     public class EditUserPasswordTests
     {
         [Fact]
-        public void Invoke_ValidData_ChangesPasswordSaltAndHash()
+        public void Invoke_ValidData_SavedAndEditAreCalled()
         {
             // prepare
             var userFromDb = new DataAccess.Models.User()
@@ -66,6 +66,47 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             mockedUserTokenRepo.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
             mockedUserTokenRepo.Verify(r => r.Save(), Times.Once());
+        }
+
+        [Fact]
+        public void Invoke_ValidData_NoUser()
+        {
+            // prepare
+            var userToken = new DataAccess.Models.UserToken()
+            {
+                SecretToken = "123"
+            };
+
+            var findByResult = new List<DataAccess.Models.UserToken>() { userToken };
+
+            DataAccess.Models.User userSaved = null;
+            var mockedUserRepository = new Mock<IUserRepository>();
+
+            var mockedUserTokenRepo = new Mock<IUserTokenRepository>();
+            mockedUserTokenRepo.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
+                .Returns(findByResult.AsQueryable);
+
+            var mockedHasher = new Mock<IHasher>();
+            mockedHasher.Setup(h => h.GenerateRandomSalt()).Returns("salt-generated");
+            mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
+
+            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedHasher.Object);
+
+            // action
+            var actionResult = action.Invoke(1, "plain");
+
+            // assert
+            Assert.False(actionResult);
+            Assert.Null(userSaved);
+
+            mockedHasher.Verify(r => r.GenerateRandomSalt(), Times.Never);
+            mockedHasher.Verify(r => r.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+            mockedUserRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
+            mockedUserRepository.Verify(r => r.Save(), Times.Never);
+
+            mockedUserTokenRepo.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
+            mockedUserTokenRepo.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
