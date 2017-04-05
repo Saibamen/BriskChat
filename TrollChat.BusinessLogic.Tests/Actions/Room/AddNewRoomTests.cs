@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementation;
 using TrollChat.DataAccess.Repositories.Interfaces;
-using Moq;
 using Xunit;
-using System.Linq.Expressions;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
@@ -51,39 +47,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // prepare
             var roomToAdd = new Models.RoomModel();
             var mockedRoomRepository = new Mock<IRoomRepository>();
-
-            var action = new AddNewRoom(mockedRoomRepository.Object);
-
-            // action
-            var actionResult = action.Invoke(roomToAdd);
-
-            // assert
-            Assert.Equal(0, actionResult);
-            mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-        }
-
-        // [Fact]
-        public void Invoke_AlreadyExists_AddNorSaveAreCalled()
-        {
-            // prepare
-            var roomToAdd = new Models.RoomModel
-            {
-                Name = "TestRoom",
-                Topic = "RoomTrool",
-                Description = "TroloRoom",
-                Customization = 1,
-                IsPublic = true
-            };
-            var roomFromDb = new DataAccess.Models.Room
-            {
-                Name = "TestRoom",
-            };
-            var findByResult = new List<DataAccess.Models.Room> { roomFromDb };
-
-            var mockedRoomRepository = new Mock<IRoomRepository>();
-            mockedRoomRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()))
-                .Returns(findByResult.AsQueryable());
 
             var action = new AddNewRoom(mockedRoomRepository.Object);
 
