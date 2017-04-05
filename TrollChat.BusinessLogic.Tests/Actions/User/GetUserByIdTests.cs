@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 using Moq;
 using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -7,7 +6,7 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class GetUserByIdTests
+    public class GetUserByIdTests : IClassFixture<AutoMapperFixture>
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()

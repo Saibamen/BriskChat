@@ -20,18 +20,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return null;
             }
 
-            var user = new DataAccess.Models.User()
-            {
-                Id = dbUser.Id,
-                Email = dbUser.Email,
-                Name = dbUser.Name,
-                EmailConfirmedOn = dbUser.EmailConfirmedOn,
-                CreatedOn = dbUser.CreatedOn,
-                ModifiedOn = dbUser.ModifiedOn,
-                LockedOn = dbUser.LockedOn,
-                DeletedOn = dbUser.DeletedOn,
-            };
-
+            var user = AutoMapper.Mapper.Map<DataAccess.Models.User>(dbUser);
             return user;
         }
     }

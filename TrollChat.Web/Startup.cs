@@ -40,6 +40,8 @@ namespace TrollChat.Web
 
             DependencyRegister.RegisterDependecy.Register(services);
 
+            AutoMapperBuilder.Build();
+
             services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
 
             services.AddAuthorization(options =>

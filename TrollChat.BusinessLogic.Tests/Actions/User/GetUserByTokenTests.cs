@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Moq;
 using TrollChat.BusinessLogic.Actions.User.Implementation;
-using TrollChat.DataAccess.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using System.Linq;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class GetUserByTokenTests
+    public class GetUserByTokenTests : IClassFixture<AutoMapperFixture>
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
