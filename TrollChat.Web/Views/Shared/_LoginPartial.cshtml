@@ -4,7 +4,7 @@
         using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
         {
 
-                    <button type="submit" class="header item">Log off</button>
+                    <button type="submit" class="orginalbutton">Log off</button>
 
         }
     }
@@ -12,7 +12,7 @@
     {
                 <a asp-controller="Auth" asp-action="Register" class="header item" >Register</a>
 
-                <a class="ui grey basic button " asp-controller="Auth" asp-action="Login"  >Log in</a>
+                <a class="orginalbutton " asp-controller="Auth" asp-action="Login" >Log in</a>
 
 
     }

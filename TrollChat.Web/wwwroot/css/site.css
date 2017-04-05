@@ -5,7 +5,10 @@
     color: #4A4A4A;
 
 }
-
+.hr{
+    margin-bottom: 30px;
+    margin-top:30px;
+}
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -44,12 +47,13 @@ textarea {
     font-size: 20px;
 }
 
-    .ui.inverted.menu.item {
-        color: #4A4A4A;
-        font-size: 20px;
-    }
+.ui.inverted.menu.item {
+     color: #4A4A4A;
+     font-size: 20px;
+}
 
 .logo {
+    margin-right:10px;
     width: 50px; 
     height: 50px;
     position:relative;left: 10px;
@@ -66,19 +70,23 @@ textarea {
     }
 .orginalbutton {
     border: 0;
-    margin: 0;
+    text-align: center;
+    vertical-align: central;
+    margin-top: 10px;
+    margin-right:5px;
     border-radius: 4px;
     cursor: pointer;
     height: 35px;
-    width:100px;
+    width: 100px;
     display: inline-block;
     background-color: #42c299;
     color: #fff !important;
     position: relative;
+    line-height: 32px;
 }
 .backgrounds {
     padding-top: 400px;
-    position: absolute;
+    position: relative;
     margin-right: 20px;
     margin-bottom: 20px;
     background-color: #E3E4E5;
@@ -86,7 +94,7 @@ textarea {
     background-image: url(../images/illos-large.png);
     background-position-y: bottom;
     width: 800px;
-    height: 700px;
+    height: 800px;
     position: relative;
     float: right;
     background-size: contain;
@@ -96,14 +104,33 @@ textarea {
 .ui.form{
     padding-left:50px;
 }
-.ui.grey.basic.button {
-    color: #4A4A4A;
+.ui.basic.grey.button {
+    vertical-align: central;
     margin-top: 9px;
     height: 40px;
     border-width: 4px;
-    color: #4A4A4A;
     text-align: center;
     font-size: medium;
     line-height: 15px;
     border-color: #4A4A4A;
+    color: #4A4A4A;
+}
+.column.backgrounds {
+    position: relative;
+    background-image: url(../images/talks.png);
+    width: 820px;
+    height: 800px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.column.roms{
+}
+.newroomdata {
+    margin-left:200px;
+    margin-top:300px;
+    text-align:center;
+    height: 300px;
+    width: 300px;
+    position: center;
 }

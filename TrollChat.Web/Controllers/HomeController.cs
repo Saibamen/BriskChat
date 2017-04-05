@@ -28,6 +28,12 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        public IActionResult CreateDomain()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();

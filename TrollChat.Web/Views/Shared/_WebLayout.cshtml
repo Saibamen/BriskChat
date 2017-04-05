@@ -14,19 +14,22 @@
 
 @section Pre_Body
 {
+
     <div class="ui secondary pointing menu">
-        <img class="logo" src="~/images/troll.png" asp-action="Index" />
+        <a class="ui logo icon image" href="/">
+            <img class="logo" src="~/images/troll.png"  />
+        </a>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
             TrollChat
         </a>
         <div class="right menu">
             <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="CreateDomain" class="ui item">Create new Domain</a>
             <a asp-area="" asp-controller="Home" asp-action="About" class="ui item">About</a>
             <a asp-area="" asp-controller="Home" asp-action="Contact" class="ui item">Contact</a>
         </div>
         @await Html.PartialAsync("_LoginPartial")
     </div>
-
     <div class="container body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
