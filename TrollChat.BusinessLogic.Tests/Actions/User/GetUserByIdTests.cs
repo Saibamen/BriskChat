@@ -7,7 +7,8 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class GetUserByIdTests : IClassFixture<AutoMapperFixture>
+    [Collection("mapper")]
+    public class GetUserByIdTests
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
