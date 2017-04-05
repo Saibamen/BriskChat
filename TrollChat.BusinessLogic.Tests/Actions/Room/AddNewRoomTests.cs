@@ -1,5 +1,6 @@
 ﻿using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementation;
+using TrollChat.BusinessLogic.Tests.TestConfig;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 

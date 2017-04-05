@@ -1,6 +1,6 @@
 ﻿using TrollChat.BusinessLogic.Configuration.Implementations;
 
-namespace TrollChat.BusinessLogic.Tests
+namespace TrollChat.BusinessLogic.Tests.TestConfig
 {
     public class AutoMapperFixture
     {
