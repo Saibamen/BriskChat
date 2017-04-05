@@ -19,14 +19,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementation
                 return 0;
             }
 
-            var newRoom = new DataAccess.Models.Room
-            {
-                Name = room.Name,
-                Topic = room.Topic,
-                Description = room.Description,
-                Customization = room.Customization,
-                IsPublic = true,
-            };
+            var newRoom = AutoMapper.Mapper.Map<DataAccess.Models.Room>(room);
+            newRoom.IsPublic = true;
 
             roomRepository.Add(newRoom);
             roomRepository.Save();

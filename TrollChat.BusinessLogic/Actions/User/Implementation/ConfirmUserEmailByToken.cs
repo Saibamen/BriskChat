@@ -20,12 +20,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
         {
             var userToken = userTokenRepository.FindBy(x => x.SecretToken == guid).FirstOrDefault();
 
-            if (userToken == null)
-            {
-                return false;
-            }
-
-            if (userToken.User.EmailConfirmedOn != null)
+            if (userToken == null || userToken.User.EmailConfirmedOn != null)
             {
                 return false;
             }

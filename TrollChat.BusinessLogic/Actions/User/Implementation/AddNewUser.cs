@@ -28,16 +28,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return null;
             }
 
-            var salt = hasher.GenerateRandomSalt();
-            var passwordHash = hasher.CreatePasswordHash(user.Password, salt);
-
-            var newUser = new DataAccess.Models.User
-            {
-                Email = user.Email,
-                PasswordSalt = salt,
-                PasswordHash = passwordHash,
-                Name = user.Name
-            };
+            var newUser = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
+            newUser.PasswordSalt = hasher.GenerateRandomSalt();
+            newUser.PasswordHash = hasher.CreatePasswordHash(user.Password, newUser.PasswordSalt);
 
             userRepository.Add(newUser);
 

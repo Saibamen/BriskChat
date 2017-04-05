@@ -5,7 +5,7 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
-    public class AddNewRoomTests
+    public class AddNewRoomTests : IClassFixture<AutoMapperFixture>
     {
         [Fact]
         public void Invoke_ValidData_AddsRoomToDatabaseWithCorrectValues()

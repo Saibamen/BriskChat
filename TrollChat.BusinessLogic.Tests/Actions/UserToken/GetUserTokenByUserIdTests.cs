@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 {
-    public class GetUserTokenByUserIdTests
+    public class GetUserTokenByUserIdTests : IClassFixture<AutoMapperFixture>
     {
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
@@ -24,6 +22,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
                 CreatedOn = DateTime.MinValue,
                 ModifiedOn = DateTime.MinValue,
                 DeletedOn = null,
+                User = new DataAccess.Models.User() { Name = "bob" },
             };
 
             var findByResult = new List<DataAccess.Models.UserToken>() { userTokenFromDb };
@@ -39,6 +38,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             // check
             Assert.Equal(1, userToken.Id);
+            Assert.Equal("bob", userToken.User.Name);
             Assert.Equal("123", userToken.SecretToken);
             Assert.Equal(DateTime.MaxValue, userToken.SecretTokenTimeStamp);
             Assert.Equal(DateTime.MinValue, userToken.CreatedOn);

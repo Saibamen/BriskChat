@@ -10,7 +10,7 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {
-    public class AddNewUserTests
+    public class AddNewUserTests : IClassFixture<AutoMapperFixture>
     {
         [Fact]
         public void Invoke_ValidData_AddsUserToDatabaseWithCorrectValues()

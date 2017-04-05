@@ -4,7 +4,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using Moq;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using TrollChat.BusinessLogic.Actions.UserToken.Implementations;

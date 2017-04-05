@@ -1,5 +1,6 @@
 ﻿using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using System.Linq;
+using AutoMapper;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
@@ -23,15 +24,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
                 return null;
             }
 
-            var userTokenModel = new UserTokenModel()
-            {
-                Id = token.Id,
-                SecretToken = token.SecretToken,
-                SecretTokenTimeStamp = token.SecretTokenTimeStamp,
-                CreatedOn = token.CreatedOn,
-                ModifiedOn = token.ModifiedOn,
-                DeletedOn = token.DeletedOn,
-            };
+            var userTokenModel = Mapper.Map<UserTokenModel>(token);
 
             return userTokenModel;
         }
