@@ -22,10 +22,13 @@
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/semantic/dist/semantic.js"></script>
+        <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
+        <script src="~/js/alert.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/semantic/dist/semantic.min.js"></script>
+        <script src="~/js/alert.min.js"></script>
     </environment>
     @RenderSection("Scripts", required: false)
 </body>
