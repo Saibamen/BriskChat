@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "outputFileName": "wwwroot/css/site.min.css",
     "inputFiles": [
@@ -25,6 +25,12 @@
     "outputFileName": "wwwroot/js/chat.min.js",
     "inputFiles": [
       "wwwroot/js/chat.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/alert.min.js",
+    "inputFiles": [
+      "wwwroot/js/alert.js"
     ]
   }
 ]
