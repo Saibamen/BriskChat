@@ -63,16 +63,53 @@
             @Html.Partial("_AlertsPartial")
         }
 
-        <div id="chat-header"><h2>Header</h2></div>
-
-        <div id="chat-messages">Messages</div>
-
-        <div id="chat-input">
-            <div class="ui action input">
-                <input type="text" placeholder="Type message here...">
-                <div class="ui button primary">Go</div>
+        <header id="chat-header">
+            <div class="channel_name">
+                #TrollChat Dev channel
+            </div>
+        </header>
+        
+        <div id="chat-messages">
+            <div class="tc-message">
+                <div class="message_content">
+                    <div class="message_content_header">
+                        <a href="#" class="message_sender">Saibamen</a>
+                        <a href="#" class="timestamp">15:54</a>
+                    </div>
+                    <span class="message_body">Testowa wiadomość</span>
+                </div>
+            </div>
+            <div class="tc-message">
+                <div class="message_content">
+                    <div class="message_content_header">
+                        <a href="#" class="message_sender">Grzechu</a>
+                        <a href="#" class="timestamp">15:58</a>
+                    </div>
+                    <span class="message_body">Spam</span>
+                </div>
             </div>
         </div>
+        
+    <div id="chat-input">
+        <form id="msg_form" class="offline" onsubmit="TS.view.submit(); return false;" data-qa="message_form">
+            <textarea id="msg_input" aria-label="Message input" data-qa="message_input"></textarea>
+			
+            <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle file_upload_btn" aria-label="File menu">
+                <i class="ts_icon ts_icon_plus_thick"></i>
+            </button>
+
+            <input type="file" id="file_upload" class="offscreen" multiple="multiple" aria-hidden="true" data-qa="file_upload" tabindex="-1"
+            >
+
+            <button type="button" id="main_emo_menu" class="btn_unstyle emo_menu hidden" aria-label="Emoji menu">
+                <i class="ts_icon ts_icon_circle_fill"></i>
+                <i class="ts_icon ts_icon_smile_o"></i>
+                <i class="ts_icon ts_icon_happy_smile"></i>
+            </button>
+
+            <div id="msg_input_message"><span></span></div>
+        </form>
+    </div>
 }
 
 @section Post_Body

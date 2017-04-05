@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\chat.css" />
+    <Content Include="wwwroot\js\alert.js" />
     <Content Include="wwwroot\js\chat.js" />
     <Content Include="wwwroot\js\chat.min.js" />
   </ItemGroup>

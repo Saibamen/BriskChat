@@ -14,19 +14,19 @@
 
 @section Pre_Body
 {
-
-<div class="ui secondary pointing menu">
-    <img class="logo" src="~/images/troll.png" asp-action="Index"/>
-    <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
-        TrollChat
-    </a>
-    <div class="right menu">
-        <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">Home</a>
-        <a asp-area="" asp-controller="Home" asp-action="About" class="ui item">About</a>
-        <a asp-area="" asp-controller="Home" asp-action="Contact" class="ui item">Contact</a>
+    <div class="ui secondary pointing menu">
+        <img class="logo" src="~/images/troll.png" asp-action="Index" />
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
+            TrollChat
+        </a>
+        <div class="right menu">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">Home</a>
+            <a asp-area="" asp-controller="Home" asp-action="About" class="ui item">About</a>
+            <a asp-area="" asp-controller="Home" asp-action="Contact" class="ui item">Contact</a>
+        </div>
+        @await Html.PartialAsync("_LoginPartial")
     </div>
-    @await Html.PartialAsync("_LoginPartial")
-</div>
+
     <div class="container body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
@@ -38,10 +38,10 @@
 {
     <div class="ui inverted vertical footer segment form-page">
         <div class="container">
-        <hr />
-        <p>&copy; 2017 - TrollChat</p>
-    </div>
+            <hr />
+            <p>&copy; 2017 - TrollChat</p>
         </div>
+    </div>
 </div>
 }
 
