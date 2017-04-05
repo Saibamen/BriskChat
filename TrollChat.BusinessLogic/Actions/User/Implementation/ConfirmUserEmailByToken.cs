@@ -25,6 +25,11 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return false;
             }
 
+            if (userToken.User.EmailConfirmedOn != null)
+            {
+                return false;
+            }
+
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);

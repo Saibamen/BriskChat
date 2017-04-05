@@ -62,11 +62,18 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 EmailConfirmedOn = dateNow,
             };
 
-            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var userTokenFromDb = new DataAccess.Models.UserToken
+            {
+                User = userFromDb,
+                SecretToken = "123"
+            };
 
+            var getAllResults = new List<DataAccess.Models.UserToken> { userTokenFromDb };
+
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
+                .Returns(getAllResults.AsQueryable());
             var mockedUserRepo = new Mock<IUserRepository>();
-            mockedUserRepo.Setup(r => r.GetById(1))
-                .Returns(userFromDb);
 
             var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
 
