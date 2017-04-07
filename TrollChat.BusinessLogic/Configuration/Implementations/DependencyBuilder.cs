@@ -12,7 +12,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
         public void Register(IServiceCollection services)
         {
             var globalName = Assembly.GetEntryAssembly().GetName().Name;
-            globalName = globalName.Substring(0, globalName.IndexOf("."));
+            globalName = globalName.Substring(0, globalName.IndexOf(".", StringComparison.Ordinal));
 
             int countBeforeInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
             int countGenericInterface = countBeforeInjection;
