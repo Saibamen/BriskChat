@@ -101,20 +101,6 @@ textarea {
     background-repeat: no-repeat;
     background-position: bottom right;
 }
-.ui.form{
-    padding-left:50px;
-}
-.ui.basic.grey.button {
-    vertical-align: central;
-    margin-top: 9px;
-    height: 40px;
-    border-width: 4px;
-    text-align: center;
-    font-size: medium;
-    line-height: 15px;
-    border-color: #4A4A4A;
-    color: #4A4A4A;
-}
 .column.backgrounds {
     position: relative;
     background-image: url(../images/talks.png);
@@ -124,8 +110,6 @@ textarea {
     background-repeat: no-repeat;
     background-position: center;
 }
-.column.roms{
-}
 .newroomdata {
     margin-left:200px;
     margin-top:300px;
@@ -133,4 +117,30 @@ textarea {
     height: 300px;
     width: 300px;
     position: center;
+}
+.big {
+    height:40px;
+    width: 200px;
+}
+.webressetbox {
+    text-align: center;
+    background-color: #fff;
+    border-radius: .25rem;
+    box-shadow: 0 1px 0 rgba(0,0,0,.25);
+    border: 1px solid #E8E8E8;
+}
+.high {
+    height: 550px;
+    width: 650px;
+    margin-top: -275px;
+}
+.h01 {
+    font-size: 78px;
+    height: 350px;
+    width: 250px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -175px; /* połowa szerokości */
+    margin-top: -125px /* połowa wysokości */
 }

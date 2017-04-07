@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Configuration.Implementations
 {
@@ -10,14 +8,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
         {
             Mapper.Initialize(config =>
             {
-                config.CreateMap<User, UserModel>();
-                config.CreateMap<User, UserModel>().ReverseMap();
-
-                config.CreateMap<UserToken, UserTokenModel>();
-                config.CreateMap<UserToken, UserTokenModel>().ReverseMap();
-
-                config.CreateMap<Room, RoomModel>();
-                config.CreateMap<Room, RoomModel>().ReverseMap();
+                config.CreateMissingTypeMaps = true;
             });
         }
     }
