@@ -74,81 +74,46 @@
                     </div>
 
                     <div id="channel_header_info" class="channel_header_info">
-                        <div id="star_container" class="channel_header_info_item"><button type="button" data-channel-id="C0MBGMG58" class="star ts_icon ts_icon_star_o ts_icon_inherit ts_tip_bottom star_channel ts_tip ts_tip_float ts_tip_hidden btn_unstyle">
-                            <span class="ts_tip_tip" data-tip-toggle-auto="Unstar this channel">
-                                Star this channel
-                            </span>
-                        </button></div><div class="channel_header_info_item">
-                            <button type="button" id="channel_members_toggle_count" class="btn_unstyle blue_on_hover ts_tip ts_tip_bottom ts_tip_multiline"><ts-icon class="ts_icon_user ts_icon_inherit channel_members_icon"></ts-icon>
-                                <span id="channel_members_toggle_count_count">28</span><span class="ts_tip_tip"><span class="ts_tip_multiline_inner">
-                                    View member list
-                                </span></span></button>
-                        </div><div class="channel_header_info_item pin">
-                            <button type="button" id="pinned_item_count" class="btn_unstyle blue_on_hover ts_tip ts_tip_bottom ts_tip_multiline"><ts-icon class="ts_icon_thumb_tack ts_icon_inherit ts_icon_align_bottom pinned_count_icon"></ts-icon><span id="pinned_item_count_count">0</span><span class="ts_tip_tip"><span class="ts_tip_multiline_inner">
-                                View Pinned Items<br><span class="subtle_silver pin_count_new_pin_message"></span>
-                            </span></span></button>
-                        </div><div class="channel_header_info_item channel_topic_container">
-                            <span id="topic_inline_edit" class="channel_topic inline_edit inline_edit_editable"><span tabindex="0" class="inline_edit_inner" data-instructions-text="Enter to submit, Esc to cancel"><span id="channel_topic_text" class="inline_edit_input no_jumbomoji" data-placeholder="Add a topic">Parapetówka w nowej siedzibie odbędzie się w bliżej nieokreślony piątek w ciągu najbliższych kilku tygodnii - czekamy na ustąpienie mrozów.</span></span></span>
+                        <div class="channel_header_info_item">
+                            <button type="button" id="channel_members_toggle_count" data-content="View member list" data-position="bottom center" class="btn_unstyle ts_tip"><i class="user icon"></i>
+                                <span id="channel_members_toggle_count_count">28</span><span class="ts_tip_tip"></span></button>
+                        </div>
+                        <div class="channel_header_info_item channel_topic_container">
+                            <span id="topic_inline_edit" class="channel_topic inline_edit"><span tabindex="0" data-instructions-text="Enter to submit, Esc to cancel"><span id="channel_topic_text" class="inline_edit_input no_jumbomoji" data-placeholder="Add a topic">Parapetówka w nowej siedzibie odbędzie się w bliżej nieokreślony piątek w ciągu najbliższych kilku tygodnii - czekamy na ustąpienie mrozów.</span></span></span>
                         </div></div>
                 </div>
 
                 <div class="channel_title_info">
                     <!-- calls button -->
-                    <div id="channel_calls_container" class="channel_calls_container">	<button class="channel_header_icon channel_calls_button voice_call btn_unstyle ts_tip ts_tip_bottom ts_tip_multiline ts_tip_delay_300 blue_on_hover">
-                            <span class="ts_tip_tip"><span class="ts_tip_multiline_inner">
-                                Only paid teams can start calls from channels.
-                            </span></span>
-                            <ts-icon class="call_icon call_window_offline ts_icon_phone" aria-hidden="true"></ts-icon>
-                        </button>
-                    </div><button type="button" id="channel_actions_toggle" class="btn_unstyle blue_on_hover channel_actions_toggle channel_header_icon ts_tip ts_tip_bottom" data-oldest-ts="1487271313.000028">
-                        <span class="ts_tip_tip">Channel Settings</span>
-                        <ts-icon class="ts_icon_cog_o" aria-hidden="true"></ts-icon>
-                    </button><button type="button" id="details_toggle" class="channel_header_icon btn_unstyle blue_on_hover channel_details_toggle ts_tip ts_tip_bottom">
-                        <span class="ts_tip_tip">Show Channel Details</span>
-                        <ts-icon class="ts_icon_side_panel" aria-hidden="true"></ts-icon>
+                    <button type="button" id="channel_actions_toggle" data-content="Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
+                        <i class="setting icon"></i>
+                    </button>
+                    <button type="button" id="details_toggle" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
+                        <i class="list layout icon"></i>
                     </button>
                 </div>
             </div>
+
             <div class="flex_header">
                 <div id="search_container">
                     <form role="search" method="get" action="/search" id="header_search_form" class="search_form no_bottom_margin">
-                        <div class="icon_search_wrapper"><ts-icon class="ts_icon_search icon_search" aria-hidden="true"></ts-icon></div>
+                        <div class="icon_search_wrapper"><i class="search icon icon_search"></i></div>
                         <div class="search_input_wrapper">
                             <input type="text" id="search_terms" name="q" class="search_input" placeholder="Search" autocomplete="off" maxlength="250" aria-label="Search">
                         </div>
-                        <div class="search_clear_icon_wrapper"><button type="button" id="search_clear" class="btn_unstyle search_clear_icon" aria-label="Clear search field"><ts-icon class="ts_icon_times_circle" aria-hidden="true"></ts-icon></button></div>
+                        <div class="search_clear_icon_wrapper"><button type="button" id="search_clear" class="btn_unstyle search_clear_icon" aria-label="Clear search field"><i class="remove circle outline icon ts_icon_times_circle"></i><ts-icon class="ts_icon_times_circle" aria-hidden="true"></ts-icon></button></div>
                     </form>
-                </div><button type="button" id="recent_mentions_toggle" class="channel_header_icon btn_unstyle ts_tip ts_tip_bottom">
-                    <span class="ts_tip_tip">Show Activity</span>
-                    <ts-icon class="ts_icon_mentions" aria-hidden="true"></ts-icon>			</button><button type="button" id="stars_toggle" class="channel_header_icon btn_unstyle ts_tip ts_tip_bottom ts_tip_rightish">
-                    <span class="ts_tip_tip">Show Starred Items</span>
-                    <ts-icon class="ts_icon_star_o" aria-hidden="true"></ts-icon>			</button><button type="button" id="flex_menu_toggle" class="channel_header_icon blue_on_hover btn_unstyle ts_tip ts_tip_bottom ts_tip_right normal">
-                    <span class="ts_tip_tip">More Items</span>
-                    <ts-icon class="ts_icon_vertical_ellipsis" aria-hidden="true"></ts-icon>				<span class="help_icon_icon hidden" id="help_icon_circle_count">0</span>
-                    <div class="flex_menu_download_circle"></div>
-                </button><button type="button" id="whats_new_toggle" class="channel_header_icon btn_unstyle ts_tip ts_tip_bottom ts_tip_right candy_red_bg neutral_white small_left_margin">
-                    <span class="ts_tip_tip">What's New</span>
-                    <ts-icon class="ts_icon_emoji_celebration" aria-hidden="true"></ts-icon>			</button>
-                <div id="rxn_toast_div" class="hidden ts_tip ts_tip_bottom"></div></div>
+                </div>
+            </div>
         </div>
         </header>
         
         <div id="chat_messages">
-            <div class="tc_message">
+            <div class="ts-message">
                 <div class="message_gutter">
                     <div class="message_icon">
-                        <a href="/team/malgosia" target="/team/malgosia" class=" member_preview_link member_image thumb_36" data-member-id="U42KXAW07" data-thumb-size="36" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48')" aria-hidden="true" tabindex="-1">	</a>
-				
+                        <a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" data-thumb-size="36" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48')" aria-hidden="true" tabindex="-1">	</a>
                     </div>
-                    <a href="/archives/C0MBGMG58/p1489484077608323" target="new_1491380920004" class="timestamp ts_tip ts_tip_top ts_tip_float ts_tip_hidden ts_tip_multiline ts_tip_delay_300"><i class="copy_only">[</i>10:34 AM<i class="copy_only">]</i><span class="ts_tip_tip"><span class="ts_tip_multiline_inner">Open in archives<br><span class="subtle_silver no_wrap">March&nbsp;14th&nbsp;at&nbsp;10:34:37&nbsp;AM</span></span></span></a>
-                    <span class="message_star_holder">
-
-                        <button type="button" data-msg-id="1489484077.608323" data-c-id="C0MBGMG58" class="star ts_icon ts_icon_star_o ts_icon_inherit ts_tip_top star_message ts_tip ts_tip_float ts_tip_hidden btn_unstyle">
-                            <span class="ts_tip_tip" data-tip-toggle-auto="Unstar this message">
-                                Star this message
-                            </span>
-                        </button>
-                    </span>
                 </div>
                 <div class="message_content">
                     <div class="message_content_header">
@@ -158,7 +123,12 @@
                     <span class="message_body">Testowa wiadomość</span>
                 </div>
             </div>
-            <div class="tc_message">
+            <div class="ts-message">
+                <div class="message_gutter">
+                    <div class="message_icon">
+                        <a href="/team/kropi" target="/team/kropi" class="member_image" data-member-id="U2Q6CCXE1" data-thumb-size="36" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U2Q6CCXE1-9b6c6653f25c-48')" aria-hidden="true" tabindex="-1">	</a>
+                    </div>
+                </div>
                 <div class="message_content">
                     <div class="message_content_header">
                         <a href="#" class="message_sender">Grzechu</a>
@@ -173,17 +143,15 @@
         <form id="msg_form" class="offline" onsubmit="TS.view.submit(); return false;" data-qa="message_form">
             <textarea id="msg_input" aria-label="Message input" data-qa="message_input" placeholder="Message #TrollChatDev"></textarea>
 			
-            <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle file_upload_btn" aria-label="File menu">
-                <i class="ts_icon ts_icon_plus_thick"></i>
+            <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle" aria-label="File menu">
+                <i class="plus icon"></i>
             </button>
 
             <input type="file" id="file_upload" class="offscreen" multiple="multiple" aria-hidden="true" data-qa="file_upload" tabindex="-1"
             >
 
             <button type="button" id="main_emo_menu" class="btn_unstyle emo_menu hidden" aria-label="Emoji menu">
-                <i class="ts_icon ts_icon_circle_fill"></i>
-                <i class="ts_icon ts_icon_smile_o"></i>
-                <i class="ts_icon ts_icon_happy_smile"></i>
+                <i class="meh icon"></i>
             </button>
 
             <div id="msg_input_message"><span></span></div>
