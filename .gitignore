@@ -263,3 +263,5 @@ __pycache__/
 ## Our rules
 
 */*.Production.json
+*/wwwroot/css/*.min.css
+*/wwwroot/js/*.min.js
