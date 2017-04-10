@@ -455,6 +455,8 @@ button, input, textarea {
 #chat_messages {
     height: 89%;
     background-color: white;
+    -webkit-flex: 1 1 auto;
+    overflow-y: auto;
 }
 
 .ts-message {
@@ -681,6 +683,7 @@ a {
     background-image: -moz-linear-gradient(top,rgba(255,255,255,0),#fff 6px);
     background-image: -o-linear-gradient(top,rgba(255,255,255,0),#fff 6px);
     background-image: linear-gradient(to bottom,rgba(255,255,255,0),#fff 6px);
+    z-index: 1;
 }
 
 #msg_form {
