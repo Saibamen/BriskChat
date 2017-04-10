@@ -30,22 +30,22 @@
         </div>
         @await Html.PartialAsync("_LoginPartial")
     </div>
-    <div class="container body-content">
+    <div class=" body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
             @Html.Partial("_AlertsPartial")
         }
+        </div>
 }
 
 @section Post_Body
 {
-    <div class="ui inverted vertical footer segment form-page">
+    <div class="ui inverted vertical footer segment">
         <div class="container">
             <hr />
             <p>&copy; 2017 - TrollChat</p>
         </div>
     </div>
-</div>
 }
 
 @section Scripts

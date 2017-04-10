@@ -2,22 +2,23 @@
     Layout = "_WebLayout";
 }
 @model TrollChat.Web.Models.Auth.ResendConfirmationEmailViewModel
-
-@using (Html.BeginForm("ResendConfirmationEmail", "Auth", FormMethod.Post))
-{
-    <div class="webressetbox">
-        <h1>Resend confirmation email</h1>
-        <br /><br />
-        <div class="ui form">
+<div class="ui middle aligned center aligned grid">
+<div class="webressetbox column">
+    <h2 class="ui teal header">Resend confirmation email</h2>
+    <br /><br />
+    @using (Html.BeginForm("ResendConfirmationEmail", "Auth", FormMethod.Post))
+    {
+        <div class="ui large form">
             <div class="field">
                 @Html.LabelFor(m => m.Email, new { @class = "control-label col-sm-2" })
                 <br />
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })               
-            </div>  
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
             <div class="field">
-                    <button class="orginalbutton big" type="submit" id="btnLogin">Resend</button>
+                <button class="orginalbutton big" type="submit" id="btnLogin">Resend</button>
             </div>
         </div>
-    </div>
-}
+    }
+</div>
+</div>

@@ -3,14 +3,16 @@
 }
 @model TrollChat.Web.Models.Auth.RegisterViewModel
 
-@using (Html.BeginForm("Register", "Auth", FormMethod.Post))
-{
-    <div class="webressetbox high">
-        <h1>Create to TrollChat Account</h1>
+
+<div class="ui middle aligned center aligned grid">
+    <div class="webressetbox column">
+        <h2 class="ui teal header"  >Create to TrollChat Account</h2>
         <br />
         <h4>Once registered, you will be sent an email to the address listed below. In this way, we will confirm your email.</h4>
         <br />
-        <div class="ui form">
+@using (Html.BeginForm("Register", "Auth", FormMethod.Post))
+{
+        <div class="ui large form">
             <div class="field">
                 @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
@@ -33,5 +35,7 @@
                 </div>
             </div>
         </div>
-    </div>
 }
+    </div>
+    </div>
+        
