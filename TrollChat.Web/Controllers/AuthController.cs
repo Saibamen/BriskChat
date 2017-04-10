@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Auth;
 using TrollChat.Web.Models.Common;
 
@@ -25,6 +27,7 @@ namespace TrollChat.Web.Controllers
         private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
+        private readonly IAddNewEmailLog addNewEmailLog;
 
         public AuthController(IAuthorizeUser authorizeUser,
             IAddNewUser addNewUser,
@@ -34,7 +37,8 @@ namespace TrollChat.Web.Controllers
             IAddUserTokenToUser addUserTokenToUser,
             IGetUserByToken getUserByToken,
             IEditUserPassword editIUserPassword,
-            IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString)
+            IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
+            IAddNewEmailLog addNewEmailLog)
         {
             this.authorizeUser = authorizeUser;
             this.addNewUser = addNewUser;
@@ -45,6 +49,7 @@ namespace TrollChat.Web.Controllers
             this.getUserByToken = getUserByToken;
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
+            this.addNewEmailLog = addNewEmailLog;
         }
 
         [AllowAnonymous]
@@ -69,22 +74,12 @@ namespace TrollChat.Web.Controllers
                 return View();
             }
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-
-            var emailinfo = new EmailBodyModel
-            {
-                TopicFirst = "We are ready to activate your account.",
-                TopicSecend = "Only we have to check if the email is yours.",
-                ButtonValue = callbackUrl,
-                Buttontext = "Confirm Email",
-                AditionalNotesFirst = "If you do not create a TrollChat account,",
-                AditionalNotesSecend = "remove this email and everything will return to normal."
-            };
-
-            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
-
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken },
+                Request.Scheme);
+            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
-            emailService.SendEmailAsync(message).ConfigureAwait(false);
+            addNewEmailLog.Invoke(message);
 
             Alert.Success("Confirmation email has been sent to your email address");
 
@@ -178,7 +173,6 @@ namespace TrollChat.Web.Controllers
             }
 
             Alert.Success("Email confirmed");
-
             return RedirectToAction("Login", "Auth");
         }
 
@@ -209,23 +203,13 @@ namespace TrollChat.Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken }, Request.Scheme);
-
-            var emailinfo = new EmailBodyModel
-            {
-                TopicFirst = "We are ready to activate your account.",
-                TopicSecend = "Only we have to check if the email is yours.",
-                ButtonValue = callbackUrl,
-                Buttontext = "Confirm Email",
-                AditionalNotesFirst = "If you do not create a TrollChat account,",
-                AditionalNotesSecend = "remove this email and everything will return to normal."
-            };
-
-            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", "", emailinfo);
-
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken },
+                Request.Scheme);
+            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
-            emailService.SendEmailAsync(message).ConfigureAwait(false);
 
+            addNewEmailLog.Invoke(message);
             Alert.Success("Check your inbox");
 
             return RedirectToAction("Login");
@@ -257,30 +241,22 @@ namespace TrollChat.Web.Controllers
 
                 return View();
             }
+
             var token = addUserTokenToUser.Invoke(user.Id);
-            var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token }, Request.Scheme);
-            var emailinfo = new EmailBodyModel
-            {
-                TopicFirst = "We are ready to activate your account.",
-                TopicSecend = "Only we have to check if the email is yours.",
-                ButtonValue = callbackUrl,
-                Buttontext = "Confirm Email",
-                AditionalNotesFirst = "If you do not create a TrollChat account,",
-                AditionalNotesSecend = "remove this email and everything will return to normal."
-            };
-
-            var stringView = RenderViewToString<EmailBodyModel>("Reset Password", "", emailinfo);
-
+            var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
+                Request.Scheme);
+            var emailinfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("Reset Password", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
-            emailService.SendEmailAsync(message).ConfigureAwait(false);
 
-            Alert.Success("Email was sent to your Email account");
+            addNewEmailLog.Invoke(message);
+            Alert.Success("Email will be sent to your account shortly");
 
             return RedirectToAction("Login");
         }
 
         [AllowAnonymous]
-        [HttpGet("resetpasswordbytoken")]
+        [HttpGet("resetpasswordbytoken/{token}")]
         public IActionResult ResetPasswordByToken(string token)
         {
             if (string.IsNullOrEmpty(token))

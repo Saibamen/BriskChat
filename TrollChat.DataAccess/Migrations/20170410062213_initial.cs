@@ -10,6 +10,28 @@ namespace TrollChat.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "EmailLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    FailError = table.Column<string>(nullable: true),
+                    FailErrorMessage = table.Column<string>(nullable: true),
+                    FailureCount = table.Column<int>(nullable: false),
+                    From = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Recipient = table.Column<string>(nullable: false),
+                    Subject = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -27,23 +49,6 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    Description = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -55,13 +60,36 @@ namespace TrollChat.DataAccess.Migrations
                     EmailConfirmedOn = table.Column<DateTime>(nullable: true),
                     LockedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
                     PasswordHash = table.Column<string>(type: "NVARCHAR(256)", nullable: false),
                     PasswordSalt = table.Column<string>(type: "NVARCHAR(128)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Domains",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
+                    OwnerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Domains", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Domains_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +121,7 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomTags",
+                name: "UserTokens",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -101,22 +129,46 @@ namespace TrollChat.DataAccess.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoomId = table.Column<int>(nullable: true),
-                    TagId = table.Column<int>(nullable: true)
+                    SecretToken = table.Column<string>(type: "NVARCHAR(256)", nullable: true),
+                    SecretTokenTimeStamp = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomTags", x => x.Id);
+                    table.PrimaryKey("PK_UserTokens", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoomTags_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
+                        name: "FK_UserTokens_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DomainRooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    DomainId = table.Column<int>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    RoomId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DomainRooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DomainRooms_Domains_DomainId",
+                        column: x => x.DomainId,
+                        principalTable: "Domains",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_RoomTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
+                        name: "FK_DomainRooms_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -131,19 +183,12 @@ namespace TrollChat.DataAccess.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     LockedUntil = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoleId = table.Column<int>(nullable: false),
                     RoomId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_UserRooms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRooms_Roles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UserRooms_Rooms_RoomId",
                         column: x => x.RoomId,
@@ -189,6 +234,66 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Description = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
+                    RoomId = table.Column<int>(nullable: true),
+                    UserRoomId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Tags_UserRooms_UserRoomId",
+                        column: x => x.UserRoomId,
+                        principalTable: "UserRooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoomTags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    RoomId = table.Column<int>(nullable: false),
+                    TagId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoomTags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoomTags_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RoomTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoomTags",
                 columns: table => new
                 {
@@ -197,8 +302,8 @@ namespace TrollChat.DataAccess.Migrations
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    TagId = table.Column<int>(nullable: true),
-                    UserRoomId = table.Column<int>(nullable: true)
+                    TagId = table.Column<int>(nullable: false),
+                    UserRoomId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -216,6 +321,26 @@ namespace TrollChat.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "Email",
+                table: "Domains",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Domains_OwnerId",
+                table: "Domains",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DomainRooms_DomainId",
+                table: "DomainRooms",
+                column: "DomainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DomainRooms_RoomId",
+                table: "DomainRooms",
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_LastMessageForId",
@@ -244,9 +369,24 @@ namespace TrollChat.DataAccess.Migrations
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserRooms_RoleId",
-                table: "UserRooms",
-                column: "RoleId");
+                name: "Email",
+                table: "Tags",
+                column: "Name");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_RoomId",
+                table: "Tags",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_UserRoomId",
+                table: "Tags",
+                column: "UserRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "Email",
+                table: "Users",
+                column: "Email");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRooms_RoomId",
@@ -267,12 +407,31 @@ namespace TrollChat.DataAccess.Migrations
                 name: "IX_UserRoomTags_UserRoomId",
                 table: "UserRoomTags",
                 column: "UserRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "SecretToken",
+                table: "UserTokens",
+                column: "SecretToken");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTokens_UserId",
+                table: "UserTokens",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "DomainRooms");
+
+            migrationBuilder.DropTable(
+                name: "EmailLogs");
+
+            migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "RoomTags");
@@ -281,13 +440,16 @@ namespace TrollChat.DataAccess.Migrations
                 name: "UserRoomTags");
 
             migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Domains");
+
+            migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "UserRooms");
-
-            migrationBuilder.DropTable(
-                name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Rooms");

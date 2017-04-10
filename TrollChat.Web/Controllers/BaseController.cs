@@ -25,7 +25,7 @@ namespace TrollChat.Web.Controllers
             }
         }
 
-        public string RenderViewToString<T>(string viewName, string masterName, T model, bool customized = false, string controllerName = "")
+        public string RenderViewToString<T>(string viewName, T model, string controllerName = "")
         {
             ViewData.Model = model;
 

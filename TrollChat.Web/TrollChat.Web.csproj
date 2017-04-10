@@ -38,6 +38,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
     <PackageReference Include="Nuget.Build" Version="2.12.0" />
     <PackageReference Include="PreMailer.Net" Version="2.0.0-beta2" />
+    <PackageReference Include="Quartz" Version="3.0.0-alpha2" />
+    <PackageReference Include="Quartz.Serialization.Json" Version="3.0.0-alpha2" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.0" />

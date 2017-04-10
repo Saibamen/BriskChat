@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using TrollChat.BusinessLogic.Configuration.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using System.Threading.Tasks;
@@ -26,8 +25,6 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             // the XOAUTH2 authentication mechanism.
             client.AuthenticationMechanisms.Remove("XOAUTH2");
         }
-
-        //TODO: Add logging on failed Task
 
         public MimeMessage CreateMessage(string emailAddress, string subject, string message)
         {
@@ -59,10 +56,8 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             }
             catch (Exception e)
             {
-                // TODO: Save failed attempts and retry
-                Debug.WriteLine(e.Message);
+                // log failure
             }
         }
     }
-
 }

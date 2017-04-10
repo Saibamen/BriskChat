@@ -67,6 +67,38 @@ namespace TrollChat.DataAccess.Migrations
                     b.ToTable("DomainRooms");
                 });
 
+            modelBuilder.Entity("TrollChat.DataAccess.Models.EmailLogger", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<string>("FailError");
+
+                    b.Property<string>("FailErrorMessage");
+
+                    b.Property<int>("FailureCount");
+
+                    b.Property<string>("From");
+
+                    b.Property<string>("Message")
+                        .IsRequired();
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired();
+
+                    b.Property<string>("Subject");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailLogs");
+                });
+
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
                 {
                     b.Property<int>("Id")

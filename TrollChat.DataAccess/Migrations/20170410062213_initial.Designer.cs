@@ -8,8 +8,8 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170329103049_DomainRework")]
-    partial class DomainRework
+    [Migration("20170410062213_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,6 +35,9 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<int>("OwnerId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .HasName("Email");
 
                     b.HasIndex("OwnerId");
 
@@ -63,6 +66,38 @@ namespace TrollChat.DataAccess.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("DomainRooms");
+                });
+
+            modelBuilder.Entity("TrollChat.DataAccess.Models.EmailLogger", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreatedOn");
+
+                    b.Property<DateTime?>("DeletedOn");
+
+                    b.Property<string>("FailError");
+
+                    b.Property<string>("FailErrorMessage");
+
+                    b.Property<int>("FailureCount");
+
+                    b.Property<string>("From");
+
+                    b.Property<string>("Message")
+                        .IsRequired();
+
+                    b.Property<DateTime>("ModifiedOn");
+
+                    b.Property<string>("Recipient")
+                        .IsRequired();
+
+                    b.Property<string>("Subject");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailLogs");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
@@ -201,6 +236,9 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .HasName("Email");
+
                     b.HasIndex("RoomId");
 
                     b.HasIndex("UserRoomId");
@@ -323,7 +361,7 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserToken");
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
@@ -409,7 +447,7 @@ namespace TrollChat.DataAccess.Migrations
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserToken", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Tokens")
                         .HasForeignKey("UserId");
                 });
         }
