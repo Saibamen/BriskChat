@@ -1,79 +1,89 @@
 ﻿body {
-    padding-top: 5px;
-    padding-bottom: 20px;
-    background-color: #E3E4E5;
-    color: #4A4A4A;
-
+padding-top: 5px;
+padding-bottom: 20px;
+background-color: #E3E4E5;
+color: #4A4A4A;
+display: block;
+height: 100%;
 }
-.hr{
-    margin-bottom: 30px;
-    margin-top:30px;
+
+.hr {
+margin-bottom: 30px;
+margin-top: 30px;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+padding-left: 15px;
+padding-right: 15px;
+}
+
+html, body {
+height: 100%;
+}
+
+body > .grid {
+height: 100%;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
-    max-width: 280px;
+max-width: 280px;
 }
 
 /* Carousel */
 .carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+font-size: 20px;
+line-height: 1.4;
 }
 
 /* Make .svg files in the carousel display properly in older browsers */
 .carousel-inner .item img[src$=".svg"] {
-    width: 100%;
+width: 100%;
 }
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
+/* Hide captions */
+.carousel-caption {
+display: none;
+}
+}
+@media (min-height: 320px) {
 }
 
+/*naglowek*/
 .ui.inverted.menu {
-    background-color: #E3E4E5;
+background-color: #E3E4E5;
+font-size: 20px;
+}
+/* naglowek*/
+.ui.inverted.menu.item {
+    color: #4A4A4A;
     font-size: 20px;
 }
-
-.ui.inverted.menu.item {
-     color: #4A4A4A;
-     font-size: 20px;
-}
-
+/* w Index*/
 .logo {
-    margin-right:10px;
-    width: 50px; 
-    height: 50px;
-    position:relative;left: 10px;
+margin-right: 10px;
+width: 50px;
+height: 50px;
+position: relative;
+left: 10px;
 }
-
-@media (min-height: 320px) {
-    .ui.inverted.vertical.footer.segment.form-page { /* Increased specificity for SO snippet priority */
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        background-color: #E3E4E5;
-        color: #4A4A4A;
-    }
-    }
+/*stopka*/
+.ui.inverted.vertical.footer.segment {
+background-color: #E3E4E5;
+color: #4A4A4A;
+}
+/*własny przycisk*/
 .orginalbutton {
     border: 0;
     text-align: center;
     vertical-align: central;
     margin-top: 10px;
-    margin-right:5px;
+    margin-right: 5px;
     border-radius: 4px;
     cursor: pointer;
     height: 35px;
@@ -84,63 +94,38 @@ textarea {
     position: relative;
     line-height: 32px;
 }
-.backgrounds {
-    padding-top: 400px;
-    position: relative;
-    margin-right: 20px;
-    margin-bottom: 20px;
+/* w Index*/
+.indexbackgrounds {
     background-color: #E3E4E5;
-    border:none;
+    background-position: bottom;
     background-image: url(../images/illos-large.png);
-    background-position-y: bottom;
-    width: 800px;
-    height: 800px;
-    position: relative;
-    float: right;
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: bottom right;
 }
-.column.backgrounds {
-    position: relative;
+/* w create new domain*/
+.domainbackground{
+    width: 100%;
+    height: 100%;
+    border: none;
     background-image: url(../images/talks.png);
-    width: 820px;
-    height: 800px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
 }
-.newroomdata {
-    margin-left:200px;
-    margin-top:300px;
-    text-align:center;
-    height: 300px;
-    width: 300px;
-    position: center;
-}
+/*powiekdzenie własnego przycisku*/
 .big {
-    height:40px;
+    height: 40px;
     width: 200px;
 }
+/* we wszystkich auth views*/
 .webressetbox {
+    margin-top: -100px;
+    padding-top: 40px;
+    max-width: 450px;
     text-align: center;
     background-color: #fff;
     border-radius: .25rem;
     box-shadow: 0 1px 0 rgba(0,0,0,.25);
     border: 1px solid #E8E8E8;
 }
-.high {
-    height: 550px;
-    width: 650px;
-    margin-top: -275px;
-}
-.h01 {
-    font-size: 78px;
-    height: 350px;
-    width: 250px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    margin-left: -175px; /* połowa szerokości */
-    margin-top: -125px /* połowa wysokości */
-}
+
