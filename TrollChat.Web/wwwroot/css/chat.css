@@ -48,6 +48,42 @@ body {
     height: 100%;
 }
 
+.ui.left.sidebar {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-basis: 220px;
+    -moz-flex-basis: 220px;
+    -ms-flex-preferred-size: 220px;
+    flex-basis: 220px;
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    min-width: 1px;
+    max-width: 260px;
+    z-index: 201;
+}
+
+.item > .btn_unstyle.right {
+    float: right !important;
+}
+
+.item > i.left {
+    float: left !important;
+    margin: 3px 1px 0 -2px !important;
+}
+
+.sidebar_channels_messages {
+    height: 849px;
+}
+
 /*
  *  Header
  */
@@ -619,6 +655,18 @@ a {
 
 #chat_input {
     width: 86%;
+    -webkit-order: 1;
+    -moz-order: 1;
+    -ms-flex-order: 1;
+    order: 1;
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    background-image: -webkit-linear-gradient(top,rgba(255,255,255,0),#fff 6px);
+    background-image: -moz-linear-gradient(top,rgba(255,255,255,0),#fff 6px);
+    background-image: -o-linear-gradient(top,rgba(255,255,255,0),#fff 6px);
+    background-image: linear-gradient(to bottom,rgba(255,255,255,0),#fff 6px);
 }
 
 #msg_form {
@@ -707,4 +755,46 @@ a {
     -webkit-transition: all 50ms ease-out 0s;
     -moz-transition: all 50ms ease-out 0s;
     transition: all 50ms ease-out 0s;
+}
+
+#client_body {
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+#client_body:not(.onboarding):before {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 8px;
+    border-bottom: 1px solid #E8E8E8;
+    background: #fff;
+    content: '';
+    z-index: 200;
+}
+
+#col_messages {
+    margin-left: 0;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    -ms-flex-direction: column;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    min-width: 1px;
 }
