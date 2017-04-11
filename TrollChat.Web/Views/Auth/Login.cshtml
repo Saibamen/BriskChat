@@ -4,41 +4,40 @@
 @model TrollChat.Web.Models.Auth.LoginViewModel
 
 <div class="ui middle aligned center aligned grid">
-    <div class="webressetbox column">
-        <h2 class="ui teal header">Login to TrollChat Account</h2>
-        <br />
-        @using (Html.BeginForm("Login", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
-        {
-            <div class="ui large form">
-                <div class="field">
-                    <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                        <i class="user icon"></i>
+    <div class="column webressetbox">
+            <h2 class="ui teal header">Login to TrollChat Account</h2>
+            <br />
+            @using (Html.BeginForm("Login", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+            {
+                <div class="ui large form">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                            <i class="user icon"></i>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                            <i class="lock icon"></i>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
                     </div>
                 </div>
-                <div class="field">
-                    <div class="ui left icon input">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        <i class="lock icon"></i>
-                    </div>
-                </div>
-                <div class="field">
-                    <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
-                </div>
+            }
+            <br />
+            <div>
+                <a href="@Url.Action("ResendConfirmationEmail", "Auth")">Resend confirmation email?</a>
             </div>
-        }
-        <br />
-        <div>
-            <a href="@Url.Action("ResendConfirmationEmail", "Auth")">Resend confirmation email?</a>
-        </div>
-        <div>
-            <a href="@Url.Action("ResetPasswordInitiation", "Auth")">Reset password</a>
+            <div>
+                <a href="@Url.Action("ResetPasswordInitiation", "Auth")">Reset password</a>
+            </div>
         </div>
     </div>
-</div>
-
 
 
 

@@ -1,10 +1,10 @@
 ﻿body {
-padding-top: 5px;
-padding-bottom: 20px;
-background-color: #E3E4E5;
-color: #4A4A4A;
-display: block;
-height: 100%;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    background-color: #E3E4E5;
+    color: #4A4A4A;
+    display: block;
+    height: 100%;
 }
 
 .hr {
@@ -56,27 +56,47 @@ display: none;
 
 /*naglowek*/
 .ui.inverted.menu {
-background-color: #E3E4E5;
-font-size: 20px;
-}
-/* naglowek*/
-.ui.inverted.menu.item {
     color: #4A4A4A;
+    background-color: #E3E4E5;
     font-size: 20px;
 }
-/* w Index*/
-.logo {
-margin-right: 10px;
-width: 50px;
-height: 50px;
-position: relative;
-left: 10px;
+.ui.inverted.menu.item {
+    color: #4A4A4A;
+    font-size: 24px;
 }
+.ui.secondary.pointing.menu {
+   font-size: 17px;
+    color: #4A4A4A;
+    font-family: sans-serif;
+
+}
+
 /*stopka*/
-.ui.inverted.vertical.footer.segment {
-background-color: #E3E4E5;
-color: #4A4A4A;
+.cat_2 {
+    list-style-type: none;
+    color: #e32072;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-weight: 700;
 }
+.cat_1 {
+    list-style-type: none;
+    color: #4A4A4A;
+    text-transform: lowercase;
+    font-size: 12px;
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-weight: 700;
+}
+.ui.inverted.vertical.footer.segment {
+margin-top: 10px;
+
+color: #4A4A4A;
+width:100%;
+background-color:whitesmoke;
+position:absolute;
+}
+
 /*własny przycisk*/
 .orginalbutton {
     border: 0;
@@ -94,16 +114,47 @@ color: #4A4A4A;
     position: relative;
     line-height: 32px;
 }
+
+/*powiekdzenie własnego przycisku*/
+.big {
+    height: 40px;
+    width: 200px;
+}
+
 /* w Index*/
+.logo {
+    margin-right: 10px;
+    width: 50px;
+    height: 50px;
+    position: relative;
+    left: 10px;
+}
 .indexbackgrounds {
     background-color: #E3E4E5;
     background-position: bottom;
     background-image: url(../images/illos-large.png);
-    background-size: contain;
+    background-size:contain;
     background-repeat: no-repeat;
 }
+.indexleftcolumn {
+    margin-top: -20%;
+    text-shadow: 20px 20px 0 0 #4A4A4A;
+}
+.headline {
+    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-weight: 900;
+    font-size: 94px;
+    line-height: 1;
+    position: relative;
+    white-space: nowrap;
+    z-index: 1;
+}
+
 /* w create new domain*/
-.domainbackground{
+.domainleftcolumn {
+}
+.domainbackground {
+    background-color: #21B2FE;
     width: 100%;
     height: 100%;
     border: none;
@@ -112,16 +163,16 @@ color: #4A4A4A;
     background-repeat: no-repeat;
     background-position: center;
 }
-/*powiekdzenie własnego przycisku*/
-.big {
-    height: 40px;
-    width: 200px;
+.socloce {
+     padding-top: 0rem !important;
+     padding-bottom: 0rem !important;
 }
+
 /* we wszystkich auth views*/
 .webressetbox {
-    margin-top: -100px;
-    padding-top: 40px;
-    max-width: 450px;
+    margin-top: -10%;
+    /*padding-top: 40px;*/
+    max-width: 500px;
     text-align: center;
     background-color: #fff;
     border-radius: .25rem;
@@ -129,3 +180,9 @@ color: #4A4A4A;
     border: 1px solid #E8E8E8;
 }
 
+/*w rejestracji*/
+.column.webressetbox {
+    padding-left: 50%;
+    padding-right: 5%;
+    padding-top: 5%;
+}
