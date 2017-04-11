@@ -17,7 +17,7 @@
 
     <div class="ui secondary pointing menu">
         <a class="ui logo icon image" href="/">
-            <img class="logo" src="~/images/troll.png"  />
+            <img class="logo" src="~/images/troll.png" />
         </a>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
             TrollChat
@@ -32,7 +32,7 @@
         {
             @Html.Partial("_AlertsPartial")
         }
-        </div>
+    </div>
 }
 
 @section Post_Body
@@ -40,19 +40,20 @@
     <div class="ui inverted vertical footer segment ">
         <div class="container">
             <p> TrollChat 2017</p>
-           <ul>
-               <li class="cat_2">  Trollchat 
-                <i class="icon heart"></i>
-               </li>
-               <li class="cat_1" >
-                   <i class="icon mail "></i>
-                    <a asp-area="" asp-controller="home" asp-action="about" class="ui item cat_1">About</a> 
-               </li>
-               <li class="cat_1" > 
-                  <i class="info icon"></i>
-                 <a asp-area="" asp-controller="home" asp-action="contact" class="ui item cat_1">Contact</a>
-              </li>
-           </ul>
+            <ul>
+                <li class="cat_2">
+                    Trollchat
+                    <i class="icon heart"></i>
+                </li>
+                <li class="cat_1">
+                    <i class="icon mail "></i>
+                    <a asp-area="" asp-controller="home" asp-action="about" class="ui item cat_1">About</a>
+                </li>
+                <li class="cat_1">
+                    <i class="info icon"></i>
+                    <a asp-area="" asp-controller="home" asp-action="contact" class="ui item cat_1">Contact</a>
+                </li>
+            </ul>
         </div>
     </div>
 }
