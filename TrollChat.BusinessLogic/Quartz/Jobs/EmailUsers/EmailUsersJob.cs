@@ -1,20 +1,20 @@
-﻿using System.Diagnostics;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MimeKit;
 using Quartz;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
+using TrollChat.DataAccess.Models;
 
-namespace TrollChat.BusinessLogic.Quartz.Jobs
+namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
 {
     [DisallowConcurrentExecution]
-    public class EmailJob : IJob
+    public class EmailUsersJob : IJob
     {
         private readonly IEmailService emailService;
         private readonly IGetEmailLog getEmailLog;
 
-        public EmailJob(IGetEmailLog getEmailLog, IEmailService emailService)
+        public EmailUsersJob(IGetEmailLog getEmailLog, IEmailService emailService)
         {
             this.emailService = emailService;
             this.getEmailLog = getEmailLog;
@@ -23,8 +23,9 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs
         public Task Execute(IJobExecutionContext context)
         {
             var emailList = getEmailLog.Invoke();
-            if (!emailList.Any())
+            if (emailList.Any())
             {
+                //TODO: Check how this works :D
                 return Task.CompletedTask;
             }
 
@@ -39,9 +40,6 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs
                     HtmlBody = email.Message
                 };
                 mimeMessage.Body = builder.ToMessageBody();
-
-                Debug.WriteLine("Email sent to user");
-
                 emailService.SendEmailAsync(mimeMessage);
             }
             return Task.CompletedTask;

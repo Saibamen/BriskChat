@@ -104,7 +104,8 @@ namespace TrollChat.Web
             migrationHelper.Migrate();
 
             // It works but we don't need to use it right now
-            // ShedulerConfig.CreateScheduler(scheduler, app);
+            scheduler = ShedulerCreator.CreateScheduler(app);
+            // scheduler.Start().Wait();
         }
     }
 }

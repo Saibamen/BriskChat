@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz.Spi;
-using TrollChat.BusinessLogic.Quartz.Jobs;
+using TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers;
 
 namespace TrollChat.BusinessLogic.Quartz
 {
@@ -9,7 +9,8 @@ namespace TrollChat.BusinessLogic.Quartz
         public static void Register(IServiceCollection services)
         {
             services.AddTransient<IJobFactory, CustomJobFactory>(provider => new CustomJobFactory(provider));
-            services.AddTransient<EmailJob>();
+            // TODO: Create automaitc dependency register if there will be too many jobs
+            services.AddTransient<EmailUsersJob>();
         }
     }
 }

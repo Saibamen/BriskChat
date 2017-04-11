@@ -6,21 +6,22 @@ namespace TrollChat.BusinessLogic.Quartz
 {
     public class CustomJobFactory : IJobFactory
     {
-        private readonly IServiceProvider _container;
+        private readonly IServiceProvider container;
 
         public CustomJobFactory(IServiceProvider container)
         {
-            _container = container;
+            this.container = container;
         }
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            var item = _container.GetService(bundle.JobDetail.JobType) as IJob;
+            var item = container.GetService(bundle.JobDetail.JobType) as IJob;
             return item;
         }
 
         public void ReturnJob(IJob job)
         {
+            //this shall remain empty
         }
     }
 }
