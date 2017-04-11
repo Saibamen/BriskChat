@@ -36,7 +36,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var user = action.Invoke("email@dot.com", "plain");
 
             // check
-            Assert.Equal(true, user);
+            Assert.True(user);
         }
 
         [Fact]
