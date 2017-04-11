@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Moq;
 using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.BusinessLogic.Tests.TestConfig;
+using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
@@ -18,7 +18,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_AddsUserToDatabaseWithCorrectValues()
         {
             // prepare
-            var userData = new Models.UserModel
+            var userData = new UserModel
             {
                 Email = "email",
                 Password = "plain",
@@ -59,7 +59,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
-            var userToAdd = new Models.UserModel();
+            var userToAdd = new UserModel();
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
 
@@ -79,7 +79,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_AlreadyExists_AddNorSaveAreCalled()
         {
             // prepare
-            var userToAdd = new Models.UserModel
+            var userToAdd = new UserModel
             {
                 Email = "test",
                 Password = "Password"
