@@ -1,6 +1,6 @@
 ﻿using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementation;
-using TrollChat.BusinessLogic.Tests.TestConfig;
+using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_AddsRoomToDatabaseWithCorrectValues()
         {
             // prepare
-            var roomData = new Models.RoomModel
+            var roomData = new RoomModel
             {
                 Name = "TestRoom",
                 Topic = "RoomTrool",
@@ -47,7 +47,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
-            var roomToAdd = new Models.RoomModel();
+            var roomToAdd = new RoomModel();
             var mockedRoomRepository = new Mock<IRoomRepository>();
 
             var action = new AddNewRoom(mockedRoomRepository.Object);
