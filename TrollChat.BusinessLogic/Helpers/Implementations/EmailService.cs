@@ -42,7 +42,7 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
 
             return emailMessage;
         }
-       
+
         public async Task SendEmailAsync(MimeMessage emailMessage)
         {
             try
@@ -54,9 +54,9 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
                 await client.SendAsync(emailMessage).ConfigureAwait(false);
                 await client.DisconnectAsync(true).ConfigureAwait(false);
             }
+            // TODO: LOG failures
             catch (Exception e)
             {
-                // log failure
             }
         }
     }
