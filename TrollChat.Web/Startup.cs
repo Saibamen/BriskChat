@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Quartz;
 using TrollChat.BusinessLogic.Configuration.Interfaces;
 using TrollChat.DataAccess.Context;
 using TrollChat.BusinessLogic.Configuration.Implementations;
+using TrollChat.BusinessLogic.Quartz;
 
 namespace TrollChat.Web
 {
@@ -40,6 +42,8 @@ namespace TrollChat.Web
 
             DependencyRegister.RegisterDependecy.Register(services);
 
+            QuartzDependencyRegister.Register(services);
+
             AutoMapperBuilder.Build();
 
             services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
@@ -54,6 +58,8 @@ namespace TrollChat.Web
                 });
             });
         }
+
+        private static IScheduler scheduler;
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
@@ -96,6 +102,9 @@ namespace TrollChat.Web
             });
 
             migrationHelper.Migrate();
+
+            // It works but we don't need to use it right now
+            // ShedulerConfig.CreateScheduler(scheduler, app);
         }
     }
 }

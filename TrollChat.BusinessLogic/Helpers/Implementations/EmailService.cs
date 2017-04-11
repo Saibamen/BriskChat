@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using TrollChat.BusinessLogic.Configuration.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using System.Threading.Tasks;

@@ -1,21 +1,23 @@
-﻿using MimeKit;
-using Quartz;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using MimeKit;
+using Quartz;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 
-namespace TrollChat.Web.QuartzJobs
+namespace TrollChat.BusinessLogic.Quartz.Jobs
 {
+    [DisallowConcurrentExecution]
     public class EmailJob : IJob
     {
         private readonly IEmailService emailService;
         private readonly IGetEmailLog getEmailLog;
 
-        public EmailJob()
+        public EmailJob(IGetEmailLog getEmailLog, IEmailService emailService)
         {
+            this.emailService = emailService;
+            this.getEmailLog = getEmailLog;
         }
 
         public Task Execute(IJobExecutionContext context)
