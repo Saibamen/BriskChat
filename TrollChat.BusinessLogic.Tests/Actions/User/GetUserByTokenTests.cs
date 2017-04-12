@@ -6,7 +6,6 @@ using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using System.Linq;
-using TrollChat.BusinessLogic.Tests.TestConfig;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {

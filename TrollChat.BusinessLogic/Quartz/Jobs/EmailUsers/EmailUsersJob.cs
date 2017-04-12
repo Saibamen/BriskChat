@@ -4,7 +4,6 @@ using MimeKit;
 using Quartz;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
 {

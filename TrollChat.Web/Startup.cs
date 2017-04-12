@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Quartz;
 using TrollChat.BusinessLogic.Configuration.Interfaces;
 using TrollChat.DataAccess.Context;
 using TrollChat.BusinessLogic.Configuration.Implementations;
