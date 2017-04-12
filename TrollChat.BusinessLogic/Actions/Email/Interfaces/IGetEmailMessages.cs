@@ -6,6 +6,6 @@ namespace TrollChat.BusinessLogic.Actions.Email.Interfaces
 {
     public interface IGetEmailMessages : IAction
     {
-        List<EmailMessage> Invoke();
+        List<EmailMessage> Invoke(int count);
     }
 }

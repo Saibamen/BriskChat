@@ -14,7 +14,6 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public override void Delete(EmailMessage entity)
         {
             context.Set<EmailMessage>().Remove(entity);
-            context.SaveChanges();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace TrollChat.BusinessLogic.Models
 {
-    public class EmailMessageModel
+    public class EmailMessageModel : BaseModel
     {
         public string From { get; set; }
 
@@ -15,5 +15,10 @@
         public string FailError { get; set; }
 
         public string FailErrorMessage { get; set; }
+
+        public override bool IsValid()
+        {
+            return !(string.IsNullOrEmpty(From) || string.IsNullOrEmpty(Recipient) || string.IsNullOrEmpty(Message) || string.IsNullOrEmpty(Subject));
+        }
     }
 }

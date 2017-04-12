@@ -27,7 +27,7 @@ namespace TrollChat.Web.Controllers
         private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
-        private readonly IAddNewEmailLog addNewEmailLog;
+        private readonly IAddNewEmailMessage addNewEmailMessage;
 
         public AuthController(IAuthorizeUser authorizeUser,
             IAddNewUser addNewUser,
@@ -38,7 +38,7 @@ namespace TrollChat.Web.Controllers
             IGetUserByToken getUserByToken,
             IEditUserPassword editIUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
-            IAddNewEmailLog addNewEmailLog)
+            IAddNewEmailMessage addNewEmailMessage)
         {
             this.authorizeUser = authorizeUser;
             this.addNewUser = addNewUser;
@@ -49,7 +49,7 @@ namespace TrollChat.Web.Controllers
             this.getUserByToken = getUserByToken;
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
-            this.addNewEmailLog = addNewEmailLog;
+            this.addNewEmailMessage = addNewEmailMessage;
         }
 
         [AllowAnonymous]
@@ -79,7 +79,8 @@ namespace TrollChat.Web.Controllers
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
             var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
-            addNewEmailLog.Invoke(message);
+            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
+            addNewEmailMessage.Invoke(mappedMessage);
 
             Alert.Success("Confirmation email has been sent to your email address");
 
@@ -208,8 +209,9 @@ namespace TrollChat.Web.Controllers
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
             var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
-            addNewEmailLog.Invoke(message);
+            addNewEmailMessage.Invoke(mappedMessage);
             Alert.Success("Check your inbox");
 
             return RedirectToAction("Login");
@@ -248,8 +250,9 @@ namespace TrollChat.Web.Controllers
             var emailinfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
             var stringView = RenderViewToString<EmailBodyModel>("Reset Password", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
-            addNewEmailLog.Invoke(message);
+            addNewEmailMessage.Invoke(mappedMessage);
             Alert.Success("Email will be sent to your account shortly");
 
             return RedirectToAction("Login");

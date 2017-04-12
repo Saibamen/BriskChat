@@ -15,9 +15,9 @@ namespace TrollChat.BusinessLogic.Actions.Email.Implementations
             this.emailRepository = emailRepository;
         }
 
-        public List<EmailMessage> Invoke()
+        public List<EmailMessage> Invoke(int count)
         {
-            return emailRepository.FindBy(x => x.Message != null).Take(10).ToList();
+            return emailRepository.FindBy(x => x.Message != null).Take(count).ToList();
         }
     }
 }
