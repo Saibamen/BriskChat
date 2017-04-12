@@ -33,27 +33,6 @@ textarea {
 max-width: 280px;
 }
 
-/* Carousel */
-.carousel-caption p {
-font-size: 20px;
-line-height: 1.4;
-}
-
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"] {
-width: 100%;
-}
-
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-/* Hide captions */
-.carousel-caption {
-display: none;
-}
-}
-@media (min-height: 320px) {
-}
-
 /*naglowek*/
 .ui.inverted.menu {
     color: #4A4A4A;
@@ -76,7 +55,7 @@ display: none;
     list-style-type: none;
     color: #e32072;
     text-transform: uppercase;
-    font-size: 12px;
+    font-size: 15px;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-weight: 700;
 }
@@ -84,7 +63,7 @@ display: none;
     list-style-type: none;
     color: #4A4A4A;
     text-transform: lowercase;
-    font-size: 12px;
+    font-size: 15px;
     font-family: Slack-Lato,appleLogo,sans-serif;
     font-weight: 700;
 }
@@ -110,7 +89,7 @@ position:absolute;
     width: 100px;
     display: inline-block;
     background-color: #42c299;
-    color: #fff !important;
+    color: #fff ;
     position: relative;
     line-height: 32px;
 }
@@ -137,7 +116,14 @@ position:absolute;
     background-repeat: no-repeat;
 }
 .indexleftcolumn {
-    margin-top: -20%;
+    background-image:url(../images/emlememle.png);
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+    height:100%;
+    margin:auto;
+    position:center;
+    align-self:center;
     text-shadow: 20px 20px 0 0 #4A4A4A;
 }
 .headline {
@@ -145,14 +131,15 @@ position:absolute;
     font-weight: 900;
     font-size: 94px;
     line-height: 1;
+    top:30%;
     position: relative;
     white-space: nowrap;
-    z-index: 1;
 }
-
+.middle.aligned.center.aligned.column {
+    height:100%;
+}
 /* w create new domain*/
-.domainleftcolumn {
-}
+
 .domainbackground {
     background-color: #21B2FE;
     width: 100%;
@@ -163,14 +150,17 @@ position:absolute;
     background-repeat: no-repeat;
     background-position: center;
 }
+.domainleftcolumn{
+    top:35%;
+}
 .socloce {
-     padding-top: 0rem !important;
-     padding-bottom: 0rem !important;
+     padding-top: 0 !important;
+     padding-bottom: 0 !important;
 }
 
 /* we wszystkich auth views*/
 .webressetbox {
-    margin-top: -10%;
+    top: -10%;
     /*padding-top: 40px;*/
     max-width: 500px;
     text-align: center;
@@ -186,3 +176,41 @@ position:absolute;
     padding-right: 5%;
     padding-top: 5%;
 }
+
+/*w confirm email*/
+.pages {
+    background-color: #1377db;
+    text-align: center;
+    padding: 5px;
+}
+.topic {
+    text-align: center;
+}
+.mywrapper {
+    border-width: 1px;
+    border: 1px solid;
+    border-color: black;
+    border-top: 0;
+}
+h1 {
+    font-size: 38px;
+}
+.button1 {
+    background-color: white;
+    color: black;
+    display: inline-block;
+    border: 2px solid #4CAF50;
+    padding: 16px 32px;
+    text-align: center;
+    margin-top: 11px;
+    margin-bottom: 11px;
+}
+.button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button1:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
