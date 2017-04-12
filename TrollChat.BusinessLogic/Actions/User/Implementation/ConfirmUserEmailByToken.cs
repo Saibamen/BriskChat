@@ -20,7 +20,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
         {
             var userToken = userTokenRepository.FindBy(x => x.SecretToken == guid).FirstOrDefault();
 
-            if (userToken == null || userToken.User.EmailConfirmedOn != null)
+            if (userToken == null
+                || userToken.User.EmailConfirmedOn != null
+                || userToken.SecretTokenTimeStamp <= DateTime.UtcNow)
             {
                 return false;
             }
@@ -28,9 +30,10 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);
+            userRepository.Save();
 
             userTokenRepository.Delete(userToken);
-            userRepository.Save();
+            userTokenRepository.Save();
 
             return true;
         }
