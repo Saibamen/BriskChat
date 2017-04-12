@@ -15,11 +15,12 @@ $(".item > .btn_unstyle.right").popup({
  */
 
 $(function () {
-    var connection = $.hubConnection("http://localhost:52283");
+    var connection = $.hubConnection("http://localhost:52283/signalr");
 
     var testName = "TestName";
 
-    /*$.connection.client.broadMessage = function (userName, message) {
+    /*connection.broadcastMessage = function (userName, message) {
+        console.log("broadcastMessage  function");
         var encodedName = $.text(userName).html();
         var encodedMessage = $.text(message).html();
 
@@ -34,7 +35,7 @@ $(function () {
 
             $("#msg_form").keypress(function (e) {
                 if (e.which == 13) {
-                    connection.send("Hello World");
+                    console.log("Sending message " + $("#msg_input").val());
                     connection.send(testName, $("#msg_input").val());
                     $("#msg_input").val("");
                 }
