@@ -15,6 +15,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
+            // prepare
             var userFromDb = new DataAccess.Models.User()
             {
                 Id = 1,
@@ -23,7 +24,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 PasswordHash = "123",
             };
 
-            // prepare
             var findByResult = new List<DataAccess.Models.User>() { userFromDb };
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))

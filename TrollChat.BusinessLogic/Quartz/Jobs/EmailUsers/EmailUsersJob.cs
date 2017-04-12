@@ -13,20 +13,20 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
     {
         private readonly IEmailService emailService;
         private readonly IGetEmailMessages getEmailMessages;
-        private readonly IDeleteEmailMessage deleteEmailMessage;
+        private readonly IDeleteEmailMessageById deleteEmailMessageById;
 
         public EmailUsersJob(IGetEmailMessages getEmailMessages,
             IEmailService emailService,
-            IDeleteEmailMessage deleteEmailMessage)
+            IDeleteEmailMessageById deleteEmailMessageById)
         {
             this.emailService = emailService;
             this.getEmailMessages = getEmailMessages;
-            this.deleteEmailMessage = deleteEmailMessage;
+            this.deleteEmailMessageById = deleteEmailMessageById;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var emailList = getEmailMessages.Invoke();
+            var emailList = getEmailMessages.Invoke(10);
             if (!emailList.Any())
             {
                 Debug.WriteLine("No emails to send");
@@ -46,7 +46,7 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
                 var sendResult = await emailService.SendEmailAsync(messageToSend);
                 if (sendResult)
                 {
-                    deleteEmailMessage.Invoke(email);
+                    deleteEmailMessageById.Invoke(email.Id);
                 }
                 else
                 {
