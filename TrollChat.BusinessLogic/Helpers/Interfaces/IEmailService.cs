@@ -6,7 +6,11 @@ namespace TrollChat.BusinessLogic.Helpers.Interfaces
 {
     public interface IEmailService : IAction
     {
-        Task SendEmailAsync(MimeMessage emailMessage);
+        Task<bool> ConnectClient();
+
+        Task<bool> DisconnectClient();
+
+        Task<bool> SendEmailAsync(MimeMessage emailMessage);
 
         MimeMessage CreateMessage(string emailAddress, string subject, string message);
     }

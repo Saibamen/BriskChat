@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using TrollChat.BusinessLogic.Configuration.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using System.Threading.Tasks;
@@ -43,20 +44,46 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             return emailMessage;
         }
 
-        public async Task SendEmailAsync(MimeMessage emailMessage)
+        public Task<bool> ConnectClient()
         {
             try
             {
                 client.Connect(settings.Value.Host, settings.Value.Port, settings.Value.UseSsl);
-
                 // Note: only needed if the SMTP server requires authentication
                 client.Authenticate(settings.Value.Login, settings.Value.Password);
-                await client.SendAsync(emailMessage).ConfigureAwait(false);
-                await client.DisconnectAsync(true).ConfigureAwait(false);
+                return Task.FromResult(true);
+            }
+            catch
+            {
+                return Task.FromResult(false);
+            }
+        }
+
+        public async Task<bool> DisconnectClient()
+        {
+            try
+            {
+                await client.DisconnectAsync(true);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> SendEmailAsync(MimeMessage emailMessage)
+        {
+            try
+            {
+                await client.SendAsync(emailMessage);
+                return true;
             }
             // TODO: LOG failures
             catch (Exception e)
             {
+                Debug.WriteLine(e.Message);
+                return false;
             }
         }
     }

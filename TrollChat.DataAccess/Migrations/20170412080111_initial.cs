@@ -10,7 +10,7 @@ namespace TrollChat.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EmailLogs",
+                name: "EmailMessages",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -24,11 +24,11 @@ namespace TrollChat.DataAccess.Migrations
                     Message = table.Column<string>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Recipient = table.Column<string>(nullable: false),
-                    Subject = table.Column<string>(nullable: true)
+                    Subject = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmailLogs", x => x.Id);
+                    table.PrimaryKey("PK_EmailMessages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -425,7 +425,7 @@ namespace TrollChat.DataAccess.Migrations
                 name: "DomainRooms");
 
             migrationBuilder.DropTable(
-                name: "EmailLogs");
+                name: "EmailMessages");
 
             migrationBuilder.DropTable(
                 name: "Messages");

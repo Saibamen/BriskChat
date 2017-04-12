@@ -4,16 +4,17 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.DataAccess.Repositories.Implementations
 {
-    public class EmailRepository : GenericRepository<EmailLogger>, IEmailRepository
+    public class EmailRepository : GenericRepository<EmailMessage>, IEmailRepository
     {
         public EmailRepository(ITrollChatDbContext context)
             : base(context)
         {
         }
 
-        public override void Delete(EmailLogger entity)
+        public override void Delete(EmailMessage entity)
         {
-            context.Set<EmailLogger>().Remove(entity);
+            context.Set<EmailMessage>().Remove(entity);
+            context.SaveChanges();
         }
     }
 }

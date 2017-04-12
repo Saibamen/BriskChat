@@ -4,8 +4,8 @@ using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Actions.Email.Interfaces
 {
-    public interface IGetEmailLog : IAction
+    public interface IGetEmailMessages : IAction
     {
-        List<EmailLogger> Invoke();
+        List<EmailMessage> Invoke();
     }
 }

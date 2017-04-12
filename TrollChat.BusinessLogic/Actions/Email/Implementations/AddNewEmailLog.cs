@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Actions.Email.Implementations
 
         public void Invoke(MimeMessage email)
         {
-            var dbItem = new EmailLogger()
+            var dbItem = new EmailMessage()
             {
                 From = email.From.Mailboxes.FirstOrDefault().Address,
                 Recipient = email.To.Mailboxes.FirstOrDefault().Address,

@@ -6,18 +6,18 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Email.Implementations
 {
-    public class GetEmailLog : IGetEmailLog
+    public class GetEmailMessages : IGetEmailMessages
     {
         private readonly IEmailRepository emailRepository;
 
-        public GetEmailLog(IEmailRepository emailRepository)
+        public GetEmailMessages(IEmailRepository emailRepository)
         {
             this.emailRepository = emailRepository;
         }
 
-        public List<EmailLogger> Invoke()
+        public List<EmailMessage> Invoke()
         {
-            return emailRepository.FindBy(x => x.Message != null).ToList();
+            return emailRepository.FindBy(x => x.Message != null).Take(10).ToList();
         }
     }
 }

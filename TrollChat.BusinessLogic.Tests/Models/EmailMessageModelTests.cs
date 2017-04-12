@@ -3,7 +3,7 @@ using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Models
 {
-    public class EmailLoggerModelTests
+    public class EmailMessageModelTests
     {
         [Fact]
         public void ValidData_ModelAreCorrect()
@@ -18,7 +18,7 @@ namespace TrollChat.BusinessLogic.Tests.Models
             var failErrorMessage = "failErrorMessage";
 
             // action
-            var action = new EmailLoggerModel
+            var action = new EmailMessageModel
             {
                 From = from,
                 Recipient = recipient,

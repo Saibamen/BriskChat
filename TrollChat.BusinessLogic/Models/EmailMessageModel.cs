@@ -1,6 +1,6 @@
 ﻿namespace TrollChat.BusinessLogic.Models
 {
-    public class EmailLoggerModel
+    public class EmailMessageModel
     {
         public string From { get; set; }
 

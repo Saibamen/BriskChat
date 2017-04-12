@@ -8,7 +8,7 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170410062213_initial")]
+    [Migration("20170412080111_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace TrollChat.DataAccess.Migrations
                     b.ToTable("DomainRooms");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.EmailLogger", b =>
+            modelBuilder.Entity("TrollChat.DataAccess.Models.EmailMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -93,11 +93,12 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<string>("Recipient")
                         .IsRequired();
 
-                    b.Property<string>("Subject");
+                    b.Property<string>("Subject")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailLogs");
+                    b.ToTable("EmailMessages");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>

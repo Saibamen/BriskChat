@@ -2,7 +2,7 @@
 
 namespace TrollChat.DataAccess.Repositories.Interfaces
 {
-    public interface IEmailRepository : IGenericRepository<EmailLogger>, IRepository
+    public interface IEmailRepository : IGenericRepository<EmailMessage>, IRepository
     {
     }
 }
