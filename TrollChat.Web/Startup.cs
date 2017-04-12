@@ -48,6 +48,12 @@ namespace TrollChat.Web
 
             services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
 
+            services.AddSignalR(options =>
+            {
+                options.Hubs.EnableDetailedErrors = true;
+                options.Hubs.EnableJavaScriptProxies = true;
+            });
+
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("UserPolicy", policyBuilder =>
@@ -58,8 +64,6 @@ namespace TrollChat.Web
                 });
             });
         }
-
-        private static IScheduler scheduler;
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
@@ -85,6 +89,9 @@ namespace TrollChat.Web
             app.UseStaticFiles();
             app.UseSession();
 
+            app.UseWebSockets();
+            app.UseSignalR();
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
@@ -104,8 +111,8 @@ namespace TrollChat.Web
             migrationHelper.Migrate();
 
             // It works but we don't need to use it right now
-            scheduler = ShedulerCreator.CreateScheduler(app);
-            // scheduler.Start().Wait();
+            var scheduler = ShedulerCreator.CreateScheduler(app);
+            scheduler.Start().Wait();
         }
     }
 }
