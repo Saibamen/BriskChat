@@ -89,7 +89,6 @@ namespace TrollChat.Web
             app.UseSession();
 
             app.UseWebSockets();
-            app.UseSignalR();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -99,6 +98,8 @@ namespace TrollChat.Web
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
             });
+
+            app.UseSignalR();
 
             app.UseMvc(routes =>
             {
