@@ -94,7 +94,7 @@ namespace TrollChat.Web
             {
                 AuthenticationScheme = "Cookies",
                 LoginPath = new PathString("/Auth/Login"),
-                AccessDeniedPath = new PathString("/Home/Error"),
+                AccessDeniedPath = new PathString("/Home/AccessDenied"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
             });

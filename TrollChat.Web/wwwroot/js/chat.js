@@ -11,19 +11,20 @@ $(".item > .btn_unstyle.right").popup({
 });
 
 /*
- *  Resizing #chat_messages height
+ *  Resizing
  */
 
 $(window).resize(function() {
-    var additional_height = 117;
+    // #chat_messages
+    var chat_additional_height = 117;
 
     if ($(".ui.message").length) {
         if (! $(".ui.message").hasClass("hidden")) {
-            additional_height += 51;
+            chat_additional_height += 51;
         }
     }
 
-    $("#chat_messages").height($(window).height() - additional_height);
+    $("#chat_messages").height($(window).height() - chat_additional_height);
 });
 
 $(window).trigger("resize");
