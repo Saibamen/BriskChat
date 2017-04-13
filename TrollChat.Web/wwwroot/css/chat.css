@@ -31,6 +31,15 @@ body {
     user-select: none;
 }
 
+a {
+    color: #08c;
+    text-decoration: none;
+}
+
+div {
+    display: block;
+}
+
 .logo.image {
     width: 35px;
     margin-right: 1em;
@@ -40,6 +49,7 @@ body {
     width: 86%;
     flex-shrink: 0;
     display: block;
+    margin: 0;
 }
 
 .ui.main.container {
@@ -330,7 +340,7 @@ form {
     color: #555459;
     width: 100%;
     max-width: 100%;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: sans-serif;
     margin: 0 0 .5rem;
     font-variant-ligatures: none;
     -webkit-transition: box-shadow 70ms ease-out,border-color 70ms ease-out;
@@ -440,7 +450,19 @@ button, input, textarea {
  *  Wiadomości na kanale
  */
 
-#chat_messages:before {
+#client_body {
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+}
+
+#client_body:not(.onboarding):before {
     box-sizing: border-box;
     position: absolute;
     left: 0;
@@ -452,11 +474,34 @@ button, input, textarea {
     z-index: 200;
 }
 
+#messages_container {
+    overflow-y: hidden;
+    position: relative;
+}
+
+#col_messages {
+    margin-left: 0;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    -ms-flex-direction: column;
+    -moz-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    min-width: 1px;
+}
+
 #chat_messages {
-    height: 89%;
-    background-color: white;
-    -webkit-flex: 1 1 auto;
-    overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border-right: .25rem solid transparent;
+    outline: 0;
 }
 
 .ts-message {
@@ -512,11 +557,6 @@ button, input, textarea {
 .ts-message.first .message_icon, .light_theme .ts-message.selected .message_icon {
     margin-top: 4px;
     display: block;
-}
-
-a {
-    color: #08c;
-    text-decoration: none;
 }
 
 .member_image {
@@ -772,46 +812,4 @@ a {
     -webkit-transition: all 50ms ease-out 0s;
     -moz-transition: all 50ms ease-out 0s;
     transition: all 50ms ease-out 0s;
-}
-
-#client_body {
-    overflow: hidden;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex: 1;
-    -webkit-flex: 1;
-    flex: 1;
-}
-
-#client_body:not(.onboarding):before {
-    box-sizing: border-box;
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 8px;
-    border-bottom: 1px solid #E8E8E8;
-    background: #fff;
-    content: '';
-    z-index: 200;
-}
-
-#col_messages {
-    margin-left: 0;
-    position: relative;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex: 1;
-    -webkit-flex: 1;
-    flex: 1;
-    -ms-flex-direction: column;
-    -moz-flex-direction: column;
-    -webkit-flex-direction: column;
-    flex-direction: column;
-    min-width: 1px;
 }

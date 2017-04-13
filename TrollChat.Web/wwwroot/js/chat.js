@@ -11,6 +11,17 @@ $(".item > .btn_unstyle.right").popup({
 });
 
 /*
+ *  Resizing #chat_messages height
+ */
+
+$(window).resize(function() {
+    console.log("resizing");
+    $("#chat_messages").height($(window).height() - 117);
+});
+
+$(window).trigger("resize");
+
+/*
  *  SignalR
  */
 
