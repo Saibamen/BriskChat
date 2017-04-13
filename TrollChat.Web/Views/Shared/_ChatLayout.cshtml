@@ -14,120 +14,127 @@
 
 @section Pre_Body
 {
-    @Html.Partial("_SidebarPartial")
+    <div id="client_container">
 
-    <div class="ui main container">
-        @if (TempData.ContainsKey("alertMessages"))
-        {
-            @Html.Partial("_AlertsPartial")
-        }
+        @Html.Partial("_SidebarPartial")
 
-        <header id="chat_header">
-            <div class="channel_header">
-                <div class="messages_header">
-                    <div class="channel_title">
-                        <div id="channel_name_container" class="channel_name_container">
-                            <span id="channel_name" class="channel_name">
-                                <button type="button" span="" id="channel_title" class="btn_unstyle">#TrollChatDev</button>
-                            </span>
+        <div class="ui active dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+
+        <div class="ui main container" style="display:none;">
+            @if (TempData.ContainsKey("alertMessages"))
+            {
+                @Html.Partial("_AlertsPartial")
+            }
+
+            <header id="chat_header">
+                <div class="channel_header">
+                    <div class="messages_header">
+                        <div class="channel_title">
+                            <div id="channel_name_container" class="channel_name_container">
+                                <span id="channel_name" class="channel_name">
+                                    <button type="button" span="" id="channel_title" class="btn_unstyle">#TrollChatDev</button>
+                                </span>
+                            </div>
+
+                            <div id="channel_header_info" class="channel_header_info">
+                                <div class="channel_header_info_item">
+                                    <button type="button" id="channel_members_toggle_count" data-content="View member list" data-position="bottom center" class="btn_unstyle ts_tip">
+                                        <i class="user icon"></i>
+                                        <span id="channel_members_toggle_count_count">28</span>
+                                    </button>
+                                </div>
+                                <div class="channel_header_info_item channel_topic_container">
+                                    <span id="topic_inline_edit" class="channel_topic inline_edit"><span tabindex="0" data-instructions-text="Enter to submit, Esc to cancel"><span id="channel_topic_text" class="inline_edit_input no_jumbomoji" data-placeholder="Add a topic">Parapetówka w nowej siedzibie odbędzie się w bliżej nieokreślony piątek w ciągu najbliższych kilku tygodnii - czekamy na ustąpienie mrozów.</span></span></span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div id="channel_header_info" class="channel_header_info">
-                            <div class="channel_header_info_item">
-                                <button type="button" id="channel_members_toggle_count" data-content="View member list" data-position="bottom center" class="btn_unstyle ts_tip">
-                                    <i class="user icon"></i>
-                                    <span id="channel_members_toggle_count_count">28</span>
-                                </button>
-                            </div>
-                            <div class="channel_header_info_item channel_topic_container">
-                                <span id="topic_inline_edit" class="channel_topic inline_edit"><span tabindex="0" data-instructions-text="Enter to submit, Esc to cancel"><span id="channel_topic_text" class="inline_edit_input no_jumbomoji" data-placeholder="Add a topic">Parapetówka w nowej siedzibie odbędzie się w bliżej nieokreślony piątek w ciągu najbliższych kilku tygodnii - czekamy na ustąpienie mrozów.</span></span></span>
-                            </div>
+                        <div class="channel_title_info">
+                            <button type="button" id="channel_actions_toggle" data-content="Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
+                                <i class="setting icon"></i>
+                            </button>
+                            <button type="button" id="details_toggle" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
+                                <i class="list layout icon"></i>
+                            </button>
                         </div>
                     </div>
 
-                    <div class="channel_title_info">
-                        <button type="button" id="channel_actions_toggle" data-content="Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
-                            <i class="setting icon"></i>
-                        </button>
-                        <button type="button" id="details_toggle" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
-                            <i class="list layout icon"></i>
-                        </button>
+                    <div class="flex_header">
+                        <div id="search_container">
+                            <form role="search" method="get" action="/search" id="header_search_form" class="search_form no_bottom_margin">
+                                <div class="icon_search_wrapper"><i class="search icon icon_search"></i></div>
+                                <div class="search_input_wrapper">
+                                    <input type="text" id="search_terms" name="q" class="search_input" placeholder="Search" autocomplete="off" maxlength="250" aria-label="Search">
+                                </div>
+                                <div class="search_clear_icon_wrapper"><button type="button" id="search_clear" class="btn_unstyle search_clear_icon" aria-label="Clear search field"><i class="remove circle outline icon ts_icon_times_circle"></i><ts-icon class="ts_icon_times_circle" aria-hidden="true"></ts-icon></button></div>
+                            </form>
+                        </div>
                     </div>
                 </div>
+            </header>
 
-                <div class="flex_header">
-                    <div id="search_container">
-                        <form role="search" method="get" action="/search" id="header_search_form" class="search_form no_bottom_margin">
-                            <div class="icon_search_wrapper"><i class="search icon icon_search"></i></div>
-                            <div class="search_input_wrapper">
-                                <input type="text" id="search_terms" name="q" class="search_input" placeholder="Search" autocomplete="off" maxlength="250" aria-label="Search">
-                            </div>
-                            <div class="search_clear_icon_wrapper"><button type="button" id="search_clear" class="btn_unstyle search_clear_icon" aria-label="Clear search field"><i class="remove circle outline icon ts_icon_times_circle"></i><ts-icon class="ts_icon_times_circle" aria-hidden="true"></ts-icon></button></div>
+            <div id="client_body">
+                <div id="col_messages">
+                    <div id="chat_input">
+                        <form id="msg_form" class="offline" data-qa="message_form">
+                            <textarea id="msg_input" aria-label="Message input" data-qa="message_input" placeholder="Message #TrollChatDev"></textarea>
+
+                            <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle" aria-label="File menu">
+                                <i class="plus icon"></i>
+                            </button>
+
+                            <input type="file" id="file_upload" class="offscreen" multiple="multiple" aria-hidden="true" data-qa="file_upload" tabindex="-1">
+
+                            <button type="button" id="main_emo_menu" class="btn_unstyle emo_menu hidden" aria-label="Emoji menu">
+                                <i class="meh icon"></i>
+                            </button>
+
+                            <div id="msg_input_message"><span></span></div>
                         </form>
                     </div>
-                </div>
-            </div>
-        </header>
 
-        <div id="client_body">
-            <div id="col_messages">
-                <div id="chat_input">
-                    <form id="msg_form" class="offline" data-qa="message_form">
-                        <textarea id="msg_input" aria-label="Message input" data-qa="message_input" placeholder="Message #TrollChatDev"></textarea>
-
-                        <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle" aria-label="File menu">
-                            <i class="plus icon"></i>
-                        </button>
-
-                        <input type="file" id="file_upload" class="offscreen" multiple="multiple" aria-hidden="true" data-qa="file_upload" tabindex="-1">
-
-                        <button type="button" id="main_emo_menu" class="btn_unstyle emo_menu hidden" aria-label="Emoji menu">
-                            <i class="meh icon"></i>
-                        </button>
-
-                        <div id="msg_input_message"><span></span></div>
-                    </form>
-                </div>
-
-                <div id="messages_container">
-                    <div id="chat_messages" tabindex="-1">
-                        <div class="ts-message">
-                            <div class="message_gutter">
-                                <div class="message_icon">
-                                    <a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48')" aria-hidden="true" tabindex="-1"> </a>
+                    <div id="messages_container">
+                        <div id="chat_messages" tabindex="-1">
+                            <div class="ts-message">
+                                <div class="message_gutter">
+                                    <div class="message_icon">
+                                        <a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48')" aria-hidden="true" tabindex="-1"> </a>
+                                    </div>
+                                </div>
+                                <div class="message_content">
+                                    <div class="message_content_header">
+                                        <a href="#" class="message_sender">Saibamen</a>
+                                        <a href="#" class="timestamp">15:54</a>
+                                    </div>
+                                    <span class="message_body">Testowa wiadomość</span>
                                 </div>
                             </div>
-                            <div class="message_content">
-                                <div class="message_content_header">
-                                    <a href="#" class="message_sender">Saibamen</a>
-                                    <a href="#" class="timestamp">15:54</a>
+                            <div class="ts-message">
+                                <div class="message_gutter">
+                                    <div class="message_icon">
+                                        <a href="/team/kropi" target="/team/kropi" class="member_image" data-member-id="U2Q6CCXE1" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U2Q6CCXE1-9b6c6653f25c-48')" aria-hidden="true" tabindex="-1"> </a>
+                                    </div>
                                 </div>
-                                <span class="message_body">Testowa wiadomość</span>
-                            </div>
-                        </div>
-                        <div class="ts-message">
-                            <div class="message_gutter">
-                                <div class="message_icon">
-                                    <a href="/team/kropi" target="/team/kropi" class="member_image" data-member-id="U2Q6CCXE1" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U2Q6CCXE1-9b6c6653f25c-48')" aria-hidden="true" tabindex="-1"> </a>
+                                <div class="message_content">
+                                    <div class="message_content_header">
+                                        <a href="#" class="message_sender">Grzechu</a>
+                                        <a href="#" class="timestamp">15:58</a>
+                                    </div>
+                                    <span class="message_body">Spam</span>
                                 </div>
-                            </div>
-                            <div class="message_content">
-                                <div class="message_content_header">
-                                    <a href="#" class="message_sender">Grzechu</a>
-                                    <a href="#" class="timestamp">15:58</a>
-                                </div>
-                                <span class="message_body">Spam</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 }
 
 @section Post_Body
 {
-</div>
+    </div>
+    </div>
 }
 
 @section Scripts

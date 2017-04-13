@@ -40,6 +40,32 @@ div {
     display: block;
 }
 
+/*
+ *  Loader
+ */
+
+.ui.text.loader {
+    margin-left: -130px;
+}
+
+/*
+ *  Start
+ */
+
+.client_container {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -moz-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
 .logo.image {
     width: 35px;
     margin-right: 1em;

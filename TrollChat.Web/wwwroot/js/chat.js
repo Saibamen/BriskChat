@@ -44,8 +44,8 @@ $(function () {
 
     var testName = "TestName";
 
-    myHub.client.broadcastMessage = function (username, message) {
-        console.log(testName + ": " + message);
+    myHub.client.broadcastMessage = function (userName, message, chatTime) {
+        $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + chatTime + '</a></div><span class="message_body">' + message + '</span></div></div>');
     }
 
     // Start the connection
@@ -56,9 +56,15 @@ $(function () {
 
             $("#msg_form").keypress(function (e) {
                 if (e.which == 13) {
-                    message = $("#msg_input").val(); 
-                    myHub.server.send(testName, message);
-                    $("#msg_input").val("");
+                    if (! e.shiftKey) {
+                        if(message = $("#msg_input").val().trim()) {
+                            console.log("Wysyłam: " + message);
+                            myHub.server.send(testName, message);
+                        }
+
+                        e.preventDefault();
+                        $("#msg_input").val("");
+                    }
                 }
             });
         })
@@ -78,9 +84,13 @@ $(function () {
     $.connection.hub.stateChanged(function (change) {
         if (change.newState === $.signalR.connectionState.reconnecting) {
             console.log("Re-connecting");
+            $(".ui.main.container").css("display", "none");
+            $(".ui.dimmer").addClass("active");
         }
         else if (change.newState === $.signalR.connectionState.connected) {
             console.log("The server is online");
+            $(".ui.main.container").css("display", "block");
+            $(".ui.dimmer").removeClass("active");
         } 
     });
 

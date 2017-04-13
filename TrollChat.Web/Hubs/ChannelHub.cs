@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System;
+using Microsoft.AspNetCore.SignalR;
 
 namespace TrollChat.Web.Hubs
 {
@@ -8,7 +9,17 @@ namespace TrollChat.Web.Hubs
         [Authorize(Roles = "Admin")]
         public void Send(string userName, string message)
         {
-            Clients.All.broadcastMessage(userName, message);
+            if (string.IsNullOrEmpty(userName.Trim()) || string.IsNullOrEmpty(message.Trim()))
+            {
+                return;
+            }
+
+            // TODO: Save to database
+
+            DateTime timestamp = DateTime.Now;
+            var chatTime = timestamp.ToString("HH:mm");
+
+            Clients.All.broadcastMessage(userName.Trim(), message.Trim(), chatTime);
         }
     }
 }
