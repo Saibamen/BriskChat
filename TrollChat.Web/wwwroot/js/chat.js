@@ -15,8 +15,15 @@ $(".item > .btn_unstyle.right").popup({
  */
 
 $(window).resize(function() {
-    console.log("resizing");
-    $("#chat_messages").height($(window).height() - 117);
+    var additional_height = 117;
+
+    if ($(".ui.message").length) {
+        if (! $(".ui.message").hasClass("hidden")) {
+            additional_height += 51;
+        }
+    }
+
+    $("#chat_messages").height($(window).height() - additional_height);
 });
 
 $(window).trigger("resize");

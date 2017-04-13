@@ -50,6 +50,8 @@ div {
     flex-shrink: 0;
     display: block;
     margin: 0;
+    cursor: pointer;
+    text-align: center;
 }
 
 .ui.main.container {
