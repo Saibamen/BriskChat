@@ -1,11 +1,20 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.DataAccess.Context;
+using System;
 
 namespace TrollChat.BusinessLogic.Configuration.Seeder
 {
-    public class DbSeeder
+    public class DbContextSeeder
     {
+        private readonly TrollChatDbContext context;
+
+        public DbContextSeeder(TrollChatDbContext context)
+        {
+            this.context = context;
+        }
+
         public void Seed(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken)
         {
             SeedUsers(addNewUser, confirmUserEmailByToken);
