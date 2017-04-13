@@ -9,6 +9,7 @@ using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.Web.Authorization;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Auth;
 using TrollChat.Web.Models.Common;
@@ -124,10 +125,10 @@ namespace TrollChat.Web.Controllers
             //TODO: Create actual claims
             var claims = new List<Claim>
             {
-                new Claim("Role", "User"),
+                new Claim(ClaimTypes.Role, Role.User),
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "role");
+            var claimsIdentity = new ClaimsIdentity(claims, "Roles");
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
