@@ -15,7 +15,7 @@ $(".item > .btn_unstyle.right").popup({
  */
 
 $(function () {
-    $.connection.hub.url = "http://localhost:52283/signalr";
+    $.connection.hub.url = "http://localhost:52284/signalr";
     var myHub = $.connection.channelHub;
 
     var testName = "TestName";
