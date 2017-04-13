@@ -7,7 +7,7 @@
     <div class="column webressetbox">
         <h2 class="ui teal header">Login to TrollChat Account</h2>
         <br />
-        @using (Html.BeginForm("Login", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+        @using (Html.BeginForm("Login", "Auth", new { name="Loginform", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
         {
 
             <div class="ui large form">
