@@ -25,6 +25,11 @@ $(window).resize(function() {
     }
 
     $("#chat_messages").height($(window).height() - chat_additional_height);
+
+    // .sidebar_channels_messages
+    var sidebar_additional_height = 165;
+
+    $(".sidebar_channels_messages").height($(window).height() - sidebar_additional_height);
 });
 
 $(window).trigger("resize");

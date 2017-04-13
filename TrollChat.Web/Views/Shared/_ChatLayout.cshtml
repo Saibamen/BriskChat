@@ -14,44 +14,7 @@
 
 @section Pre_Body
 {
-    <div class="ui vertical inverted sidebar menu visible">
-        <div class="item">
-            <a class="ui logo icon image" href="/">
-                <img src="/images/troll.png" alt="Logo">
-            </a>
-            <a href="/"><b>TrollChat</b></a>
-        </div>
-
-        <div class="sidebar_channels_messages">
-            <div class="item">
-                CHANNELS (13)
-                <button class="btn_unstyle right" data-content="Create new channel" data-position="top center"><i class="add circle icon"></i></button>
-                <div class="menu">
-                    <a class="item"><i class="icon left">#</i> dev</a>
-                    <a class="item"><i class="icon left">#</i> general</a>
-                    <a class="item"><i class="icon left">#</i> legnica</a>
-                    <a class="item"><i class="lock icon left"></i> legnicait_2017a_cs</a>
-                </div>
-            </div>
-            <div class="item">
-                DIRECT MESSAGES
-                <button class="btn_unstyle right" data-content="Open a Direct Message" data-position="top center"><i class="add circle icon"></i></button>
-                <div class="menu">
-                    <a class="item"><i class="icon left"></i> slackbot</a>
-                    <a class="item"><i class="icon left"></i> saibamen (you)</a>
-                    <a class="item"><i class="icon left"></i> krychan</a>
-                </div>
-            </div>
-        </div>
-        <div class="item down">
-            <div class="item">
-                @using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
-                {
-                    <button type="submit" class="ui fluid button negative">Log off</button>
-                }
-            </div>
-        </div>
-    </div>
+    @Html.Partial("_SidebarPartial")
 
     <div class="ui main container">
         @if (TempData.ContainsKey("alertMessages"))
