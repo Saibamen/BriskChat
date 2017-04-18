@@ -25,11 +25,12 @@
                         <i class="lock icon"></i>
                     </div>
                 </div>
-                @Html.ValidationSummary(false,"", new { @class = "text-danger" })
-                <div class="field">
-                    <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
+                    
+                    <div class="field">
+                        <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    </div>
                 </div>
-            </div>
         }
         <br />
         <div>
