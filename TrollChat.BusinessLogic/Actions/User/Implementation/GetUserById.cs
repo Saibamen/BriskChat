@@ -15,12 +15,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
         public DataAccess.Models.User Invoke(int id)
         {
             var dbUser = userRepository.GetById(id);
+
             if (dbUser == null)
             {
                 return null;
             }
 
             var user = AutoMapper.Mapper.Map<DataAccess.Models.User>(dbUser);
+
             return user;
         }
     }
