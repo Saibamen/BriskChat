@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementation
@@ -13,7 +14,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.userRepository = userRepository;
         }
 
-        public DataAccess.Models.User Invoke(string email)
+        public UserModel Invoke(string email)
         {
             if (string.IsNullOrEmpty(email))
             {
@@ -26,7 +27,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return null;
             }
 
-            var user = AutoMapper.Mapper.Map<DataAccess.Models.User>(dbUser);
+            var user = AutoMapper.Mapper.Map<UserModel>(dbUser);
 
             return user;
         }

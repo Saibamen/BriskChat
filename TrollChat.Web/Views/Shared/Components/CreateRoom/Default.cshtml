@@ -1,0 +1,83 @@
+﻿@model TrollChat.Web.Models.Room.CreateNewRoomViewModel
+
+<style>
+    .chat_slack_button {
+        border: solid !important;
+        border-width: 1px !important;
+        border-color: #B1B2B4 !important;
+    }
+
+    .font_black {
+        color: #000 !important;
+    }
+
+    .font_white {
+        color: #fff !important;
+    }
+
+    .slack_background_white {
+        background-color: #FBFBFA !important;
+    }
+
+    .slack_background_grey {
+        background-color: #919294 !important;
+    }
+
+    .ui.dimmer {
+        background-color: #fff;
+    }
+
+    .ui.basic.modal {
+        color: #000;
+    }
+
+    .ui.modal > .actions {
+        border: none;
+    }
+</style>
+
+<div class="ui basic modal">
+    <h1 class="modal-title" id="createNewChannelHeader"> Create a private channel</h1>
+    <label>Channels are where your team communicates. They're the best when organized around a topic - #leads for example</label>
+
+    @using (Html.BeginForm(FormMethod.Post,false,new { id = "createChanelForm", @class = "ui large form" }))
+    {
+        <div class="content">
+            <div class="row" style="display: flex; align-items: center;">
+                <div class="two wide column">
+                    <div class="field">
+                        <div class="onoffswitch">
+                            @Html.CheckBoxFor(x => x.IsPrivate, new { @class = "onoffswitch-checkbox", id = "IsPrivate" })
+                            <label class="onoffswitch-label" for="IsPrivate">
+                                <span class="onoffswitch-inner"></span>
+                                <span class="onoffswitch-switch"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label id="createNewChannelLabel"> This channel can only be joined or viewed by invite</label>
+                </div>
+            </div>
+            <div class="field">
+                @Html.LabelFor(x => x.Name)
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "# e.g. leads", required = "required" })
+            </div>
+            <div class="field">
+                @Html.LabelFor(x => x.Description)
+                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+            </div>
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+    }
+
+    <div class="actions" style="text-align: right">
+        <button class="ui cancel button ">
+            <i class="remove icon"></i>
+            Cancel
+        </button>
+        <button class="ui button" form="createChanelForm" type="submit">
+            Create channel
+        </button>
+    </div>
+</div>
