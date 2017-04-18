@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementation
@@ -13,7 +14,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.userTokenRepository = userTokenRepository;
         }
 
-        public DataAccess.Models.User Invoke(string token)
+        public UserModel Invoke(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -21,8 +22,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             }
 
             var result = userTokenRepository.FindBy(y => y.SecretToken == token).FirstOrDefault();
+            if (result == null)
+            {
+                return null;
+            }
 
-            return result?.User;
+            var user = AutoMapper.Mapper.Map<UserModel>(result.User);
+
+            return user;
         }
     }
 }

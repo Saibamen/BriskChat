@@ -3,7 +3,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Models;
+using TrollChat.Web.Models.Room;
 
 namespace TrollChat.Web.Hubs
 {
@@ -11,9 +14,11 @@ namespace TrollChat.Web.Hubs
     public class ChannelHub : Hub
     {
         private readonly IGetUserById getUserById;
+        private readonly IAddNewRoom addNewRoom;
 
-        public ChannelHub(IGetUserById getUserById)
+        public ChannelHub(IGetUserById getUserById, IAddNewRoom addNewRoom)
         {
+            this.addNewRoom = addNewRoom;
             this.getUserById = getUserById;
         }
 
@@ -64,6 +69,26 @@ namespace TrollChat.Web.Hubs
 
                 Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), localTime);
             }
+        }
+
+        public void CreateNewChannel(CreateNewRoomViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return;
+            }
+
+            var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
+
+            //TODO: change to real id
+            var room = addNewRoom.Invoke(roomModel, 1);
+
+            if (room == 0)
+            {
+                return;
+            }
+
+            Clients.Caller.channelAddedAction(model.Name);
         }
     }
 }

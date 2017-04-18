@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_AddsRoomToDatabaseWithCorrectValues()
         {
             // prepare
-            var user = new UserModel
+            var user = new DataAccess.Models.User
             {
                 Name = "Test"
             };
@@ -27,7 +27,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
 
             var roomData = new RoomModel
             {
-                Owner = user,
                 Tags = new List<TagModel> { tag },
                 Name = "TestRoom",
                 Topic = "RoomTrool",
@@ -38,17 +37,19 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
 
             DataAccess.Models.Room roomSaved = null;
 
-            var mockedRoomRepo = new Mock<IRoomRepository>();
-            mockedRoomRepo.Setup(r => r.Add(It.IsAny<DataAccess.Models.Room>()))
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+            mockedRoomRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Room>()))
                 .Callback<DataAccess.Models.Room>(u => roomSaved = u);
 
-            var action = new AddNewRoom(mockedRoomRepo.Object);
+            var mockedUserRepo = new Mock<IUserRepository>();
+            mockedUserRepo.Setup(x => x.GetById(It.IsAny<int>())).Returns(user);
+
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object);
 
             // action
-            action.Invoke(roomData);
+            action.Invoke(roomData, 1);
 
             // assert
-            Assert.Equal("Test", roomSaved.Owner.Name);
             Assert.Equal("TestTag", roomSaved.Tags.ElementAt(0).Name);
             Assert.Equal("TestRoom", roomSaved.Name);
             Assert.Equal("RoomTrool", roomSaved.Topic);
@@ -56,8 +57,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.False(roomSaved.IsPrivateConversation);
             Assert.Equal(1, roomSaved.Customization);
             Assert.True(roomSaved.IsPublic);
-            mockedRoomRepo.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Once());
-            mockedRoomRepo.Verify(r => r.Save(), Times.Once());
+            Assert.Equal("Test", roomSaved.Owner.Name);
+            mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Once());
+            mockedRoomRepository.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -66,11 +68,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // prepare
             var roomToAdd = new RoomModel();
             var mockedRoomRepository = new Mock<IRoomRepository>();
+            var mockedUserRepo = new Mock<IUserRepository>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object);
 
             // action
-            var actionResult = action.Invoke(roomToAdd);
+            var actionResult = action.Invoke(roomToAdd, 1);
 
             // assert
             Assert.Equal(0, actionResult);

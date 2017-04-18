@@ -1,9 +1,10 @@
 ﻿using TrollChat.BusinessLogic.Actions.Base;
+using TrollChat.BusinessLogic.Models;
 
 namespace TrollChat.BusinessLogic.Actions.User.Interfaces
 {
     public interface IGetUserById : IAction
     {
-        DataAccess.Models.User Invoke(int id);
+        UserModel Invoke(int id);
     }
 }

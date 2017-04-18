@@ -29,6 +29,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             var userTokenFromDb = new DataAccess.Models.UserToken()
             {
+                Id = 1,
                 User = userFromDb,
                 SecretToken = "123"
             };
@@ -77,11 +78,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // prepare
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             var action = new GetUserByToken(mockedUserTokenRepository.Object);
-
-            var findByResult = new List<DataAccess.Models.UserToken>() { };
-
-            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
-                 .Returns(findByResult.AsQueryable);
 
             // action
             var user = action.Invoke("123");
