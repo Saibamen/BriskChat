@@ -125,7 +125,8 @@ namespace TrollChat.Web.Controllers
             //TODO: Create actual claims
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, Role.User),
+                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Role, Role.User)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Roles");
