@@ -14,12 +14,12 @@ namespace TrollChat.Web.Hubs
     public class ChannelHub : Hub
     {
         private readonly IGetUserById getUserById;
-
         private readonly IAddNewRoom addNewRoom;
 
         public ChannelHub(IGetUserById getUserById, IAddNewRoom addNewRoom)
         {
             this.addNewRoom = addNewRoom;
+            this.getUserById = getUserById;
         }
 
         public async Task JoinRoom(string roomId)
