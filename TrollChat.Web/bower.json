@@ -6,7 +6,8 @@
     "jquery-validation": "1.16.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "semantic": "Semantic-UI#2.2.10",
-    "signalr": "v2.2.1"
+    "signalr": "v2.2.1",
+    "jquery-dateFormat": "1.0.2"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",

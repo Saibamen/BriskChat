@@ -21,26 +21,26 @@ namespace TrollChat.Web.Hubs
         {
             await Groups.Add(Context.ConnectionId, roomId);
 
-            DateTime timestamp = DateTime.Now;
-            var chatTime = timestamp.ToString("HH:mm");
+            DateTime time = DateTime.UtcNow;
+            var localTime = time.ToLocalTime();
 
             var user = (ClaimsIdentity)Context.User.Identity;
             var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " joined to this channel (" + roomId + ")", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " joined to this channel (" + roomId + ")", localTime);
         }
 
         public async Task LeaveRoom(string roomId)
         {
             await Groups.Remove(Context.ConnectionId, roomId);
 
-            DateTime timestamp = DateTime.Now;
-            var chatTime = timestamp.ToString("HH:mm");
+            DateTime time = DateTime.UtcNow;
+            var localTime = time.ToLocalTime();
 
             var user = (ClaimsIdentity)Context.User.Identity;
             var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " left from this channel (" + roomId + ")", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " left from this channel (" + roomId + ")", localTime);
         }
 
         public void Send(string roomId, string message)
@@ -50,18 +50,19 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            int fakeUserId = 1;
-            DateTime timestamp = DateTime.Now;
-            // TODO: Only timestamp
-            var chatTime = timestamp.ToString("HH:mm");
+            var userClaims = (ClaimsIdentity)Context.User.Identity;
+            var userId = Int32.Parse(userClaims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
 
-            var user = getUserById.Invoke(fakeUserId);
+            var user = getUserById.Invoke(userId);
 
             if (user != null)
             {
+                DateTime time = DateTime.UtcNow;
+                var localTime = time.ToLocalTime();
+
                 // TODO: Save to database
 
-                Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), chatTime);
+                Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), localTime);
             }
         }
     }

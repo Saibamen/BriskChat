@@ -142,11 +142,14 @@
     <environment names="Development">
         <script src="~/lib/signalr/jquery.signalR.js"></script>
         <script src="signalr/hubs"></script>
+        <script src="~/lib/jquery-dateFormat/dist/jquery-dateFormat.js"></script>
         <script src="~/js/chat.js" asp-append-version="true"></script>
     </environment>
 
     <environment names="Staging,Production">
         <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+        <script src="signalr/hubs"></script>
+        <script src="~/lib/jquery-dateFormat/dist/jquery-dateFormat.min.js"></script>
         <script src="~/js/chat.min.js" asp-append-version="true"></script>
     </environment>
 }
