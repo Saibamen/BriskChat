@@ -14,12 +14,12 @@ $(".item > .btn_unstyle.right").popup({
  *  Resizing
  */
 
-$(window).resize(function() {
+$(window).resize(function () {
     // #chat_messages
     var chat_additional_height = 117;
 
     if ($(".ui.message").length) {
-        if (! $(".ui.message").hasClass("hidden")) {
+        if (!$(".ui.message").hasClass("hidden")) {
             chat_additional_height += 51;
         }
     }
@@ -38,63 +38,122 @@ $(window).trigger("resize");
  *  SignalR
  */
 
-$(function () {
-    $.connection.hub.url = "http://localhost:52284/signalr";
-    var myHub = $.connection.channelHub;
+var currentRoomId = $(".menu > a.item.active").data("id");
+console.log("Current room ID: " + currentRoomId);
 
-    var testName = "TestName";
+$.connection.hub.url = "http://localhost:52284/signalr";
+var myHub = $.connection.channelHub;
 
-    myHub.client.broadcastMessage = function (userName, message, chatTime) {
-        $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'https://ca.slack-edge.com/T0MBAPD9S-U42KXAW07-991dd9964bd3-48\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + chatTime + '</a></div><span class="message_body">' + message + '</span></div></div>');
-    }
+// Change room
+$(".menu > a.item").click(function (e) {
+    // Leave current room
+    myHub.server.leaveRoom(currentRoomId);
+    $(".menu > a.item.active").removeClass("active");
 
-    // Start the connection
-    $.connection.hub.start()
-        .done(function () {
-            console.log("Connected :)");
-            console.log("connection ID: " + $.connection.hub.id);
+    currentRoomId = $(e.target).data("id");
+    myHub.server.joinRoom(currentRoomId);
+    $(e.target).addClass("active");
+    console.log("Current room ID: " + currentRoomId);
+});
 
-            $("#msg_form").keypress(function (e) {
-                if (e.which == 13) {
-                    if (! e.shiftKey) {
-                        if(message = $("#msg_input").val().trim()) {
-                            console.log("Wysyłam: " + message);
-                            myHub.server.send(testName, message);
-                        }
+myHub.client.broadcastMessage = function (userName, message, chatTime) {
+    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + chatTime + '</a></div><span class="message_body">' + message + '</span></div></div>');
 
-                        e.preventDefault();
-                        $("#msg_input").val("");
+
+    // Scroll #chat_messages
+    $("#chat_messages").clearQueue();
+    $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+}
+
+myHub.client.channelAddedAction = function (channelName) {
+    console.log("haha");
+    $("#channelsMenu").append('<a class="item"><i class="icon left">#</i>' + channelName + '</a>');
+} 
+
+// Start the connection
+$.connection.hub.start()
+    .done(function () {
+        // Joining to room
+        myHub.server.joinRoom(currentRoomId);
+        console.log("Connected :)");
+
+        $("#msg_form").keypress(function (e) {
+            if (e.which == 13) {
+                if (!e.shiftKey) {
+                    if (message = $("#msg_input").val().trim()) {
+                        console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                        myHub.server.send(currentRoomId, message);
                     }
-                }
-            });
-        })
 
-        .fail(function (a) {
-            console.log("Not connected! " + a);
+                    e.preventDefault();
+                    $("#msg_input").val("");
+                }
+            }
+        });
+    })
+
+    .fail(function (a) {
+        console.log("Not connected! " + a);
+    });
+
+$.connection.hub.received = function (data) {
+    console.log(data);
+};
+
+$.connection.hub.error = function (error) {
+    console.warn(error);
+};
+
+$.connection.hub.stateChanged(function (change) {
+    if (change.newState === $.signalR.connectionState.reconnecting) {
+        console.log("Re-connecting");
+        $(".ui.main.container").css("display", "none");
+        $(".ui.dimmer").addClass("active");
+    }
+    else if (change.newState === $.signalR.connectionState.connected) {
+        console.log("The server is online");
+        $(".ui.main.container").css("display", "block");
+        $(".ui.dimmer").removeClass("active");
+    }
+});
+
+$.connection.hub.reconnected(function () {
+    console.log("Reconnected");
+});
+
+$("#createNewChannel").click(function () {
+    $("#createChanelForm")[0].reset();
+
+    $('.ui.modal')
+        .modal('setting', 'closable', false)
+        .modal('show');
+});
+
+$('#IsPrivate').click(function () {
+    if ($(this).is(':checked')) {
+        $("#createNewChannelHeader").html('Create a channel');
+        $("#createNewChannelLabel").html('Anyone on your team can view and join this channel');
+    } else {
+        $("#createNewChannelHeader").html('Create a private channel');
+        $("#createNewChannelLabel").html('This channel can only be joined by invite');
+    }
+});
+
+$("#createChanelForm").submit(function (e) {
+    e.preventDefault();
+    data = serializeForm($(this));
+    myHub.server.createNewChannel(data);
+    $('.ui.modal').modal('hide');
+});
+
+function serializeForm(_form) {
+    data = $(_form).serializeArray();
+    var obj = {};
+
+    $.each(data,
+        function (key, value) {
+            obj[value.name] = value.value;
         });
 
-    $.connection.hub.received = function(data) {
-        console.log(data);
-    };
-
-    $.connection.hub.error = function(error) {
-        console.warn(error);
-    };
-
-    $.connection.hub.stateChanged(function (change) {
-        if (change.newState === $.signalR.connectionState.reconnecting) {
-            console.log("Re-connecting");
-            $(".ui.main.container").css("display", "none");
-            $(".ui.dimmer").addClass("active");
-        }
-        else if (change.newState === $.signalR.connectionState.connected) {
-            console.log("The server is online");
-            $(".ui.main.container").css("display", "block");
-            $(".ui.dimmer").removeClass("active");
-        } 
-    });
-
-    $.connection.hub.reconnected(function() {
-        console.log("Reconnected");
-    });
-});
+    return obj;
+}

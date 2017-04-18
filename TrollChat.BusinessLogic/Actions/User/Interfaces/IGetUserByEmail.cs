@@ -1,9 +1,10 @@
 ﻿using TrollChat.BusinessLogic.Actions.Base;
+using TrollChat.BusinessLogic.Models;
 
 namespace TrollChat.BusinessLogic.Actions.User.Interfaces
 {
     public interface IGetUserByEmail : IAction
     {
-        DataAccess.Models.User Invoke(string email);
+        UserModel Invoke(string email);
     }
 }

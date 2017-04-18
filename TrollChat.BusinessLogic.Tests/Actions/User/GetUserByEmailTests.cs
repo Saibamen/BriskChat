@@ -37,7 +37,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Equal(1, user.Id);
             Assert.Equal("Name", user.Name);
             Assert.Equal("email@dot.com", user.Email);
-            Assert.Equal("123", user.PasswordHash);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Once);
         }
 
