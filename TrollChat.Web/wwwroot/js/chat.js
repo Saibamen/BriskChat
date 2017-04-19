@@ -67,12 +67,32 @@ $(".menu").on("click", ".menu > a.item", function (e) {
     console.log("Current room ID: " + currentRoomId);
 });
 
+$(".ts-message .action_hover_container .btn_msg_action[data-action='delete']").click(function (e) {
+    console.log("click na delete");
+
+    // TODO: Alert
+
+    var messageId = $(e.target).closest(".ts-message").data("id");
+
+    myHub.server.deleteMessage(currentRoomId, messageId);
+});
+
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
+    $("#chat_messages").append('<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
 
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+}
+
+myHub.client.deleteMessage = function (messageId) {
+    var message = $(".ts-message[data-id='" + messageId + "']");
+
+    console.log("Klient usuwa wiadomosc o ID: " + message.data("id"));
+
+    message.hide("slow", function () {
+        message.remove();
+    });
 }
 
 myHub.client.loadRooms = function (result) {
@@ -80,13 +100,14 @@ myHub.client.loadRooms = function (result) {
     $.each(result,
         function (index, value) {
             var divToAppend = '<a class="item" data-id="' + value.Id + '">';
+
             if (value.IsPublic) {
                 divToAppend += '<i class="icon left">#</i>';
             } else {
                 divToAppend += '<i class="lock icon left"></i>'
             }
-            divToAppend += value.Name + '</a>';
 
+            divToAppend += value.Name + "</a>";
             $("#channelsMenu").append(divToAppend);
         });
 }

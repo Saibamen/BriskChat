@@ -69,5 +69,17 @@ namespace TrollChat.Web.Hubs
 
             Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
         }
+
+        public void DeleteMessage(string roomId, int messageId)
+        {
+            if (string.IsNullOrEmpty(roomId.Trim()) || messageId <= 0)
+            {
+                return;
+            }
+
+            // TODO: Check author and delete from database
+
+            Clients.Group(roomId).deleteMessage(messageId);
+        }
     }
 }
