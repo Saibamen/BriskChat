@@ -56,7 +56,7 @@ $(".menu > a.item").click(function (e) {
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp" data-timestamp="' + timestamp + '">' + $.format.date(timestamp, "HH:mm") + '</a></div><span class="message_body">' + message + '</span></div></div>');
+    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
 
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
