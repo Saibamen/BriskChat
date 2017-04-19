@@ -78,7 +78,7 @@
             <div id="client_body">
                 <div id="col_messages">
                     <div id="chat_input">
-                        <form id="msg_form" class="offline" data-qa="message_form">
+                        <form id="msg_form" data-qa="message_form">
                             <textarea id="msg_input" aria-label="Message input" data-qa="message_input" placeholder="Message #TrollChatDev"></textarea>
 
                             <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle" aria-label="File menu">
@@ -112,6 +112,21 @@
                                 </div>
                             </div>
                             <div class="ts-message">
+                                <div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true" data-show_reply_action="true" data-show_comment_action="" data-abs_permalink="https://itmation.slack.com/archives/G4S0G012T/p1492502082115279">
+                                    <button type="button" data-action="reaction" class="btn_unstyle btn_msg_action ts_icon ts_icon_small_reaction ts_tip ts_tip_top ts_tip_float ts_tip_delay_60 ts_tip_hidden" data-content="Add reaction …" data-position="top center">
+                                        <i class="meh icon"></i>
+                                    </button>
+                                    <button type="button" data-action="reply" class="btn_unstyle btn_msg_action ts_icon ts_icon_comment_alt ts_tip ts_tip_top ts_tip_float ts_tip_delay_60 ts_tip_hidden" data-content="Start a thread" data-position="top center">
+                                        <i class="comment icon"></i>
+                                    </button>
+                                    <button type="button" data-action="share_message" data-permalink="https://itmation.slack.com/archives/G4S0G012T/p1492502082115279" class="btn_unstyle btn_msg_action ts_icon ts_icon_share_action ts_tip ts_tip_top ts_tip_float ts_tip_delay_60 ts_tip_hidden" data-content="Share message …" data-position="top center">
+                                        <i class="share icon"></i>
+                                    </button>
+                                    <button type="button" data-action="actions_menu" class="btn_unstyle btn_msg_action ts_icon ts_icon_small_ellipsis ts_tip ts_tip_top ts_tip_float ts_tip_delay_60 ts_tip_hidden" data-content="Show message actions" data-position="top center">
+                                        <i class="ellipsis horizontal icon"></i>
+                                    </button>
+                                </div>
+
                                 <div class="message_gutter">
                                     <div class="message_icon">
                                         <a href="/team/kropi" target="/team/kropi" class="member_image" data-member-id="U2Q6CCXE1" style="background-image: url('https://ca.slack-edge.com/T0MBAPD9S-U2Q6CCXE1-9b6c6653f25c-48')" aria-hidden="true" tabindex="-1"> </a>
@@ -133,8 +148,8 @@
 
 @section Post_Body
 {
-    </div>
-    </div>
+</div>
+</div>
 }
 
 @section Scripts
