@@ -8,5 +8,9 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
     public interface IUserRepository : IGenericRepository<User>, IRepository
     {
         IQueryable<User> FindTokens(Expression<Func<User, bool>> predicate);
+
+        IQueryable<User> GetUserAndRoomsByUserId(int id);
+
+        IQueryable<User> GetUserAndUserRoomsByUserId(int id);
     }
 }

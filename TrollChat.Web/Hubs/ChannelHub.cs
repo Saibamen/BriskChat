@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
+using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Room;
@@ -12,11 +13,20 @@ namespace TrollChat.Web.Hubs
     public class ChannelHub : Hub
     {
         private readonly IAddNewRoom addNewRoom;
+        private readonly IGetUserRooms getUserRooms;
         private const string TimeStampRepresentation = "HH:mm";
 
-        public ChannelHub(IAddNewRoom addNewRoom)
+        public ChannelHub(IAddNewRoom addNewRoom, IGetUserRooms getUserRooms)
         {
             this.addNewRoom = addNewRoom;
+            this.getUserRooms = getUserRooms;
+        }
+
+        public void GetRooms()
+        {
+            var roomList = getUserRooms.Invoke(this.UserId());
+
+            Clients.Caller.loadRooms(roomList);
         }
 
         public async Task JoinRoom(string roomId)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using TrollChat.DataAccess.Context;
 using TrollChat.DataAccess.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -14,10 +15,15 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
         }
 
-        //TODO: Find use or delete
-        public IQueryable FindRoomsBy(Expression<Func<User, bool>> predicate)
+        public IQueryable<User> GetUserAndRoomsByUserId(int id)
         {
-            var query = Include(x => x.Rooms).Where(predicate).AsQueryable().Where(x => x.DeletedOn == null);
+            var query = Include(x => x.Rooms).AsQueryable().Where(x => x.DeletedOn == null).Where(y => y.Id == id);
+            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
+        }
+
+        public IQueryable<User> GetUserAndUserRoomsByUserId(int id)
+        {
+            var query = Include(x => x.UserRooms).Include(i => i.UserRooms).ThenInclude(i => i.Room).AsQueryable().Where(x => x.DeletedOn == null).Where(y => y.Id == id);
             return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
         }
 
