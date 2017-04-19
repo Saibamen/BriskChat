@@ -63,6 +63,22 @@ myHub.client.broadcastMessage = function (userName, message, timestamp) {
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
 }
 
+myHub.client.loadRooms = function (result) {
+    console.log(result);
+    $.each(result,
+        function (index, value) {
+            var divToAppend = '<a class="item" data-id="' + value.Id + '">';
+            if (value.IsPublic) {
+                divToAppend += '<i class="icon left">#</i>';
+            } else {
+                divToAppend += '<i class="lock icon left"></i>'
+            }
+            divToAppend += value.Name + '</a>';
+
+            $("#channelsMenu").append(divToAppend);
+        });
+}
+
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     var divToAppend = '<a class="item" data-id="' + roomId + '">';
     if (isPublic) { divToAppend += '<i class="icon left">#</i>'; } else { divToAppend += '<i class="lock icon left"></i>' }
@@ -75,6 +91,7 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 $.connection.hub.start()
     .done(function () {
         // Joining to room
+        myHub.server.getRooms();
         myHub.server.joinRoom(currentRoomId);
         console.log("Connected :)");
 
@@ -121,6 +138,9 @@ $.connection.hub.reconnected(function () {
 $("#createNewChannel").click(function () {
     $("#createChanelForm")[0].reset();
 
+    var item = $("input[name*='IsPublic']")[1];
+    item.value = false;
+
     $('.ui.modal')
         .modal('setting', 'closable', false)
         .modal('show');
@@ -130,11 +150,13 @@ $('#myCheckBox').click(function () {
     if ($(this).is(':checked')) {
         $("#createNewChannelHeader").html('Create a channel');
         $("#createNewChannelLabel").html('Anyone on your team can view and join this channel');
-        document.getElementsByName("IsPublic")[1].value = true;
+        var item = $("input[name*='IsPublic']")[1];
+        item.value = true;
     } else {
         $("#createNewChannelHeader").html('Create a private channel');
         $("#createNewChannelLabel").html('This channel can only be joined by invite');
-        document.getElementsByName("IsPublic")[1].value = false;
+        var item = $("input[name*='IsPublic']")[1];
+        item.value = false;
     }
 });
 
