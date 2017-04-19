@@ -5,7 +5,7 @@ using Moq;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.BusinessLogic.Actions.User.Implementations;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {

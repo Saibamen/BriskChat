@@ -5,9 +5,9 @@ using TrollChat.BusinessLogic.Models;
 using Xunit;
 using Moq;
 using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.BusinessLogic.Actions.Domain.Implementation;
 using System.Linq.Expressions;
 using System.Linq;
+using TrollChat.BusinessLogic.Actions.Domain.Implementations;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Domain
 {

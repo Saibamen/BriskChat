@@ -1,8 +1,8 @@
-﻿using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
+﻿using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementation
+namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
     public class AddNewRoom : IAddNewRoom
     {

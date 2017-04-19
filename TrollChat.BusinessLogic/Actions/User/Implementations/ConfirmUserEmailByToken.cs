@@ -3,7 +3,7 @@ using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementation
+namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
     public class ConfirmUserEmailByToken : IConfirmUserEmailByToken
     {

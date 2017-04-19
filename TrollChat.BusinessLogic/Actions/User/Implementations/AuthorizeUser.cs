@@ -4,7 +4,7 @@ using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementation
+namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
     public class AuthorizeUser : IAuthorizeUser
     {
@@ -27,7 +27,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             }
 
             var dbUser = userRepository.FindBy(x => x.Email == email
-           // && x.EmailConfirmedOn != null
+            // && x.EmailConfirmedOn != null
             ).FirstOrDefault();
 
             if (dbUser == null)

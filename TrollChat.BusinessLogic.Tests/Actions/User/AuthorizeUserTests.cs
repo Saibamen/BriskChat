@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using System.Linq;
+using TrollChat.BusinessLogic.Actions.User.Implementations;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.User
 {

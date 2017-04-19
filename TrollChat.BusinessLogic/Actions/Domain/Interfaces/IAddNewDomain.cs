@@ -1,7 +1,7 @@
 ﻿using TrollChat.BusinessLogic.Actions.Base;
 using TrollChat.BusinessLogic.Models;
 
-namespace TrollChat.BusinessLogic.Actions.Domain.Interface
+namespace TrollChat.BusinessLogic.Actions.Domain.Interfaces
 {
     public interface IAddNewDomain : IAction
     {
