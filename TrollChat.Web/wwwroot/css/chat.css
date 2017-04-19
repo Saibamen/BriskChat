@@ -40,6 +40,10 @@ div {
     display: block;
 }
 
+.danger {
+    color: #eb4d5c !important;
+}
+
 /*
  *  Loader
  */

@@ -10,6 +10,16 @@ $(".item > .btn_unstyle.right").popup({
     variation: "inverted"
 });
 
+function loadingStart() {
+    $(".ui.main.container").css("display", "none");
+    $(".ui.dimmer").addClass("active");
+}
+
+function loadingStop() {
+    $(".ui.main.container").css("display", "block");
+    $(".ui.dimmer").removeClass("active");
+}
+
 /*
  *  Resizing
  */
@@ -46,12 +56,14 @@ var myHub = $.connection.channelHub;
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
     // Leave current room
+    loadingStart();
     myHub.server.leaveRoom(currentRoomId);
     $(".menu > a.item.active").removeClass("active");
 
     currentRoomId = $(e.target).data("id");
     myHub.server.joinRoom(currentRoomId);
     $(e.target).addClass("active");
+    loadingStop();
     console.log("Current room ID: " + currentRoomId);
 });
 
@@ -65,10 +77,16 @@ myHub.client.broadcastMessage = function (userName, message, timestamp) {
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     var divToAppend = '<a class="item" data-id="' + roomId + '">';
-    if (isPublic) { divToAppend += '<i class="icon left">#</i>'; } else { divToAppend += '<i class="lock icon left"></i>' }
-    divToAppend += channelName + '</a>';
 
+    if (isPublic) {
+        divToAppend += '<i class="icon left">#</i>';
+    } else {
+        divToAppend += '<i class="lock icon left"></i>'
+    }
+
+    divToAppend += channelName + "</a>";
     $("#channelsMenu").append(divToAppend);
+    loadingStop();
 }
 
 // Start the connection
@@ -104,13 +122,11 @@ $.connection.hub.error = function (error) {
 $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
         console.log("Re-connecting");
-        $(".ui.main.container").css("display", "none");
-        $(".ui.dimmer").addClass("active");
+        loadingStart();
     }
     else if (change.newState === $.signalR.connectionState.connected) {
         console.log("The server is online");
-        $(".ui.main.container").css("display", "block");
-        $(".ui.dimmer").removeClass("active");
+        loadingStop();
     }
 });
 
@@ -121,28 +137,29 @@ $.connection.hub.reconnected(function () {
 $("#createNewChannel").click(function () {
     $("#createChanelForm")[0].reset();
 
-    $('.ui.modal')
-        .modal('setting', 'closable', false)
-        .modal('show');
+    $(".ui.modal")
+        .modal("setting", "closable", false)
+        .modal("show");
 });
 
-$('#myCheckBox').click(function () {
-    if ($(this).is(':checked')) {
-        $("#createNewChannelHeader").html('Create a channel');
-        $("#createNewChannelLabel").html('Anyone on your team can view and join this channel');
+$("#myCheckBox").click(function () {
+    if ($(this).is(":checked")) {
+        $("#createNewChannelHeader").html("Create a channel");
+        $("#createNewChannelLabel").html("Anyone on your team can view and join this channel");
         document.getElementsByName("IsPublic")[1].value = true;
     } else {
-        $("#createNewChannelHeader").html('Create a private channel');
-        $("#createNewChannelLabel").html('This channel can only be joined by invite');
+        $("#createNewChannelHeader").html("Create a private channel");
+        $("#createNewChannelLabel").html("This channel can only be joined by invite");
         document.getElementsByName("IsPublic")[1].value = false;
     }
 });
 
 $("#createChanelForm").submit(function (e) {
+    loadingStart();
     e.preventDefault();
     data = serializeForm($(this));
     myHub.server.createNewChannel(data);
-    $('.ui.modal').modal('hide');
+    $(".ui.modal").modal("hide");
 });
 
 function serializeForm(_form) {
