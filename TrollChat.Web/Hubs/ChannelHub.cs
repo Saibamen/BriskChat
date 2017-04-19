@@ -60,15 +60,17 @@ namespace TrollChat.Web.Hubs
 
             var user = getUserById.Invoke(userId);
 
-            if (user != null)
+            if (user == null)
             {
-                DateTime time = DateTime.UtcNow;
-                var localTime = time.ToLocalTime();
-
-                // TODO: Save to database
-
-                Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), localTime);
+                return;
             }
+
+            DateTime time = DateTime.UtcNow;
+            var localTime = time.ToLocalTime();
+
+            // TODO: Save to database
+
+            Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), localTime);
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)

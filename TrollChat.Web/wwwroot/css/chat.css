@@ -553,6 +553,73 @@ button, input, textarea {
     padding: 1px 40px 2px 0;
 }
 
+.ts-message:hover {
+    background: #F9F9F9;
+}
+
+/*
+ *  Przyciski edycja i usuwanie wiadomości
+ */
+
+.ts-message .action_hover_container {
+    display: none;
+    position: absolute;
+    top: -20px;
+    right: 245px;   /* 18px */
+    border: .0625rem solid rgba(0,0,0,.15);
+    border-radius: .375rem;
+    overflow: hidden;
+    -webkit-transition: border 50ms ease-in 0s;
+    -moz-transition: border 50ms ease-in 0s;
+    transition: border 50ms ease-in 0s;
+    z-index: 97;
+}
+
+.ts-message:hover .action_hover_container.stretch_btn_heights {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: stretch;
+    -webkit-align-items: stretch;
+    -webkit-box-align: stretch;
+    -moz-align-items: stretch;
+    align-items: stretch;
+}
+
+.ts-message .action_hover_container.narrow_buttons .btn_msg_action {
+    width: 34px;
+}
+
+.ts-message .action_hover_container .btn_msg_action:first-child {
+    border-radius: 6px 0 0 6px;
+}
+
+.ts-message .action_hover_container .btn_msg_action:last-child {
+    border-radius: 0 6px 6px 0;
+    border-right: none;
+}
+
+.ts-message .action_hover_container .btn_msg_action {
+    width: 37px;
+    text-align: center;
+    line-height: 14px;
+    padding: 6px 0 4px;
+    color: #555459;
+    background: #fff;
+    border-right: 1px solid rgba(0,0,0,.15);
+    -webkit-transition: all 50ms ease-in 0s;
+    -moz-transition: all 50ms ease-in 0s;
+    transition: all 50ms ease-in 0s;
+    display: block;
+    float: left;
+}
+
+/*
+ *  Gutter
+ */
+
 .ts-message .message_gutter {
     width: 72px;
     padding-right: 10px;
