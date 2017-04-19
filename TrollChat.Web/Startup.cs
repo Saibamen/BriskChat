@@ -112,7 +112,7 @@ namespace TrollChat.Web
 
             // It works but we don't need to use it right now
             var scheduler = ShedulerCreator.CreateScheduler(app);
-            scheduler.Start().Wait();
+            //scheduler.Start().Wait();
         }
     }
 }

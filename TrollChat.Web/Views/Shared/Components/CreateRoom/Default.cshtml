@@ -40,15 +40,15 @@
     <h1 class="modal-title" id="createNewChannelHeader"> Create a private channel</h1>
     <label>Channels are where your team communicates. They're the best when organized around a topic - #leads for example</label>
 
-    @using (Html.BeginForm(FormMethod.Post,false,new { id = "createChanelForm", @class = "ui large form" }))
+    @using (Html.BeginForm(FormMethod.Post, false, new { id = "createChanelForm", @class = "ui large form" }))
     {
         <div class="content">
             <div class="row" style="display: flex; align-items: center;">
                 <div class="two wide column">
                     <div class="field">
                         <div class="onoffswitch">
-                            @Html.CheckBoxFor(x => x.IsPrivate, new { @class = "onoffswitch-checkbox", id = "IsPrivate" })
-                            <label class="onoffswitch-label" for="IsPrivate">
+                            @Html.CheckBoxFor(x => x.IsPublic, new { @class = "onoffswitch-checkbox", id = "myCheckBox"})
+                            <label class="onoffswitch-label" for="myCheckBox">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
                             </label>
