@@ -122,7 +122,7 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Create actual claims
+            //TODO: Create actual claims for Role
             var user = getuserByEmail.Invoke(model.Email);
 
             var claims = new List<Claim>
