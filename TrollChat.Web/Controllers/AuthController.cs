@@ -123,10 +123,12 @@ namespace TrollChat.Web.Controllers
             }
 
             //TODO: Create actual claims
+            var user = getuserByEmail.Invoke(model.Email);
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, "Name"),
-                new Claim(ClaimTypes.Sid, "1"),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, Role.User)
             };
 

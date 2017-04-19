@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Models
 {
     public class UserModel : BaseModel
     {
-        public List<UserRoomModel> Rooms { get; set; }
+        public List<RoomModel> Rooms { get; set; }
 
-        public List<UserToken> Tokens { get; set; }
+        public List<UserRoomModel> UserRooms { get; set; }
+
+        public List<UserTokenModel> Tokens { get; set; }
 
         public string Email { get; set; }
 

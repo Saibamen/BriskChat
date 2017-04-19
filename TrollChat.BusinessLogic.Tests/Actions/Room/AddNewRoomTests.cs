@@ -6,6 +6,7 @@ using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
+//TODO: Update tests
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
     [Collection("mapper")]
@@ -44,7 +45,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(x => x.GetById(It.IsAny<int>())).Returns(user);
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object);
+            var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
 
             // action
             action.Invoke(roomData, 1);
@@ -70,7 +73,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRepo = new Mock<IUserRepository>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object);
+            var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
 
             // action
             var actionResult = action.Invoke(roomToAdd, 1);

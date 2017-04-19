@@ -76,7 +76,7 @@ myHub.client.broadcastMessage = function (userName, message, timestamp) {
 }
 
 myHub.client.loadRooms = function (result) {
-    console.log(result);
+    $("#channelsCount").text("Channels (" + result.length + ")");
     $.each(result,
         function (index, value) {
             var divToAppend = '<a class="item" data-id="' + value.Id + '">';
@@ -102,6 +102,7 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 
     divToAppend += channelName + "</a>";
     $("#channelsMenu").append(divToAppend);
+    updateChannelsCount(1);
     loadingStop();
 }
 
@@ -183,6 +184,12 @@ $("#createChanelForm").submit(function (e) {
     myHub.server.createNewChannel(data);
     $(".ui.modal").modal("hide");
 });
+
+function updateChannelsCount(diff) {
+    var number = $("#channelsCount").text().match(/\d+/);
+    number = parseInt(number) + diff;
+    $("#channelsCount").text("Channels count (" + number + ")");
+}
 
 function serializeForm(_form) {
     data = $(_form).serializeArray();
