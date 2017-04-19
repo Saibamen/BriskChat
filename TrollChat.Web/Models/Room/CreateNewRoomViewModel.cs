@@ -4,7 +4,7 @@ namespace TrollChat.Web.Models.Room
 {
     public class CreateNewRoomViewModel
     {
-        public bool IsPrivate { get; set; }
+        public bool IsPublic { get; set; }
 
         [DisplayName("Name")]
         public string Name { get; set; }

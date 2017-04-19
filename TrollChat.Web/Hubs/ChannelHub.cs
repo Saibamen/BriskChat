@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Room;
 
 namespace TrollChat.Web.Hubs
@@ -13,39 +11,32 @@ namespace TrollChat.Web.Hubs
     [Authorize(Roles = "User")]
     public class ChannelHub : Hub
     {
-        private readonly IGetUserById getUserById;
         private readonly IAddNewRoom addNewRoom;
+        private const string TimeStampRepresentation = "HH:mm";
 
-        public ChannelHub(IGetUserById getUserById, IAddNewRoom addNewRoom)
+        public ChannelHub(IAddNewRoom addNewRoom)
         {
             this.addNewRoom = addNewRoom;
-            this.getUserById = getUserById;
         }
 
         public async Task JoinRoom(string roomId)
         {
             await Groups.Add(Context.ConnectionId, roomId);
 
-            DateTime time = DateTime.UtcNow;
-            var localTime = time.ToLocalTime();
+            var timestamp = DateTime.UtcNow.ToLocalTime();
+            var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            var user = (ClaimsIdentity)Context.User.Identity;
-            var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
-
-            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " joined to this channel (" + roomId + ")", localTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", this.Name() + " joined to this channel (" + roomId + ")", chatTime);
         }
 
         public async Task LeaveRoom(string roomId)
         {
             await Groups.Remove(Context.ConnectionId, roomId);
 
-            DateTime time = DateTime.UtcNow;
-            var localTime = time.ToLocalTime();
+            var timestamp = DateTime.UtcNow.ToLocalTime();
+            var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            var user = (ClaimsIdentity)Context.User.Identity;
-            var userId = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value;
-
-            Clients.Group(roomId).broadcastMessage("TrollChat", userId + " left from this channel (" + roomId + ")", localTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", this.Name() + " left from this channel (" + roomId + ")", chatTime);
         }
 
         public void Send(string roomId, string message)
@@ -55,20 +46,10 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            var userClaims = (ClaimsIdentity)Context.User.Identity;
-            var userId = Int32.Parse(userClaims.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Sid).Value);
+            var timestamp = DateTime.UtcNow.ToLocalTime();
+            var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            var user = getUserById.Invoke(userId);
-
-            if (user != null)
-            {
-                DateTime time = DateTime.UtcNow;
-                var localTime = time.ToLocalTime();
-
-                // TODO: Save to database
-
-                Clients.Group(roomId).broadcastMessage(user.Name.Trim(), message.Trim(), localTime);
-            }
+            Clients.Group(roomId).broadcastMessage(this.UserId(), message.Trim(), chatTime);
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)
@@ -79,16 +60,14 @@ namespace TrollChat.Web.Hubs
             }
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-
-            //TODO: change to real id
-            var room = addNewRoom.Invoke(roomModel, 1);
+            var room = addNewRoom.Invoke(roomModel, this.UserId());
 
             if (room == 0)
             {
                 return;
             }
 
-            Clients.Caller.channelAddedAction(model.Name);
+            Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
         }
     }
 }

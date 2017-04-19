@@ -8,6 +8,11 @@ namespace TrollChat.Web.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "User");
+            }
+
             return View();
         }
 

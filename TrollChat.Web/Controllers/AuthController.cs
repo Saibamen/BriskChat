@@ -125,11 +125,12 @@ namespace TrollChat.Web.Controllers
             //TODO: Create actual claims
             var claims = new List<Claim>
             {
+                new Claim(ClaimTypes.Name, "Name"),
                 new Claim(ClaimTypes.Sid, "1"),
                 new Claim(ClaimTypes.Role, Role.User)
             };
 
-            var claimsIdentity = new ClaimsIdentity(claims, "Roles");
+            var claimsIdentity = new ClaimsIdentity(claims, "Claims");
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);

@@ -39,13 +39,12 @@ $(window).trigger("resize");
  */
 
 var currentRoomId = $(".menu > a.item.active").data("id");
-console.log("Current room ID: " + currentRoomId);
 
 $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
 // Change room
-$(".menu > a.item").click(function (e) {
+$(".menu").on("click", ".menu > a.item", function (e) {
     // Leave current room
     myHub.server.leaveRoom(currentRoomId);
     $(".menu > a.item.active").removeClass("active");
@@ -57,17 +56,20 @@ $(".menu > a.item").click(function (e) {
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp" data-timestamp="' + timestamp + '">' + $.format.date(timestamp, "HH:mm") + '</a></div><span class="message_body">' + message + '</span></div></div>');
+    $("#chat_messages").append('<div class="ts-message"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
 
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
 }
 
-myHub.client.channelAddedAction = function (channelName) {
-    console.log("haha");
-    $("#channelsMenu").append('<a class="item"><i class="icon left">#</i>' + channelName + '</a>');
-} 
+myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
+    var divToAppend = '<a class="item" data-id="' + roomId + '">';
+    if (isPublic) { divToAppend += '<i class="icon left">#</i>'; } else { divToAppend += '<i class="lock icon left"></i>' }
+    divToAppend += channelName + '</a>';
+
+    $("#channelsMenu").append(divToAppend);
+}
 
 // Start the connection
 $.connection.hub.start()
@@ -124,13 +126,15 @@ $("#createNewChannel").click(function () {
         .modal('show');
 });
 
-$('#IsPrivate').click(function () {
+$('#myCheckBox').click(function () {
     if ($(this).is(':checked')) {
         $("#createNewChannelHeader").html('Create a channel');
         $("#createNewChannelLabel").html('Anyone on your team can view and join this channel');
+        document.getElementsByName("IsPublic")[1].value = true;
     } else {
         $("#createNewChannelHeader").html('Create a private channel');
         $("#createNewChannelLabel").html('This channel can only be joined by invite');
+        document.getElementsByName("IsPublic")[1].value = false;
     }
 });
 
