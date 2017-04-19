@@ -44,7 +44,7 @@ $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
 // Change room
-$(".menu > a.item").click(function (e) {
+$(".menu").on("click", ".menu > a.item", function (e) {
     // Leave current room
     myHub.server.leaveRoom(currentRoomId);
     $(".menu > a.item.active").removeClass("active");
