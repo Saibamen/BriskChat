@@ -54,7 +54,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                     Owner = AutoMapper.Mapper.Map<BusinessLogic.Models.UserModel>(getUserByEmail.Invoke(email)),
                 };
 
-                var dbdomain = addNewDomain.Invoke(model);
+                var dbdomain = addNewDomain.Invoke(model, model.Owner.Id);
             }
         }
     }
