@@ -14,7 +14,7 @@ namespace TrollChat.BusinessLogic.Models
 
         public override bool IsValid()
         {
-            return string.IsNullOrEmpty(Name);
+            return !(string.IsNullOrEmpty(Name));
         }
     }
 }
