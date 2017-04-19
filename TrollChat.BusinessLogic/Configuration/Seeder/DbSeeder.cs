@@ -1,10 +1,9 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.BusinessLogic.Actions.Domain.Interface;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Context;
 using System;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 
 namespace TrollChat.BusinessLogic.Configuration.Seeder
 {

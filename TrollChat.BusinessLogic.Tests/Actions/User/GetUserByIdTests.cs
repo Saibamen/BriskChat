@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.BusinessLogic.Actions.User.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 

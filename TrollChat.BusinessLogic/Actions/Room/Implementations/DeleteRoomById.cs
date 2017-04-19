@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
+﻿using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementation
+namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
     public class DeleteRoomById : IDeleteRoomById
     {

@@ -2,7 +2,7 @@
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementation
+namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserById : IGetUserById
     {

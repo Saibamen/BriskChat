@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using TrollChat.BusinessLogic.Actions.User.Implementation;
+using TrollChat.BusinessLogic.Actions.User.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 

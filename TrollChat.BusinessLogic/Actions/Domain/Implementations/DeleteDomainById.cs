@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TrollChat.BusinessLogic.Actions.Domain.Interface;
+﻿using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Domain.Implementation
+namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class DeleteDomainById : IDeleteDomainById
     {

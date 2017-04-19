@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Room.Implementation;
+using TrollChat.BusinessLogic.Actions.Room.Implementations;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;

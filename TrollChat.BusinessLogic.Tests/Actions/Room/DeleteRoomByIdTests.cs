@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TrollChat.BusinessLogic.Actions.Room.Implementation;
+using TrollChat.BusinessLogic.Actions.Room.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
