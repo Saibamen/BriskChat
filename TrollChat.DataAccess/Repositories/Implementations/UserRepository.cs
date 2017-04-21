@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
@@ -15,22 +16,19 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<User> GetUserAndRoomsByUserId(int id)
+        public IQueryable<Room> GetUserRooms(int id, bool isPrivateConversation)
         {
-            var query = Include(x => x.Rooms).AsQueryable().Where(x => x.DeletedOn == null).Where(y => y.Id == id);
-            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
-        }
+            var query =
+                context.Set<User>()
+                .Where(user => user.DeletedOn == null)
+                .Where(user => user.Id == id)
+                    .SelectMany(i => i.UserRooms)
+                    .Where(userRoom => userRoom.DeletedOn == null)
+                         .Select(i => i.Room)
+                         .Where(room => room.IsPrivateConversation == isPrivateConversation)
+                .AsQueryable();
 
-        public IQueryable<User> GetUserAndUserRoomsByUserId(int id)
-        {
-            var query = Include(x => x.UserRooms).Include(i => i.UserRooms).ThenInclude(i => i.Room).AsQueryable().Where(x => x.DeletedOn == null).Where(y => y.Id == id);
-            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
-        }
-
-        public IQueryable<User> FindTokens(Expression<Func<User, bool>> predicate)
-        {
-            var query = Include(x => x.Tokens).Where(predicate).AsQueryable().Where(x => x.DeletedOn == null);
-            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
+            return query.Any() ? query : Enumerable.Empty<Room>().AsQueryable();
         }
     }
 }

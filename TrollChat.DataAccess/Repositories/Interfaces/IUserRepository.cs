@@ -1,16 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using TrollChat.DataAccess.Models;
 
 namespace TrollChat.DataAccess.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>, IRepository
     {
-        IQueryable<User> FindTokens(Expression<Func<User, bool>> predicate);
-
-        IQueryable<User> GetUserAndRoomsByUserId(int id);
-
-        IQueryable<User> GetUserAndUserRoomsByUserId(int id);
+        IQueryable<Room> GetUserRooms(int id, bool isPrivateConversation);
     }
 }

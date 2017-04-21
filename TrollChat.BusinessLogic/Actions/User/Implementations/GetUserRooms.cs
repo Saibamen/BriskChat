@@ -17,21 +17,22 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
 
         public List<RoomModel> Invoke(int userId)
         {
-            var dbUser = userRepository.GetUserAndUserRoomsByUserId(userId).FirstOrDefault();
+            var dbUser = userRepository.GetUserRooms(userId, false);
 
             if (dbUser == null)
             {
                 return null;
             }
 
-            var tempList = dbUser.UserRooms.Select(item => new RoomModel()
+            var returnList = dbUser.ToList().Select(item => new RoomModel()
             {
-                Id = item.Room.Id,
-                Name = item.Room.Name,
-                IsPublic = item.Room.IsPublic,
+                Id = item.Id,
+                Name = item.Name,
+                IsPublic = item.IsPublic,
+                IsPrivateConversation = item.IsPrivateConversation
             }).ToList();
 
-            return tempList;
+            return returnList;
         }
     }
 }
