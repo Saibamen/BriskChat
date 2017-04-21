@@ -24,7 +24,7 @@ namespace TrollChat.Web.Hubs
 
         public void GetRooms()
         {
-            var roomList = getUserRooms.Invoke(this.UserId());
+            var roomList = getUserRooms.Invoke(Context.UserId());
 
             Clients.Caller.loadRooms(roomList);
         }
@@ -36,7 +36,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow.ToLocalTime();
             var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", this.Name() + " joined to this channel (" + roomId + ")", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
 
         public async Task LeaveRoom(string roomId)
@@ -46,7 +46,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow.ToLocalTime();
             var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", this.Name() + " left from this channel (" + roomId + ")", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
         public void Send(string roomId, string message)
@@ -59,7 +59,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow.ToLocalTime();
             var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage(this.UserId(), message.Trim(), chatTime);
+            Clients.Group(roomId).broadcastMessage(Context.UserId(), message.Trim(), chatTime);
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)
@@ -70,7 +70,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewRoom.Invoke(roomModel, this.UserId());
+            var room = addNewRoom.Invoke(roomModel, Context.UserId());
 
             if (room == 0)
             {
