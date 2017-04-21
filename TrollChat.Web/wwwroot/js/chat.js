@@ -18,6 +18,7 @@ function loadingStart() {
 function loadingStop() {
     $(".ui.main.container").css("display", "block");
     $(".ui.dimmer").removeClass("active");
+    console.log("loader stops");
 }
 
 /*
@@ -63,13 +64,14 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
     currentRoomId = $(e.target).data("id");
 
-    myHub.server.joinRoom(currentRoomId);
-    $(e.target).addClass("active");
-    loadingStop();
-    console.log("Current room ID: " + currentRoomId);
+    $.when(myHub.server.joinRoom(currentRoomId)).then(function() {
+        $(e.target).addClass("active");
+        loadingStop();
+        console.log("Current room ID: " + currentRoomId);
+    });
 });
 
-// this deletes the message
+// This deletes the message
 $(".ts-message .action_hover_container .btn_msg_action[data-action='delete']").click(function (e) {
     console.log("click na delete");
 
@@ -141,24 +143,27 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 // Start the connection
 $.connection.hub.start()
     .done(function () {
-        // Joining to room
-
+        console.log("Connected to Hub. Getting rooms");
+        // Getting rooms
         $.when(myHub.server.getRooms()).then(function() {
-            myHub.server.joinRoom(currentRoomId);
-            console.log("Connected :)");
+            // Joining to room
+            $.when(myHub.server.joinRoom(currentRoomId)).then(function() {
+                console.log("Connected to room :)");
+                loadingStop();
 
-            $("#msg_form").keypress(function(e) {
-                if (e.which == 13) {
-                    if (!e.shiftKey) {
-                        if (message = $("#msg_input").val().trim()) {
-                            console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
-                            myHub.server.sendMessage(currentRoomId, message);
+                $("#msg_form").keypress(function(e) {
+                    if (e.which == 13) {
+                        if (!e.shiftKey) {
+                            if (message = $("#msg_input").val().trim()) {
+                                console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                                myHub.server.sendMessage(currentRoomId, message);
+                            }
+
+                            e.preventDefault();
+                            $("#msg_input").val("");
                         }
-
-                        e.preventDefault();
-                        $("#msg_input").val("");
                     }
-                }
+                });
             });
         });
     })
@@ -178,12 +183,12 @@ $.connection.hub.stateChanged(function (change) {
     }
     else if (change.newState === $.signalR.connectionState.connected) {
         console.log("The server is online");
-        loadingStop();
     }
 });
 
 $.connection.hub.reconnected(function () {
     console.log("Reconnected");
+    loadingStop();
 });
 
 $("#createNewChannel").click(function () {
@@ -199,13 +204,13 @@ $("#createNewChannel").click(function () {
 
 $('#myCheckBox').click(function () {
     if ($(this).is(':checked')) {
-        $("#createNewChannelHeader").html('Create a channel');
-        $("#createNewChannelLabel").html('Anyone on your team can view and join this channel');
+        $("#createNewChannelHeader").html("Create a channel");
+        $("#createNewChannelLabel").html("Anyone on your team can view and join this channel");
         var item = $("input[name*='IsPublic']")[1];
         item.value = true;
     } else {
-        $("#createNewChannelHeader").html('Create a private channel');
-        $("#createNewChannelLabel").html('This channel can only be joined by invite');
+        $("#createNewChannelHeader").html("Create a private channel");
+        $("#createNewChannelLabel").html("This channel can only be joined by invite");
         var item = $("input[name*='IsPublic']")[1];
         item.value = false;
     }

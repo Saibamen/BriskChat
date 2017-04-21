@@ -68,7 +68,7 @@ namespace TrollChat.Web.Hubs
 
             message = message.Trim();
 
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(message))
             {
                 return;
             }
