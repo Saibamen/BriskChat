@@ -96,7 +96,7 @@ myHub.client.deleteMessage = function (messageId) {
 }
 
 myHub.client.loadRooms = function (result) {
-    $("#channelsCount").text("Channels (" + result.length + ")");
+    $("#channelsCount").text("CHANNELS (" + result.length + ")");
     $.each(result,
         function (index, value) {
             var divToAppend = '<a class="item" data-id="' + value.Id + '">';
@@ -209,7 +209,7 @@ $("#createChanelForm").submit(function (e) {
 function updateChannelsCount(diff) {
     var number = $("#channelsCount").text().match(/\d+/);
     number = parseInt(number) + diff;
-    $("#channelsCount").text("Channels count (" + number + ")");
+    $("#channelsCount").text("CHANNELS (" + number + ")");
 }
 
 function serializeForm(_form) {
