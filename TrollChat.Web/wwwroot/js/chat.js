@@ -49,7 +49,6 @@ $(window).trigger("resize");
  *  SignalR
  */
 
-
 currentRoomId = 0;
 
 $.connection.hub.url = "http://localhost:52284/signalr";
@@ -73,13 +72,15 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
 // This deletes the message
 $(".ts-message .action_hover_container .btn_msg_action[data-action='delete']").click(function (e) {
-    console.log("click na delete");
-
-    // TODO: Alert
-
-    var messageId = $(e.target).closest(".ts-message").data("id");
-
-    myHub.server.deleteMessage(currentRoomId, messageId);
+    $(".ui.basic.delete.modal")
+        .modal({
+            onApprove : function() {
+                // Deleting message
+                var messageId = $(e.target).closest(".ts-message").data("id");
+                myHub.server.deleteMessage(currentRoomId, messageId);
+            }
+        })
+        .modal("show");
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
@@ -103,26 +104,27 @@ myHub.client.deleteMessage = function (messageId) {
 myHub.client.loadRooms = function (result) {
     var setActive = true;
     $("#channelsCount").text("CHANNELS (" + result.length + ")");
-    $.each(result,
-        function (index, value) {
-            var divToAppend = '<a class="item';
 
-            if (setActive) {
-                divToAppend += " active";
-                setActive = false;
-                currentRoomId = value.Id;
-            }
-            divToAppend += '"data-id="' + value.Id + '" > ';
+    $.each(result, function (index, value) {
+        var divToAppend = '<a class="item';
 
-            if (value.IsPublic) {
-                divToAppend += '<i class="icon left">#</i>';
-            } else {
-                divToAppend += '<i class="lock icon left"></i>'
-            }
+        if (setActive) {
+            divToAppend += " active";
+            setActive = false;
+            currentRoomId = value.Id;
+        }
 
-            divToAppend += value.Name + "</a>";
-            $("#channelsMenu").append(divToAppend);
-        });
+        divToAppend += '"data-id="' + value.Id + '" > ';
+
+        if (value.IsPublic) {
+            divToAppend += '<i class="icon left">#</i>';
+        } else {
+            divToAppend += '<i class="lock icon left"></i>'
+        }
+
+        divToAppend += value.Name + "</a>";
+        $("#channelsMenu").append(divToAppend);
+    });
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
@@ -197,13 +199,25 @@ $("#createNewChannel").click(function () {
     var item = $("input[name*='IsPublic']")[1];
     item.value = false;
 
-    $('.ui.modal')
-        .modal('setting', 'closable', false)
-        .modal('show');
+    $(".ui.basic.create-room.modal")
+        .modal("setting", "closable", false)
+        // HACK
+        .modal({
+            onDeny : function() {
+                $(".ui.basic.create-room.modal").parent().css("background-color", "");
+            },
+            onApprove : function() {
+                $(".ui.basic.create-room.modal").parent().css("background-color", "");
+            }
+        })
+        .modal("show");
+
+    // HACK
+    $(".ui.basic.create-room.modal").parent().css("background-color", "#fff");
 });
 
-$('#myCheckBox').click(function () {
-    if ($(this).is(':checked')) {
+$("#myCheckBox").click(function () {
+    if ($(this).is(":checked")) {
         $("#createNewChannelHeader").html("Create a channel");
         $("#createNewChannelLabel").html("Anyone on your team can view and join this channel");
         var item = $("input[name*='IsPublic']")[1];
@@ -221,7 +235,7 @@ $("#createChanelForm").submit(function (e) {
     e.preventDefault();
     data = serializeForm($(this));
     myHub.server.createNewChannel(data);
-    $(".ui.modal").modal("hide");
+    $(".ui.basic.create-room.modal").modal("hide");
 });
 
 function updateChannelsCount(diff) {

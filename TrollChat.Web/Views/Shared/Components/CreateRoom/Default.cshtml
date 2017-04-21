@@ -23,21 +23,21 @@
         background-color: #919294 !important;
     }
 
-    .ui.dimmer.modals {
+    /*.ui.dimmer.modals:has(> .ui.basic.create-room.modal) {
         background-color: #fff;
-    }
+    }*/
 
-    .ui.basic.modal {
+    .ui.basic.create-room.modal {
         color: #000;
     }
 
-    .ui.modal > .actions {
+    .ui.basic.create-room.modal > .actions {
         border: none;
     }
 </style>
 
-<div class="ui basic modal">
-    <h1 class="modal-title" id="createNewChannelHeader"> Create a private channel</h1>
+<div class="ui basic create-room modal">
+    <h1 class="modal-title" id="createNewChannelHeader">Create a private channel</h1>
     <label>Channels are where your team communicates. They're the best when organized around a topic - #leads for example</label>
 
     @using (Html.BeginForm(FormMethod.Post, false, new { id = "createChanelForm", @class = "ui large form" }))
