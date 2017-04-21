@@ -48,7 +48,8 @@ $(window).trigger("resize");
  *  SignalR
  */
 
-var currentRoomId = $(".menu > a.item.active").data("id");
+
+currentRoomId = 0;
 
 $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
@@ -61,12 +62,14 @@ $(".menu").on("click", ".menu > a.item", function (e) {
     $(".menu > a.item.active").removeClass("active");
 
     currentRoomId = $(e.target).data("id");
+
     myHub.server.joinRoom(currentRoomId);
     $(e.target).addClass("active");
     loadingStop();
     console.log("Current room ID: " + currentRoomId);
 });
 
+// this deletes the message
 $(".ts-message .action_hover_container .btn_msg_action[data-action='delete']").click(function (e) {
     console.log("click na delete");
 
@@ -96,10 +99,18 @@ myHub.client.deleteMessage = function (messageId) {
 }
 
 myHub.client.loadRooms = function (result) {
+    var setActive = true;
     $("#channelsCount").text("CHANNELS (" + result.length + ")");
     $.each(result,
         function (index, value) {
-            var divToAppend = '<a class="item" data-id="' + value.Id + '">';
+            var divToAppend = '<a class="item';
+
+            if (setActive) {
+                divToAppend += " active";
+                setActive = false;
+                currentRoomId = value.Id;
+            }
+            divToAppend += '"data-id="' + value.Id + '" > ';
 
             if (value.IsPublic) {
                 divToAppend += '<i class="icon left">#</i>';
@@ -131,22 +142,24 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 $.connection.hub.start()
     .done(function () {
         // Joining to room
-        myHub.server.getRooms();
-        myHub.server.joinRoom(currentRoomId);
-        console.log("Connected :)");
 
-        $("#msg_form").keypress(function (e) {
-            if (e.which == 13) {
-                if (!e.shiftKey) {
-                    if (message = $("#msg_input").val().trim()) {
-                        console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
-                        myHub.server.send(currentRoomId, message);
+        $.when(myHub.server.getRooms()).then(function() {
+            myHub.server.joinRoom(currentRoomId);
+            console.log("Connected :)");
+
+            $("#msg_form").keypress(function(e) {
+                if (e.which == 13) {
+                    if (!e.shiftKey) {
+                        if (message = $("#msg_input").val().trim()) {
+                            console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                            myHub.server.sendMessage(currentRoomId, message);
+                        }
+
+                        e.preventDefault();
+                        $("#msg_input").val("");
                     }
-
-                    e.preventDefault();
-                    $("#msg_input").val("");
                 }
-            }
+            });
         });
     })
 

@@ -31,6 +31,11 @@ namespace TrollChat.Web.Hubs
 
         public async Task JoinRoom(string roomId)
         {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+
             await Groups.Add(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow.ToLocalTime();
@@ -41,6 +46,11 @@ namespace TrollChat.Web.Hubs
 
         public async Task LeaveRoom(string roomId)
         {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+
             await Groups.Remove(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow.ToLocalTime();
@@ -49,9 +59,16 @@ namespace TrollChat.Web.Hubs
             Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
-        public void Send(string roomId, string message)
+        public void SendMessage(string roomId, string message)
         {
-            if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(message.Trim()))
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            message = message.Trim();
+
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(message))
             {
                 return;
             }
@@ -59,7 +76,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow.ToLocalTime();
             var chatTime = timestamp.ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage(Context.UserId(), message.Trim(), chatTime);
+            Clients.Group(roomId).broadcastMessage(Context.UserName(), message, chatTime);
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)
