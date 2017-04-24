@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
@@ -19,17 +20,20 @@ namespace TrollChat.Web.Hubs
         private readonly IGetUserRooms getUserRooms;
         private readonly IGetUserRoomByIds getUserRoomByIds;
 
+        private readonly IGetUsersByDomainId getUsersByDomainId;
         private const string TimeStampRepresentation = "HH:mm";
 
         public ChannelHub(IAddNewRoom addNewRoom,
             IAddNewMessage addNewMessage,
             IGetUserRoomByIds getUserRoomByIds,
-            IGetUserRooms getUserRooms)
+            IGetUserRooms getUserRooms,
+            IGetUsersByDomainId getUsersByDomainId)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
             this.getUserRoomByIds = getUserRoomByIds;
             this.getUserRooms = getUserRooms;
+            this.getUsersByDomainId = getUsersByDomainId;
         }
 
         public void GetRooms()
@@ -127,6 +131,12 @@ namespace TrollChat.Web.Hubs
             }
 
             Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
+        }
+
+        public void GetUsersFromDomain(string name)
+        {
+            getUsersByDomainId.Invoke(Context.DomainId());
+            return;
         }
 
         public void CreateNewPrivateConversation(CreateNewPrivateConversationViewModel model)

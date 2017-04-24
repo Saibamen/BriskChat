@@ -176,6 +176,15 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     loadingStop();
 }
 
+myHub.client.privateConversationAddedAction = function (channelName, roomId) {
+    var divToAppend = '<a class="item" data-id="' + roomId + '">';
+    divToAppend += '<i class="icon left">#</i>';
+    divToAppend += channelName + "</a>";
+    $("#privateConversationsMenu").append(divToAppend);
+
+    loadingStop();
+}
+
 // Start the connection
 $.connection.hub.start()
     .done(function () {
@@ -237,41 +246,42 @@ $("#createNewChannel").click(function () {
     var item = $("input[name*='IsPublic']")[1];
     item.value = false;
 
-    $(".ui.basic.create-room.modal")
-        .modal("setting", "closable", false)
-        // HACK
+    thisModal = $(".ui.basic.create-room.modal");
+
+    $(thisModal)
         .modal({
             onDeny: function () {
-                $(".ui.basic.create-room.modal").parent().css("background-color", "");
+                $(thisModal).parent().css("background-color", "");
             },
             onApprove: function () {
-                $(".ui.basic.create-room.modal").parent().css("background-color", "");
+                $(thisModal).parent().css("background-color", "");
             }
         })
+        .modal({ closable: false })
         .modal("show");
 
-    // HACK
-    $(".ui.basic.create-room.modal").parent().css("background-color", "#fff");
+    $(thisModal).parent().css("background-color", "#fff");
 });
 
 $("#createNewPrivateConversation").click(function () {
     $("#createPrivateConversationForm")[0].reset();
 
-    $(".ui.basic.create-private-conversation.modal")
-        .modal("setting", "closable", false)
-        // HACK
+    thisModal = $(".ui.basic.create-private-conversation.modal");
+
+    $(thisModal)
         .modal({
+            closable: false,
             onDeny: function () {
-                $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "");
+                $(thisModal).parent().css("background-color", "");
             },
             onApprove: function () {
-                $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "");
+                $(thisModal).parent().css("background-color", "");
             }
         })
+        .modal({ closable: false })
         .modal("show");
 
-    // HACK
-    $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "#fff");
+    $(thisModal).parent().css("background-color", "#fff");
 });
 
 $("#myCheckBox").click(function () {

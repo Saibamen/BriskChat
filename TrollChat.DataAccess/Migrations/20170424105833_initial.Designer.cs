@@ -8,7 +8,7 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170424065103_initial")]
+    [Migration("20170424105833_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,14 +32,10 @@ namespace TrollChat.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
-                    b.Property<Guid>("OwnerId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .HasName("Email");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Domains");
                 });
@@ -256,6 +252,8 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<Guid>("DomainId");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("NVARCHAR(256)");
@@ -279,6 +277,9 @@ namespace TrollChat.DataAccess.Migrations
                         .HasColumnType("NVARCHAR(128)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DomainId")
+                        .IsUnique();
 
                     b.HasIndex("Email")
                         .HasName("Email");
@@ -365,13 +366,6 @@ namespace TrollChat.DataAccess.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
-                {
-                    b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-                });
-
             modelBuilder.Entity("TrollChat.DataAccess.Models.DomainRoom", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
@@ -421,6 +415,13 @@ namespace TrollChat.DataAccess.Migrations
                     b.HasOne("TrollChat.DataAccess.Models.UserRoom")
                         .WithMany("Tags")
                         .HasForeignKey("UserRoomId");
+                });
+
+            modelBuilder.Entity("TrollChat.DataAccess.Models.User", b =>
+                {
+                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
+                        .WithOne("Owner")
+                        .HasForeignKey("TrollChat.DataAccess.Models.User", "DomainId");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>

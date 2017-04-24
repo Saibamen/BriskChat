@@ -7,13 +7,13 @@
     <div class="column webressetbox">
         <h2 class="ui teal header">Login to TrollChat Account</h2>
         <br />
-        @using (Html.BeginForm("Login", "Auth", new { name="Loginform", returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+        @using (Html.BeginForm("Login", "Auth", new { returnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
         {
-
+            Html.HiddenFor(x => x.DomainName, ViewBag.DomainName as string);
             <div class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
                         @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
                         <i class="user icon"></i>
                     </div>
@@ -25,12 +25,12 @@
                         <i class="lock icon"></i>
                     </div>
                 </div>
-                    
-                    <div class="field">
-                        <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
-                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-                    </div>
+
+                <div class="field">
+                    <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                 </div>
+            </div>
         }
         <br />
         <div>

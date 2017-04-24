@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_WebLayout";
+}
+@model TrollChat.Web.Models.Auth.ChooseDomainViewModel
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column webressetbox">
+        <h2 class="ui teal header">Login to TrollChat Account</h2>
+        <br />
+        @using (Html.BeginForm("ChooseDomain", "Auth", FormMethod.Post))
+            {
+
+            <div class="ui large form">
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.DomainName, new { @class = "form-control", placeholder = "Domain name", required = "required" })
+                        @Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })
+                        <i class="user icon"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        <br />
+    </div>
+</div>

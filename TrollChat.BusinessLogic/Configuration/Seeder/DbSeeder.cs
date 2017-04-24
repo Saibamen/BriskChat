@@ -1,30 +1,25 @@
 ﻿using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Context;
-using System;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 
 namespace TrollChat.BusinessLogic.Configuration.Seeder
 {
     public class DbContextSeeder
     {
-        private readonly TrollChatDbContext context;
-
-        public DbContextSeeder(TrollChatDbContext context)
+        public void Seed(IAddNewUser addNewUser,
+            IConfirmUserEmailByToken confirmUserEmailByToken,
+            IAddNewDomain addNewDomain,
+            IGetUserByEmail getUserByEmail,
+            IGetDomainByName getDomainByName)
         {
-            this.context = context;
-        }
-
-        public void Seed(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken, IAddNewDomain addNewDomain, IGetUserByEmail getUserByEmail)
-        {
-            SeedUsers(addNewUser, confirmUserEmailByToken);
             SeedDomain(addNewDomain, getUserByEmail);
+            SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName);
         }
 
         private readonly string[] users = { "owner", "user" };
 
-        public void SeedUsers(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken)
+        public void SeedUsers(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken, IGetDomainByName getDomainByName)
         {
             foreach (var user in users)
             {
@@ -32,7 +27,8 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                 {
                     Email = $"{user}@test.com",
                     Password = "test",
-                    Name = user
+                    Name = user,
+                    Domain = getDomainByName.Invoke($"{user}domain")
                 };
 
                 var dbuser = addNewUser.Invoke(model);
@@ -45,15 +41,12 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
         {
             foreach (var user in users)
             {
-                string email = $"{user}@test.com";
-
                 var model = new DomainModel
                 {
                     Name = $"{user}domain",
-                    Owner = AutoMapper.Mapper.Map<BusinessLogic.Models.UserModel>(getUserByEmail.Invoke(email)),
                 };
 
-                var dbdomain = addNewDomain.Invoke(model, model.Owner.Id);
+                addNewDomain.Invoke(model);
             }
         }
     }

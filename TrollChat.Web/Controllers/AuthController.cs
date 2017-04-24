@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
@@ -19,7 +20,7 @@ namespace TrollChat.Web.Controllers
     [Route("auth")]
     public class AuthController : BaseController
     {
-        private readonly IAuthorizeUser authorizeUser;
+        private readonly IAuthenticateUser authenticateUser;
         private readonly IAddNewUser addNewUser;
         private readonly IEmailService emailService;
         private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
@@ -29,8 +30,9 @@ namespace TrollChat.Web.Controllers
         private readonly IEditUserPassword editUserPassword;
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
         private readonly IAddNewEmailMessage addNewEmailMessage;
+        private readonly ICheckDomainExistsByName checkDomainExistsByName;
 
-        public AuthController(IAuthorizeUser authorizeUser,
+        public AuthController(IAuthenticateUser authenticateUser,
             IAddNewUser addNewUser,
             IEmailService emailService,
             IConfirmUserEmailByToken confirmUserEmailByToken,
@@ -39,9 +41,11 @@ namespace TrollChat.Web.Controllers
             IGetUserByToken getUserByToken,
             IEditUserPassword editIUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
-            IAddNewEmailMessage addNewEmailMessage)
+            IAddNewEmailMessage addNewEmailMessage,
+            ICheckDomainExistsByName checkDomainExistsByName
+            )
         {
-            this.authorizeUser = authorizeUser;
+            this.authenticateUser = authenticateUser;
             this.addNewUser = addNewUser;
             this.emailService = emailService;
             this.confirmUserEmailByToken = confirmUserEmailByToken;
@@ -51,11 +55,33 @@ namespace TrollChat.Web.Controllers
             this.editUserPassword = editIUserPassword;
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
             this.addNewEmailMessage = addNewEmailMessage;
+            this.checkDomainExistsByName = checkDomainExistsByName;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("signin")]
+        public IActionResult ChooseDomain()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost("signin")]
+        public IActionResult ChooseDomain(ChooseDomainViewModel model)
+        {
+            if (!checkDomainExistsByName.Invoke(model.DomainName))
+            {
+                ModelState.AddModelError("Domain", "Domain not found");
+
+                return View(model);
+            }
+
+            return RedirectToAction("Login", new { domainName = model.DomainName });
         }
 
         [AllowAnonymous]
         [HttpGet("register")]
-        public IActionResult Register()
+        public IActionResult Register(string domainName)
         {
             return View();
         }
@@ -89,17 +115,16 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("login")]
-        public IActionResult Login(string returnUrl)
+        [HttpGet("login/{domainName}")]
+        public IActionResult Login(string returnUrl, string domainName)
         {
             ViewBag.ReturnUrl = returnUrl;
-
             return View();
         }
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [HttpPost("login")]
+        [HttpPost("login/{domainName}")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -111,9 +136,9 @@ namespace TrollChat.Web.Controllers
             }
 
             //TODO: Check for user email confirmed
-            var access = authorizeUser.Invoke(model.Email, model.Password);
+            var access = authenticateUser.Invoke(model.Email, model.Password, model.DomainName);
 
-            if (!access)
+            if (access == null)
             {
                 ModelState.AddModelError("Email", "Invalid email or password");
                 Alert.Warning();
@@ -123,21 +148,20 @@ namespace TrollChat.Web.Controllers
             }
 
             //TODO: Create actual claims for Role
-            var user = getuserByEmail.Invoke(model.Email);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Sid, user.Id.ToString()),
-                new Claim(ClaimTypes.Role, Role.User)
+                new Claim(ClaimTypes.Name, access.Name),
+                new Claim(ClaimTypes.Sid, access.Id.ToString()),
+                new Claim(ClaimTypes.Role, Role.User),
+                new Claim("DomainName", access.Domain.Name),
+                new Claim("DomainId", access.Domain.Id.ToString()),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Claims");
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
             await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
-
-            Alert.Success("Logged in");
 
             if (string.IsNullOrEmpty(returnUrl))
             {
@@ -322,7 +346,7 @@ namespace TrollChat.Web.Controllers
 
             Alert.Success("Your password has been updated");
 
-            return RedirectToAction("Login");
+            return RedirectToAction("ChooseDomain");
         }
     }
 }

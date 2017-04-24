@@ -9,6 +9,21 @@ namespace TrollChat.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Domains",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Domains", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmailMessages",
                 columns: table => new
                 {
@@ -52,6 +67,7 @@ namespace TrollChat.DataAccess.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
+                    DomainId = table.Column<Guid>(nullable: false),
                     Email = table.Column<string>(type: "NVARCHAR(256)", nullable: false),
                     EmailConfirmedOn = table.Column<DateTime>(nullable: true),
                     LockedOn = table.Column<DateTime>(nullable: true),
@@ -63,26 +79,10 @@ namespace TrollChat.DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Domains",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    OwnerId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Domains", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Domains_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
+                        name: "FK_Users_Domains_DomainId",
+                        column: x => x.DomainId,
+                        principalTable: "Domains",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -315,11 +315,6 @@ namespace TrollChat.DataAccess.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Domains_OwnerId",
-                table: "Domains",
-                column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DomainRooms_DomainId",
                 table: "DomainRooms",
                 column: "DomainId");
@@ -369,6 +364,12 @@ namespace TrollChat.DataAccess.Migrations
                 name: "IX_Tags_UserRoomId",
                 table: "Tags",
                 column: "UserRoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DomainId",
+                table: "Users",
+                column: "DomainId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "Email",
@@ -430,9 +431,6 @@ namespace TrollChat.DataAccess.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Domains");
-
-            migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
@@ -443,6 +441,9 @@ namespace TrollChat.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Domains");
         }
     }
 }

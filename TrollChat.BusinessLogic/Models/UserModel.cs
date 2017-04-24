@@ -17,6 +17,8 @@ namespace TrollChat.BusinessLogic.Models
 
         public string Password { get; set; }
 
+        public DomainModel Domain { get; set; }
+
         public string Name { get; set; }
 
         public DateTime? LockedOn { get; set; }

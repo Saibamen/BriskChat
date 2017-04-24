@@ -17,22 +17,14 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
             this.userRepository = userRepository;
         }
 
-        public Guid Invoke(DomainModel domain, Guid userId)
+        public Guid Invoke(DomainModel domain, Guid? userId = null)
         {
             if (!domain.IsValid() || domainRepository.FindBy(x => x.Name == domain.Name).Any())
             {
                 return Guid.Empty;
             }
 
-            var user = userRepository.GetById(userId);
-
-            if (user == null)
-            {
-                return Guid.Empty;
-            }
-
             var newDomain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
-            newDomain.Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
             domainRepository.Add(newDomain);
             domainRepository.Save();
 

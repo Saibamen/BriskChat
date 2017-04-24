@@ -6,6 +6,6 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Interfaces
 {
     public interface IAddNewDomain : IAction
     {
-        Guid Invoke(DomainModel domain, Guid userId);
+        Guid Invoke(DomainModel domain, Guid? userId = null);
     }
 }

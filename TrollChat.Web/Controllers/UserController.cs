@@ -10,10 +10,5 @@ namespace TrollChat.Web.Controllers
         {
             return View();
         }
-
-        public IActionResult CreateChannel()
-        {
-            return View();
-        }
     }
 }

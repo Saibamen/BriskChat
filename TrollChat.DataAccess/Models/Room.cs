@@ -11,10 +11,10 @@ namespace TrollChat.DataAccess.Models
             Tags = new HashSet<Tag>();
         }
 
+        public virtual ICollection<Tag> Tags { get; set; }
+
         [Required]
         public User Owner { get; set; }
-
-        public virtual ICollection<Tag> Tags { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(100)")]
