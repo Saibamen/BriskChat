@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
@@ -13,18 +14,19 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             public void Invoke_ValidData_DeleteAndSaveAreCalled()
             {
                 // prepare
+                var guid = new Guid();
                 var userTokenFromDb = new DataAccess.Models.UserToken()
                 {
-                    Id = 1,
+                    Id = guid,
                 };
 
                 var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
-                mockedUserTokenRepository.Setup(r => r.GetById(1)).Returns(userTokenFromDb);
+                mockedUserTokenRepository.Setup(r => r.GetById(guid)).Returns(userTokenFromDb);
 
                 var action = new DeleteUserTokenById(mockedUserTokenRepository.Object);
 
                 // action
-                var actionResult = action.Invoke(1);
+                var actionResult = action.Invoke(guid);
 
                 // assert
                 Assert.True(actionResult);
@@ -40,7 +42,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
                 var action = new DeleteUserTokenById(mockedUserTokenRepository.Object);
 
                 // action
-                var actionResult = action.Invoke(1);
+                var actionResult = action.Invoke(Guid.NewGuid());
 
                 // assert
                 Assert.False(actionResult);

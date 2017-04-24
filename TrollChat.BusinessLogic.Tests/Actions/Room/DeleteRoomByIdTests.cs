@@ -14,18 +14,19 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
+            var guid = new Guid();
             var RoomFromDb = new DataAccess.Models.Room()
             {
-                Id = 1
+                Id = guid
             };
 
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            mockedRoomRepository.Setup(r => r.GetById(1)).Returns(RoomFromDb);
+            mockedRoomRepository.Setup(r => r.GetById(guid)).Returns(RoomFromDb);
 
             var action = new DeleteRoomById(mockedRoomRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(guid);
 
             // assert
             Assert.True(result);
@@ -42,7 +43,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new DeleteRoomById(mockedEmailRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(Guid.NewGuid());
 
             // assert
             Assert.False(result);

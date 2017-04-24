@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace TrollChat.DataAccess.Migrations
 {
@@ -13,8 +12,7 @@ namespace TrollChat.DataAccess.Migrations
                 name: "EmailMessages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     FailError = table.Column<string>(nullable: true),
@@ -35,8 +33,7 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Description = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
@@ -52,8 +49,7 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Email = table.Column<string>(type: "NVARCHAR(256)", nullable: false),
@@ -73,13 +69,12 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Domains",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    OwnerId = table.Column<int>(nullable: false)
+                    OwnerId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,8 +91,7 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Rooms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     Customization = table.Column<int>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
@@ -106,7 +100,7 @@ namespace TrollChat.DataAccess.Migrations
                     IsPublic = table.Column<bool>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    OwnerId = table.Column<int>(nullable: false),
+                    OwnerId = table.Column<Guid>(nullable: false),
                     Topic = table.Column<string>(type: "NVARCHAR(100)", nullable: true)
                 },
                 constraints: table =>
@@ -124,14 +118,13 @@ namespace TrollChat.DataAccess.Migrations
                 name: "UserTokens",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     SecretToken = table.Column<string>(type: "NVARCHAR(256)", nullable: true),
                     SecretTokenTimeStamp = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,13 +141,12 @@ namespace TrollChat.DataAccess.Migrations
                 name: "DomainRooms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    DomainId = table.Column<int>(nullable: false),
+                    DomainId = table.Column<Guid>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoomId = table.Column<int>(nullable: false)
+                    RoomId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -177,14 +169,13 @@ namespace TrollChat.DataAccess.Migrations
                 name: "UserRooms",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     LockedUntil = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoomId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    RoomId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,14 +198,13 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Messages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    LastMessageForId = table.Column<int>(nullable: false),
+                    LastMessageForId = table.Column<Guid>(nullable: false),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Text = table.Column<string>(nullable: false),
-                    UserRoomId = table.Column<int>(nullable: false)
+                    UserRoomId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -237,15 +227,14 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Tags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Description = table.Column<string>(type: "NVARCHAR(100)", nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(type: "NVARCHAR(100)", nullable: false),
-                    RoomId = table.Column<int>(nullable: true),
-                    UserRoomId = table.Column<int>(nullable: true)
+                    RoomId = table.Column<Guid>(nullable: true),
+                    UserRoomId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -268,13 +257,12 @@ namespace TrollChat.DataAccess.Migrations
                 name: "RoomTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoomId = table.Column<int>(nullable: false),
-                    TagId = table.Column<int>(nullable: false)
+                    RoomId = table.Column<Guid>(nullable: false),
+                    TagId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -297,13 +285,12 @@ namespace TrollChat.DataAccess.Migrations
                 name: "UserRoomTags",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
-                    TagId = table.Column<int>(nullable: false),
-                    UserRoomId = table.Column<int>(nullable: false)
+                    TagId = table.Column<Guid>(nullable: false),
+                    UserRoomId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {

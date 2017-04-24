@@ -34,12 +34,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
                 .Callback<DataAccess.Models.Domain>(u => domainSaved = u);
 
             var mockedUserRepo = new Mock<IUserRepository>();
-            mockedUserRepo.Setup(x => x.GetById(It.IsAny<int>())).Returns(userData);
+            mockedUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(userData);
 
             var action = new AddNewDomain(mockedDomainrepository.Object, mockedUserRepo.Object);
 
             // action
-            action.Invoke(domainData, 1);
+            action.Invoke(domainData, Guid.NewGuid());
 
             // assert
             mockedDomainrepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
@@ -59,10 +59,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             var action = new AddNewDomain(mockedDomainRepository.Object, mockedUserRepo.Object);
 
             // action
-            var actionResult = action.Invoke(domainToAdd, 1);
+            var actionResult = action.Invoke(domainToAdd, Guid.NewGuid());
 
             // assert
-            Assert.Equal(0, actionResult);
+            Assert.Equal(Guid.Empty, actionResult);
             mockedDomainRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
             mockedDomainRepository.Verify(r => r.Save(), Times.Never);
         }
@@ -97,10 +97,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             var action = new AddNewDomain(mockedDomainRepository.Object, mockedUserRepo.Object);
 
             // action
-            var actionResult = action.Invoke(domainToAdd, 1);
+            var actionResult = action.Invoke(domainToAdd, Guid.NewGuid());
 
             // assert
-            Assert.Equal(0, actionResult);
+            Assert.Equal(Guid.Empty, actionResult);
             mockedDomainRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
             mockedDomainRepository.Verify(r => r.Save(), Times.Never);
         }

@@ -10,7 +10,7 @@ namespace TrollChat.BusinessLogic.Tests.Models
         public void ValidData_ModelAreCorrect()
         {
             // prepare
-            var id = 5;
+            var guid = new Guid();
             var createdOn = DateTime.Today;
             var modifiedOn = DateTime.Today.AddDays(4);
             var deletedOn = DateTime.Today.AddDays(5);
@@ -18,14 +18,14 @@ namespace TrollChat.BusinessLogic.Tests.Models
             // action
             var action = new BaseModel
             {
-                Id = id,
+                Id = guid,
                 CreatedOn = createdOn,
                 ModifiedOn = modifiedOn,
                 DeletedOn = deletedOn
             };
 
             // check
-            Assert.Equal(5, action.Id);
+            Assert.Equal(guid, action.Id);
             Assert.Equal(DateTime.Today, action.CreatedOn);
             Assert.Equal(DateTime.Today.AddDays(4), action.ModifiedOn);
             Assert.Equal(DateTime.Today.AddDays(5), action.DeletedOn);

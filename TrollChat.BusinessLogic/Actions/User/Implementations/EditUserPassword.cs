@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
@@ -22,7 +23,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             this.hasher = hasher ?? new Hasher();
         }
 
-        public bool Invoke(int id, string plainPassword)
+        public bool Invoke(Guid id, string plainPassword)
         {
             if (string.IsNullOrEmpty(plainPassword))
             {

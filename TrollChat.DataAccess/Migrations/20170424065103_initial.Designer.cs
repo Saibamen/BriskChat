@@ -8,7 +8,7 @@ using TrollChat.DataAccess.Context;
 namespace TrollChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170412080111_initial")]
+    [Migration("20170424065103_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,7 +19,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -32,7 +32,7 @@ namespace TrollChat.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
-                    b.Property<int>("OwnerId");
+                    b.Property<Guid>("OwnerId");
 
                     b.HasKey("Id");
 
@@ -46,18 +46,18 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.DomainRoom", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<int>("DomainId");
+                    b.Property<Guid>("DomainId");
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<int>("RoomId");
+                    b.Property<Guid>("RoomId");
 
                     b.HasKey("Id");
 
@@ -70,7 +70,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.EmailMessage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -103,21 +103,21 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<int>("LastMessageForId");
+                    b.Property<Guid>("LastMessageForId");
 
                     b.Property<DateTime>("ModifiedOn");
 
                     b.Property<string>("Text")
                         .IsRequired();
 
-                    b.Property<int>("UserRoomId");
+                    b.Property<Guid>("UserRoomId");
 
                     b.HasKey("Id");
 
@@ -131,7 +131,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Role", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -155,7 +155,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -177,7 +177,7 @@ namespace TrollChat.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
-                    b.Property<int>("OwnerId");
+                    b.Property<Guid>("OwnerId");
 
                     b.Property<string>("Topic")
                         .HasColumnType("NVARCHAR(100)");
@@ -191,7 +191,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.RoomTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -200,9 +200,9 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<int>("RoomId");
+                    b.Property<Guid>("RoomId");
 
-                    b.Property<int>("TagId");
+                    b.Property<Guid>("TagId");
 
                     b.HasKey("Id");
 
@@ -215,7 +215,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Tag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -231,9 +231,9 @@ namespace TrollChat.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
-                    b.Property<int?>("RoomId");
+                    b.Property<Guid?>("RoomId");
 
-                    b.Property<int?>("UserRoomId");
+                    b.Property<Guid?>("UserRoomId");
 
                     b.HasKey("Id");
 
@@ -249,7 +249,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -288,7 +288,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -299,9 +299,9 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<int>("RoomId");
+                    b.Property<Guid>("RoomId");
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -314,7 +314,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoomTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -323,9 +323,9 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<int>("TagId");
+                    b.Property<Guid>("TagId");
 
-                    b.Property<int>("UserRoomId");
+                    b.Property<Guid>("UserRoomId");
 
                     b.HasKey("Id");
 
@@ -338,7 +338,7 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedOn");
@@ -353,7 +353,7 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<DateTime?>("SecretTokenTimeStamp")
                         .IsRequired();
 
-                    b.Property<int>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
 
@@ -397,7 +397,7 @@ namespace TrollChat.DataAccess.Migrations
             modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
-                        .WithMany()
+                        .WithMany("Rooms")
                         .HasForeignKey("OwnerId");
                 });
 
@@ -430,7 +430,7 @@ namespace TrollChat.DataAccess.Migrations
                         .HasForeignKey("RoomId");
 
                     b.HasOne("TrollChat.DataAccess.Models.User", "User")
-                        .WithMany("Rooms")
+                        .WithMany("UserRooms")
                         .HasForeignKey("UserId");
                 });
 

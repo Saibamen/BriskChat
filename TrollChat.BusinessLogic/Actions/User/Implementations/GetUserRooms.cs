@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.User.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.userRepository = userRepository;
         }
 
-        public List<RoomModel> Invoke(int userId)
+        public List<RoomModel> Invoke(Guid userId, bool isPrivateConversation)
         {
-            var dbUser = userRepository.GetUserRooms(userId, false);
+            var dbUser = userRepository.GetUserRooms(userId, isPrivateConversation);
 
             if (dbUser == null)
             {

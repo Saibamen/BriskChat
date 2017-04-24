@@ -26,7 +26,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedHasher = new Mock<IHasher>();
 
-            mockedUserRepository.Setup(r => r.GetById(3)).Returns(user);
+            mockedUserRepository.Setup(r => r.GetById(It.IsAny<Guid>())).Returns(user);
 
             mockedHasher.Setup(r => r.GenerateRandomGuid()).Returns("123");
 
@@ -35,7 +35,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
 
-            action.Invoke(3);
+            action.Invoke(Guid.NewGuid());
 
             Assert.Equal("Ryszard", tokensaved.User.Name);
             Assert.Equal("123", tokensaved.SecretToken);
@@ -65,7 +65,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedHasher = new Mock<IHasher>();
 
-            mockedUserRepository.Setup(r => r.GetById(3)).Returns(user);
+            mockedUserRepository.Setup(r => r.GetById(It.IsAny<Guid>())).Returns(user);
 
             mockedHasher.Setup(r => r.GenerateRandomGuid()).Returns("123");
 
@@ -77,7 +77,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
 
-            action.Invoke(3);
+            action.Invoke(Guid.NewGuid());
 
             Assert.Equal("Ryszard", tokensaved.User.Name);
             Assert.Equal("123", tokensaved.SecretToken);
@@ -97,7 +97,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object);
 
             // action
-            var actionResult = action.Invoke(3);
+            var actionResult = action.Invoke(Guid.NewGuid());
 
             // assert
             Assert.Equal(string.Empty, actionResult);

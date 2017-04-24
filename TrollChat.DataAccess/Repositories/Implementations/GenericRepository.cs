@@ -29,6 +29,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public virtual void Add(T entity)
         {
             var timeNow = DateTime.UtcNow;
+            entity.Id = new Guid();
             entity.ModifiedOn = timeNow;
             entity.CreatedOn = timeNow;
             dbSet.Add(entity);
@@ -63,8 +64,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             return query ?? dbSet;
         }
 
-
-        public virtual T GetById(int id)
+        public virtual T GetById(Guid id)
         {
             return DbSet.FirstOrDefault(m => m.Id == id);
         }

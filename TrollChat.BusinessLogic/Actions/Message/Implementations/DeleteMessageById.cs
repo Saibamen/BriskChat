@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
@@ -15,7 +13,7 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             this.MessageRepository = MessageRepository;
         }
 
-        public bool Invoke(int MessageId)
+        public bool Invoke(Guid MessageId)
         {
             var messageToDelete = MessageRepository.GetById(MessageId);
 

@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using System.Linq;
 using AutoMapper;
 using TrollChat.BusinessLogic.Models;
@@ -15,7 +16,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             this.userRepository = userRepository;
         }
 
-        public UserTokenModel Invoke(int userId)
+        public UserTokenModel Invoke(Guid userId)
         {
             var token = userRepository.FindBy(x => x.User.Id == userId).FirstOrDefault();
 

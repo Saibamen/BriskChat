@@ -16,18 +16,20 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
+
+            var guid = new Guid();
             var DomainFromDb = new DataAccess.Models.Domain()
             {
-                Id = 1
+                Id = guid
             };
 
             var mockedDomainRepository = new Mock<IDomainRepository>();
-            mockedDomainRepository.Setup(r => r.GetById(1)).Returns(DomainFromDb);
+            mockedDomainRepository.Setup(r => r.GetById(guid)).Returns(DomainFromDb);
 
             var action = new DeleteDomainById(mockedDomainRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(guid);
 
             // assert
             Assert.True(result);
@@ -44,7 +46,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             var action = new DeleteDomainById(mockedDomainRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(Guid.NewGuid());
 
             // assert
             Assert.False(result);

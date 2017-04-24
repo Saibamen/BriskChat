@@ -16,9 +16,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 Name = "Name",
                 Email = "email@dot.com",
                 PasswordHash = "123",
@@ -34,7 +35,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var user = action.Invoke("email@dot.com");
 
             // check
-            Assert.Equal(1, user.Id);
+            Assert.Equal(guid, user.Id);
             Assert.Equal("Name", user.Name);
             Assert.Equal("email@dot.com", user.Email);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Once);

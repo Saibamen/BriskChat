@@ -16,9 +16,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_SavedAndEditAreCalled()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 Name = "Name",
                 PasswordHash = "hash",
                 PasswordSalt = "salt"
@@ -34,7 +35,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             DataAccess.Models.User userSaved = null;
             var mockedUserRepository = new Mock<IUserRepository>();
 
-            mockedUserRepository.Setup(r => r.GetById(1)).Returns(userFromDb);
+            mockedUserRepository.Setup(r => r.GetById(It.IsAny<Guid>())).Returns(userFromDb);
             mockedUserRepository.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
                 .Callback<DataAccess.Models.User>(u => userSaved = u);
 
@@ -49,7 +50,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedHasher.Object);
 
             // action
-            var actionResult = action.Invoke(1, "plain");
+            var actionResult = action.Invoke(Guid.NewGuid(), "plain");
 
             // assert
             Assert.True(actionResult);
@@ -93,7 +94,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedHasher.Object);
 
             // action
-            var actionResult = action.Invoke(1, "plain");
+            var actionResult = action.Invoke(Guid.NewGuid(), "plain");
 
             // assert
             Assert.False(actionResult);
@@ -113,9 +114,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_EmptyPassword_SaveNorEditAreCalled()
         {
             // prepare
-            var userFromDb = new DataAccess.Models.User() { Id = 1 };
+            var guid = new Guid();
+            var userFromDb = new DataAccess.Models.User() { Id = guid };
             var mockedUserRepo = new Mock<IUserRepository>();
-            mockedUserRepo.Setup(r => r.GetById(1))
+            mockedUserRepo.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(userFromDb);
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
@@ -123,7 +125,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new EditUserPassword(mockedUserTokenRepository.Object, mockedUserRepo.Object);
 
             // action
-            var actionResult = action.Invoke(1, "");
+            var actionResult = action.Invoke(guid, "");
 
             // assert
             Assert.False(actionResult);
@@ -139,16 +141,17 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_NoToken_SaveNorEditAreCalled()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 Name = "Name",
                 PasswordHash = "hash",
                 PasswordSalt = "salt"
             };
 
             var mockedUserRepository = new Mock<IUserRepository>();
-            mockedUserRepository.Setup(r => r.GetById(1))
+            mockedUserRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(userFromDb);
 
             var mockedUserTokenRepo = new Mock<IUserTokenRepository>();
@@ -156,7 +159,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object);
 
             // action
-            var actionResult = action.Invoke(1, "123");
+            var actionResult = action.Invoke(guid, "123");
 
             // assert
             Assert.False(actionResult);

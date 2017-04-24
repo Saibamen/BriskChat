@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -16,18 +17,18 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
             this.userRepository = userRepository;
         }
 
-        public int Invoke(DomainModel domain, int userId)
+        public Guid Invoke(DomainModel domain, Guid userId)
         {
             if (!domain.IsValid() || domainRepository.FindBy(x => x.Name == domain.Name).Any())
             {
-                return 0;
+                return Guid.Empty;
             }
 
             var user = userRepository.GetById(userId);
 
             if (user == null)
             {
-                return 0;
+                return Guid.Empty;
             }
 
             var newDomain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);

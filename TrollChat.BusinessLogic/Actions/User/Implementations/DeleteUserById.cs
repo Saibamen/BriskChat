@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.User.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementations
@@ -12,7 +13,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             this.userRepository = userRepository;
         }
 
-        public bool Invoke(int userId)
+        public bool Invoke(Guid userId)
         {
             var roomToDelete = userRepository.GetById(userId);
 

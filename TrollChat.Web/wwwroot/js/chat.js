@@ -79,7 +79,7 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
     currentRoomId = $(e.target).data("id");
 
-    $.when(myHub.server.joinRoom(currentRoomId)).then(function() {
+    $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
         $(e.target).addClass("active");
         loadingStop();
         console.log("Current room ID: " + currentRoomId);
@@ -91,7 +91,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
     console.log("click na deleteee");
     $(".ui.delete.modal")
         .modal({
-            onApprove : function() {
+            onApprove: function () {
                 // Deleting message
                 var messageId = $(e.target).closest(".ts-message").data("id");
                 myHub.server.deleteMessage(currentRoomId, messageId);
@@ -146,6 +146,22 @@ myHub.client.loadRooms = function (result) {
     });
 }
 
+myHub.client.loadPrivateConversations = function (result) {
+    $.each(result,
+        function (index, value) {
+            var divToAppend = '<a class="item';
+
+            if (setActive) {
+                divToAppend += " active";
+            }
+            divToAppend += '"data-id="' + value.Id + '" > ';
+            divToAppend += '<i class="icon left">#</i>';
+            divToAppend += value.Name + "</a>";
+
+            $("#privateConversationsMenu").append(divToAppend);
+        });
+}
+
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     var divToAppend = '<a class="item" data-id="' + roomId + '">';
 
@@ -166,13 +182,17 @@ $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub. Getting rooms");
         // Getting rooms
-        $.when(myHub.server.getRooms()).then(function() {
+
+        getRooms = myHub.server.getRooms();
+        //  getPrivateConversations = myHub.Server.getPrivateConversations();
+
+        $.when(getRooms).then(function () {
             // Joining to room
-            $.when(myHub.server.joinRoom(currentRoomId)).then(function() {
+            $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
                 console.log("Connected to room :)");
                 loadingStop();
 
-                $("#msg_form").keypress(function(e) {
+                $("#msg_form").keypress(function (e) {
                     if (e.which == 13) {
                         if (!e.shiftKey) {
                             if (message = $("#msg_input").val().trim()) {
@@ -222,10 +242,10 @@ $("#createNewChannel").click(function () {
         .modal("setting", "closable", false)
         // HACK
         .modal({
-            onDeny : function() {
+            onDeny: function () {
                 $(".ui.basic.create-room.modal").parent().css("background-color", "");
             },
-            onApprove : function() {
+            onApprove: function () {
                 $(".ui.basic.create-room.modal").parent().css("background-color", "");
             }
         })
@@ -235,17 +255,35 @@ $("#createNewChannel").click(function () {
     $(".ui.basic.create-room.modal").parent().css("background-color", "#fff");
 });
 
+$("#createNewPrivateConversation").click(function () {
+    $("#createPrivateConversationForm")[0].reset();
+
+    $(".ui.basic.create-private-conversation.modal")
+        .modal("setting", "closable", false)
+        // HACK
+        .modal({
+            onDeny: function () {
+                $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "");
+            },
+            onApprove: function () {
+                $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "");
+            }
+        })
+        .modal("show");
+
+    // HACK
+    $(".ui.basic.create-private-conversation.modal").parent().css("background-color", "#fff");
+});
+
 $("#myCheckBox").click(function () {
     if ($(this).is(":checked")) {
         $("#createNewChannelHeader").html("Create a channel");
         $("#createNewChannelLabel").html("Anyone on your team can view and join this channel");
-        var item = $("input[name*='IsPublic']")[1];
-        item.value = true;
+        $("input[name*='IsPublic']")[1].value = true;
     } else {
         $("#createNewChannelHeader").html("Create a private channel");
         $("#createNewChannelLabel").html("This channel can only be joined by invite");
-        var item = $("input[name*='IsPublic']")[1];
-        item.value = false;
+        $("input[name*='IsPublic']")[1].value = false;
     }
 });
 

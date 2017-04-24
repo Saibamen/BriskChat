@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
@@ -12,7 +13,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
             this.domainRepository = domainRepository;
         }
 
-        public bool Invoke(int domainId)
+        public bool Invoke(Guid domainId)
         {
             var domainToDelete = domainRepository.GetById(domainId);
 

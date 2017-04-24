@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementations;
@@ -43,14 +44,14 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
                 .Callback<DataAccess.Models.Room>(u => roomSaved = u);
 
             var mockedUserRepo = new Mock<IUserRepository>();
-            mockedUserRepo.Setup(x => x.GetById(It.IsAny<int>())).Returns(user);
+            mockedUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(user);
 
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
 
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
 
             // action
-            action.Invoke(roomData, 1);
+            action.Invoke(roomData, new Guid());
 
             // assert
             Assert.Equal("TestTag", roomSaved.Tags.ElementAt(0).Name);
@@ -78,10 +79,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
 
             // action
-            var actionResult = action.Invoke(roomToAdd, 1);
+            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid());
 
             // assert
-            Assert.Equal(0, actionResult);
+            Assert.Equal(Guid.Empty, actionResult);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
             mockedRoomRepository.Verify(r => r.Save(), Times.Never);
         }

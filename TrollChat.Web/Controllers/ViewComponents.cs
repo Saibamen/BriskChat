@@ -9,4 +9,12 @@ namespace TrollChat.Web.Controllers
             return View();
         }
     }
+
+    public class CreatePrivateConversationViewComponent : ViewComponent
+    {
+        public IViewComponentResult Invoke()
+        {
+            return View();
+        }
+    }
 }

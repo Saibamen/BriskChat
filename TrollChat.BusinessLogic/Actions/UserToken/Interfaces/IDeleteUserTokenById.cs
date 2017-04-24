@@ -1,9 +1,10 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.Base;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
 {
     public interface IDeleteUserTokenById : IAction
     {
-        bool Invoke(int userTokenId);
+        bool Invoke(Guid userTokenId);
     }
 }

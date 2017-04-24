@@ -14,18 +14,19 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
+            var guid = new Guid();
             var MessageFromDb = new DataAccess.Models.Message()
             {
-                Id = 1
+                Id = guid
             };
 
             var mockedMessageRepository = new Mock<IMessageRepository>();
-            mockedMessageRepository.Setup(r => r.GetById(1)).Returns(MessageFromDb);
+            mockedMessageRepository.Setup(r => r.GetById(guid)).Returns(MessageFromDb);
 
             var action = new DeleteMessageById(mockedMessageRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(guid);
 
             // assert
             Assert.True(result);
@@ -42,7 +43,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var action = new DeleteMessageById(mockedMessageRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(new Guid());
 
             // assert
             Assert.False(result);
