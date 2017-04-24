@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using TrollChat.BusinessLogic.Actions.Email.Implementations;
 using TrollChat.DataAccess.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -12,18 +13,19 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
+            var guid = new Guid();
             var messageFromDb = new EmailMessage()
             {
-                Id = 1
+                Id = guid
             };
 
             var mockedEmailRepository = new Mock<IEmailRepository>();
-            mockedEmailRepository.Setup(r => r.GetById(1)).Returns(messageFromDb);
+            mockedEmailRepository.Setup(r => r.GetById(guid)).Returns(messageFromDb);
 
             var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(guid);
 
             // assert
             Assert.True(result);
@@ -40,7 +42,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
 
             // action
-            var result = action.Invoke(1);
+            var result = action.Invoke(new Guid());
 
             // assert
             Assert.False(result);

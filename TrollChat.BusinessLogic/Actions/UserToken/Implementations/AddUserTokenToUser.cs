@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
@@ -21,7 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             this.hasher = hasher ?? new Hasher();
         }
 
-        public string Invoke(int userId)
+        public string Invoke(Guid userId)
         {
             var user = userRepository.GetById(userId);
 
@@ -30,7 +31,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
                 return string.Empty;
             }
 
-            var token = userTokenRepository.FindBy(x => x.User == user).FirstOrDefault();
+            var token = userTokenRepository.GetById(userId);
 
             if (token != null)
             {

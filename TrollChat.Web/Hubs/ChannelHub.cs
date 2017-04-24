@@ -24,9 +24,16 @@ namespace TrollChat.Web.Hubs
 
         public void GetRooms()
         {
-            var roomList = getUserRooms.Invoke(Context.UserId());
+            var roomList = getUserRooms.Invoke(Context.UserId(), false);
 
             Clients.Caller.loadRooms(roomList);
+        }
+
+        public void GetPrivateConversations()
+        {
+            var roomList = getUserRooms.Invoke(Context.UserId(), true);
+
+            Clients.Caller.loadPrivateConversations(roomList);
         }
 
         public async Task JoinRoom(string roomId)
@@ -89,7 +96,7 @@ namespace TrollChat.Web.Hubs
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
             var room = addNewRoom.Invoke(roomModel, Context.UserId());
 
-            if (room == 0)
+            if (room == Guid.Empty)
             {
                 return;
             }

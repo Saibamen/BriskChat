@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.User.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
@@ -13,7 +14,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             this.userRepository = userRepository;
         }
 
-        public UserModel Invoke(int id)
+        public UserModel Invoke(Guid id)
         {
             var dbUser = userRepository.GetById(id);
 

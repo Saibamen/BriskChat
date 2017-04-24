@@ -14,7 +14,7 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
 
         IQueryable<T> GetAll();
 
-        T GetById(int id);
+        T GetById(Guid id);
 
         void Save();
 

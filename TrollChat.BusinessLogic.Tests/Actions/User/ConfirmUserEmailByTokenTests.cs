@@ -15,9 +15,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_UpdatesEmailConfirmedOn()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 EmailConfirmedOn = null,
             };
 
@@ -56,9 +57,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_TokenExpired()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 EmailConfirmedOn = null,
             };
 
@@ -99,9 +101,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             DateTime dateNow = DateTime.UtcNow;
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 EmailConfirmedOn = dateNow,
             };
 
@@ -133,9 +136,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Verify_ForDoubledAction_UpdatesEmailConfirmedOnOnce()
         {
             // prepare
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 EmailConfirmedOn = null,
             };
 

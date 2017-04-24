@@ -16,7 +16,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<Room> GetUserRooms(int id, bool isPrivateConversation)
+        public IQueryable<Room> GetUserRooms(Guid id, bool isPrivateConversation)
         {
             var query =
                 context.Set<User>()

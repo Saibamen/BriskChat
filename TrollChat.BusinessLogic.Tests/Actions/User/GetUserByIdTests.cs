@@ -12,9 +12,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 Name = "Name",
                 Email = "email@dot.com",
                 EmailConfirmedOn = DateTime.MinValue,
@@ -26,15 +27,15 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
-            mockedUserRepository.Setup(r => r.GetById(It.IsAny<int>()))
+            mockedUserRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(userFromDb);
             var action = new GetUserById(mockedUserRepository.Object);
 
             // action
-            var user = action.Invoke(1);
+            var user = action.Invoke(guid);
 
             // check
-            Assert.Equal(1, user.Id);
+            Assert.Equal(guid, user.Id);
             Assert.Equal("Name", user.Name);
             Assert.Equal("email@dot.com", user.Email);
             Assert.Equal(DateTime.MinValue, user.EmailConfirmedOn);
@@ -42,7 +43,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Equal(DateTime.MinValue, user.CreatedOn);
             Assert.Equal(DateTime.MinValue, user.ModifiedOn);
             Assert.Null(user.DeletedOn);
-            mockedUserRepository.Verify(r => r.GetById(It.IsAny<int>()), Times.Once);
+            mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -53,7 +54,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new GetUserById(mockedUserRepository.Object);
 
             // action
-            var user = action.Invoke(1337);
+            var user = action.Invoke(new Guid());
 
             // check
             Assert.Null(user);

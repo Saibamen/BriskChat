@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrollChat.DataAccess.Models
@@ -9,7 +10,7 @@ namespace TrollChat.DataAccess.Models
         public UserRoom UserRoom { get; set; }
 
         [ForeignKey(nameof(LastMessageFor))]
-        public int LastMessageForId { get; set; }
+        public Guid LastMessageForId { get; set; }
 
         public UserRoom LastMessageFor { get; set; }
 

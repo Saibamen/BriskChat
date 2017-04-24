@@ -1,9 +1,10 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.Base;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
 {
     public interface IAddUserTokenToUser : IAction
     {
-        string Invoke(int userId);
+        string Invoke(Guid userId);
     }
 }

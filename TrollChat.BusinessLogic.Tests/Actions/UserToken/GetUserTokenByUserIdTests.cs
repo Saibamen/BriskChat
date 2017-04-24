@@ -15,9 +15,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
+            var guid = new Guid();
             var userTokenFromDb = new DataAccess.Models.UserToken()
             {
-                Id = 1,
+                Id = guid,
                 SecretToken = "123",
                 SecretTokenTimeStamp = DateTime.MaxValue,
                 CreatedOn = DateTime.MinValue,
@@ -35,10 +36,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             var action = new GetUserTokenByUserId(userTokenRepository.Object);
 
             // action
-            var userToken = action.Invoke(1);
+            var userToken = action.Invoke(guid);
 
             // check
-            Assert.Equal(1, userToken.Id);
+            Assert.Equal(guid, userToken.Id);
             Assert.Equal("bob", userToken.User.Name);
             Assert.Equal("123", userToken.SecretToken);
             Assert.Equal(DateTime.MaxValue, userToken.SecretTokenTimeStamp);
@@ -55,7 +56,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             var action = new GetUserTokenByUserId(mockedUserTokenRepository.Object);
 
             // action
-            var user = action.Invoke(1337);
+            var user = action.Invoke(Guid.NewGuid());
 
             // check
             Assert.Null(user);

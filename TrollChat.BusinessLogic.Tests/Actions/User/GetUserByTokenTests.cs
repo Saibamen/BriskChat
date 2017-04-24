@@ -15,9 +15,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
+            var guid = new Guid();
             var userFromDb = new DataAccess.Models.User()
             {
-                Id = 1,
+                Id = guid,
                 Name = "Name",
                 Email = "email@dot.com",
                 EmailConfirmedOn = DateTime.MinValue,
@@ -29,7 +30,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             var userTokenFromDb = new DataAccess.Models.UserToken()
             {
-                Id = 1,
+                Id = new Guid(),
                 User = userFromDb,
                 SecretToken = "123"
             };
@@ -46,7 +47,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var user = action.Invoke("123");
 
             // check
-            Assert.Equal(1, user.Id);
+            Assert.Equal(guid, user.Id);
             Assert.Equal("Name", user.Name);
             Assert.Equal("email@dot.com", user.Email);
             Assert.Equal(DateTime.MinValue, user.EmailConfirmedOn);

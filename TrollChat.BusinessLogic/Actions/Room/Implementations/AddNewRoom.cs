@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -18,18 +20,18 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             this.userRoomRepository = userRoomRepository;
         }
 
-        public int Invoke(RoomModel room, int userId)
+        public Guid Invoke(RoomModel room, Guid userId)
         {
             if (!room.IsValid())
             {
-                return 0;
+                return Guid.Empty;
             }
 
             var user = userRepository.GetById(userId);
 
             if (user == null)
             {
-                return 0;
+                return Guid.Empty;
             }
 
             var newRoom = AutoMapper.Mapper.Map<DataAccess.Models.Room>(room);

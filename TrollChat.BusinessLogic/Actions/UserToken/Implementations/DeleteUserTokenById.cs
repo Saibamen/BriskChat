@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
@@ -12,7 +13,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             this.userTokenRepository = userTokenRepository;
         }
 
-        public bool Invoke(int userTokenId)
+        public bool Invoke(Guid userTokenId)
         {
             var userToken = userTokenRepository.GetById(userTokenId);
 

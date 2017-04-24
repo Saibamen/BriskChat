@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.Email.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Email.Implementations
@@ -12,7 +13,7 @@ namespace TrollChat.BusinessLogic.Actions.Email.Implementations
             this.emailRepository = emailRepository;
         }
 
-        public bool Invoke(int emailId)
+        public bool Invoke(Guid emailId)
         {
             var emailToDelete = emailRepository.GetById(emailId);
 
