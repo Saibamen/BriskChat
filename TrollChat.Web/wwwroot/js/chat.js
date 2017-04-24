@@ -2,12 +2,14 @@
     transition: "overlay"
 });
 
-$(".ts_tip").popup({
+$(document).on("reloadPopups", function () {
+    $(".ts_tip").popup({
     variation: "inverted"
-});
+    });
 
-$(".item > .btn_unstyle.right").popup({
-    variation: "inverted"
+    $(".item > .btn_unstyle.right").popup({
+        variation: "inverted"
+    });
 });
 
 function loadingStart() {
@@ -19,6 +21,20 @@ function loadingStop() {
     $(".ui.main.container").css("display", "block");
     $(".ui.dimmer").removeClass("active");
     console.log("loader stops");
+    addActionsToMessages();
+}
+
+function addActionsToMessages() {
+    $(".ts-message").not(":has(> .action_hover_container)").each(function() {
+        $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
+            <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
+            <i class="edit icon"></i> \
+            </button> \
+            <button type="button" data-action="delete" class="btn_unstyle btn_msg_action ts_tip danger" data-content="Delete message" data-position="top center"> \
+            <i class="delete icon"></i> \
+            </button> \
+            </div>');
+    });
 }
 
 /*
@@ -71,8 +87,9 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 });
 
 // This deletes the message
-$(".ts-message .action_hover_container .btn_msg_action[data-action='delete']").click(function (e) {
-    $(".ui.basic.delete.modal")
+$("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete']", function (e) {
+    console.log("click na deleteee");
+    $(".ui.delete.modal")
         .modal({
             onApprove : function() {
                 // Deleting message
@@ -89,6 +106,8 @@ myHub.client.broadcastMessage = function (userName, message, timestamp) {
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+    addActionsToMessages();
+    $(document).trigger("reloadPopups");
 }
 
 myHub.client.deleteMessage = function (messageId) {
