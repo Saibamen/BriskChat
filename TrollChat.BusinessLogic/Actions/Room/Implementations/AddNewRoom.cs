@@ -1,9 +1,7 @@
 using System;
-using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
@@ -41,7 +39,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             roomRepository.Add(newRoom);
             roomRepository.Save();
 
-            var userRoom = new UserRoom() { User = user, Room = newRoom };
+            var userRoom = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
 
             userRoomRepository.Add(userRoom);
             userRoomRepository.Save();

@@ -88,7 +88,6 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
 // This deletes the message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete']", function (e) {
-    console.log("click na deleteee");
     $(".ui.delete.modal")
         .modal({
             onApprove: function () {

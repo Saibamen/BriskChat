@@ -1,10 +1,12 @@
-﻿namespace TrollChat.BusinessLogic.Models
+﻿using System;
+
+namespace TrollChat.BusinessLogic.Models
 {
     public class MessageModel : BaseModel
     {
         public UserRoomModel UserRoom { get; set; }
 
-        public int LastMessageForId { get; set; }
+        public Guid LastMessageForId { get; set; }
 
         public UserRoomModel LastMessageFor { get; set; }
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Room;
@@ -13,12 +15,20 @@ namespace TrollChat.Web.Hubs
     public class ChannelHub : Hub
     {
         private readonly IAddNewRoom addNewRoom;
+        private readonly IAddNewMessage addNewMessage;
         private readonly IGetUserRooms getUserRooms;
+        private readonly IGetUserRoomByIds getUserRoomByIds;
+
         private const string TimeStampRepresentation = "HH:mm";
 
-        public ChannelHub(IAddNewRoom addNewRoom, IGetUserRooms getUserRooms)
+        public ChannelHub(IAddNewRoom addNewRoom,
+            IAddNewMessage addNewMessage,
+            IGetUserRoomByIds getUserRoomByIds,
+            IGetUserRooms getUserRooms)
         {
             this.addNewRoom = addNewRoom;
+            this.addNewMessage = addNewMessage;
+            this.getUserRoomByIds = getUserRoomByIds;
             this.getUserRooms = getUserRooms;
         }
 
@@ -45,8 +55,8 @@ namespace TrollChat.Web.Hubs
 
             await Groups.Add(Context.ConnectionId, roomId);
 
-            var timestamp = DateTime.UtcNow.ToLocalTime();
-            var chatTime = timestamp.ToString(TimeStampRepresentation);
+            var timestamp = DateTime.UtcNow;
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
             Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
@@ -60,8 +70,8 @@ namespace TrollChat.Web.Hubs
 
             await Groups.Remove(Context.ConnectionId, roomId);
 
-            var timestamp = DateTime.UtcNow.ToLocalTime();
-            var chatTime = timestamp.ToString(TimeStampRepresentation);
+            var timestamp = DateTime.UtcNow;
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
             Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
@@ -80,10 +90,25 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            var timestamp = DateTime.UtcNow.ToLocalTime();
-            var chatTime = timestamp.ToString(TimeStampRepresentation);
+            var timestamp = DateTime.UtcNow;
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage(Context.UserName(), message, chatTime);
+            // Add to database
+            var userRoomModel = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+
+            var messageModel = new MessageModel
+            {
+                Text = message,
+                CreatedOn = timestamp,
+                UserRoom = userRoomModel
+            };
+
+            var dbMessage = addNewMessage.Invoke(messageModel);
+
+            if (dbMessage)
+            {
+                Clients.Group(roomId).broadcastMessage(Context.UserName(), message, chatTime);
+            }
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)

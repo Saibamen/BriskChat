@@ -1,6 +1,5 @@
 ﻿using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Message.Implementations
