@@ -104,6 +104,25 @@ namespace TrollChat.Web.Hubs
             Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
         }
 
+        public void CreateNewPrivateConversation(CreateNewPrivateConversationViewModel model)
+        {
+            if (string.IsNullOrEmpty(model.Name))
+            {
+                return;
+            }
+
+            var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
+            var room = addNewRoom.Invoke(roomModel, Context.UserId());
+
+            if (room == Guid.Empty)
+            {
+                return;
+            }
+
+            //TODO: Add private conversation to sidebar
+            //  Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
+        }
+
         public void DeleteMessage(string roomId, int messageId)
         {
             if (string.IsNullOrEmpty(roomId.Trim()) || messageId <= 0)

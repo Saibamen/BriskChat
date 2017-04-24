@@ -1,0 +1,37 @@
+﻿@model TrollChat.Web.Models.Room.CreateNewPrivateConversationViewModel
+
+<style>
+    .ui.basic.create-private-conversation.modal {
+        color: #000;
+    }
+</style>
+
+<div class="ui basic create-private-conversation modal">
+    <h1 class="modal-title" id="createNewChannelHeader">Direct Messages</h1>
+
+    @using (Html.BeginForm(FormMethod.Post, false, new { id = "createPrivateConversationForm", @class = "ui large form" }))
+    {
+        @Html.HiddenFor(x => x.SecondUserId, new { @class = "required" });
+        <div class="ui form">
+            <div class="fields">
+                <div class="fourteen wide field">
+                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required" })
+                </div>
+                <div class="two wide field">
+                    <button class="ui button" form="createPrivateConversationForm" type="submit">
+                        Go
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="container" id="privateConversationsUserList"></div>
+
+    <div class="actions" style="text-align: right">
+        <button class="ui cancel button ">
+            <i class="remove icon"></i>
+            Cancel
+        </button>
+    </div>
+</div>
