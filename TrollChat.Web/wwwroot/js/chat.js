@@ -250,6 +250,7 @@ $("#createNewChannel").click(function () {
 
     $(thisModal)
         .modal({
+            closable: false,
             onDeny: function () {
                 $(thisModal).parent().css("background-color", "");
             },
@@ -257,7 +258,6 @@ $("#createNewChannel").click(function () {
                 $(thisModal).parent().css("background-color", "");
             }
         })
-        .modal({ closable: false })
         .modal("show");
 
     $(thisModal).parent().css("background-color", "#fff");
@@ -278,7 +278,6 @@ $("#createNewPrivateConversation").click(function () {
                 $(thisModal).parent().css("background-color", "");
             }
         })
-        .modal({ closable: false })
         .modal("show");
 
     $(thisModal).parent().css("background-color", "#fff");
