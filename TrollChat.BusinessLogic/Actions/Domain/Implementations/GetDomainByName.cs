@@ -29,6 +29,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
             }
 
             var domainModel = AutoMapper.Mapper.Map<DomainModel>(result);
+
             return domainModel;
         }
     }

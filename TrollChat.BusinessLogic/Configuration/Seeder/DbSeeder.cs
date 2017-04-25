@@ -10,22 +10,23 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
         public void Seed(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IAddNewDomain addNewDomain,
-            IGetUserByEmail getUserByEmail,
             IGetDomainByName getDomainByName)
         {
-            SeedDomain(addNewDomain, getUserByEmail);
+            SeedDomain(addNewDomain);
             SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName);
         }
 
         private readonly string[] users = { "owner", "user" };
 
-        public void SeedUsers(IAddNewUser addNewUser, IConfirmUserEmailByToken confirmUserEmailByToken, IGetDomainByName getDomainByName)
+        public void SeedUsers(IAddNewUser addNewUser,
+            IConfirmUserEmailByToken confirmUserEmailByToken,
+            IGetDomainByName getDomainByName)
         {
             foreach (var user in users)
             {
                 var model = new UserModel
                 {
-                    Email = $"{user}@test.com",
+                    Email = $"{user}@test.pl",
                     Password = "test",
                     Name = user,
                     Domain = getDomainByName.Invoke("jan")
@@ -37,17 +38,14 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
             }
         }
 
-        public void SeedDomain(IAddNewDomain addNewDomain, IGetUserByEmail getUserByEmail)
+        public void SeedDomain(IAddNewDomain addNewDomain)
         {
-            foreach (var user in users)
+            var model = new DomainModel
             {
-                var model = new DomainModel
-                {
-                    Name = "jan"
-                };
+                Name = "jan"
+            };
 
-                addNewDomain.Invoke(model);
-            }
+            addNewDomain.Invoke(model);
         }
     }
 }
