@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
                 return null;
             }
 
-            var returnList = dbUser.ToList().Select(item => new RoomModel()
+            var returnList = dbUser.ToList().Select(item => new RoomModel
             {
                 Id = item.Id,
                 Name = item.Name,

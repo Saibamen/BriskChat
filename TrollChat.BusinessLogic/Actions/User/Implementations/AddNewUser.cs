@@ -31,13 +31,15 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             var newUser = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
             newUser.PasswordSalt = hasher.GenerateRandomSalt();
             newUser.PasswordHash = hasher.CreatePasswordHash(user.Password, newUser.PasswordSalt);
+            // Niepotrzebny null
+            newUser.Domain.Owner = null;
 
             userRepository.Add(newUser);
 
-            var newUserToken = new DataAccess.Models.UserToken()
+            var newUserToken = new DataAccess.Models.UserToken
             {
                 User = newUser,
-                SecretToken = hasher.GenerateRandomGuid(),
+                SecretToken = hasher.GenerateRandomGuid()
             };
 
             userTokenRepository.Add(newUserToken);
