@@ -6,24 +6,24 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
 {
     public class DeleteMessageById : IDeleteMessageById
     {
-        private readonly IMessageRepository MessageRepository;
+        private readonly IMessageRepository messageRepository;
 
-        public DeleteMessageById(IMessageRepository MessageRepository)
+        public DeleteMessageById(IMessageRepository messageRepository)
         {
-            this.MessageRepository = MessageRepository;
+            this.messageRepository = messageRepository;
         }
 
-        public bool Invoke(Guid MessageId)
+        public bool Invoke(Guid messageId)
         {
-            var messageToDelete = MessageRepository.GetById(MessageId);
+            var messageToDelete = messageRepository.GetById(messageId);
 
             if (messageToDelete == null)
             {
                 return false;
             }
 
-            MessageRepository.Delete(messageToDelete);
-            MessageRepository.Save();
+            messageRepository.Delete(messageToDelete);
+            messageRepository.Save();
 
             return true;
         }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TrollChat.BusinessLogic.Models;
 using Xunit;
 using Moq;

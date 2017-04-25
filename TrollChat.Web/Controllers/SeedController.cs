@@ -1,7 +1,5 @@
 ﻿using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Configuration.Seeder;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
