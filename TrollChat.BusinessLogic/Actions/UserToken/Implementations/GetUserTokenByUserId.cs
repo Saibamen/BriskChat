@@ -9,16 +9,16 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class GetUserTokenByUserId : IGetUserTokenByUserId
     {
-        private readonly IUserTokenRepository userRepository;
+        private readonly IUserTokenRepository userTokenRepository;
 
-        public GetUserTokenByUserId(IUserTokenRepository userRepository)
+        public GetUserTokenByUserId(IUserTokenRepository userTokenRepository)
         {
-            this.userRepository = userRepository;
+            this.userTokenRepository = userTokenRepository;
         }
 
         public UserTokenModel Invoke(Guid userId)
         {
-            var token = userRepository.FindBy(x => x.User.Id == userId).FirstOrDefault();
+            var token = userTokenRepository.FindBy(x => x.User.Id == userId).FirstOrDefault();
 
             if (token == null)
             {

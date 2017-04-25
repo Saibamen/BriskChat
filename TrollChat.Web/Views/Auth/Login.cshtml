@@ -13,7 +13,7 @@
             <div class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
                         @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
                         <i class="user icon"></i>
                     </div>

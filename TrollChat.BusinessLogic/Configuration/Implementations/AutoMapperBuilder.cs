@@ -16,6 +16,9 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                     .ForMember(x => x.Recipient, y => y.MapFrom(x => x.To.Mailboxes.FirstOrDefault().Address))
                     .ForMember(x => x.Message, y => y.MapFrom(x => x.HtmlBody));
 
+                config.CreateMap<UserRoomModel, UserModel>().MaxDepth(1);
+                config.CreateMap<UserModel, UserRoomModel>().MaxDepth(1);
+
                 config.CreateMissingTypeMaps = true;
             });
         }
