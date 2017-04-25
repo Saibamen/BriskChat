@@ -1,10 +1,10 @@
-﻿$(".ui.sidebar").sidebar("setting", {
+﻿$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
 $(document).on("reloadPopups", function () {
     $(".ts_tip").popup({
-    variation: "inverted"
+        variation: "inverted"
     });
 
     $(".item > .btn_unstyle.right").popup({
@@ -25,7 +25,7 @@ function loadingStop() {
 }
 
 function addActionsToMessages() {
-    $(".ts-message").not(":has(> .action_hover_container)").each(function() {
+    $(".ts-message").not(":has(> .action_hover_container)").each(function () {
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
             <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
             <i class="edit icon"></i> \
@@ -320,3 +320,36 @@ function serializeForm(_form) {
 
     return obj;
 }
+
+$("#channel_actions_toggle").click(function () {
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+
+    if (sidebar.hasClass("visible")) {
+        sidebar.removeClass("visible");
+    } else {
+        sidebar.addClass("visible");
+        $("#rightbar_Title").html("Chanel Setings");
+    }
+});
+
+
+$("#closerightbar").click(function() {
+    $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+});
+
+$(".ui.sidebar.vertical.inverted.right").sidebar("setting", {
+    transition: "overlay"
+});
+
+$("#details_toggle").click(function () {
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+
+    if (sidebar.hasClass("visible")) {
+        sidebar.removeClass("visible");
+    } else {
+        sidebar.addClass("visible");
+        $("#rightbar_Title").html("Chanel Details");
+    }
+});
+
+

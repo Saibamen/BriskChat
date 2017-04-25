@@ -28,7 +28,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
                     Email = $"{user}@test.com",
                     Password = "test",
                     Name = user,
-                    Domain = getDomainByName.Invoke($"{user}domain")
+                    Domain = getDomainByName.Invoke("jan")
                 };
 
                 var dbuser = addNewUser.Invoke(model);
@@ -43,7 +43,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
             {
                 var model = new DomainModel
                 {
-                    Name = $"jan",
+                    Name = "jan",
                 };
 
                 addNewDomain.Invoke(model);
