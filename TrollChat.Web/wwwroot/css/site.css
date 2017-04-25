@@ -7,30 +7,34 @@
     height: 100%;
 }
 
+.ui.message {
+    z-index: 99;
+}
+
 .hr {
-margin-bottom: 30px;
-margin-top: 30px;
+    margin-bottom: 30px;
+    margin-top: 30px;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
-padding-left: 15px;
-padding-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 html, body {
-height: 100%;
+    height: 100%;
 }
 
 body > .grid {
-height: 100%;
+    height: 100%;
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input,
 select,
 textarea {
-max-width: 280px;
+    max-width: 280px;
 }
 
 /*naglowek*/
@@ -44,7 +48,7 @@ max-width: 280px;
     font-size: 24px;
 }
 .ui.secondary.pointing.menu {
-   font-size: 17px;
+    font-size: 17px;
     color: #4A4A4A;
     font-family: sans-serif;
 
@@ -68,12 +72,11 @@ max-width: 280px;
     font-weight: 700;
 }
 .ui.inverted.vertical.footer.segment {
-margin-top: 10px;
-
-color: #4A4A4A;
-width:100%;
-background-color:whitesmoke;
-position:absolute;
+    margin-top: 10px;
+    color: #4A4A4A;
+    width:100%;
+    background-color:whitesmoke;
+    position:absolute;
 }
 
 /*własny przycisk*/
@@ -150,12 +153,12 @@ position:absolute;
     background-repeat: no-repeat;
     background-position: center;
 }
-.domainleftcolumn{
+.domainleftcolumn {
     top:35%;
 }
 .socloce {
-     padding-top: 0 !important;
-     padding-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }
 
 /* we wszystkich auth views*/
@@ -211,11 +214,11 @@ h1 {
     border: 2px solid #4CAF50;
 }
 .button1:hover {
-        background-color: #4CAF50;
-        color: white;
-    }
+    background-color: #4CAF50;
+    color: white;
+}
 /*validation*/
-.text-danger{
+.text-danger {
     text-align:left;
     color:orangered;
 }

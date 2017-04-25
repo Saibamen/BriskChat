@@ -18,8 +18,8 @@ namespace TrollChat.Web.Hubs
         private readonly IAddNewMessage addNewMessage;
         private readonly IGetUserRooms getUserRooms;
         private readonly IGetUserRoomByIds getUserRoomByIds;
-
         private readonly IGetUsersByDomainId getUsersByDomainId;
+
         private const string TimeStampRepresentation = "HH:mm";
 
         public ChannelHub(IAddNewRoom addNewRoom,
