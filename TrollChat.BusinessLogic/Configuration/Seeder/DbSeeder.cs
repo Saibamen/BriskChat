@@ -43,7 +43,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
             {
                 var model = new DomainModel
                 {
-                    Name = $"{user}domain",
+                    Name = $"jan",
                 };
 
                 addNewDomain.Invoke(model);

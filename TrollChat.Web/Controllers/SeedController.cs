@@ -14,20 +14,20 @@ namespace TrollChat.Web.Controllers
     {
         private readonly IAddNewUser addNewUser;
         private readonly IHostingEnvironment env;
-        private readonly IConfirmUserEmailByToken ConfirmUserEmailByToken;
+        private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
         private readonly IAddNewDomain addNewDomain;
         private readonly IGetUserByEmail getUserByEmail;
         private readonly IGetDomainByName getDomainByName;
 
         public SeedController(IAddNewUser addNewUser,
-            IConfirmUserEmailByToken ConfirmUserEmailByToken,
+            IConfirmUserEmailByToken confirmUserEmailByToken,
             IHostingEnvironment env,
             IAddNewDomain addNewDomain,
             IGetUserByEmail getUserByEmail,
             IGetDomainByName getDomainByName)
         {
             this.addNewUser = addNewUser;
-            this.ConfirmUserEmailByToken = ConfirmUserEmailByToken;
+            this.confirmUserEmailByToken = confirmUserEmailByToken;
             this.addNewDomain = addNewDomain;
             this.getUserByEmail = getUserByEmail;
             this.getDomainByName = getDomainByName;
@@ -38,7 +38,7 @@ namespace TrollChat.Web.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            new DbContextSeeder().Seed(addNewUser, ConfirmUserEmailByToken, addNewDomain, getUserByEmail, getDomainByName);
+            new DbContextSeeder().Seed(addNewUser, confirmUserEmailByToken, addNewDomain, getUserByEmail, getDomainByName);
 
             return Json("Database seeded");
         }
