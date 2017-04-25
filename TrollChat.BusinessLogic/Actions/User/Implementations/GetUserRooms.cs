@@ -16,7 +16,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementation
             this.userRepository = userRepository;
         }
 
-        public List<RoomModel> Invoke(Guid userId, bool isPrivateConversation)
+        public List<RoomModel> Invoke(Guid userId, bool isPrivateConversation = false)
         {
             var dbUser = userRepository.GetUserRooms(userId, isPrivateConversation);
 

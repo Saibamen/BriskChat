@@ -118,6 +118,12 @@ namespace TrollChat.Web.Controllers
         [HttpGet("login/{domainName}")]
         public IActionResult Login(string returnUrl, string domainName)
         {
+            if (string.IsNullOrEmpty(domainName))
+            {
+                Alert.Warning("You need to choose existing domain");
+                return RedirectToAction("ChooseDomain", "Auth");
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -179,7 +185,7 @@ namespace TrollChat.Web.Controllers
 
             Alert.Success("Logged out");
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
         [AllowAnonymous]

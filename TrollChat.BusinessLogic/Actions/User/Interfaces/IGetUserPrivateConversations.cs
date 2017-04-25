@@ -5,8 +5,8 @@ using TrollChat.BusinessLogic.Models;
 
 namespace TrollChat.BusinessLogic.Actions.User.Interfaces
 {
-    public interface IGetUserRooms : IAction
+    public interface IGetUserPrivateConversations : IAction
     {
-        List<RoomModel> Invoke(Guid userId, bool isPrivateConversation);
+        List<UserRoomModel> Invoke(Guid userId);
     }
 }

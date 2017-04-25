@@ -16,7 +16,7 @@ namespace TrollChat.BusinessLogic.Configuration.Seeder
             SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName);
         }
 
-        private readonly string[] users = { "owner", "user" };
+        private readonly string[] users = { "owner", "user", "user1" };
 
         public void SeedUsers(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,

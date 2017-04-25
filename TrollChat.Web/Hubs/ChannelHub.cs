@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
@@ -18,7 +21,9 @@ namespace TrollChat.Web.Hubs
         private readonly IAddNewMessage addNewMessage;
         private readonly IGetUserRooms getUserRooms;
         private readonly IGetUserRoomByIds getUserRoomByIds;
+        private readonly IAddNewPrivateConversation addNewPrivateConversation;
         private readonly IGetUsersByDomainId getUsersByDomainId;
+        private readonly IGetUserPrivateConversations getUserPrivateConversations;
 
         private const string TimeStampRepresentation = "HH:mm";
 
@@ -26,13 +31,17 @@ namespace TrollChat.Web.Hubs
             IAddNewMessage addNewMessage,
             IGetUserRoomByIds getUserRoomByIds,
             IGetUserRooms getUserRooms,
-            IGetUsersByDomainId getUsersByDomainId)
+            IGetUsersByDomainId getUsersByDomainId,
+            IAddNewPrivateConversation addNewPrivateConversation,
+            IGetUserPrivateConversations getUserPrivateConversations)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
             this.getUserRoomByIds = getUserRoomByIds;
             this.getUserRooms = getUserRooms;
             this.getUsersByDomainId = getUsersByDomainId;
+            this.addNewPrivateConversation = addNewPrivateConversation;
+            this.getUserPrivateConversations = getUserPrivateConversations;
         }
 
         public void GetRooms()
@@ -44,9 +53,18 @@ namespace TrollChat.Web.Hubs
 
         public void GetPrivateConversations()
         {
-            var roomList = getUserRooms.Invoke(Context.UserId(), true);
+            var roomList = getUserPrivateConversations.Invoke(Context.UserId());
+            var viewList = new List<PrivateConversationViewModel>();
+            foreach (var item in roomList)
+            {
+                viewList.Add(new PrivateConversationViewModel()
+                {
+                    Id = item.Id,
+                    UserName = item.User.Name,
+                });
+            }
 
-            Clients.Caller.loadPrivateConversations(roomList);
+            Clients.Caller.loadPrivateConversations(viewList);
         }
 
         public async Task JoinRoom(string roomId)
@@ -134,27 +152,23 @@ namespace TrollChat.Web.Hubs
 
         public void GetUsersFromDomain(string name)
         {
-            getUsersByDomainId.Invoke(Context.DomainId());
-            return;
+            var userList = getUsersByDomainId.Invoke(Context.DomainId());
+
+            // Clients.Caller.privateConversationsUsersLoadedAction(userList);
         }
 
         public void CreateNewPrivateConversation(CreateNewPrivateConversationViewModel model)
         {
-            if (string.IsNullOrEmpty(model.Name))
-            {
-                return;
-            }
-
+            model.Name = "private";
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewRoom.Invoke(roomModel, Context.UserId());
+            var room = addNewPrivateConversation.Invoke(roomModel, Context.UserId(), new Guid("24fbd6d8-048f-4ef6-5ead-08d48bd0a0e7"));
 
             if (room == Guid.Empty)
             {
                 return;
             }
 
-            //TODO: Add private conversation to sidebar
-            //  Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
+            Clients.Caller.privateConversationAddedAction(model.Name, room);
         }
 
         public void DeleteMessage(string roomId, int messageId)

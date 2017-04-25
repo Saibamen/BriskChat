@@ -149,13 +149,9 @@ myHub.client.loadPrivateConversations = function (result) {
     $.each(result,
         function (index, value) {
             var divToAppend = '<a class="item';
-
-            if (setActive) {
-                divToAppend += " active";
-            }
             divToAppend += '"data-id="' + value.Id + '" > ';
             divToAppend += '<i class="icon left">#</i>';
-            divToAppend += value.Name + "</a>";
+            divToAppend += value.UserName + "</a>";
 
             $("#privateConversationsMenu").append(divToAppend);
         });
@@ -185,14 +181,29 @@ myHub.client.privateConversationAddedAction = function (channelName, roomId) {
     loadingStop();
 }
 
+myHub.client.privateConversationsUsersLoadedAction = function (result) {
+    $.each(result,
+        function (index, value) {
+            var divToAppend = '<a class="item';
+
+            if (setActive) {
+                divToAppend += " active";
+            }
+            divToAppend += '"data-id="' + value.Id + '" > ';
+            divToAppend += '<i class="icon left">#</i>';
+            divToAppend += value.UserName + "</a>";
+
+            $("#privateConversationsMenu").append(divToAppend);
+        });
+}
+
 // Start the connection
 $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub. Getting rooms");
         // Getting rooms
-
         getRooms = myHub.server.getRooms();
-        //  getPrivateConversations = myHub.Server.getPrivateConversations();
+        getPrivateConversations = myHub.server.getPrivateConversations();
 
         $.when(getRooms).then(function () {
             // Joining to room
@@ -265,6 +276,7 @@ $("#createNewChannel").click(function () {
 
 $("#createNewPrivateConversation").click(function () {
     $("#createPrivateConversationForm")[0].reset();
+    myHub.server.getUsersFromDomain("123");
 
     thisModal = $(".ui.basic.create-private-conversation.modal");
 
