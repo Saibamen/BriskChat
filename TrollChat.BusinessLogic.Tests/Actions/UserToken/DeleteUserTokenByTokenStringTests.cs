@@ -15,12 +15,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             var guid = new Guid();
-            var userTokenFromDb = new DataAccess.Models.UserToken()
+            var userTokenFromDb = new DataAccess.Models.UserToken
             {
-                Id = guid,
+                Id = guid
             };
 
-            var findByResult = new List<DataAccess.Models.UserToken>() { userTokenFromDb };
+            var findByResult = new List<DataAccess.Models.UserToken> { userTokenFromDb };
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))

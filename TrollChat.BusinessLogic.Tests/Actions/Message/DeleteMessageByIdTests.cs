@@ -13,13 +13,13 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         {
             // prepare
             var guid = new Guid();
-            var MessageFromDb = new DataAccess.Models.Message()
+            var messageFromDb = new DataAccess.Models.Message
             {
                 Id = guid
             };
 
             var mockedMessageRepository = new Mock<IMessageRepository>();
-            mockedMessageRepository.Setup(r => r.GetById(guid)).Returns(MessageFromDb);
+            mockedMessageRepository.Setup(r => r.GetById(guid)).Returns(messageFromDb);
 
             var action = new DeleteMessageById(mockedMessageRepository.Object);
 

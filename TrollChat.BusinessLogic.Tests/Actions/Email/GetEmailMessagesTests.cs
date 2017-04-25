@@ -16,11 +16,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
             // prepare
-            var findByResult = new List<EmailMessage>()
+            var findByResult = new List<EmailMessage>
             {
-                new EmailMessage() { },
-                new EmailMessage() { },
-                new EmailMessage() { },
+                new EmailMessage(),
+                new EmailMessage(),
+                new EmailMessage()
             };
 
             var mockedEmailRepository = new Mock<IEmailRepository>();

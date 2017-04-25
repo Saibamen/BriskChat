@@ -14,7 +14,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         public void Invoke_ValidData_AddsEmailMessageToDatabaseWithCorrectValues()
         {
             //prepare
-            var emailMessage = new EmailMessageModel()
+            var emailMessage = new EmailMessageModel
             {
                 From = "from@from.from",
                 Recipient = "to@to.to",

@@ -16,7 +16,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
             var guid = new Guid();
-            var userTokenFromDb = new DataAccess.Models.UserToken()
+            var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 Id = guid,
                 SecretToken = "123",
@@ -24,10 +24,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
                 CreatedOn = DateTime.MinValue,
                 ModifiedOn = DateTime.MinValue,
                 DeletedOn = null,
-                User = new DataAccess.Models.User() { Name = "bob" },
+                User = new DataAccess.Models.User { Name = "bob" }
             };
 
-            var findByResult = new List<DataAccess.Models.UserToken>() { userTokenFromDb };
+            var findByResult = new List<DataAccess.Models.UserToken> { userTokenFromDb };
 
             // prepare
             var userTokenRepository = new Mock<IUserTokenRepository>();

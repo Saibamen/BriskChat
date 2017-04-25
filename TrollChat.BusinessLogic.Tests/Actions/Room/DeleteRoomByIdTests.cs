@@ -13,13 +13,13 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var guid = new Guid();
-            var RoomFromDb = new DataAccess.Models.Room()
+            var roomFromDb = new DataAccess.Models.Room
             {
                 Id = guid
             };
 
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            mockedRoomRepository.Setup(r => r.GetById(guid)).Returns(RoomFromDb);
+            mockedRoomRepository.Setup(r => r.GetById(guid)).Returns(roomFromDb);
 
             var action = new DeleteRoomById(mockedRoomRepository.Object);
 

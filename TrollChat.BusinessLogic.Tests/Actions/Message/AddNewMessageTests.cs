@@ -14,13 +14,13 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         {
             var messageData = new MessageModel
             {
-                Text = "Testmessage",
+                Text = "Testmessage"
             };
 
             DataAccess.Models.Message messageSaved = null;
             var mockedMessagerepository = new Mock<IMessageRepository>();
             mockedMessagerepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Message>()))
-            .Callback<DataAccess.Models.Message>(u => messageSaved = u);
+                .Callback<DataAccess.Models.Message>(u => messageSaved = u);
 
             var action = new AddNewMessage(mockedMessagerepository.Object);
 
@@ -37,13 +37,13 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         public void Invoke_InvalidData_AddNorSaveAreCalled()
         {
             // prepare
-            var MessageToAdd = new MessageModel();
+            var messageToAdd = new MessageModel();
             var mockedMessageRepository = new Mock<IMessageRepository>();
 
             var action = new AddNewMessage(mockedMessageRepository.Object);
 
             // action
-            var result = action.Invoke(MessageToAdd);
+            var result = action.Invoke(messageToAdd);
 
             // assert
             Assert.False(result);

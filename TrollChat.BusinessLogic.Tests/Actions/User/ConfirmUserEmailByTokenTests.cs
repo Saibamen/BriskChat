@@ -16,10 +16,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
-                EmailConfirmedOn = null,
+                EmailConfirmedOn = null
             };
 
             var userTokenFromDb = new DataAccess.Models.UserToken
@@ -58,17 +58,17 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
-                EmailConfirmedOn = null,
+                EmailConfirmedOn = null
             };
 
             var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 User = userFromDb,
                 SecretToken = "123",
-                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(-1),
+                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(-1)
             };
 
             DataAccess.Models.User userSaved = null;
@@ -102,10 +102,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // prepare
             DateTime dateNow = DateTime.UtcNow;
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
-                EmailConfirmedOn = dateNow,
+                EmailConfirmedOn = dateNow
             };
 
             var userTokenFromDb = new DataAccess.Models.UserToken
@@ -137,23 +137,23 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
-                EmailConfirmedOn = null,
+                EmailConfirmedOn = null
             };
 
             var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 User = userFromDb,
                 SecretToken = "123",
-                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(1),
+                SecretTokenTimeStamp = DateTime.UtcNow.AddDays(1)
             };
 
             DataAccess.Models.User userSaved = null;
 
             var getAllResults = new List<DataAccess.Models.UserToken> { userTokenFromDb };
-            var getSecondResult = new List<DataAccess.Models.UserToken> { };
+            var getSecondResult = new List<DataAccess.Models.UserToken>();
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             mockedUserTokenRepository.SetupSequence(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
