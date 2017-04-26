@@ -75,7 +75,7 @@ div {
     margin-right: 1em;
 }
 
-.ui .message {
+.ui.message {
     width: 86%;
     flex-shrink: 0;
     display: block;

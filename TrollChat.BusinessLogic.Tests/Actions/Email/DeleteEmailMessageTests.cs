@@ -14,7 +14,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         {
             // prepare
             var guid = new Guid();
-            var messageFromDb = new EmailMessage()
+            var messageFromDb = new EmailMessage
             {
                 Id = guid
             };

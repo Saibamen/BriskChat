@@ -28,11 +28,11 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
             foreach (var item in result)
             {
-                userList.Add(new UserModel()
+                userList.Add(new UserModel
                 {
                     Id = item.Id,
                     Name = item.Name,
-                    Email = item.Email,
+                    Email = item.Email
                 });
             }
 

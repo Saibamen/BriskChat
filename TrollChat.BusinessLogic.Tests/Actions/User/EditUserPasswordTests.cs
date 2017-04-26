@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
                 Name = "Name",
@@ -25,12 +25,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 PasswordSalt = "salt"
             };
 
-            var userToken = new DataAccess.Models.UserToken()
+            var userToken = new DataAccess.Models.UserToken
             {
                 SecretToken = "123"
             };
 
-            var findByResult = new List<DataAccess.Models.UserToken>() { userToken };
+            var findByResult = new List<DataAccess.Models.UserToken> { userToken };
 
             DataAccess.Models.User userSaved = null;
             var mockedUserRepository = new Mock<IUserRepository>();
@@ -73,12 +73,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_NoUser()
         {
             // prepare
-            var userToken = new DataAccess.Models.UserToken()
+            var userToken = new DataAccess.Models.UserToken
             {
                 SecretToken = "123"
             };
 
-            var findByResult = new List<DataAccess.Models.UserToken>() { userToken };
+            var findByResult = new List<DataAccess.Models.UserToken> { userToken };
 
             DataAccess.Models.User userSaved = null;
             var mockedUserRepository = new Mock<IUserRepository>();
@@ -115,8 +115,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User() { Id = guid };
+            var userFromDb = new DataAccess.Models.User { Id = guid };
             var mockedUserRepo = new Mock<IUserRepository>();
+
             mockedUserRepo.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(userFromDb);
 
@@ -142,7 +143,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
                 Name = "Name",

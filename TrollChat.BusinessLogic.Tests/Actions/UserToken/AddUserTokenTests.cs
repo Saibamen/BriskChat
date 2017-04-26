@@ -15,9 +15,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         [Fact]
         public void Invoke_ValidData_AddsUserToDatabaseWithCorrectValues()
         {
-            var user = new DataAccess.Models.User()
+            var user = new DataAccess.Models.User
             {
-                Name = "Ryszard",
+                Name = "Ryszard"
             };
 
             DataAccess.Models.UserToken tokensaved = null;
@@ -48,16 +48,14 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         [Fact]
         public void Invoke_ValidData_UserAlreadyHadToken()
         {
-            var user = new DataAccess.Models.User()
+            var user = new DataAccess.Models.User
             {
-                Name = "Ryszard",
+                Name = "Ryszard"
             };
 
-            var userTokenFromDatabase = new DataAccess.Models.UserToken()
-            {
-            };
+            var userTokenFromDatabase = new DataAccess.Models.UserToken();
 
-            var findByResult = new List<DataAccess.Models.UserToken>() { userTokenFromDatabase };
+            var findByResult = new List<DataAccess.Models.UserToken> { userTokenFromDatabase };
 
             DataAccess.Models.UserToken tokensaved = null;
 
@@ -70,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             mockedHasher.Setup(r => r.GenerateRandomGuid()).Returns("123");
 
             mockedUserTokenRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()))
-             .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
+                .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
 
             mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
                 .Returns(findByResult.AsQueryable());

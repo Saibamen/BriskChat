@@ -2,6 +2,7 @@
 using AutoMapper;
 using MimeKit;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.DataAccess.Models;
 
 namespace TrollChat.BusinessLogic.Configuration.Implementations
 {
@@ -18,6 +19,9 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
 
                 config.CreateMap<UserRoomModel, UserModel>().MaxDepth(1);
                 config.CreateMap<UserModel, UserRoomModel>().MaxDepth(1);
+
+                config.CreateMap<Domain, DomainModel>().MaxDepth(1);
+                config.CreateMap<DomainModel, Domain>().MaxDepth(1);
 
                 config.CreateMissingTypeMaps = true;
             });

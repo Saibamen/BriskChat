@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
             var guid = new Guid();
-            var userFromDb = new DataAccess.Models.User()
+            var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
                 Name = "Name",
@@ -22,7 +22,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 LockedOn = null,
                 CreatedOn = DateTime.MinValue,
                 ModifiedOn = DateTime.MinValue,
-                DeletedOn = null,
+                DeletedOn = null
             };
 
             // prepare

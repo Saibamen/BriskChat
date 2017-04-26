@@ -17,9 +17,9 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
         public EmailService(IOptions<EmailServiceCredentials> settings)
         {
             this.settings = settings;
-            client = new SmtpClient()
+            client = new SmtpClient
             {
-                ServerCertificateValidationCallback = (s, c, h, e) => true,
+                ServerCertificateValidationCallback = (s, c, h, e) => true
             };
 
             // Note: since we don't have an OAuth2 token, disable

@@ -14,13 +14,13 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // prepare
 
             var guid = new Guid();
-            var DomainFromDb = new DataAccess.Models.Domain()
+            var domainFromDb = new DataAccess.Models.Domain
             {
                 Id = guid
             };
 
             var mockedDomainRepository = new Mock<IDomainRepository>();
-            mockedDomainRepository.Setup(r => r.GetById(guid)).Returns(DomainFromDb);
+            mockedDomainRepository.Setup(r => r.GetById(guid)).Returns(domainFromDb);
 
             var action = new DeleteDomainById(mockedDomainRepository.Object);
 

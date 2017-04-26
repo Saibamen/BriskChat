@@ -50,18 +50,18 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var domainModel = new DomainModel()
+            var domainModel = new DomainModel
             {
                 Id = domain.Id,
                 Name = domain.Name
             };
 
-            var userModel = new UserModel()
+            var userModel = new UserModel
             {
                 Id = dbUser.Id,
                 Name = dbUser.Name,
                 Email = dbUser.Email,
-                Domain = domainModel,
+                Domain = domainModel
             };
 
             return userModel;

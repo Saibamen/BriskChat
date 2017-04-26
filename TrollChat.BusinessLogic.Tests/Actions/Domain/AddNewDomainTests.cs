@@ -23,7 +23,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             };
             var domainData = new DomainModel
             {
-                Name = "testdomain",
+                Name = "testdomain"
             };
 
             DataAccess.Models.Domain domainSaved = null;

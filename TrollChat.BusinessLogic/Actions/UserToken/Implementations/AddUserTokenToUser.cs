@@ -38,10 +38,10 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
                 userTokenRepository.Save();
             }
 
-            var userToken = new DataAccess.Models.UserToken()
+            var userToken = new DataAccess.Models.UserToken
             {
                 User = user,
-                SecretToken = hasher.GenerateRandomGuid(),
+                SecretToken = hasher.GenerateRandomGuid()
             };
 
             userTokenRepository.Add(userToken);

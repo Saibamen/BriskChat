@@ -15,9 +15,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             {
                 // prepare
                 var guid = new Guid();
-                var userTokenFromDb = new DataAccess.Models.UserToken()
+                var userTokenFromDb = new DataAccess.Models.UserToken
                 {
-                    Id = guid,
+                    Id = guid
                 };
 
                 var mockedUserTokenRepository = new Mock<IUserTokenRepository>();

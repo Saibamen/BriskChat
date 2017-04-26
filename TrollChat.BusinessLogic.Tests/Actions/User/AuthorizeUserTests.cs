@@ -16,13 +16,14 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ReturnsTrue()
         {
             // prepare
-            var dataUser = new DataAccess.Models.User()
+            var dataUser = new DataAccess.Models.User
             {
                 Email = "email@dot.com",
                 PasswordSalt = "salt-generated",
                 PasswordHash = "plain-hashed"
             };
-            var findByResult = new List<DataAccess.Models.User>() { dataUser };
+
+            var findByResult = new List<DataAccess.Models.User> { dataUser };
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable);
