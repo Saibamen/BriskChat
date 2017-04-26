@@ -72,18 +72,21 @@ var myHub = $.connection.channelHub;
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
-    // Leave current room
-    loadingStart();
-    myHub.server.leaveRoom(currentRoomId);
-    $(".menu > a.item.active").removeClass("active");
+    if (currentRoomId != $(e.target).data("id")) {
+        // Leave current room
+        loadingStart();
+        myHub.server.leaveRoom(currentRoomId);
+        $(".menu > a.item.active").removeClass("active");
 
-    currentRoomId = $(e.target).data("id");
+        currentRoomId = $(e.target).data("id");
 
-    $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
-        $(e.target).addClass("active");
-        loadingStop();
-        console.log("Current room ID: " + currentRoomId);
-    });
+        $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
+            $(e.target).addClass("active");
+            $("#channel_title").html($(e.target).html());
+            loadingStop();
+            console.log("Current room ID: " + currentRoomId);
+        });
+    }
 });
 
 // This deletes the message
