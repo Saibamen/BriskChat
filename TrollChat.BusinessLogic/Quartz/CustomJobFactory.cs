@@ -16,6 +16,7 @@ namespace TrollChat.BusinessLogic.Quartz
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             var item = container.GetService(bundle.JobDetail.JobType) as IJob;
+
             return item;
         }
 

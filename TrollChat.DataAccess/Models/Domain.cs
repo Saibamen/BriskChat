@@ -9,9 +9,11 @@ namespace TrollChat.DataAccess.Models
         public Domain()
         {
             Users = new HashSet<User>();
+            Rooms = new HashSet<Room>();
         }
 
         public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<Room> Rooms { get; set; }
 
         [Required]
         [Column(TypeName = "NVARCHAR(100)")]

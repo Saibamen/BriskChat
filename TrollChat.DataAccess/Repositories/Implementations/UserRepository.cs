@@ -36,7 +36,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                           join room in context.Set<Room>() on useroom.Room.Id equals room.Id
                           where user.Id == id
                           where room.IsPrivateConversation
-                          select new UserRoom()
+                          select new UserRoom
                           {
                               Id = useroom.Id,
                               User = user,
@@ -60,7 +60,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                           join user in context.Set<User>() on useroom.User.Id equals user.Id
                           where query1.Contains(room)
                           where useroom.User.Id != id
-                          select new UserRoom()
+                          select new UserRoom
                           {
                               Id = useroom.Id,
                               User = user,

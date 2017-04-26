@@ -43,6 +43,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
             IQueryable<T> query = context.Set<T>().Where(predicate).Where(x => x.DeletedOn == null);
+
             return !query.Any() ? Enumerable.Empty<T>().AsQueryable() : query;
         }
 
@@ -56,6 +57,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             DbSet<T> dbSet = context.Set<T>();
 
             IQueryable<T> query = null;
+
             foreach (var includeExpression in includeExpressions)
             {
                 query = dbSet.Include(includeExpression);

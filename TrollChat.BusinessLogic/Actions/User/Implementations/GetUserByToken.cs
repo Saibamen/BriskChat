@@ -22,6 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             }
 
             var result = userTokenRepository.FindBy(y => y.SecretToken == token).FirstOrDefault();
+
             if (result == null)
             {
                 return null;

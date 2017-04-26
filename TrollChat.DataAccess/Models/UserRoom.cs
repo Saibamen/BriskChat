@@ -13,9 +13,8 @@ namespace TrollChat.DataAccess.Models
             Tags = new HashSet<Tag>();
         }
 
-        [InverseProperty(nameof(Message.UserRoom))]
         public virtual ICollection<Message> Messages { get; set; }
-                
+
         public virtual ICollection<Tag> Tags { get; set; }
 
         [Required]
@@ -26,7 +25,6 @@ namespace TrollChat.DataAccess.Models
 
         public DateTime? LockedUntil { get; set; }
 
-        [InverseProperty(nameof(Message.LastMessageFor))]
         public Message LastMessage { get; set; }
     }
 }

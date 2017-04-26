@@ -55,9 +55,10 @@ namespace TrollChat.Web.Hubs
         {
             var roomList = getUserPrivateConversations.Invoke(Context.UserId());
             var viewList = new List<PrivateConversationViewModel>();
+
             foreach (var item in roomList)
             {
-                viewList.Add(new PrivateConversationViewModel()
+                viewList.Add(new PrivateConversationViewModel
                 {
                     Id = item.Id,
                     UserName = item.User.Name,
@@ -124,11 +125,11 @@ namespace TrollChat.Web.Hubs
                 UserRoom = userRoomModel
             };
 
-            var dbMessage = addNewMessage.Invoke(messageModel);
+            var dbMessageId = addNewMessage.Invoke(messageModel);
 
-            if (dbMessage)
+            if (dbMessageId != Guid.Empty)
             {
-                Clients.Group(roomId).broadcastMessage(Context.UserName(), message, chatTime);
+                Clients.Group(roomId).broadcastMessage(Context.UserName(), dbMessageId, message, chatTime);
             }
         }
 
@@ -140,14 +141,12 @@ namespace TrollChat.Web.Hubs
             }
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewRoom.Invoke(roomModel, Context.UserId());
+            var room = addNewRoom.Invoke(roomModel, Context.UserId(), Context.DomainId());
 
-            if (room == Guid.Empty)
+            if (room != Guid.Empty)
             {
-                return;
+                Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
             }
-
-            Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
         }
 
         public void GetUsersFromDomain(string name)
@@ -163,17 +162,15 @@ namespace TrollChat.Web.Hubs
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
             var room = addNewPrivateConversation.Invoke(roomModel, Context.UserId(), new Guid("24fbd6d8-048f-4ef6-5ead-08d48bd0a0e7"));
 
-            if (room == Guid.Empty)
+            if (room != Guid.Empty)
             {
-                return;
+                Clients.Caller.privateConversationAddedAction(model.Name, room);
             }
-
-            Clients.Caller.privateConversationAddedAction(model.Name, room);
         }
 
-        public void DeleteMessage(string roomId, int messageId)
+        public void DeleteMessage(string roomId, string messageId)
         {
-            if (string.IsNullOrEmpty(roomId.Trim()) || messageId <= 0)
+            if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(messageId.Trim()))
             {
                 return;
             }

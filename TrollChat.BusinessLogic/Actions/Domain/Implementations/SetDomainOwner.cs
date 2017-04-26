@@ -39,6 +39,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
             domainRepository.Edit(domain);
             domainRepository.Save();
+
             return true;
         }
     }

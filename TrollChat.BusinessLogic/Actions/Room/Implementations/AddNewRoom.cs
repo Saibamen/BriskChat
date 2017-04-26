@@ -23,14 +23,14 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             this.domainRepository = domainRepository;
         }
 
-        public Guid Invoke(RoomModel room, Guid userId)
+        public Guid Invoke(RoomModel room, Guid userId, Guid domainId)
         {
             if (!room.IsValid())
             {
                 return Guid.Empty;
             }
 
-            var domain = domainRepository.GetById(room.Domain.Id);
+            var domain = domainRepository.GetById(domainId);
 
             if (domain == null)
             {

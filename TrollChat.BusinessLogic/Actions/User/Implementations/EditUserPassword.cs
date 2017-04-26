@@ -40,6 +40,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                     userToEdit.PasswordSalt = salt;
 
                     var tokenToDelete = userTokenRepository.FindBy(x => x.User == userToEdit).FirstOrDefault();
+
                     if (tokenToDelete is null)
                     {
                         return false;
@@ -50,6 +51,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
                     userRepository.Edit(userToEdit);
                     userRepository.Save();
+
                     return true;
 
                 case null:
