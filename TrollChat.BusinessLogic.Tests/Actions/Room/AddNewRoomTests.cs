@@ -52,7 +52,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
-            action.Invoke(roomData, new Guid());
+            action.Invoke(roomData, new Guid(), new Guid());
 
             // assert
             Assert.Equal("TestTag", roomSaved.Tags.ElementAt(0).Name);
@@ -80,7 +80,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
-            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid());
+            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), new Guid());
 
             // assert
             Assert.Equal(Guid.Empty, actionResult);

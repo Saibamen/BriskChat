@@ -29,10 +29,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable);
-            var action = new GetUserByEmail(mockedUserRepository.Object);
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("email@dot.com");
+            var user = action.Invoke("email@dot.com", "");
 
             // check
             Assert.Equal(guid, user.Id);
@@ -49,10 +50,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable);
-            var action = new GetUserByEmail(mockedUserRepository.Object);
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("");
+            var user = action.Invoke("", "");
 
             // check
             Assert.Null(user);
@@ -67,10 +69,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable);
-            var action = new GetUserByEmail(mockedUserRepository.Object);
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("whatislove@wp.pl");
+            var user = action.Invoke("whatislove@wp.pl", "");
 
             // check
             Assert.Null(user);

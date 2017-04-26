@@ -161,7 +161,7 @@ namespace TrollChat.Web.Hubs
         {
             model.Name = "private";
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewPrivateConversation.Invoke(roomModel, Context.UserId(), new Guid("24fbd6d8-048f-4ef6-5ead-08d48bd0a0e7"));
+            var room = addNewPrivateConversation.Invoke(roomModel, Context.UserId(), model.SecondUserId);
 
             if (room == Guid.Empty)
             {

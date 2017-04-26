@@ -115,22 +115,29 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("login/{domainName}")]
+        [HttpGet("{domainName}/login")]
         public IActionResult Login(string returnUrl, string domainName)
         {
             if (string.IsNullOrEmpty(domainName))
             {
-                Alert.Warning("You need to choose existing domain");
+                Alert.Warning("Choose existing domain");
+                return RedirectToAction("ChooseDomain", "Auth");
+            }
+
+            if (!checkDomainExistsByName.Invoke(domainName))
+            {
+                Alert.Warning("Choose existing domain");
                 return RedirectToAction("ChooseDomain", "Auth");
             }
 
             ViewBag.ReturnUrl = returnUrl;
+            ViewBag.DomainName = domainName;
             return View();
         }
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [HttpPost("login/{domainName}")]
+        [HttpPost("{domainName}/login")]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             if (!ModelState.IsValid)
@@ -141,7 +148,6 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Check for user email confirmed
             var access = authenticateUser.Invoke(model.Email, model.Password, model.DomainName);
 
             if (access == null)
@@ -153,13 +159,12 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            //TODO: Create actual claims for Role
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, access.Name),
                 new Claim(ClaimTypes.Sid, access.Id.ToString()),
                 new Claim(ClaimTypes.Role, Role.User),
+                // TODO: MOVE TO CONST STRING
                 new Claim("DomainName", access.Domain.Name),
                 new Claim("DomainId", access.Domain.Id.ToString()),
             };
@@ -213,17 +218,23 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("resendconfirmationemail")]
-        public IActionResult ResendConfirmationEmail()
+        [HttpGet("{domainName}/resendconfirmationemail")]
+        public IActionResult ResendConfirmationEmail(string domainName)
         {
+            if (!checkDomainExistsByName.Invoke(domainName))
+            {
+                Alert.Warning("Choose existing domain");
+                return RedirectToAction("ChooseDomain", "Auth");
+            }
+
             return View();
         }
 
         [AllowAnonymous]
-        [HttpPost("resendconfirmationemail")]
+        [HttpPost("{domainName}/resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
         {
-            var user = getuserByEmail.Invoke(model.Email);
+            var user = getuserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -239,7 +250,9 @@ namespace TrollChat.Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = user.Tokens.FirstOrDefault().SecretToken },
+            var token = addUserTokenToUser.Invoke(user.Id);
+
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token },
                 Request.Scheme);
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
             var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
@@ -253,14 +266,20 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("resetpassword")]
-        public IActionResult ResetPasswordInitiation()
+        [HttpGet("{domainName}/resetpassword")]
+        public IActionResult ResetPasswordInitiation(string domainName)
         {
+            if (!checkDomainExistsByName.Invoke(domainName))
+            {
+                Alert.Warning("Choose existing domain");
+                return RedirectToAction("ChooseDomain", "Auth");
+            }
+
             return View();
         }
 
         [AllowAnonymous]
-        [HttpPost("resetpassword")]
+        [HttpPost("{domainName}/resetpassword")]
         public IActionResult ResetPasswordInitiation(ResetPasswordInitiationViewModel model)
         {
             if (!ModelState.IsValid)
@@ -270,7 +289,7 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getuserByEmail.Invoke(model.Email);
+            var user = getuserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -283,7 +302,7 @@ namespace TrollChat.Web.Controllers
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
                 Request.Scheme);
             var emailinfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("Reset Password", emailinfo);
+            var stringView = RenderViewToString<EmailBodyModel>("ResetPassword", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
@@ -308,7 +327,7 @@ namespace TrollChat.Web.Controllers
 
             if (user == null)
             {
-                Alert.Danger("You can't complete this action");
+                Alert.Danger("Invalid token");
 
                 return View("Error");
             }

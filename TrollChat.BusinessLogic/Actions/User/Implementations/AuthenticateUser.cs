@@ -33,7 +33,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             var domain = domainRepository.FindBy(x => x.Name == domainName).FirstOrDefault();
 
             var dbUser = userRepository.FindBy(x => x.Email == email
-            // && x.EmailConfirmedOn != null
+            && x.EmailConfirmedOn != null
             && x.Domain == domain
             ).FirstOrDefault();
 
