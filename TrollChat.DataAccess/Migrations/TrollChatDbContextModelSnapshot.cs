@@ -85,8 +85,6 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
-                    b.Property<Guid?>("LastMessageForId");
-
                     b.Property<DateTime>("ModifiedOn");
 
                     b.Property<string>("Text")
@@ -95,9 +93,6 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<Guid>("UserRoomId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LastMessageForId")
-                        .IsUnique();
 
                     b.HasIndex("UserRoomId");
 
@@ -275,6 +270,8 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.Property<DateTime?>("DeletedOn");
 
+                    b.Property<Guid?>("LastMessageId");
+
                     b.Property<DateTime?>("LockedUntil");
 
                     b.Property<DateTime>("ModifiedOn");
@@ -284,6 +281,8 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<Guid>("UserId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LastMessageId");
 
                     b.HasIndex("RoomId");
 
@@ -354,19 +353,16 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "LastMessageFor")
-                        .WithOne("LastMessage")
-                        .HasForeignKey("TrollChat.DataAccess.Models.Message", "LastMessageForId");
-
                     b.HasOne("TrollChat.DataAccess.Models.UserRoom", "UserRoom")
                         .WithMany("Messages")
-                        .HasForeignKey("UserRoomId");
+                        .HasForeignKey("UserRoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
-                        .WithMany()
+                        .WithMany("Rooms")
                         .HasForeignKey("DomainId");
 
                     b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
@@ -406,6 +402,10 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>
                 {
+                    b.HasOne("TrollChat.DataAccess.Models.Message", "LastMessage")
+                        .WithMany()
+                        .HasForeignKey("LastMessageId");
+
                     b.HasOne("TrollChat.DataAccess.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId");

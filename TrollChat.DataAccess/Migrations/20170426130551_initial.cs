@@ -111,35 +111,6 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserRooms",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    DeletedOn = table.Column<DateTime>(nullable: true),
-                    LockedUntil = table.Column<DateTime>(nullable: true),
-                    ModifiedOn = table.Column<DateTime>(nullable: false),
-                    RoomId = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserRooms", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserRooms_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_UserRooms_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "UserTokens",
                 columns: table => new
                 {
@@ -163,13 +134,42 @@ namespace TrollChat.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserRooms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    LastMessageId = table.Column<Guid>(nullable: true),
+                    LockedUntil = table.Column<DateTime>(nullable: true),
+                    ModifiedOn = table.Column<DateTime>(nullable: false),
+                    RoomId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRooms_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserRooms_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     DeletedOn = table.Column<DateTime>(nullable: true),
-                    LastMessageForId = table.Column<Guid>(nullable: true),
                     ModifiedOn = table.Column<DateTime>(nullable: false),
                     Text = table.Column<string>(nullable: false),
                     UserRoomId = table.Column<Guid>(nullable: false)
@@ -178,17 +178,11 @@ namespace TrollChat.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_UserRooms_LastMessageForId",
-                        column: x => x.LastMessageForId,
-                        principalTable: "UserRooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
                         name: "FK_Messages_UserRooms_UserRoomId",
                         column: x => x.UserRoomId,
                         principalTable: "UserRooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -288,12 +282,6 @@ namespace TrollChat.DataAccess.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_LastMessageForId",
-                table: "Messages",
-                column: "LastMessageForId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Messages_UserRoomId",
                 table: "Messages",
                 column: "UserRoomId");
@@ -337,6 +325,11 @@ namespace TrollChat.DataAccess.Migrations
                 name: "IX_Users_DomainId",
                 table: "Users",
                 column: "DomainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRooms_LastMessageId",
+                table: "UserRooms",
+                column: "LastMessageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRooms_RoomId",
@@ -391,6 +384,14 @@ namespace TrollChat.DataAccess.Migrations
                 principalTable: "Domains",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserRooms_Messages_LastMessageId",
+                table: "UserRooms",
+                column: "LastMessageId",
+                principalTable: "Messages",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -399,11 +400,20 @@ namespace TrollChat.DataAccess.Migrations
                 name: "FK_Domains_Users_OwnerId",
                 table: "Domains");
 
-            migrationBuilder.DropTable(
-                name: "EmailMessages");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Rooms_Users_OwnerId",
+                table: "Rooms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserRooms_Users_UserId",
+                table: "UserRooms");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Messages_UserRooms_UserRoomId",
+                table: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "EmailMessages");
 
             migrationBuilder.DropTable(
                 name: "Roles");
@@ -421,13 +431,16 @@ namespace TrollChat.DataAccess.Migrations
                 name: "Tags");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "UserRooms");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Domains");

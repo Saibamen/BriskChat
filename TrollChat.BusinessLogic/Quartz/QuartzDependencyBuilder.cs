@@ -9,7 +9,7 @@ namespace TrollChat.BusinessLogic.Quartz
         public static void Register(IServiceCollection services)
         {
             services.AddTransient<IJobFactory, CustomJobFactory>(provider => new CustomJobFactory(provider));
-            // TODO: Create automaitc dependency register if there will be too many jobs
+            // TODO: Create automatic dependency register if there will be too many jobs
             services.AddTransient<EmailUsersJob>();
         }
     }

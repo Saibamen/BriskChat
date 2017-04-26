@@ -12,7 +12,10 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
 
         public string CreatePasswordHash(string plaintext, string salt)
         {
-            if (string.IsNullOrEmpty(plaintext) || string.IsNullOrEmpty(salt)) return null;
+            if (string.IsNullOrEmpty(plaintext) || string.IsNullOrEmpty(salt))
+            {
+                return null;
+            }
 
             var byteArraySalt = Convert.FromBase64String(salt);
             var deriveBytes = new Rfc2898DeriveBytes(plaintext, byteArraySalt, Iterations);

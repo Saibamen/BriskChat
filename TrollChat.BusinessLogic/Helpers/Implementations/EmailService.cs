@@ -51,6 +51,7 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
                 client.Connect(settings.Value.Host, settings.Value.Port, settings.Value.UseSsl);
                 // Note: only needed if the SMTP server requires authentication
                 client.Authenticate(settings.Value.Login, settings.Value.Password);
+
                 return Task.FromResult(true);
             }
             catch
@@ -64,6 +65,7 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             try
             {
                 await client.DisconnectAsync(true);
+
                 return true;
             }
             catch
@@ -77,12 +79,14 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
             try
             {
                 await client.SendAsync(emailMessage);
+
                 return true;
             }
             // TODO: LOG failures
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
+
                 return false;
             }
         }

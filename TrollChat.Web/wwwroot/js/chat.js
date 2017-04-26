@@ -107,8 +107,8 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
         .modal("show");
 });
 
-myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
+myHub.client.broadcastMessage = function (userName, messageId, message, timestamp) {
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
 
     var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 

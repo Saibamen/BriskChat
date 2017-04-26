@@ -12,6 +12,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
         public void Register(IServiceCollection services)
         {
             var globalName = Assembly.GetEntryAssembly().GetName().Name;
+
             if (globalName.Contains('.'))
             {
                 // Reduce "Project.Web" to "Project"
@@ -38,7 +39,10 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                     // If interface of class inherits <T> register it
                     var interfaceToInject = implementationToInject.GetInterfaces().FirstOrDefault(myInterface => myInterface.GetInterfaces().Contains(typeof(T)));
 
-                    if (interfaceToInject == null) return;
+                    if (interfaceToInject == null)
+                    {
+                        return;
+                    }
 
                     services.AddScoped(interfaceToInject, implementationToInject);
                     mismatchList[interfaceToInject] = true;
@@ -46,12 +50,16 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                 });
             });
 
-            if (mismatchList.All(x => x.Value)) return;
+            if (mismatchList.All(x => x.Value))
+            {
+                return;
+            }
 
             foreach (var missing in mismatchList.Where(i => i.Value == false).Select(i => i.Key.Name))
             {
                 Debug.WriteLine($"Mismatch between interfaces and implementations for {typeof(T).Name}: {missing}");
             }
+
             // This error is thrown when a class isn't registered but its interface that inherits <T> exists
             throw new NotImplementedException();
         }
