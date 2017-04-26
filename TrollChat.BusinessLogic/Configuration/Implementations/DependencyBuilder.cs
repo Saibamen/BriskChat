@@ -12,52 +12,48 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
         public void Register(IServiceCollection services)
         {
             var globalName = Assembly.GetEntryAssembly().GetName().Name;
-            globalName = globalName.Substring(0, globalName.IndexOf(".", StringComparison.Ordinal));
+            if (globalName.Contains('.'))
+            {
+                // Reduce "Project.Web" to "Project"
+                globalName = globalName.Split('.')[0];
+            }
 
-            int countBeforeInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
-            int countGenericInterface = countBeforeInjection;
-            var list = new Dictionary<Type, bool>();
+            var mismatchList = new Dictionary<Type, bool>();
 
-            Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assemly => assemly.Name.StartsWith(globalName)).ToList().ForEach(assemblyType =>
+            Assembly.GetEntryAssembly().GetReferencedAssemblies().Where(assembly => assembly.Name.StartsWith(globalName)).ToList().ForEach(assemblyType =>
             {
                 // Find interfaces in assemblies
-                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
+                Assembly.Load(assemblyType).GetTypes().Where(assemblyInterface => assemblyInterface.GetTypeInfo().IsInterface).ToList().ForEach(myInterface =>
                 {
-                    // If interface inherits interface of type <T> increment counter
+                    // If interface inherits interface of type <T> add to list
                     if (myInterface.GetInterfaces().Contains(typeof(T)))
                     {
-                        countGenericInterface++;
-                        list.Add(myInterface, false);
+                        mismatchList.Add(myInterface, false);
                     }
                 });
 
                 // Find classes in assemblies
-                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementation =>
+                Assembly.Load(assemblyType).GetTypes().Where(assemblyClass => assemblyClass.GetTypeInfo().IsClass).ToList().ForEach(implementationToInject =>
                 {
-                    // If class's interface inherits <T> register it
-                    var myInterface = implementation.GetInterfaces().FirstOrDefault(Iimplementation => Iimplementation.GetInterfaces().Contains(typeof(T)));
+                    // If interface of class inherits <T> register it
+                    var interfaceToInject = implementationToInject.GetInterfaces().FirstOrDefault(myInterface => myInterface.GetInterfaces().Contains(typeof(T)));
 
-                    if (myInterface != null)
-                    {
-                        services.AddScoped(myInterface, implementation);
-                        list[myInterface] = true;
-                        Debug.WriteLine($"Registered {typeof(T).Name} interface {myInterface.Name} to {implementation.Name}");
-                    }
+                    if (interfaceToInject == null) return;
+
+                    services.AddScoped(interfaceToInject, implementationToInject);
+                    mismatchList[interfaceToInject] = true;
+                    Debug.WriteLine($"Registered {typeof(T).Name} interface {interfaceToInject.Name} to {implementationToInject.Name}");
                 });
             });
 
-            int countAfterInjection = services.Count(x => x.Lifetime == ServiceLifetime.Scoped && x.ServiceType.ToString().Contains(globalName));
+            if (mismatchList.All(x => x.Value)) return;
 
-            if (countGenericInterface != countAfterInjection)
+            foreach (var missing in mismatchList.Where(i => i.Value == false).Select(i => i.Key.Name))
             {
-                // This error is thrown when a class isn't registered but it's interface that inherits <T> exists
-                foreach (var missing in list.Where(i => i.Value == false).Select(i => i.Key.Name))
-                {
-                    Debug.WriteLine($"Mismatch between interfaces and implementations for {typeof(T).Name}: {missing}");
-                }
-
-                throw new NotImplementedException();
+                Debug.WriteLine($"Mismatch between interfaces and implementations for {typeof(T).Name}: {missing}");
             }
+            // This error is thrown when a class isn't registered but its interface that inherits <T> exists
+            throw new NotImplementedException();
         }
     }
 }

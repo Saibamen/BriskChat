@@ -31,36 +31,16 @@ namespace TrollChat.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(100)");
 
+                    b.Property<Guid?>("OwnerId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .HasName("Email");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Domains");
-                });
-
-            modelBuilder.Entity("TrollChat.DataAccess.Models.DomainRoom", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<Guid>("DomainId");
-
-                    b.Property<DateTime>("ModifiedOn");
-
-                    b.Property<Guid>("RoomId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DomainId");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("DomainRooms");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.EmailMessage", b =>
@@ -162,6 +142,8 @@ namespace TrollChat.DataAccess.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("NVARCHAR(100)");
 
+                    b.Property<Guid>("DomainId");
+
                     b.Property<bool>("IsPrivateConversation");
 
                     b.Property<bool>("IsPublic");
@@ -178,6 +160,8 @@ namespace TrollChat.DataAccess.Migrations
                         .HasColumnType("NVARCHAR(100)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DomainId");
 
                     b.HasIndex("OwnerId");
 
@@ -277,11 +261,7 @@ namespace TrollChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DomainId")
-                        .IsUnique();
-
-                    b.HasIndex("Email")
-                        .HasName("Email");
+                    b.HasIndex("DomainId");
 
                     b.ToTable("Users");
                 });
@@ -365,15 +345,11 @@ namespace TrollChat.DataAccess.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.DomainRoom", b =>
+            modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
+                    b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("DomainId");
-
-                    b.HasOne("TrollChat.DataAccess.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
@@ -389,6 +365,10 @@ namespace TrollChat.DataAccess.Migrations
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
                 {
+                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
+                        .WithMany()
+                        .HasForeignKey("DomainId");
+
                     b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
                         .WithMany("Rooms")
                         .HasForeignKey("OwnerId");
@@ -419,8 +399,9 @@ namespace TrollChat.DataAccess.Migrations
             modelBuilder.Entity("TrollChat.DataAccess.Models.User", b =>
                 {
                     b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
-                        .WithOne("Owner")
-                        .HasForeignKey("TrollChat.DataAccess.Models.User", "DomainId");
+                        .WithMany("Users")
+                        .HasForeignKey("DomainId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>

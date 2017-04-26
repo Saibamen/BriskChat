@@ -10,17 +10,29 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
         private readonly IRoomRepository roomRepository;
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
+        private readonly IDomainRepository domainRepository;
 
-        public AddNewRoom(IRoomRepository roomRepository, IUserRepository userRepository, IUserRoomRepository userRoomRepository)
+        public AddNewRoom(IRoomRepository roomRepository,
+            IUserRepository userRepository,
+            IUserRoomRepository userRoomRepository,
+            IDomainRepository domainRepository)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
+            this.domainRepository = domainRepository;
         }
 
         public Guid Invoke(RoomModel room, Guid userId)
         {
             if (!room.IsValid())
+            {
+                return Guid.Empty;
+            }
+
+            var domain = domainRepository.GetById(room.Domain.Id);
+
+            if (domain == null)
             {
                 return Guid.Empty;
             }
@@ -33,8 +45,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             }
 
             var newRoom = AutoMapper.Mapper.Map<DataAccess.Models.Room>(room);
-            newRoom.IsPublic = room.IsPublic;
             newRoom.Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
+            newRoom.Domain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
 
             roomRepository.Add(newRoom);
             roomRepository.Save();

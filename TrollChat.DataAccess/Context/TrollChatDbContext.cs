@@ -31,13 +31,13 @@ namespace TrollChat.DataAccess.Context
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            modelBuilder.Entity<User>()
+                .HasOne<Domain>(s => s.Domain)
+                .WithMany(s => s.Users);
+
             modelBuilder.Entity<UserToken>()
              .HasIndex(b => b.SecretToken)
              .HasName("SecretToken");
-
-            modelBuilder.Entity<User>()
-             .HasIndex(b => b.Email)
-             .HasName("Email");
 
             modelBuilder.Entity<Domain>()
             .HasIndex(b => b.Name)
@@ -66,7 +66,6 @@ namespace TrollChat.DataAccess.Context
         #region DbSet
 
         public DbSet<Domain> Domains { get; set; }
-        public DbSet<DomainRoom> DomainRooms { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Room> Rooms { get; set; }

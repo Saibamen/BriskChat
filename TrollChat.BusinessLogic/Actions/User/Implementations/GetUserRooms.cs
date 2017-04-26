@@ -5,7 +5,7 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementation
+namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserRooms : IGetUserRooms
     {

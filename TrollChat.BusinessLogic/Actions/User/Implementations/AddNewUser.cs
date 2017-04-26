@@ -31,8 +31,6 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             var newUser = AutoMapper.Mapper.Map<DataAccess.Models.User>(user);
             newUser.PasswordSalt = hasher.GenerateRandomSalt();
             newUser.PasswordHash = hasher.CreatePasswordHash(user.Password, newUser.PasswordSalt);
-            // Niepotrzebny null
-            newUser.Domain.Owner = null;
 
             userRepository.Add(newUser);
 

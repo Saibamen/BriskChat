@@ -47,8 +47,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(user);
 
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+            var mockedDomainRoomRepository = new Mock<IDomainRepository>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
             action.Invoke(roomData, new Guid());
@@ -73,10 +74,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var roomToAdd = new RoomModel();
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRepo = new Mock<IUserRepository>();
-
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+            var mockedDomainRoomRepository = new Mock<IDomainRepository>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
             var actionResult = action.Invoke(roomToAdd, Guid.NewGuid());

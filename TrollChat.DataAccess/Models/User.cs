@@ -22,9 +22,6 @@ namespace TrollChat.DataAccess.Models
         [Column(TypeName = "NVARCHAR(256)")]
         public string Email { get; set; }
 
-        [ForeignKey(nameof(Domain))]
-        public Guid DomainId { get; set; }
-
         [Required]
         public Domain Domain { get; set; }
 

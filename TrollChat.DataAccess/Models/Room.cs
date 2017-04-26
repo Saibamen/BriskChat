@@ -17,6 +17,9 @@ namespace TrollChat.DataAccess.Models
         public User Owner { get; set; }
 
         [Required]
+        public Domain Domain { get; set; }
+
+        [Required]
         [Column(TypeName = "NVARCHAR(100)")]
         public string Name { get; set; }
 

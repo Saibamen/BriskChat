@@ -6,6 +6,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Interfaces
 {
     public interface IAddNewPrivateConversation : IAction
     {
-        Guid Invoke(RoomModel room, Guid userId1, Guid userId2);
+        Guid Invoke(RoomModel room, Guid issuerUserId, Guid secondUserId);
     }
 }

@@ -6,6 +6,8 @@ namespace TrollChat.BusinessLogic.Models
     {
         public UserModel Owner { get; set; }
 
+        public DomainModel Domain { get; set; }
+
         public List<TagModel> Tags { get; set; }
 
         public List<UserModel> Users { get; set; }

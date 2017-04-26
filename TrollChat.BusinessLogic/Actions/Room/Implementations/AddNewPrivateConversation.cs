@@ -11,45 +11,58 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
         private readonly IRoomRepository roomRepository;
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
+        private readonly IDomainRepository domainRepository;
 
-        public AddNewPrivateConversation(IRoomRepository roomRepository, IUserRepository userRepository, IUserRoomRepository userRoomRepository)
+        public AddNewPrivateConversation(IRoomRepository roomRepository,
+            IUserRepository userRepository,
+            IUserRoomRepository userRoomRepository,
+            IDomainRepository domainRepository)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
+            this.domainRepository = domainRepository;
         }
 
-        public Guid Invoke(RoomModel room, Guid userId1, Guid userId2)
+        public Guid Invoke(RoomModel room, Guid issuerUserId, Guid secondUserId)
         {
-            if (!room.IsValid() || userId1 == userId2)
+            if (!room.IsValid() || issuerUserId == secondUserId)
             {
                 return Guid.Empty;
             }
 
-            var privateConversationList = userRepository.GetPrivateConversations(userId1);
+            var domain = domainRepository.GetById(room.Domain.Id);
 
-            if (privateConversationList.Any(x => x.User.Id == userId2))
+            if (domain == null)
             {
                 return Guid.Empty;
             }
 
-            var user1 = userRepository.GetById(userId1);
-            var user2 = userRepository.GetById(userId2);
+            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId);
 
-            if (user1 == null || user2 == null)
+            if (privateConversationList.Any(x => x.User.Id == secondUserId))
+            {
+                return Guid.Empty;
+            }
+
+            var issuerUser = userRepository.GetById(issuerUserId);
+            var secondUser = userRepository.GetById(secondUserId);
+
+            if (issuerUser == null || secondUser == null)
             {
                 return Guid.Empty;
             }
 
             var newRoom = AutoMapper.Mapper.Map<DataAccess.Models.Room>(room);
-            newRoom.Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(user1);
+            newRoom.Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(issuerUser);
+            newRoom.Domain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
             newRoom.IsPrivateConversation = true;
 
             roomRepository.Add(newRoom);
             roomRepository.Save();
 
-            var userRoom = new DataAccess.Models.UserRoom { User = user1, Room = newRoom };
-            var userRoom2 = new DataAccess.Models.UserRoom { User = user2, Room = newRoom };
+            var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
+            var userRoom2 = new DataAccess.Models.UserRoom { User = secondUser, Room = newRoom };
 
             userRoomRepository.Add(userRoom);
             userRoomRepository.Add(userRoom2);

@@ -5,15 +5,16 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
 {
     public class MigrationHelper : IMigrationHelper
     {
-        private readonly ITrollChatDbContext DbContext;
-        public MigrationHelper(ITrollChatDbContext DbContext)
+        private readonly ITrollChatDbContext dbContext;
+
+        public MigrationHelper(ITrollChatDbContext dbContext)
         {
-            this.DbContext = DbContext;
+            this.dbContext = dbContext;
         }
 
         public void Migrate()
         {
-            DbContext.PerformMigration();
+            dbContext.PerformMigration();
         }
     }
 }
