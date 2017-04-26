@@ -1,4 +1,5 @@
-﻿using TrollChat.BusinessLogic.Actions.Message.Interfaces;
+﻿using System;
+using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
@@ -13,11 +14,11 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             this.messageRepository = messageRepository;
         }
 
-        public bool Invoke(MessageModel message)
+        public Guid Invoke(MessageModel message)
         {
             if (!message.IsValid())
             {
-                return false;
+                return Guid.Empty;
             }
 
             var dbMessage = AutoMapper.Mapper.Map<DataAccess.Models.Message>(message);
@@ -25,7 +26,7 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             messageRepository.Add(dbMessage);
             messageRepository.Save();
 
-            return true;
+            return dbMessage.Id;
         }
     }
 }
