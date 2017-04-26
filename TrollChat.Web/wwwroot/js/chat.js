@@ -1,15 +1,20 @@
-﻿$(".ui.sidebar").sidebar("setting", {
+﻿$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
 $(document).on("reloadPopups", function () {
     $(".ts_tip").popup({
-    variation: "inverted"
+        variation: "inverted"
     });
 
     $(".item > .btn_unstyle.right").popup({
         variation: "inverted"
     });
+});
+
+var Autolinker = new Autolinker({
+    stripPrefix : false,
+    stripTrailingSlash : false
 });
 
 function loadingStart() {
@@ -25,7 +30,7 @@ function loadingStop() {
 }
 
 function addActionsToMessages() {
-    $(".ts-message").not(":has(> .action_hover_container)").each(function() {
+    $(".ts-message").not(":has(> .action_hover_container)").each(function () {
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
             <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
             <i class="edit icon"></i> \
@@ -72,18 +77,21 @@ var myHub = $.connection.channelHub;
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
-    // Leave current room
-    loadingStart();
-    myHub.server.leaveRoom(currentRoomId);
-    $(".menu > a.item.active").removeClass("active");
+    if (currentRoomId != $(e.target).data("id")) {
+        // Leave current room
+        loadingStart();
+        myHub.server.leaveRoom(currentRoomId);
+        $(".menu > a.item.active").removeClass("active");
 
-    currentRoomId = $(e.target).data("id");
+        currentRoomId = $(e.target).data("id");
 
-    $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
-        $(e.target).addClass("active");
-        loadingStop();
-        console.log("Current room ID: " + currentRoomId);
-    });
+        $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
+            $(e.target).addClass("active");
+            $("#channel_title").html($(e.target).html());
+            loadingStop();
+            console.log("Current room ID: " + currentRoomId);
+        });
+    }
 });
 
 // This deletes the message
@@ -100,7 +108,18 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    $("#chat_messages").append('<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
+    var messageHtml = '<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
+
+    var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch)
+    {
+        messageHtml += '</span><span class="message_body"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+    } else {
+        messageHtml += '</span></div></div>';
+    }
+
+    $("#chat_messages").append(messageHtml);
 
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
@@ -209,6 +228,8 @@ $.connection.hub.start()
             // Joining to room
             $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
                 console.log("Connected to room :)");
+                var firstChannelTitle = $(".menu > a.item.active");
+                $("#channel_title").html($(firstChannelTitle).html());
                 loadingStop();
 
                 $("#msg_form").keypress(function (e) {
@@ -332,3 +353,36 @@ function serializeForm(_form) {
 
     return obj;
 }
+
+$("#channel_actions_toggle").click(function () {
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+
+    if (sidebar.hasClass("visible")) {
+        sidebar.removeClass("visible");
+    } else {
+        sidebar.addClass("visible");
+        $("#rightbar_Title").html("Chanel Setings");
+    }
+});
+
+
+$("#closerightbar").click(function() {
+    $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+});
+
+$(".ui.sidebar.vertical.inverted.right").sidebar("setting", {
+    transition: "overlay"
+});
+
+$("#details_toggle").click(function () {
+    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+
+    if (sidebar.hasClass("visible")) {
+        sidebar.removeClass("visible");
+    } else {
+        sidebar.addClass("visible");
+        $("#rightbar_Title").html("Chanel Details");
+    }
+});
+
+
