@@ -12,6 +12,11 @@ $(document).on("reloadPopups", function () {
     });
 });
 
+var Autolinker = new Autolinker({
+    stripPrefix : false,
+    stripTrailingSlash : false
+});
+
 function loadingStart() {
     $(".ui.main.container").css("display", "none");
     $(".ui.dimmer").addClass("active");
@@ -103,7 +108,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message;
+    var messageHtml = '<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
 
     var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
