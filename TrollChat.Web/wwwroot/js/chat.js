@@ -103,7 +103,18 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
 });
 
 myHub.client.broadcastMessage = function (userName, message, timestamp) {
-    $("#chat_messages").append('<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message + '</span></div></div>');
+    var messageHtml = '<div class="ts-message" data-id="-----TODO-----"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + message;
+
+    var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch)
+    {
+        messageHtml += '</span><span class="message_body"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+    } else {
+        messageHtml += '</span></div></div>';
+    }
+
+    $("#chat_messages").append(messageHtml);
 
     // Scroll #chat_messages
     $("#chat_messages").clearQueue();
@@ -201,6 +212,8 @@ $.connection.hub.start()
             // Joining to room
             $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
                 console.log("Connected to room :)");
+                var firstChannelTitle = $(".menu > a.item.active");
+                $("#channel_title").html($(firstChannelTitle).html());
                 loadingStop();
 
                 $("#msg_form").keypress(function (e) {
