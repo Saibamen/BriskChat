@@ -13,8 +13,8 @@ $(document).on("reloadPopups", function () {
 });
 
 var Autolinker = new Autolinker({
-    stripPrefix : false,
-    stripTrailingSlash : false
+    stripPrefix: false,
+    stripTrailingSlash: false
 });
 
 function loadingStart() {
@@ -112,8 +112,7 @@ myHub.client.broadcastMessage = function (userName, message, timestamp) {
 
     var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
-    if (youTubeMatch)
-    {
+    if (youTubeMatch) {
         messageHtml += '</span><span class="message_body"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
     } else {
         messageHtml += '</span></div></div>';
@@ -365,24 +364,33 @@ $("#channel_actions_toggle").click(function () {
     }
 });
 
-
-$("#closerightbar").click(function() {
+$("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
 });
 
 $(".ui.sidebar.vertical.inverted.right").sidebar("setting", {
     transition: "overlay"
 });
-
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-        sidebar.removeClass("visible");
+            sidebar.removeClass("visible");
     } else {
         sidebar.addClass("visible");
-        $("#rightbar_Title").html("Chanel Details");
+        $("#Rrightbar").html("");
+        $("#Rrightbar").append('<div class="ui styled accordion">'+
+            '<div class="active title">Channel Details</div>' +
+            '<div class="active content">' +
+            '<div class="accordion">' +
+            '<div class="title">' +
+            '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
+            '<div class="content">' +
+            'Created by saibamen on March 31, 2017</div>' +
+            '<div class="title">' +
+            '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
+            '<div class="content">Members in channel: 1</div></div></div>');
+        $(".ui.styled.accordion").accordion();
     }
 });
-
 
