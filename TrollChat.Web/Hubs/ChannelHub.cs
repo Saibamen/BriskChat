@@ -55,6 +55,7 @@ namespace TrollChat.Web.Hubs
         {
             var roomList = getUserPrivateConversations.Invoke(Context.UserId());
             var viewList = new List<PrivateConversationViewModel>();
+
             foreach (var item in roomList)
             {
                 viewList.Add(new PrivateConversationViewModel()

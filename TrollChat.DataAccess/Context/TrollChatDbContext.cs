@@ -19,8 +19,7 @@ namespace TrollChat.DataAccess.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(
-                    "Data Source=(localdb)\\mssqllocaldb;Initial Catalog=TrollChat;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=TrollChat;Integrated Security=True;");
             }
         }
 
@@ -32,20 +31,24 @@ namespace TrollChat.DataAccess.Context
             }
 
             modelBuilder.Entity<User>()
-                .HasOne<Domain>(s => s.Domain)
+                .HasOne(s => s.Domain)
                 .WithMany(s => s.Users);
 
+            modelBuilder.Entity<Message>()
+                .HasOne(s => s.UserRoom)
+                .WithMany(s => s.Messages);
+
             modelBuilder.Entity<UserToken>()
-             .HasIndex(b => b.SecretToken)
-             .HasName("SecretToken");
+                .HasIndex(b => b.SecretToken)
+                .HasName("SecretToken");
 
             modelBuilder.Entity<Domain>()
-            .HasIndex(b => b.Name)
-            .HasName("Email");
+                .HasIndex(b => b.Name)
+                .HasName("Email");
 
             modelBuilder.Entity<Tag>()
-            .HasIndex(b => b.Name)
-            .HasName("Email");
+                .HasIndex(b => b.Name)
+                .HasName("Email");
         }
 
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity

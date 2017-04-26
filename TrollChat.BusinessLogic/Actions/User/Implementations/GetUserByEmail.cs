@@ -22,6 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             }
 
             var dbUser = userRepository.FindBy(x => x.Email == email).FirstOrDefault();
+
             if (dbUser == null)
             {
                 return null;

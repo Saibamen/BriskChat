@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TrollChat.DataAccess.Models
 {
@@ -8,11 +6,6 @@ namespace TrollChat.DataAccess.Models
     {
         [Required]
         public UserRoom UserRoom { get; set; }
-
-        [ForeignKey(nameof(LastMessageFor))]
-        public Guid? LastMessageForId { get; set; }
-
-        public UserRoom LastMessageFor { get; set; }
 
         [Required]
         public string Text { get; set; }
