@@ -140,7 +140,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewRoom.Invoke(roomModel, Context.UserId());
+            var room = addNewRoom.Invoke(roomModel, Context.UserId(), Context.DomainId());
 
             if (room == Guid.Empty)
             {
