@@ -25,12 +25,12 @@ function loadingStart() {
 function loadingStop() {
     $(".ui.main.container").css("display", "block");
     $(".ui.dimmer").removeClass("active");
-    console.log("loader stops");
+    console.log("Loader stops");
     addActionsToMessages();
 }
 
 function addActionsToMessages() {
-    $(".ts-message").not(":has(> .action_hover_container)").each(function () {
+    $(".ts-message").not(":has(> .action_hover_container), #message_edit_container").each(function () {
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
             <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
             <i class="edit icon"></i> \
@@ -92,6 +92,58 @@ $(".menu").on("click", ".menu > a.item", function (e) {
             console.log("Current room ID: " + currentRoomId);
         });
     }
+});
+
+function addEditContainer(id, oldMessageText) {
+    var divToAppend = '<div class="ts-message message highlight" id="message_edit_container">\
+            <div class="message_gutter">\
+                <div class="message_icon">\
+                    <a href="/team/saibamen" target="/team/saibamen" class=" member_preview_link member_image thumb_36" data-member-id="U4LLY4LSW" data-thumb-size="36" style="background-image: url(\'https://ca.slack-edge.com/T0MBAPD9S-U4LLY4LSW-6c900c6f67fc-48\')" aria-hidden="true" tabindex="-1"> </a>\
+                </div>\
+            </div>\
+            <form id="message_edit_form" data-id="'+ id +'">\
+                <button class="btn_unstyle emo_menu" aria-label="Emoji menu" type="button">\
+                    <i class="meh icon"></i>\
+                </button>\
+                <div id="msg_text" class="message_input ql-container focus">\
+                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>'+ oldMessageText +'</p></div>\
+                    <div class="ql-clipboard" tabindex="-1" aria-hidden="true" role="presentation" spellcheck="true" contenteditable="true"></div>\
+                </div>\
+                <a id="cancel_edit" role="button" class="ui button mini">Cancel</a>\
+                <a id="commit_edit" role="button" class="ui button mini positive"><i class="icon edit"></i>Save Changes</a>\
+                <span id="message_editing_info" class="mini" style="display: none;">Finish editing this message first! Or press <strong>escape</strong> if youve changed your mind.</span>\
+            </form>\
+        </div>';
+
+    return divToAppend;
+}
+
+// Editing message
+$("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']", function (e) {
+    var message = $(e.target).closest(".ts-message");
+    var messageId = message.data("id");
+    var oldMessageText = message.find(".message_body").text();
+
+    message.hide();
+    message.after(addEditContainer(messageId, oldMessageText));
+
+    // FIXME: Check click outside #message_edit_container
+
+    // Cancel
+    $(".ts-message").on("click", "#cancel_edit", function (x) {
+        $(x.target).closest("#message_edit_container").remove();
+        message.show();
+    });
+
+    // Save
+    $(".ts-message").on("click", "#commit_edit", function (x) {
+        if (oldMessageText == $(".ql-editor").text()) {
+            $(x.target).closest("#message_edit_container").remove();
+            message.show();
+        } else {
+            // TODO: Send edited message
+        }
+    });
 });
 
 // This deletes the message
