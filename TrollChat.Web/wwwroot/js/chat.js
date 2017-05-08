@@ -13,8 +13,8 @@ $(document).on("reloadPopups", function () {
 });
 
 var Autolinker = new Autolinker({
-    stripPrefix : false,
-    stripTrailingSlash : false
+    stripPrefix: false,
+    stripTrailingSlash: false
 });
 
 function loadingStart() {
@@ -174,6 +174,20 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 });
 
+$(".grid").on("click", ".private-conversation-row", function (e) {
+    var item;
+    if ($(e.target).hasClass(".private-conversation-row")) {
+        item = e.target;
+    } else {
+        item = $(e.target).closest(".private-conversation-row");
+    }
+    var append = $(item).data("name");
+    var id = $(item).data("id");
+    //var input = $("#createPrivateConversationForm :input[name='Name']");
+    var input = $("#inputtext");
+    input.before('<span class="private-conversation-tag" data-id="' + id + '">' + append + '</span>');
+});
+
 // This deletes the message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete']", function (e) {
     $(".ui.delete.modal")
@@ -273,7 +287,7 @@ myHub.client.loadPrivateConversations = function (result) {
             var divToAppend = '<a class="item';
             divToAppend += '"data-id="' + value.Id + '" > ';
             divToAppend += '<i class="icon left">#</i>';
-            divToAppend += value.UserName + "</a>";
+            divToAppend += value.Name + "</a>";
 
             $("#privateConversationsMenu").append(divToAppend);
         });
@@ -294,28 +308,33 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     loadingStop();
 }
 
-myHub.client.privateConversationAddedAction = function (channelName, roomId) {
-    var divToAppend = '<a class="item" data-id="' + roomId + '">';
+myHub.client.privateConversationAddedAction = function (value) {
+    var divToAppend = '<a class="item" data-id="' + value.Id + '">';
     divToAppend += '<i class="icon left">#</i>';
-    divToAppend += channelName + "</a>";
+    divToAppend += value.Name + "</a>";
     $("#privateConversationsMenu").append(divToAppend);
 
     loadingStop();
 }
 
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
+    $("#privateConversationsUserList").empty();
     $.each(result,
         function (index, value) {
-            var divToAppend = '<a class="item';
-
-            if (setActive) {
-                divToAppend += " active";
+            var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+            divToAppend +=
+                '<div class="eight wide column"><b>' + value.UserName + '</b> ';
+            if (value.IsOnline) {
+                divToAppend += '<i class="circle icon green"></i>';
+            } else {
+                divToAppend += '<i class="circle thin icon"></i>';
             }
-            divToAppend += '"data-id="' + value.Id + '" > ';
-            divToAppend += '<i class="icon left">#</i>';
-            divToAppend += value.UserName + "</a>";
+            divToAppend += value.Name + '</div>';
+            divToAppend += '<div class="four wide column"></div>';
+            divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+            divToAppend += '</div>';
 
-            $("#privateConversationsMenu").append(divToAppend);
+            $("#privateConversationsUserList").append(divToAppend);
         });
 }
 
@@ -375,6 +394,10 @@ $.connection.hub.reconnected(function () {
     loadingStop();
 });
 
+window.onbeforeunload = function () {
+    $.connection.hub.stop();
+};
+
 $("#createNewChannel").click(function () {
     $("#createChanelForm")[0].reset();
 
@@ -400,9 +423,16 @@ $("#createNewChannel").click(function () {
 
 $("#createNewPrivateConversation").click(function () {
     $("#createPrivateConversationForm")[0].reset();
-    myHub.server.getUsersFromDomain("123");
 
-    thisModal = $(".ui.basic.create-private-conversation.modal");
+    //remove all added tags
+    $("#createPrivateConversationForm").find('.private-conversation-tag').each(function (index, element) {
+        console.log(element);
+        $(element).remove();
+    });
+
+    myHub.server.getUsersFromDomain();
+
+    var thisModal = $(".ui.basic.create-private-conversation.modal");
 
     $(thisModal)
         .modal({
@@ -439,6 +469,20 @@ $("#createChanelForm").submit(function (e) {
     $(".ui.basic.create-room.modal").modal("hide");
 });
 
+$("#createPrivateConversationForm").submit(function (e) {
+    loadingStart();
+    e.preventDefault();
+    var list = [];
+    $("#createPrivateConversationForm").find('.private-conversation-tag').each(function (index, element) {
+        var item = $(element);
+        var id = $(item).data("id");
+        list.push(id);
+    });
+
+    myHub.server.createNewPrivateConversation(list);
+    $(".ui.basic.create-private-conversation.modal").modal("hide");
+});
+
 function updateChannelsCount(diff) {
     var number = $("#channelsCount").text().match(/\d+/);
     number = parseInt(number) + diff;
@@ -469,7 +513,7 @@ $("#channel_actions_toggle").click(function () {
 });
 
 
-$("#closerightbar").click(function() {
+$("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
 });
 
@@ -489,3 +533,6 @@ $("#details_toggle").click(function () {
 });
 
 
+$(document).on('click', '.private-conversation-tag', function () {
+    $(this).remove();
+});

@@ -46,7 +46,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var result = action.Invoke(messageToAdd);
 
             // assert
-            Assert.False(result);
+            Assert.Null(result);
             mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Never);
             mockedMessageRepository.Verify(r => r.Save(), Times.Never);
         }

@@ -4,6 +4,55 @@
     .ui.basic.create-private-conversation.modal {
         color: #000;
     }
+
+    .private-conversation-row {
+        border-style: solid;
+        border-width: 1px 0 0 0;
+        border-color: #E8E8E8;
+        margin: 0 0 0 15px;
+        padding: 0 0 0 0;
+    }
+
+        .private-conversation-row:hover {
+            border-radius: 5px;
+            background-color: #c4e5f2;
+        }
+
+            .private-conversation-row:hover .mycheckmark {
+                visibility: visible;
+            }
+
+    .mycheckmark {
+        visibility: hidden;
+    }
+
+    .private-conversation-tag {
+        margin-right: 2px;
+        background: #2D9EE0;
+        color: white;
+        text-align: center;
+        padding: 5px;
+        margin: 1px 1px 1px 1px;
+        display: inline-block;
+        border-radius: .2rem;
+    }
+
+    #inputtext 
+    {
+        border: 0;
+        display: inline-block;
+        padding: 5px;
+        width: auto;
+        min-width: 250px;
+    }
+
+    .inputholder
+    {
+        border: 1px solid rgba(34, 36, 38, 0.15);
+        border-radius: 0.28571429rem;
+        padding: 5px;
+    }
+
 </style>
 
 <div class="ui basic create-private-conversation modal">
@@ -15,7 +64,9 @@
         <div class="ui form">
             <div class="fields">
                 <div class="fourteen wide field">
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", required = "required" })
+                    <div class="inputholder" id="inputholder">
+                       @Html.TextBoxFor(m => m.Name, new {@class = "form-control", id= "inputtext", placeholder = "Find or start a conversation", autocomplete = "off" })
+                    </div>
                 </div>
                 <div class="two wide field">
                     <button class="ui button" form="createPrivateConversationForm" type="submit">
@@ -25,9 +76,10 @@
             </div>
         </div>
     }
-
-    <div class="container" id="privateConversationsUserList"></div>
-
+    </br>
+    <div class="ui grid" id="privateConversationsUserList">
+    </div>
+    </br>
     <div class="actions" style="text-align: right">
         <button class="ui cancel button ">
             <i class="remove icon"></i>
