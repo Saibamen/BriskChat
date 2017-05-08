@@ -538,7 +538,7 @@ button, input, textarea {
 .ts-message {
     display: block;
     width: 100%;
-    margin: 0 auto -.0625rem;
+    /*margin: 0 auto -.0625rem;*/
     position: relative;
     border-left: none;
     border-right: none;
@@ -625,6 +625,7 @@ button, input, textarea {
 
 #message_edit_container {
     padding-right: 1rem;
+    width: 87%;
 }
 
 .ts-message.highlight {
@@ -632,7 +633,7 @@ button, input, textarea {
 }
 
 #message_edit_container form {
-    margin-left: 72px;
+    margin-left: 72px !important;
 }
 
 #message_edit_container form {

@@ -172,6 +172,18 @@ namespace TrollChat.Web.Hubs
             }
         }
 
+        public void EditMessage(string roomId, string messageId, string message)
+        {
+            if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(messageId.Trim()) || string.IsNullOrEmpty(message.Trim()))
+            {
+                return;
+            }
+
+            // TODO: Check author and edit message in database
+
+            Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+        }
+
         public void DeleteMessage(string roomId, string messageId)
         {
             if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(messageId.Trim()))
