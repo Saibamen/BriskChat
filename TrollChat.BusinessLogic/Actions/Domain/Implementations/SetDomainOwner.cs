@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Domain.Implementations

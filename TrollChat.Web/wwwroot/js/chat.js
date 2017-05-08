@@ -25,12 +25,12 @@ function loadingStart() {
 function loadingStop() {
     $(".ui.main.container").css("display", "block");
     $(".ui.dimmer").removeClass("active");
-    console.log("loader stops");
+    console.log("Loader stops");
     addActionsToMessages();
 }
 
 function addActionsToMessages() {
-    $(".ts-message").not(":has(> .action_hover_container)").each(function () {
+    $(".ts-message").not(":has(> .action_hover_container), #message_edit_container").each(function () {
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
             <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
             <i class="edit icon"></i> \
@@ -94,6 +94,86 @@ $(".menu").on("click", ".menu > a.item", function (e) {
     }
 });
 
+function addEditContainer(id, oldMessageText, messageIcon) {
+    var divToAppend = '<div class="ts-message message highlight" id="message_edit_container">\
+            <div class="message_gutter">\
+                <div class="message_icon">\
+                    '+ messageIcon +'\
+                </div>\
+            </div>\
+            <form id="message_edit_form" data-id="'+ id +'">\
+                <button class="btn_unstyle emo_menu" aria-label="Emoji menu" type="button">\
+                    <i class="meh icon"></i>\
+                </button>\
+                <div id="msg_text" class="message_input ql-container focus">\
+                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>'+ oldMessageText +'</p></div>\
+                    <div class="ql-clipboard" tabindex="-1" aria-hidden="true" role="presentation" spellcheck="true" contenteditable="true"></div>\
+                </div>\
+                <a id="cancel_edit" role="button" class="ui button mini">Cancel</a>\
+                <a id="commit_edit" role="button" class="ui button mini positive"><i class="icon edit"></i>Save Changes</a>\
+                <span id="message_editing_info" class="mini" style="display: none;">Finish editing this message first! Or press <strong>escape</strong> if youve changed your mind.</span>\
+            </form>\
+        </div>';
+
+    return divToAppend;
+}
+
+// Editing message
+$("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']", function (e) {
+    var message = $(e.target).closest(".ts-message");
+    var messageId = message.data("id");
+    var oldMessageText = message.find(".message_body").text();
+
+    message.hide();
+    message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
+    $(".ql-editor").focus();
+
+    // FIXME: Check click outside #message_edit_container
+
+    // Cancel
+    $(".ts-message").on("click", "#cancel_edit", function (x) {
+        $(x.target).closest("#message_edit_container").remove();
+        message.show();
+    });
+
+    $(document).keydown(function (x) {
+        if (x.keyCode == 27) {
+            console.log("Escape keydown");
+            $(document).find("#message_edit_container").remove();
+            message.show();
+        }
+    });
+
+    $("#message_edit_form").keypress(function (x) {
+        if (x.which == 13) {
+            if (!x.shiftKey) {
+                if (oldMessageText != $(".ql-editor").text().trim()) {
+                    if (editedMessage = $(".ql-editor").text().trim()) {
+                        console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                        myHub.server.editMessage(currentRoomId, messageId, editedMessage);
+                    }
+                }
+
+                $(x.target).closest("#message_edit_container").remove();
+                message.show();
+            }
+        }
+    });
+
+    // Save
+    $(".ts-message").on("click", "#commit_edit", function (x) {
+        if (oldMessageText != $(".ql-editor").text().trim()) {
+            if (editedMessage = $(".ql-editor").text().trim()) {
+                console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                myHub.server.editMessage(currentRoomId, messageId, editedMessage);
+            }
+        }
+
+        $(x.target).closest("#message_edit_container").remove();
+        message.show();
+    });
+});
+
 // This deletes the message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete']", function (e) {
     $(".ui.delete.modal")
@@ -107,14 +187,37 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
         .modal("show");
 });
 
-myHub.client.broadcastMessage = function (userName, messageId, message, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
+myHub.client.broadcastEditedMessage = function (messageId, messageText) {
+    var message = $(".ts-message[data-id='" + messageId + "']");
+    var messageBodies = message.find(".message_body");
 
-    var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+    // Change text
+    messageBodies.first().html(Autolinker.link(messageText));
 
-    if (youTubeMatch)
-    {
-        messageHtml += '</span><span class="message_body"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+    var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch) {
+        var youtube_iframe_html = '<iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
+
+        if (messageBodies.last().hasClass("youtube_iframe")) {
+            messageBodies.last().html(youtube_iframe_html);
+        } else {
+            messageBodies.last().after(youtube_iframe_html);
+        }
+    } else if (messageBodies.last().hasClass("youtube_iframe")) {
+        messageBodies.last().hide("slow", function () {
+            messageBodies.last().remove();
+        });
+    }
+}
+
+myHub.client.broadcastMessage = function (userName, messageId, messageText, timestamp) {
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
+
+    var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch) {
+        messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
     } else {
         messageHtml += '</span></div></div>';
     }
@@ -227,7 +330,7 @@ $.connection.hub.start()
         $.when(getRooms).then(function () {
             // Joining to room
             $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
-                console.log("Connected to room :)");
+                console.log("Connected to room");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
                 loadingStop();

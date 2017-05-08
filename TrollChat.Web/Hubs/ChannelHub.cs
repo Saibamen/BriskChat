@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
@@ -24,6 +22,8 @@ namespace TrollChat.Web.Hubs
         private readonly IAddNewPrivateConversation addNewPrivateConversation;
         private readonly IGetUsersByDomainId getUsersByDomainId;
         private readonly IGetUserPrivateConversations getUserPrivateConversations;
+        private readonly IDeleteMessageById deleteMessageById;
+        private readonly IGetMessageById getMessageById;
 
         private const string TimeStampRepresentation = "HH:mm";
 
@@ -33,7 +33,9 @@ namespace TrollChat.Web.Hubs
             IGetUserRooms getUserRooms,
             IGetUsersByDomainId getUsersByDomainId,
             IAddNewPrivateConversation addNewPrivateConversation,
-            IGetUserPrivateConversations getUserPrivateConversations)
+            IGetUserPrivateConversations getUserPrivateConversations,
+            IDeleteMessageById deleteMessageById,
+            IGetMessageById getMessageById)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -42,6 +44,8 @@ namespace TrollChat.Web.Hubs
             this.getUsersByDomainId = getUsersByDomainId;
             this.addNewPrivateConversation = addNewPrivateConversation;
             this.getUserPrivateConversations = getUserPrivateConversations;
+            this.deleteMessageById = deleteMessageById;
+            this.getMessageById = getMessageById;
         }
 
         public void GetRooms()
@@ -80,7 +84,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
 
         public async Task LeaveRoom(string roomId)
@@ -95,7 +99,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
-            Clients.Group(roomId).broadcastMessage("TrollChat", $"{Context.UserName()} left this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
         public void SendMessage(string roomId, string message)
@@ -168,6 +172,18 @@ namespace TrollChat.Web.Hubs
             }
         }
 
+        public void EditMessage(string roomId, string messageId, string message)
+        {
+            if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(messageId.Trim()) || string.IsNullOrEmpty(message.Trim()))
+            {
+                return;
+            }
+
+            // TODO: Check author and edit message in database
+
+            Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+        }
+
         public void DeleteMessage(string roomId, string messageId)
         {
             if (string.IsNullOrEmpty(roomId.Trim()) || string.IsNullOrEmpty(messageId.Trim()))
@@ -175,9 +191,20 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // TODO: Check author and delete from database
+            // TODO: Check author
+            /*var message = getMessageById.Invoke(new Guid(messageId));
 
-            Clients.Group(roomId).deleteMessage(messageId);
+            if (message.UserRoom.User.Id != Context.UserId())
+            {
+                return;
+            }*/
+
+            var deleted = deleteMessageById.Invoke(new Guid(messageId));
+
+            if (deleted)
+            {
+                Clients.Group(roomId).deleteMessage(messageId);
+            }
         }
     }
 }
