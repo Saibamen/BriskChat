@@ -24,6 +24,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetUserPrivateConversations getUserPrivateConversations;
         private readonly IDeleteMessageById deleteMessageById;
         private readonly IGetMessageById getMessageById;
+        private readonly IEditMessageById editMessageById;
 
         private const string TimeStampRepresentation = "HH:mm";
 
@@ -35,7 +36,8 @@ namespace TrollChat.Web.Hubs
             IAddNewPrivateConversation addNewPrivateConversation,
             IGetUserPrivateConversations getUserPrivateConversations,
             IDeleteMessageById deleteMessageById,
-            IGetMessageById getMessageById)
+            IGetMessageById getMessageById,
+            IEditMessageById editMessageById)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -46,6 +48,7 @@ namespace TrollChat.Web.Hubs
             this.getUserPrivateConversations = getUserPrivateConversations;
             this.deleteMessageById = deleteMessageById;
             this.getMessageById = getMessageById;
+            this.editMessageById = editMessageById;
         }
 
         public void GetRooms()
@@ -179,9 +182,14 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // TODO: Check author and edit message in database
+            // TODO: Check author
 
-            Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+            var edited = editMessageById.Invoke(new Guid(messageId), message);
+
+            if (edited)
+            {
+                Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+            }
         }
 
         public void DeleteMessage(string roomId, string messageId)
