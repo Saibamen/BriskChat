@@ -18,16 +18,22 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
         public List<UserRoomModel> Invoke(Guid userId)
         {
-            var dbUser = userRepository.GetPrivateConversations(userId);
+            var dbUserRoom = userRepository.GetPrivateConversations(userId);
 
-            if (dbUser == null)
+            if (dbUserRoom == null)
             {
                 return null;
             }
 
-            var user = AutoMapper.Mapper.Map<List<UserRoomModel>>(dbUser);
+            var userRoomList = new List<UserRoomModel>();
 
-            return user;
+            foreach (var item in dbUserRoom)
+            {
+                var newItem = AutoMapper.Mapper.Map<UserRoomModel>(item);
+                userRoomList.Add(newItem);
+            }
+
+            return userRoomList;
         }
     }
 }

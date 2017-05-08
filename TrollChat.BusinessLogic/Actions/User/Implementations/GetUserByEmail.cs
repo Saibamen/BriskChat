@@ -8,21 +8,29 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
     public class GetUserByEmail : IGetUserByEmail
     {
         private readonly IUserRepository userRepository;
+        private readonly IDomainRepository domainRepository;
 
-        public GetUserByEmail(IUserRepository userRepository)
+        public GetUserByEmail(IUserRepository userRepository, IDomainRepository domainRepository)
         {
             this.userRepository = userRepository;
+            this.domainRepository = domainRepository;
         }
 
-        public UserModel Invoke(string email)
+        public UserModel Invoke(string email, string domainName)
         {
             if (string.IsNullOrEmpty(email))
             {
                 return null;
             }
 
-            var dbUser = userRepository.FindBy(x => x.Email == email).FirstOrDefault();
+            var domain = domainRepository.FindBy(x => x.Name == domainName).FirstOrDefault();
 
+            if (domain == null)
+            {
+                return null;
+            }
+
+            var dbUser = userRepository.FindBy(x => x.Email == email && x.Domain == domain).FirstOrDefault();
             if (dbUser == null)
             {
                 return null;

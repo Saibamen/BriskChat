@@ -5,6 +5,6 @@ namespace TrollChat.BusinessLogic.Actions.User.Interfaces
 {
     public interface IGetUserByEmail : IAction
     {
-        UserModel Invoke(string email);
+        UserModel Invoke(string email, string domainName);
     }
 }

@@ -34,7 +34,7 @@
         }
         <br />
         <div>
-            <a href="@Url.Action("ResendConfirmationEmail", "Auth")">Resend confirmation email?</a>
+            <a href="@Url.Action("ResendConfirmationEmail", "Auth", new { domainName = ViewBag.DomainName })">Resend confirmation email?</a>
         </div>
         <div>
             <a href="@Url.Action("ResetPasswordInitiation", "Auth")">Reset password</a>
