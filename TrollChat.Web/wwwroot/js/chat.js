@@ -94,11 +94,11 @@ $(".menu").on("click", ".menu > a.item", function (e) {
     }
 });
 
-function addEditContainer(id, oldMessageText) {
+function addEditContainer(id, oldMessageText, messageIcon) {
     var divToAppend = '<div class="ts-message message highlight" id="message_edit_container">\
             <div class="message_gutter">\
                 <div class="message_icon">\
-                    <a href="/team/saibamen" target="/team/saibamen" class=" member_preview_link member_image thumb_36" data-member-id="U4LLY4LSW" data-thumb-size="36" style="background-image: url(\'https://ca.slack-edge.com/T0MBAPD9S-U4LLY4LSW-6c900c6f67fc-48\')" aria-hidden="true" tabindex="-1"> </a>\
+                    '+ messageIcon +'\
                 </div>\
             </div>\
             <form id="message_edit_form" data-id="'+ id +'">\
@@ -125,7 +125,8 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     var oldMessageText = message.find(".message_body").text();
 
     message.hide();
-    message.after(addEditContainer(messageId, oldMessageText));
+    message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
+    $(".ql-editor").focus();
 
     // FIXME: Check click outside #message_edit_container
 
@@ -135,14 +136,41 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
         message.show();
     });
 
+    $(document).keydown(function (x) {
+        if (x.keyCode == 27) {
+            console.log("Escape keydown");
+            $(document).find("#message_edit_container").remove();
+            message.show();
+        }
+    });
+
+    $("#message_edit_form").keypress(function (x) {
+        if (x.which == 13) {
+            if (!x.shiftKey) {
+                if (oldMessageText != $(".ql-editor").text().trim()) {
+                    if (editedMessage = $(".ql-editor").text().trim()) {
+                        console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                        myHub.server.editMessage(currentRoomId, messageId, editedMessage);
+                    }
+                }
+
+                $(x.target).closest("#message_edit_container").remove();
+                message.show();
+            }
+        }
+    });
+
     // Save
     $(".ts-message").on("click", "#commit_edit", function (x) {
-        if (oldMessageText == $(".ql-editor").text()) {
-            $(x.target).closest("#message_edit_container").remove();
-            message.show();
-        } else {
-            // TODO: Send edited message
+        if (oldMessageText != $(".ql-editor").text().trim()) {
+            if (editedMessage = $(".ql-editor").text().trim()) {
+                console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                myHub.server.editMessage(currentRoomId, messageId, editedMessage);
+            }
         }
+
+        $(x.target).closest("#message_edit_container").remove();
+        message.show();
     });
 });
 
@@ -159,14 +187,37 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete
         .modal("show");
 });
 
-myHub.client.broadcastMessage = function (userName, messageId, message, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(message);
+myHub.client.broadcastEditedMessage = function (messageId, messageText) {
+    var message = $(".ts-message[data-id='" + messageId + "']");
+    var messageBodies = message.find(".message_body");
 
-    var youTubeMatch = message.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+    // Change text
+    messageBodies.first().html(Autolinker.link(messageText));
 
-    if (youTubeMatch)
-    {
-        messageHtml += '</span><span class="message_body"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+    var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch) {
+        var youtube_iframe_html = '<iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
+
+        if (messageBodies.last().hasClass("youtube_iframe")) {
+            messageBodies.last().html(youtube_iframe_html);
+        } else {
+            messageBodies.last().after(youtube_iframe_html);
+        }
+    } else if (messageBodies.last().hasClass("youtube_iframe")) {
+        messageBodies.last().hide("slow", function () {
+            messageBodies.last().remove();
+        });
+    }
+}
+
+myHub.client.broadcastMessage = function (userName, messageId, messageText, timestamp) {
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
+
+    var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+    if (youTubeMatch) {
+        messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
     } else {
         messageHtml += '</span></div></div>';
     }
@@ -279,7 +330,7 @@ $.connection.hub.start()
         $.when(getRooms).then(function () {
             // Joining to room
             $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
-                console.log("Connected to room :)");
+                console.log("Connected to room");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
                 loadingStop();
