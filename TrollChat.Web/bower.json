@@ -6,11 +6,12 @@
     "jquery-validation": "1.16.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "semantic": "Semantic-UI#2.2.10",
-    "signalr": "v2.2.1",
+    "signalr": "v2.2.2",
     "Autolinker.js": "1.4.3"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",
-    "jquery": "3.2.1"
+    "jquery": "3.2.1",
+    "signalr": "v2.2.2"
   }
 }
