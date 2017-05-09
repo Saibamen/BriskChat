@@ -20,6 +20,12 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                 config.CreateMap<UserRoomModel, UserRoom>().MaxDepth(1);
                 config.CreateMap<UserRoom, UserRoomModel>().MaxDepth(1);
 
+                config.CreateMap<RoomModel, Room>().MaxDepth(1);
+                config.CreateMap<Room, RoomModel>().MaxDepth(1);
+
+                config.CreateMap<UserModel, User>().MaxDepth(1);
+                config.CreateMap<User, UserModel>().MaxDepth(1);
+
                 config.CreateMap<Domain, DomainModel>().MaxDepth(1);
                 config.CreateMap<DomainModel, Domain>().MaxDepth(1);
 

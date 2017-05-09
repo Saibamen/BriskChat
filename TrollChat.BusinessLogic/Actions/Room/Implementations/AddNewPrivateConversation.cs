@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
@@ -24,51 +25,81 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             this.domainRepository = domainRepository;
         }
 
-        public Guid Invoke(RoomModel room, Guid issuerUserId, Guid secondUserId)
+        public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
         {
-            if (!room.IsValid() || issuerUserId == secondUserId)
+            //Check if users wants to create a conversation with himself
+            if (users.Any(x => x.Equals(issuerUserId)))
             {
-                return Guid.Empty;
+                return null;
             }
 
-            var domain = domainRepository.GetById(room.Domain.Id);
+            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId).ToList();
 
-            if (domain == null)
+            var listRoom = privateConversationList.Select(x => x.Room).Distinct();
+
+            //check if private conversation already exists
+            foreach (var room in listRoom)
             {
-                return Guid.Empty;
-            }
-
-            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId);
-
-            if (privateConversationList.Any(x => x.User.Id == secondUserId))
-            {
-                return Guid.Empty;
+                var userRoomsList = privateConversationList.Where(x => x.Room == room);
+                var dict = new Dictionary<DataAccess.Models.UserRoom, bool>();
+                foreach (var connection in userRoomsList)
+                {
+                    dict.Add(connection, false);
+                    if (users.Any(x => x.Equals(connection.User.Id)))
+                    {
+                        dict[connection] = true;
+                    }
+                }
+                if (dict.All(x => x.Value))
+                {
+                    return null;
+                }
             }
 
             var issuerUser = userRepository.GetById(issuerUserId);
-            var secondUser = userRepository.GetById(secondUserId);
+            // create repostiory metehod for that?
+            var userList = userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
 
-            if (issuerUser == null || secondUser == null)
+            if (issuerUser == null)
             {
-                return Guid.Empty;
+                return null;
             }
 
-            var newRoom = AutoMapper.Mapper.Map<DataAccess.Models.Room>(room);
-            newRoom.Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(issuerUser);
-            newRoom.Domain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
-            newRoom.IsPrivateConversation = true;
+            var roomName = "";
+
+            foreach (var item in userList)
+            {
+                roomName += item.Name + ",";
+            }
+
+            roomName += issuerUser.Name;
+
+            var userDomain = domainRepository.GetDomainByUserId(issuerUser.Id);
+
+            var newRoom = new DataAccess.Models.Room
+            {
+                Name = roomName,
+                Owner = AutoMapper.Mapper.Map<DataAccess.Models.User>(issuerUser),
+                Domain = userDomain,
+                IsPrivateConversation = true
+            };
 
             roomRepository.Add(newRoom);
             roomRepository.Save();
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
-            var userRoom2 = new DataAccess.Models.UserRoom { User = secondUser, Room = newRoom };
-
             userRoomRepository.Add(userRoom);
-            userRoomRepository.Add(userRoom2);
+            foreach (var user in userList)
+            {
+                var userRoom2 = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
+                userRoomRepository.Add(userRoom2);
+            }
+
             userRoomRepository.Save();
 
-            return newRoom.Id;
+            var returnRoom = AutoMapper.Mapper.Map<RoomModel>(newRoom);
+
+            return returnRoom;
         }
     }
 }
