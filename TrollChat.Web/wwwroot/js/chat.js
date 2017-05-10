@@ -75,6 +75,11 @@ currentRoomId = 0;
 $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
+$("#channelsCount").click(function () {
+    console.log("Click na licznik kanałów");
+    myHub.server.getDomainPublicRooms();
+});
+
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
     if (currentRoomId != $(e.target).data("id")) {
@@ -256,6 +261,32 @@ myHub.client.deleteMessage = function (messageId) {
 }
 
 myHub.client.loadRooms = function (result) {
+    var setActive = true;
+    $("#channelsCount").text("CHANNELS (" + result.length + ")");
+
+    $.each(result, function (index, value) {
+        var divToAppend = '<a class="item';
+
+        if (setActive) {
+            divToAppend += " active";
+            setActive = false;
+            currentRoomId = value.Id;
+        }
+
+        divToAppend += '"data-id="' + value.Id + '" > ';
+
+        if (value.IsPublic) {
+            divToAppend += '<i class="icon left">#</i>';
+        } else {
+            divToAppend += '<i class="lock icon left"></i>'
+        }
+
+        divToAppend += value.Name + "</a>";
+        $("#channelsMenu").append(divToAppend);
+    });
+}
+
+myHub.client.loadDomainPublicRooms = function (result) {
     var setActive = true;
     $("#channelsCount").text("CHANNELS (" + result.length + ")");
 
