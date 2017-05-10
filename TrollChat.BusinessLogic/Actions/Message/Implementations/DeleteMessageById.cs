@@ -15,6 +15,11 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
 
         public bool Invoke(Guid messageId)
         {
+            if (messageId == Guid.Empty)
+            {
+                return false;
+            }
+
             var messageToDelete = messageRepository.GetById(messageId);
 
             if (messageToDelete == null)

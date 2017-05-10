@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using System;
+using Moq;
 using TrollChat.BusinessLogic.Actions.Message.Implementations;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -46,7 +47,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var result = action.Invoke(messageToAdd);
 
             // assert
-            Assert.Null(result);
+            Assert.Equal(Guid.Empty, result);
             mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Never);
             mockedMessageRepository.Verify(r => r.Save(), Times.Never);
         }

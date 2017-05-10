@@ -16,6 +16,11 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
 
         public MessageModel Invoke(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return null;
+            }
+
             var dbMessage = messageRepository.GetById(id);
 
             if (dbMessage == null)

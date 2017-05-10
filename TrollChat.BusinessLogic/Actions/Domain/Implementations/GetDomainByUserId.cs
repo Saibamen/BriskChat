@@ -17,6 +17,11 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
         public DomainModel Invoke(Guid userGuid)
         {
+            if (userGuid == Guid.Empty)
+            {
+                return null;
+            }
+
             var result = domainRepository.FindBy(x => x.Users.Any(y => y.Id == userGuid)).FirstOrDefault();
 
             if (result == null)

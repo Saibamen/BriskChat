@@ -14,7 +14,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             public void Invoke_ValidData_DeleteAndSaveAreCalled()
             {
                 // prepare
-                var guid = new Guid();
+                var guid = Guid.NewGuid();
                 var userTokenFromDb = new DataAccess.Models.UserToken
                 {
                     Id = guid

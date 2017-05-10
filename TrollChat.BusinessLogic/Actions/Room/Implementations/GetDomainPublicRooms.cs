@@ -18,6 +18,11 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public List<RoomModel> Invoke(Guid domainId)
         {
+            if (domainId == Guid.Empty)
+            {
+                return null;
+            }
+
             var dbRooms = roomRepository.FindBy(x => x.Domain.Id == domainId && x.IsPublic).ToList();
 
             if (!dbRooms.Any())

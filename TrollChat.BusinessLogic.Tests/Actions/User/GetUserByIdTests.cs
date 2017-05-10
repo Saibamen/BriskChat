@@ -12,7 +12,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,

@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var messageFromDb = new EmailMessage
             {
                 Id = guid

@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
         {
             // prepare
 
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var domainFromDb = new DataAccess.Models.Domain
             {
                 Id = guid

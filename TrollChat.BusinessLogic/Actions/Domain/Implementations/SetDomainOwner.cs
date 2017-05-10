@@ -17,6 +17,11 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
         public bool Invoke(Guid userId, Guid domainId)
         {
+            if (userId == Guid.Empty || domainId == Guid.Empty)
+            {
+                return false;
+            }
+
             var user = userRepository.GetById(userId);
 
             if (user == null)

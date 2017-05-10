@@ -18,6 +18,11 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
         public List<UserRoomModel> Invoke(Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return null;
+            }
+
             var dbUserRoom = userRepository.GetPrivateConversations(userId);
 
             if (dbUserRoom == null)

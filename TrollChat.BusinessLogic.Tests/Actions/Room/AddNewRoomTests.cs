@@ -7,7 +7,7 @@ using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-//TODO: Update tests
+// TODO: Update tests
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
     [Collection("mapper")]
@@ -52,9 +52,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
-            action.Invoke(roomData, new Guid(), new Guid());
+            var actionResult = action.Invoke(roomData, Guid.NewGuid(), Guid.NewGuid());
 
             // assert
+            Assert.NotEqual(Guid.Empty, actionResult);
             Assert.Equal("TestTag", roomSaved.Tags.ElementAt(0).Name);
             Assert.Equal("TestRoom", roomSaved.Name);
             Assert.Equal("RoomTrool", roomSaved.Topic);

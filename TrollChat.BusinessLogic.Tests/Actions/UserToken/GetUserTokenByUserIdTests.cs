@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 Id = guid,

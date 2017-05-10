@@ -17,10 +17,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
         public void Invoke_ValidData_AddsDomainToDatabaseWithCorrectValues()
         {
             // prepare
-            var userData = new DataAccess.Models.User
-            {
-                Name = "Test"
-            };
             var domainData = new DomainModel
             {
                 Name = "testdomain"
@@ -32,10 +28,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedDomainrepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Domain>()))
                 .Callback<DataAccess.Models.Domain>(u => domainSaved = u);
 
-            var mockedUserRepo = new Mock<IUserRepository>();
-            mockedUserRepo.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(userData);
-
-            var action = new AddNewDomain(mockedDomainrepository.Object, mockedUserRepo.Object);
+            var action = new AddNewDomain(mockedDomainrepository.Object);
 
             // action
             action.Invoke(domainData, Guid.NewGuid());
@@ -44,7 +37,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedDomainrepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
             mockedDomainrepository.Verify(r => r.Save(), Times.Exactly(1));
             Assert.Equal("testdomain", domainSaved.Name);
-            Assert.Equal("Test", domainSaved.Owner.Name);
         }
 
         [Fact]
@@ -53,9 +45,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // prepare
             var domainToAdd = new DomainModel();
             var mockedDomainRepository = new Mock<IDomainRepository>();
-            var mockedUserRepo = new Mock<IUserRepository>();
 
-            var action = new AddNewDomain(mockedDomainRepository.Object, mockedUserRepo.Object);
+            var action = new AddNewDomain(mockedDomainRepository.Object);
 
             // action
             var actionResult = action.Invoke(domainToAdd, Guid.NewGuid());
@@ -88,12 +79,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             var findByResult = new List<DataAccess.Models.Domain> { domainFromDb };
 
             var mockedDomainRepository = new Mock<IDomainRepository>();
-            var mockedUserRepo = new Mock<IUserRepository>();
 
             mockedDomainRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()))
-            .Returns(findByResult.AsQueryable());
+                .Returns(findByResult.AsQueryable());
 
-            var action = new AddNewDomain(mockedDomainRepository.Object, mockedUserRepo.Object);
+            var action = new AddNewDomain(mockedDomainRepository.Object);
 
             // action
             var actionResult = action.Invoke(domainToAdd, Guid.NewGuid());

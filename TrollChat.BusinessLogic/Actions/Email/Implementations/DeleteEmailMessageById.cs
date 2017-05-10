@@ -15,6 +15,11 @@ namespace TrollChat.BusinessLogic.Actions.Email.Implementations
 
         public bool Invoke(Guid emailId)
         {
+            if (emailId == Guid.Empty)
+            {
+                return false;
+            }
+
             var emailToDelete = emailRepository.GetById(emailId);
 
             if (emailToDelete == null)
