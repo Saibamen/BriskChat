@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace TrollChat.BusinessLogic.Models
 {
     public class DomainModel : BaseModel
@@ -5,6 +7,9 @@ namespace TrollChat.BusinessLogic.Models
         public string Name { get; set; }
 
         public UserModel Owner { get; set; }
+
+        public List<UserModel> Users { get; set; }
+        public List<RoomModel> Rooms { get; set; }
 
         public override bool IsValid()
         {

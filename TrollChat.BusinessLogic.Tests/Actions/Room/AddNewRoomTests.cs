@@ -7,7 +7,6 @@ using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-// TODO: Update tests
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
     [Collection("mapper")]
@@ -88,10 +87,64 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
 
             // action
-            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), new Guid());
+            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
 
             // assert
             Assert.Equal(Guid.Empty, actionResult);
+            mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_NoDomain_AddNorSaveAreCalled()
+        {
+            // prepare
+            var roomToAdd = new RoomModel { Name = "TestRoom" };
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+            var mockedUserRepo = new Mock<IUserRepository>();
+            var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+            var mockedDomainRoomRepository = new Mock<IDomainRepository>();
+
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+
+            // action
+            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
+
+            // assert
+            Assert.Equal(Guid.Empty, actionResult);
+            mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_NoUser_AddNorSaveAreCalled()
+        {
+            // prepare
+            var roomToAdd = new RoomModel { Name = "TestRoom" };
+            var domain = new DataAccess.Models.Domain
+            {
+                Name = "Test Domain"
+            };
+
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+            var mockedUserRepo = new Mock<IUserRepository>();
+            var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
+            var mockedDomainRoomRepository = new Mock<IDomainRepository>();
+            mockedDomainRoomRepository.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(domain);
+
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+
+            // action
+            var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
+
+            // assert
+            Assert.Equal(Guid.Empty, actionResult);
+            mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
             mockedRoomRepository.Verify(r => r.Save(), Times.Never);
         }

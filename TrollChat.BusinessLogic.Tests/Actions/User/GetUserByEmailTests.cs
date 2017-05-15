@@ -111,6 +111,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             // check
             Assert.Null(user);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Never);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
         }
 
@@ -126,10 +127,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("whatislove@wp.pl", "");
+            var user = action.Invoke("whatislove@wp.pl", "Test");
 
             // check
             Assert.Null(user);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
         }
     }

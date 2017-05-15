@@ -20,14 +20,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                 return false;
             }
 
-            var roomToDelete = userRepository.GetById(userId);
+            var userToDelete = userRepository.GetById(userId);
 
-            if (roomToDelete == null)
+            if (userToDelete == null)
             {
                 return false;
             }
 
-            userRepository.Delete(roomToDelete);
+            userRepository.Delete(userToDelete);
             userRepository.Save();
 
             return true;
