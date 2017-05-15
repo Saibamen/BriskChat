@@ -175,5 +175,24 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
             mockedUserRepo.Verify(r => r.Save(), Times.Once);
         }
+
+        [Fact]
+        public void Invoke_EmptyString_SaveNorEditCalled()
+        {
+            // prepare
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var mockedUserRepo = new Mock<IUserRepository>();
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+
+            // action
+            var actionResult = action.Invoke("");
+
+            // assert
+            Assert.False(actionResult);
+            mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never());
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never());
+            mockedUserRepo.Verify(r => r.Save(), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+        }
     }
 }

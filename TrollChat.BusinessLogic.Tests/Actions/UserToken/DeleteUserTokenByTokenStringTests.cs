@@ -49,6 +49,24 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             // assert
             Assert.False(actionResult);
+            mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Once);
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_EmptyString_DeleteNorSaveAreCalled()
+        {
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+            var action = new DeleteUserTokenByTokenString(mockedUserTokenRepository.Object);
+
+            // action
+            var actionResult = action.Invoke("");
+
+            // assert
+            Assert.False(actionResult);
+            mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
         }

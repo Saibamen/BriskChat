@@ -97,6 +97,27 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             // assert
             Assert.Equal(string.Empty, actionResult);
+            mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
+            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_AddNorSaveAreCalled()
+        {
+            // prepare
+            var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object);
+
+            // action
+            var actionResult = action.Invoke(new Guid());
+
+            // assert
+            Assert.Equal(string.Empty, actionResult);
+            mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);

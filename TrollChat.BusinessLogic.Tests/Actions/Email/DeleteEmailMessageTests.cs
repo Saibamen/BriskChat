@@ -42,10 +42,29 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
 
             // action
+            var result = action.Invoke(Guid.NewGuid());
+
+            // assert
+            Assert.False(result);
+            mockedEmailRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once());
+            mockedEmailRepository.Verify(r => r.Delete(It.IsAny<EmailMessage>()), Times.Never);
+            mockedEmailRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_DeleteNorSaveAreCalled()
+        {
+            // prepare
+            var mockedEmailRepository = new Mock<IEmailRepository>();
+
+            var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
+
+            // action
             var result = action.Invoke(new Guid());
 
             // assert
             Assert.False(result);
+            mockedEmailRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedEmailRepository.Verify(r => r.Delete(It.IsAny<EmailMessage>()), Times.Never);
             mockedEmailRepository.Verify(r => r.Save(), Times.Never);
         }

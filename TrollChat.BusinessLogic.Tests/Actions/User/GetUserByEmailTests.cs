@@ -79,6 +79,23 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         }
 
         [Fact]
+        public void Invoke_NoDomain_ReturnsNull()
+        {
+            // prepare
+            var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
+
+            // action
+            var user = action.Invoke("email@dot.com", "Database Domain");
+
+            // check
+            Assert.Null(user);
+            mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
+        }
+
+        [Fact]
         public void Invoke_InvalidData_EmptyString()
         {
             // prepare
