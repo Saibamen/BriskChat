@@ -338,6 +338,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
         });
 }
 
+
 // Start the connection
 $.connection.hub.start()
     .done(function () {
@@ -501,35 +502,42 @@ function serializeForm(_form) {
     return obj;
 }
 
+$(".ui.sidebar.vertical.inverted.right").first().sidebar('attach events', '.toggle.button');
+
 $("#channel_actions_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-        sidebar.removeClass("visible");
+        if ($("#rightbar_Title").text() == "Chanel Setings"){
+                sidebar.removeClass("visible");
+                }else{
+                    $("#Rrightbar").html("");
+                    sidebar.addClass("visible");
+                    $("#rightbar_Title").html("Chanel Setings");
+                    }
     } else {
-        sidebar.addClass("visible");
-        $("#rightbar_Title").html("Chanel Setings");
-    }
+            $("#Rrightbar").html("");
+            sidebar.addClass("visible");
+            $("#rightbar_Title").html("Chanel Setings");
+           }
 });
-
 
 $("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
 });
 
-$(".ui.sidebar.vertical.inverted.right").sidebar("setting", {
-    transition: "overlay"
-});
+
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-            sidebar.removeClass("visible");
-    } else {
-        sidebar.addClass("visible");
+            if ($("#rightbar_Title").html() == "Chanel Details"){
+                sidebar.removeClass("visible");
+                }else{
+                             sidebar.addClass("visible");
         $("#Rrightbar").html("");
-        $("#Rrightbar").append('<div class="ui styled accordion">'+
-            '<div class="active title">Channel Details</div>' +
+        $("#rightbar_Title").html("Chanel Details");
+        $("#Rrightbar").append('<div class="ui styled accordion">'+           
             '<div class="active content">' +
             '<div class="accordion">' +
             '<div class="title">' +
@@ -538,9 +546,43 @@ $("#details_toggle").click(function () {
             'Created by saibamen on March 31, 2017</div>' +
             '<div class="title">' +
             '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
-            '<div class="content">Members in channel: 1</div></div></div>');
+            '<div class="content" id="MembersInRoom"></div></div></div>');
         $(".ui.styled.accordion").accordion();
-    }
+        myHub.server.getRoomUsers(currentRoomId);
+                    }
+        }
+     else {
+         sidebar.addClass("visible");
+        $("#Rrightbar").html("");
+        $("#rightbar_Title").html("Chanel Details");
+        $("#Rrightbar").append('<div class="ui styled accordion">'+           
+            '<div class="active content">' +
+            '<div class="accordion">' +
+            '<div class="title">' +
+            '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
+            '<div class="content">' +
+            'Created by saibamen on March 31, 2017</div>' +
+            '<div class="title">' +
+            '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
+            '<div class="content" id="MembersInRoom"></div></div></div>');
+        $(".ui.styled.accordion").accordion();
+        myHub.server.getRoomUsers(currentRoomId);  
+            }
 });
 
+myHub.client.usersInRoom = function (result) {
+    $("#MembersInRoom").empty();
+    $.each(result,
+        function (index, value) {
+            var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+            divToAppend +=
+                '<div class="eight wide column"><b><i class="user icon"></i></b> ';
+            divToAppend += value.Name + '</div>';
+            divToAppend += '<div class="four wide column"></div>';
+            divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+            divToAppend += '</div>';
+
+            $("#MembersInRoom").append(divToAppend);
+        });
+}
 

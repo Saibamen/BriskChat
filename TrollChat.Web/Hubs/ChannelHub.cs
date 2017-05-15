@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
@@ -26,6 +27,7 @@ namespace TrollChat.Web.Hubs
         private readonly IDeleteMessageById deleteMessageById;
         private readonly IGetMessageById getMessageById;
         private readonly IEditMessageById editMessageById;
+        private readonly IGetRoomUsers getRoomUsers;
 
         private const string TimeStampRepresentation = "HH:mm";
 
@@ -38,7 +40,8 @@ namespace TrollChat.Web.Hubs
             IGetUserPrivateConversations getUserPrivateConversations,
             IDeleteMessageById deleteMessageById,
             IGetMessageById getMessageById,
-            IEditMessageById editMessageById)
+            IEditMessageById editMessageById,
+            IGetRoomUsers getRoomUsers)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -50,6 +53,7 @@ namespace TrollChat.Web.Hubs
             this.deleteMessageById = deleteMessageById;
             this.getMessageById = getMessageById;
             this.editMessageById = editMessageById;
+            this.getRoomUsers = getRoomUsers;
         }
 
         private static List<UserConnection> _connectedClients = new List<UserConnection>();
@@ -195,6 +199,27 @@ namespace TrollChat.Web.Hubs
             });
 
             Clients.Caller.privateConversationsUsersLoadedAction(viewList);
+        }
+
+        public void GetRoomUsers(Guid roomId)
+        {
+            var roomUserList = getRoomUsers.Invoke(roomId);
+
+            roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == roomId));
+
+            var userList = roomUserList.Select(item => new RoomUsersViewModel()
+            {
+                UserId = item.Id,
+                Name = item.Name,
+                Email = item.Email
+            });
+
+            if (roomId == Guid.Empty)
+            {
+                return;
+            }
+
+            Clients.Caller.UsersInRoom(userList);
         }
 
         public void CreateNewPrivateConversation(List<Guid> model)

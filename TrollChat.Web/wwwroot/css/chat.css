@@ -1142,3 +1142,11 @@ button, input, textarea {
     margin-top: 3px;
 
 }
+.ui.sidebar.vertical.inverted.right{
+    z-index: 102;
+    flex-direction: column;
+    -webkit-box-orient: vertical;
+    will-change: transform;
+    position: fixed;
+    left: 213px;
+}
