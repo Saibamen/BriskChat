@@ -16,6 +16,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         public void Invoke_ReturnsTrue()
         {
             // prepare
+            var domain = new DataAccess.Models.Domain
+            {
+                Name = "Test Domain"
+            };
+
             var dataUser = new DataAccess.Models.User
             {
                 Email = "email@dot.com",
@@ -32,6 +37,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
 
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var findDomainResult = new List<DataAccess.Models.Domain> { domain };
+            mockedDomainRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()))
+                .Returns(findDomainResult.AsQueryable);
 
             var action = new AuthenticateUser(mockedUserRepository.Object, mockedDomainRepository.Object, mockedHasher.Object);
 
@@ -40,6 +48,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             // check
             Assert.NotNull(user);
+            Assert.Equal("email@dot.com", user.Email);
+            Assert.Equal("Test Domain", user.Domain.Name);
         }
 
         [Fact]

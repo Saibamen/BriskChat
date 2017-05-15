@@ -31,7 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             mockedHasher.Setup(r => r.GenerateRandomGuid()).Returns("123");
 
             mockedUserTokenRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()))
-             .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
+                .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
 
             var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
 
@@ -55,8 +55,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             var userTokenFromDatabase = new DataAccess.Models.UserToken();
 
-            var findByResult = new List<DataAccess.Models.UserToken> { userTokenFromDatabase };
-
             DataAccess.Models.UserToken tokensaved = null;
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
@@ -70,8 +68,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             mockedUserTokenRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()))
                 .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
 
-            mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
-                .Returns(findByResult.AsQueryable());
+            mockedUserTokenRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
+                .Returns(userTokenFromDatabase);
 
             var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
 
@@ -99,6 +97,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             // assert
             Assert.Equal(string.Empty, actionResult);
+            mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
         }

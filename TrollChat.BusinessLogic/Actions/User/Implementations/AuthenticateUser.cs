@@ -37,10 +37,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var dbUser = userRepository.FindBy(x => x.Email == email
-            && x.EmailConfirmedOn != null
-            && x.Domain == domain
-            ).FirstOrDefault();
+            var dbUser = userRepository.FindBy(x => x.Email == email && x.EmailConfirmedOn != null && x.Domain == domain).FirstOrDefault();
 
             if (dbUser == null)
             {

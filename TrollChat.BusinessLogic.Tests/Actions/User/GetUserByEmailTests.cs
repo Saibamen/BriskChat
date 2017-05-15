@@ -17,12 +17,17 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var guid = Guid.NewGuid();
+            var domain = new DataAccess.Models.Domain
+            {
+                Name = "Test Domain"
+            };
             var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
                 Name = "Name",
                 Email = "email@dot.com",
-                PasswordHash = "123"
+                PasswordHash = "123",
+                Domain = domain
             };
 
             var findByResult = new List<DataAccess.Models.User> { userFromDb };
@@ -30,16 +35,47 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
                 .Returns(findByResult.AsQueryable);
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var findDomainResult = new List<DataAccess.Models.Domain> { domain };
+            mockedDomainRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()))
+                .Returns(findDomainResult.AsQueryable);
             var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("email@dot.com", "");
+            var user = action.Invoke("email@dot.com", "Test Domain");
 
             // check
+            Assert.NotNull(user);
             Assert.Equal(guid, user.Id);
             Assert.Equal("Name", user.Name);
             Assert.Equal("email@dot.com", user.Email);
+            Assert.Equal("Test Domain", user.Domain.Name);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Once);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_WrongDomain_ReturnsNull()
+        {
+            // prepare
+            var domainInDatabase = new DataAccess.Models.Domain
+            {
+                Name = "Database Domain"
+            };
+
+            var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            var findDomainResult = new List<DataAccess.Models.Domain> { domainInDatabase };
+            mockedDomainRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()))
+                .Returns(findDomainResult.AsQueryable);
+            var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
+
+            // action
+            var user = action.Invoke("email@dot.com", "Database Domain");
+
+            // check
+            Assert.Null(user);
+            mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Once);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
         }
 
         [Fact]
@@ -77,6 +113,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             // check
             Assert.Null(user);
+            mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
         }
     }
 }
