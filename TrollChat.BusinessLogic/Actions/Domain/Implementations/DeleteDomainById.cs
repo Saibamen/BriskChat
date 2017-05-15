@@ -15,6 +15,11 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
         public bool Invoke(Guid domainId)
         {
+            if (domainId == Guid.Empty)
+            {
+                return false;
+            }
+
             var domainToDelete = domainRepository.GetById(domainId);
 
             if (domainToDelete == null)

@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
 
         public bool Invoke(Guid messageId, string messageText)
         {
-            if (string.IsNullOrEmpty(messageText.Trim()))
+            if (messageId == Guid.Empty || string.IsNullOrEmpty(messageText))
             {
                 return false;
             }

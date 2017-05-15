@@ -9,12 +9,10 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
     public class AddNewDomain : IAddNewDomain
     {
         private readonly IDomainRepository domainRepository;
-        private readonly IUserRepository userRepository;
 
-        public AddNewDomain(IDomainRepository domainRepository, IUserRepository userRepository)
+        public AddNewDomain(IDomainRepository domainRepository)
         {
             this.domainRepository = domainRepository;
-            this.userRepository = userRepository;
         }
 
         public Guid Invoke(DomainModel domain, Guid? userId = null)

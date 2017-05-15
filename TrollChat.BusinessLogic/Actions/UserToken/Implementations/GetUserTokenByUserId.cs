@@ -18,6 +18,11 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
 
         public UserTokenModel Invoke(Guid userId)
         {
+            if (userId == Guid.Empty)
+            {
+                return null;
+            }
+
             var token = userTokenRepository.FindBy(x => x.User.Id == userId).FirstOrDefault();
 
             if (token == null)

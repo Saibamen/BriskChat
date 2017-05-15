@@ -31,13 +31,13 @@ function loadingStop() {
 
 function addActionsToMessages() {
     $(".ts-message").not(":has(> .action_hover_container), #message_edit_container").each(function () {
-        $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true"> \
-            <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center"> \
-            <i class="edit icon"></i> \
-            </button> \
-            <button type="button" data-action="delete" class="btn_unstyle btn_msg_action ts_tip danger" data-content="Delete message" data-position="top center"> \
-            <i class="delete icon"></i> \
-            </button> \
+        $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true">\
+            <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center">\
+            <i class="edit icon"></i>\
+            </button>\
+            <button type="button" data-action="delete" class="btn_unstyle btn_msg_action ts_tip danger" data-content="Delete message" data-position="top center">\
+            <i class="delete icon"></i>\
+            </button>\
             </div>');
     });
 }
@@ -48,20 +48,20 @@ function addActionsToMessages() {
 
 $(window).resize(function () {
     // #chat_messages
-    var chat_additional_height = 117;
+    var chatAdditionalHeight = 117;
 
     if ($(".ui.message").length) {
         if (!$(".ui.message").hasClass("hidden")) {
-            chat_additional_height += 51;
+            chatAdditionalHeight += 51;
         }
     }
 
-    $("#chat_messages").height($(window).height() - chat_additional_height);
+    $("#chat_messages").height($(window).height() - chatAdditionalHeight);
 
     // .sidebar_channels_messages
-    var sidebar_additional_height = 165;
+    var sidebarAdditionalHeight = 165;
 
-    $(".sidebar_channels_messages").height($(window).height() - sidebar_additional_height);
+    $(".sidebar_channels_messages").height($(window).height() - sidebarAdditionalHeight);
 });
 
 $(window).trigger("resize");
@@ -74,6 +74,11 @@ currentRoomId = 0;
 
 $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
+
+$("#channelsCount").click(function () {
+    console.log("Click na licznik kanałów");
+    myHub.server.getDomainPublicRooms();
+});
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
@@ -98,15 +103,15 @@ function addEditContainer(id, oldMessageText, messageIcon) {
     var divToAppend = '<div class="ts-message message highlight" id="message_edit_container">\
             <div class="message_gutter">\
                 <div class="message_icon">\
-                    '+ messageIcon +'\
+                    '+ messageIcon + '\
                 </div>\
             </div>\
-            <form id="message_edit_form" data-id="'+ id +'">\
+            <form id="message_edit_form" data-id="'+ id + '">\
                 <button class="btn_unstyle emo_menu" aria-label="Emoji menu" type="button">\
                     <i class="meh icon"></i>\
                 </button>\
                 <div id="msg_text" class="message_input ql-container focus">\
-                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>'+ oldMessageText +'</p></div>\
+                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>'+ oldMessageText + '</p></div>\
                     <div class="ql-clipboard" tabindex="-1" aria-hidden="true" role="presentation" spellcheck="true" contenteditable="true"></div>\
                 </div>\
                 <a id="cancel_edit" role="button" class="ui button mini">Cancel</a>\
@@ -137,7 +142,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     $(document).keydown(function (x) {
-        if (x.keyCode == 27) {
+        if (x.keyCode === 27) {
             console.log("Escape keydown");
             $(document).find("#message_edit_container").remove();
             message.show();
@@ -145,10 +150,12 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     $("#message_edit_form").keypress(function (x) {
-        if (x.which == 13) {
+        if (x.which === 13) {
             if (!x.shiftKey) {
-                if (oldMessageText != $(".ql-editor").text().trim()) {
-                    if (editedMessage = $(".ql-editor").text().trim()) {
+                if (oldMessageText !== $(".ql-editor").text().trim()) {
+                    var editedMessage;
+                    
+                    if (editedMessage === $(".ql-editor").text().trim()) {
                         console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
                     }
@@ -162,8 +169,10 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
     // Save
     $(".ts-message").on("click", "#commit_edit", function (x) {
-        if (oldMessageText != $(".ql-editor").text().trim()) {
-            if (editedMessage = $(".ql-editor").text().trim()) {
+        if (oldMessageText !== $(".ql-editor").text().trim()) {
+            var editedMessage = $(".ql-editor").text().trim();
+
+            if (editedMessage) {
                 console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                 myHub.server.editMessage(currentRoomId, messageId, editedMessage);
             }
@@ -185,7 +194,7 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
     var id = $(item).data("id");
     //var input = $("#createPrivateConversationForm :input[name='Name']");
     var input = $("#inputtext");
-    input.before('<span class="private-conversation-tag" data-id="' + id + '">' + append + '</span>');
+    input.before('<span class="private-conversation-tag" data-id="' + id + '">' + append + "</span>");
 });
 
 // This deletes the message
@@ -211,12 +220,12 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
     if (youTubeMatch) {
-        var youtube_iframe_html = '<iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
+        var youtubeIframeHtml = '<iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
 
         if (messageBodies.last().hasClass("youtube_iframe")) {
-            messageBodies.last().html(youtube_iframe_html);
+            messageBodies.last().html(youtubeIframeHtml);
         } else {
-            messageBodies.last().after(youtube_iframe_html);
+            messageBodies.last().after(youtubeIframeHtml);
         }
     } else if (messageBodies.last().hasClass("youtube_iframe")) {
         messageBodies.last().hide("slow", function () {
@@ -233,7 +242,7 @@ myHub.client.broadcastMessage = function (userName, messageId, messageText, time
     if (youTubeMatch) {
         messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
     } else {
-        messageHtml += '</span></div></div>';
+        messageHtml += "</span></div></div>";
     }
 
     $("#chat_messages").append(messageHtml);
@@ -273,7 +282,33 @@ myHub.client.loadRooms = function (result) {
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
         } else {
-            divToAppend += '<i class="lock icon left"></i>'
+            divToAppend += '<i class="lock icon left"></i>';
+        }
+
+        divToAppend += value.Name + "</a>";
+        $("#channelsMenu").append(divToAppend);
+    });
+}
+
+myHub.client.loadDomainPublicRooms = function (result) {
+    var setActive = true;
+    $("#channelsCount").text("CHANNELS (" + result.length + ")");
+
+    $.each(result, function (index, value) {
+        var divToAppend = '<a class="item';
+
+        if (setActive) {
+            divToAppend += " active";
+            setActive = false;
+            currentRoomId = value.Id;
+        }
+
+        divToAppend += '"data-id="' + value.Id + '" > ';
+
+        if (value.IsPublic) {
+            divToAppend += '<i class="icon left">#</i>';
+        } else {
+            divToAppend += '<i class="lock icon left"></i>';
         }
 
         divToAppend += value.Name + "</a>";
@@ -282,15 +317,11 @@ myHub.client.loadRooms = function (result) {
 }
 
 myHub.client.loadPrivateConversations = function (result) {
-    $.each(result,
-        function (index, value) {
-            var divToAppend = '<a class="item';
-            divToAppend += '"data-id="' + value.Id + '" > ';
-            divToAppend += '<i class="icon left">#</i>';
-            divToAppend += value.Name + "</a>";
+    $.each(result, function (index, value) {
+        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>"' + value.Name + '"</a>"';
 
-            $("#privateConversationsMenu").append(divToAppend);
-        });
+        $("#privateConversationsMenu").append(divToAppend);
+    });
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
@@ -299,7 +330,7 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     if (isPublic) {
         divToAppend += '<i class="icon left">#</i>';
     } else {
-        divToAppend += '<i class="lock icon left"></i>'
+        divToAppend += '<i class="lock icon left"></i>';
     }
 
     divToAppend += channelName + "</a>";
@@ -309,33 +340,31 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 }
 
 myHub.client.privateConversationAddedAction = function (value) {
-    var divToAppend = '<a class="item" data-id="' + value.Id + '">';
-    divToAppend += '<i class="icon left">#</i>';
-    divToAppend += value.Name + "</a>";
-    $("#privateConversationsMenu").append(divToAppend);
+    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>"' + value.Name + '"</a>"';
 
+    $("#privateConversationsMenu").append(divToAppend);
     loadingStop();
 }
 
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
     $("#privateConversationsUserList").empty();
-    $.each(result,
-        function (index, value) {
-            var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-            divToAppend +=
-                '<div class="eight wide column"><b>' + value.UserName + '</b> ';
-            if (value.IsOnline) {
-                divToAppend += '<i class="circle icon green"></i>';
-            } else {
-                divToAppend += '<i class="circle thin icon"></i>';
-            }
-            divToAppend += value.Name + '</div>';
-            divToAppend += '<div class="four wide column"></div>';
-            divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
-            divToAppend += '</div>';
+    $.each(result, function (index, value) {
+        var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        divToAppend += '<div class="eight wide column"><b>' + value.UserName + "</b> ";
 
-            $("#privateConversationsUserList").append(divToAppend);
-        });
+        if (value.IsOnline) {
+            divToAppend += '<i class="circle icon green"></i>';
+        } else {
+            divToAppend += '<i class="circle thin icon"></i>';
+        }
+
+        divToAppend += value.Name + "</div>";
+        divToAppend += '<div class="four wide column"></div>';
+        divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+        divToAppend += "</div>";
+
+        $("#privateConversationsUserList").append(divToAppend);
+    });
 }
 
 
@@ -356,9 +385,11 @@ $.connection.hub.start()
                 loadingStop();
 
                 $("#msg_form").keypress(function (e) {
-                    if (e.which == 13) {
+                    if (e.which === 13) {
                         if (!e.shiftKey) {
-                            if (message = $("#msg_input").val().trim()) {
+                            var message = $("#msg_input").val().trim();
+
+                            if (message) {
                                 console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
                                 myHub.server.sendMessage(currentRoomId, message);
                             }
@@ -384,8 +415,7 @@ $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
         console.log("Re-connecting");
         loadingStart();
-    }
-    else if (change.newState === $.signalR.connectionState.connected) {
+    } else if (change.newState === $.signalR.connectionState.connected) {
         console.log("The server is online");
     }
 });
@@ -425,8 +455,8 @@ $("#createNewChannel").click(function () {
 $("#createNewPrivateConversation").click(function () {
     $("#createPrivateConversationForm")[0].reset();
 
-    //remove all added tags
-    $("#createPrivateConversationForm").find('.private-conversation-tag').each(function (index, element) {
+    // Remove all added tags
+    $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         console.log(element);
         $(element).remove();
     });
@@ -474,7 +504,7 @@ $("#createPrivateConversationForm").submit(function (e) {
     loadingStart();
     e.preventDefault();
     var list = [];
-    $("#createPrivateConversationForm").find('.private-conversation-tag').each(function (index, element) {
+    $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         var item = $(element);
         var id = $(item).data("id");
         list.push(id);
@@ -490,14 +520,13 @@ function updateChannelsCount(diff) {
     $("#channelsCount").text("CHANNELS (" + number + ")");
 }
 
-function serializeForm(_form) {
-    data = $(_form).serializeArray();
+function serializeForm(form) {
+    data = $(form).serializeArray();
     var obj = {};
 
-    $.each(data,
-        function (key, value) {
-            obj[value.name] = value.value;
-        });
+    $.each(data, function (key, value) {
+        obj[value.name] = value.value;
+    });
 
     return obj;
 }
@@ -570,6 +599,9 @@ $("#details_toggle").click(function () {
             }
 });
 
+$(document).on("click", ".private-conversation-tag", function () {
+    $(this).remove();
+});
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
     $.each(result,

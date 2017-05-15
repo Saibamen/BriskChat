@@ -12,7 +12,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var userFromDb = new DataAccess.Models.User
             {
                 Id = guid,
@@ -54,10 +54,26 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var action = new GetUserById(mockedUserRepository.Object);
 
             // action
+            var user = action.Invoke(Guid.NewGuid());
+
+            // check
+            Assert.Null(user);
+            mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_ReturnsNull()
+        {
+            // prepare
+            var mockedUserRepository = new Mock<IUserRepository>();
+            var action = new GetUserById(mockedUserRepository.Object);
+
+            // action
             var user = action.Invoke(new Guid());
 
             // check
             Assert.Null(user);
+            mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }
 }

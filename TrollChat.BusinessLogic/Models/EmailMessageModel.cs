@@ -18,7 +18,12 @@
 
         public override bool IsValid()
         {
-            return !(string.IsNullOrEmpty(From) || string.IsNullOrEmpty(Recipient) || string.IsNullOrEmpty(Message) || string.IsNullOrEmpty(Subject));
+            if (string.IsNullOrEmpty(From) || string.IsNullOrEmpty(Recipient) || string.IsNullOrEmpty(Message) || string.IsNullOrEmpty(Subject))
+            {
+                return false;
+            }
+
+            return !string.IsNullOrEmpty(From.Trim()) && !string.IsNullOrEmpty(Recipient.Trim()) && !string.IsNullOrEmpty(Message.Trim()) && !string.IsNullOrEmpty(Subject.Trim());
         }
     }
 }

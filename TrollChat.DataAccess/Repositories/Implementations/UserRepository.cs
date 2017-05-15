@@ -13,12 +13,12 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
         }
 
-        public IQueryable<Room> GetUserRooms(Guid id, bool isPrivateConversation)
+        public IQueryable<Room> GetUserRooms(Guid userId, bool isPrivateConversation)
         {
             var query =
                 context.Set<User>()
                 .Where(user => user.DeletedOn == null)
-                .Where(user => user.Id == id)
+                .Where(user => user.Id == userId)
                     .SelectMany(i => i.UserRooms)
                     .Where(userRoom => userRoom.DeletedOn == null)
                          .Select(i => i.Room)
@@ -29,43 +29,43 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             return query.Any() ? query : Enumerable.Empty<Room>().AsQueryable();
         }
 
-        public IQueryable<UserRoom> GetPrivateConversations(Guid id)
+        public IQueryable<UserRoom> GetPrivateConversations(Guid userId)
         {
-            var query1 = (from user in context.Set<User>()
-                          join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                          join room in context.Set<Room>() on useroom.Room.Id equals room.Id
-                          where user.Id == id
-                          where room.IsPrivateConversation
-                          select new UserRoom
-                          {
-                              Id = useroom.Id,
-                              User = user,
-                              Room = room
-                          });
+            var query1 = from user in context.Set<User>()
+                         join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
+                         join room in context.Set<Room>() on useroom.Room.Id equals room.Id
+                         where user.Id == userId
+                         where room.IsPrivateConversation
+                         select new UserRoom
+                         {
+                             Id = useroom.Id,
+                             User = user,
+                             Room = room
+                         };
 
             return query1.Any() ? query1 : Enumerable.Empty<UserRoom>().AsQueryable();
         }
 
-        public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid id)
+        public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId)
         {
             var query1 = (from user in context.Set<User>()
                           join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
                           join room in context.Set<Room>() on useroom.Room.Id equals room.Id
-                          where user.Id == id
+                          where user.Id == userId
                           where room.IsPrivateConversation
                           select room).ToList();
 
-            var query2 = (from room in context.Set<Room>()
-                          join useroom in context.Set<UserRoom>() on room.Id equals useroom.Room.Id
-                          join user in context.Set<User>() on useroom.User.Id equals user.Id
-                          where query1.Contains(room)
-                          where useroom.User.Id != id
-                          select new UserRoom
-                          {
-                              Id = useroom.Id,
-                              User = user,
-                              Room = room
-                          });
+            var query2 = from room in context.Set<Room>()
+                         join useroom in context.Set<UserRoom>() on room.Id equals useroom.Room.Id
+                         join user in context.Set<User>() on useroom.User.Id equals user.Id
+                         where query1.Contains(room)
+                         where useroom.User.Id != userId
+                         select new UserRoom
+                         {
+                             Id = useroom.Id,
+                             User = user,
+                             Room = room
+                         };
 
             return query2.Any() ? query2 : Enumerable.Empty<UserRoom>().AsQueryable();
         }

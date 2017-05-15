@@ -18,6 +18,11 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
 
         public UserRoomModel Invoke(Guid roomId, Guid userId)
         {
+            if (roomId == Guid.Empty || userId == Guid.Empty)
+            {
+                return null;
+            }
+
             var userRoom = userRoomRepository.FindBy(x => x.Room.Id == roomId && x.User.Id == userId).FirstOrDefault();
 
             if (userRoom == null)

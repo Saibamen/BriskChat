@@ -27,8 +27,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
         {
-            //Check if users wants to create a conversation with himself
-            if (users.Any(x => x.Equals(issuerUserId)))
+            // Check if users wants to create a conversation with himself
+            if (issuerUserId == Guid.Empty || users.Any(x => x.Equals(issuerUserId)))
             {
                 return null;
             }
@@ -37,7 +37,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var listRoom = privateConversationList.Select(x => x.Room).Distinct();
 
-            //check if private conversation already exists
+            // Check if private conversation already exists
             foreach (var room in listRoom)
             {
                 var userRoomsList = privateConversationList.Where(x => x.Room == room);
@@ -57,7 +57,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             }
 
             var issuerUser = userRepository.GetById(issuerUserId);
-            // create repostiory metehod for that?
+            // Create repostiory metehod for that?
             var userList = userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
 
             if (issuerUser == null)
@@ -89,6 +89,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
             userRoomRepository.Add(userRoom);
+
             foreach (var user in userList)
             {
                 var userRoom2 = new DataAccess.Models.UserRoom { User = user, Room = newRoom };

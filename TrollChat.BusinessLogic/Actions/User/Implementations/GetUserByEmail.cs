@@ -18,7 +18,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
         public UserModel Invoke(string email, string domainName)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(domainName))
             {
                 return null;
             }
@@ -31,6 +31,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             }
 
             var dbUser = userRepository.FindBy(x => x.Email == email && x.Domain == domain).FirstOrDefault();
+
             if (dbUser == null)
             {
                 return null;

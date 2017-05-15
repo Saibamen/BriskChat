@@ -14,7 +14,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             public void Invoke_ValidData_DeleteAndSaveAreCalled()
             {
                 // prepare
-                var guid = new Guid();
+                var guid = Guid.NewGuid();
                 var userTokenFromDb = new DataAccess.Models.UserToken
                 {
                     Id = guid
@@ -46,6 +46,24 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
                 // assert
                 Assert.False(actionResult);
+                mockedUserTokenRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+                mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
+                mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            }
+
+            [Fact]
+            public void Invoke_EmptyGuid_DeleteNorSaveAreCalled()
+            {
+                var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+
+                var action = new DeleteUserTokenById(mockedUserTokenRepository.Object);
+
+                // action
+                var actionResult = action.Invoke(new Guid());
+
+                // assert
+                Assert.False(actionResult);
+                mockedUserTokenRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
                 mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
                 mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
             }

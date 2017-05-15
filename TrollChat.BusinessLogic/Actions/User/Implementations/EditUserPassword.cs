@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
         public bool Invoke(Guid id, string plainPassword)
         {
-            if (string.IsNullOrEmpty(plainPassword))
+            if (id == Guid.Empty || string.IsNullOrEmpty(plainPassword))
             {
                 return false;
             }

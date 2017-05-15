@@ -12,7 +12,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         public void Invoke_ValidData_DeleteAndSaveAreCalled()
         {
             // prepare
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var messageFromDb = new DataAccess.Models.Message
             {
                 Id = guid
@@ -41,12 +41,31 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var action = new DeleteMessageById(mockedMessageRepository.Object);
 
             // action
+            var result = action.Invoke(Guid.NewGuid());
+
+            // assert
+            Assert.False(result);
+            mockedMessageRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Message>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_DeleteNorSaveAreCalled()
+        {
+            // prepare
+            var mockedMessageRepository = new Mock<IMessageRepository>();
+
+            var action = new DeleteMessageById(mockedMessageRepository.Object);
+
+            // action
             var result = action.Invoke(new Guid());
 
             // assert
             Assert.False(result);
             mockedMessageRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Message>()), Times.Never);
             mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }
 }

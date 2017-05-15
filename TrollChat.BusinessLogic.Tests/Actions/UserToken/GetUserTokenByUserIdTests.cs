@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
-            var guid = new Guid();
+            var guid = Guid.NewGuid();
             var userTokenFromDb = new DataAccess.Models.UserToken
             {
                 Id = guid,
@@ -60,6 +60,22 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             // check
             Assert.Null(user);
+            mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_ReturnsNull()
+        {
+            // prepare
+            var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var action = new GetUserTokenByUserId(mockedUserTokenRepository.Object);
+
+            // action
+            var user = action.Invoke(new Guid());
+
+            // check
+            Assert.Null(user);
+            mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Never);
         }
     }
 }

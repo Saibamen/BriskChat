@@ -16,6 +16,11 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
         public UserModel Invoke(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return null;
+            }
+
             var dbUser = userRepository.GetById(id);
 
             if (dbUser == null)

@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public Guid Invoke(RoomModel room, Guid userId, Guid domainId)
         {
-            if (!room.IsValid())
+            if (!room.IsValid() || userId == Guid.Empty || domainId == Guid.Empty)
             {
                 return Guid.Empty;
             }

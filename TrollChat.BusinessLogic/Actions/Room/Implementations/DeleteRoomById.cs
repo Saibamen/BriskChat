@@ -15,6 +15,11 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public bool Invoke(Guid roomId)
         {
+            if (roomId == Guid.Empty)
+            {
+                return false;
+            }
+
             var roomToDelete = roomRepository.GetById(roomId);
 
             if (roomToDelete == null)
