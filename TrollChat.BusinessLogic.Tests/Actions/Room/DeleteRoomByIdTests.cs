@@ -36,17 +36,36 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_DeleteNorSaveAreCalled()
         {
             // prepare
-            var mockedEmailRepository = new Mock<IRoomRepository>();
+            var mockedRoomRepository = new Mock<IRoomRepository>();
 
-            var action = new DeleteRoomById(mockedEmailRepository.Object);
+            var action = new DeleteRoomById(mockedRoomRepository.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
 
             // assert
             Assert.False(result);
-            mockedEmailRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedEmailRepository.Verify(r => r.Save(), Times.Never);
+            mockedRoomRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_DeleteNorSaveAreCalled()
+        {
+            // prepare
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+
+            var action = new DeleteRoomById(mockedRoomRepository.Object);
+
+            // action
+            var result = action.Invoke(new Guid());
+
+            // assert
+            Assert.False(result);
+            mockedRoomRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }
 }
