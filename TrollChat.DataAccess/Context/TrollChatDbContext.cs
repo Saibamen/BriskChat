@@ -38,17 +38,9 @@ namespace TrollChat.DataAccess.Context
                 .HasOne(s => s.UserRoom)
                 .WithMany(s => s.Messages);
 
-            modelBuilder.Entity<UserToken>()
-                .HasIndex(b => b.SecretToken)
-                .HasName("SecretToken");
-
-            modelBuilder.Entity<Domain>()
-                .HasIndex(b => b.Name)
-                .HasName("Email");
-
-            modelBuilder.Entity<Tag>()
-                .HasIndex(b => b.Name)
-                .HasName("Email");
+            modelBuilder.Entity<Room>()
+                .HasOne(s => s.Owner)
+                .WithMany(s => s.Rooms);
         }
 
         public new DbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity

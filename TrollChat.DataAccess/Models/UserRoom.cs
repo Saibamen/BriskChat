@@ -22,6 +22,8 @@ namespace TrollChat.DataAccess.Models
         [Required]
         public Room Room { get; set; }
 
+        public Role Role { get; set; }
+
         public DateTime? LockedUntil { get; set; }
 
         public Message LastMessage { get; set; }

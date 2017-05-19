@@ -9,9 +9,11 @@ namespace TrollChat.DataAccess.Models
         public Room()
         {
             Tags = new HashSet<Tag>();
+            //Users = new HashSet<User>();
         }
 
         public virtual ICollection<Tag> Tags { get; set; }
+        //public virtual ICollection<User> Users { get; set; }
 
         [Required]
         public User Owner { get; set; }
