@@ -42,14 +42,17 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             {
                 var userRoomsList = privateConversationList.Where(x => x.Room == room);
                 var dict = new Dictionary<DataAccess.Models.UserRoom, bool>();
+
                 foreach (var connection in userRoomsList)
                 {
                     dict.Add(connection, false);
+
                     if (users.Any(x => x.Equals(connection.User.Id)))
                     {
                         dict[connection] = true;
                     }
                 }
+
                 if (dict.All(x => x.Value))
                 {
                     return null;
