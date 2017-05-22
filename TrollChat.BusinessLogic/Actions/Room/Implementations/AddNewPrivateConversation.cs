@@ -60,13 +60,14 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             }
 
             var issuerUser = userRepository.GetById(issuerUserId);
-            // Create repostiory metehod for that?
-            var userList = userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
 
             if (issuerUser == null)
             {
                 return null;
             }
+
+            // Create repository method for that?
+            var userList = userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
 
             var roomName = "";
 

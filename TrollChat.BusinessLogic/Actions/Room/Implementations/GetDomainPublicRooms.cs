@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var dbRooms = roomRepository.FindBy(x => x.Domain.Id == domainId && x.IsPublic).ToList();
 
-            if (!dbRooms.Any())
+            if (dbRooms == null)
             {
                 return null;
             }

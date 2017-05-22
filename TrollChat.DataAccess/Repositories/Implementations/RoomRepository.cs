@@ -23,18 +23,18 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<User> GetRoomUsers(Guid roomId)
         {
-            var query1 = (from u in context.Set<User>()
-                          join ur in context.Set<UserRoom>() on u.Id equals ur.User.Id
-                          join r in context.Set<Room>() on ur.Room.Id equals r.Id
-                          where r.Id == roomId
-                          select new User
-                          {
-                              Id = u.Id,
-                              Name = u.Name,
-                              Email = u.Email
-                          });
+            var query = from u in context.Set<User>()
+                         join ur in context.Set<UserRoom>() on u.Id equals ur.User.Id
+                         join r in context.Set<Room>() on ur.Room.Id equals r.Id
+                         where r.Id == roomId
+                         select new User
+                         {
+                             Id = u.Id,
+                             Name = u.Name,
+                             Email = u.Email
+                         };
 
-            return !query1.Any() ? Enumerable.Empty<User>().AsQueryable() : (IQueryable<User>)query1;
+            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
         }
     }
 }

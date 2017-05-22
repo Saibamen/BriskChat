@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -22,14 +23,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var dbUser = userRepository.GetPrivateConversationsTargets(userId);
+            var dbUserRooms = userRepository.GetPrivateConversationsTargets(userId);
 
-            if (dbUser == null)
+            if (dbUserRooms == null)
             {
                 return null;
             }
 
-            var user = AutoMapper.Mapper.Map<List<UserRoomModel>>(dbUser);
+            var user = AutoMapper.Mapper.Map<List<UserRoomModel>>(dbUserRooms);
 
             return user;
         }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;

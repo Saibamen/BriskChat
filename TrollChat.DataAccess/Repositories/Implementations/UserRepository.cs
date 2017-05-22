@@ -31,19 +31,19 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<UserRoom> GetPrivateConversations(Guid userId)
         {
-            var query1 = from user in context.Set<User>()
-                         join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                         join room in context.Set<Room>() on useroom.Room.Id equals room.Id
-                         where user.Id == userId
-                         where room.IsPrivateConversation
-                         select new UserRoom
-                         {
-                             Id = useroom.Id,
-                             User = user,
-                             Room = room
-                         };
+            var query = from user in context.Set<User>()
+                        join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
+                        join room in context.Set<Room>() on useroom.Room.Id equals room.Id
+                        where user.Id == userId
+                        where room.IsPrivateConversation
+                        select new UserRoom
+                        {
+                            Id = useroom.Id,
+                            User = user,
+                            Room = room
+                        };
 
-            return query1.Any() ? query1 : Enumerable.Empty<UserRoom>().AsQueryable();
+            return query.Any() ? query : Enumerable.Empty<UserRoom>().AsQueryable();
         }
 
         public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId)

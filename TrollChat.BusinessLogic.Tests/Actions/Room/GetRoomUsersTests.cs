@@ -14,8 +14,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         [Fact]
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
-            var guidRoom = new Guid();
-            var guid = new Guid();
+            // prepare
+            var guidRoom = Guid.NewGuid();
+            var guid = Guid.NewGuid();
 
             var domenka = new DataAccess.Models.Domain
             {
@@ -34,34 +35,52 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
                     Domain = domenka
                 }
             };
-            var tag = new DataAccess.Models.Tag
-            {
-                Name = "TestTag"
-            };
 
-            var userroomFromDb = new DataAccess.Models.Room()
-            {
-                Id = guidRoom,
-                Tags = new List<DataAccess.Models.Tag> { tag },
-                Owner = usersFromDb[0],
-                Domain = domenka,
-                Name = "testowy",
-                Description = "Januszowa",
-                Customization = 1
-            };
-            // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
             mockedRoomRepository.Setup(r => r.GetRoomUsers(It.IsAny<Guid>())).Returns(usersFromDb.AsQueryable());
             var action = new GetRoomUsers(mockedRoomRepository.Object);
 
-            //action
+            // action
             var users = action.Invoke(guidRoom);
 
-            //check
+            // check
+            Assert.NotNull(users);
             Assert.Equal(guid, users[0].Id);
             Assert.Equal("Name", users[0].Name);
             Assert.Equal(DateTime.MinValue, users[0].ModifiedOn);
-            Assert.Equal("dsds", userroomFromDb.Name);
+            mockedRoomRepository.Verify(r => r.GetRoomUsers(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyRepository_ReturnsNull()
+        {
+            // prepare
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+
+            var action = new GetRoomUsers(mockedRoomRepository.Object);
+
+            // action
+            var result = action.Invoke(Guid.NewGuid());
+
+            // assert
+            Assert.Equal(0, result.Count);
+            mockedRoomRepository.Verify(r => r.GetRoomUsers(It.IsAny<Guid>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyGuid_ReturnsNull()
+        {
+            // prepare
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+
+            var action = new GetRoomUsers(mockedRoomRepository.Object);
+
+            // action
+            var result = action.Invoke(new Guid());
+
+            // assert
+            Assert.Null(result);
+            mockedRoomRepository.Verify(r => r.GetRoomUsers(It.IsAny<Guid>()), Times.Never);
         }
     }
 }
