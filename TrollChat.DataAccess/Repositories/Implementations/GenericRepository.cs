@@ -44,7 +44,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
             IQueryable<T> query = context.Set<T>().Where(predicate).Where(x => x.DeletedOn == null);
 
-            return !query.Any() ? Enumerable.Empty<T>().AsQueryable() : query;
+            return !(query.Count() > 0) ? Enumerable.Empty<T>().AsQueryable() : query;
         }
 
         public IQueryable<T> GetAll()

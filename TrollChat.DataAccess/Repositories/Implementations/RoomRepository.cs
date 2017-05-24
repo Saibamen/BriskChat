@@ -18,23 +18,23 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
             var query = context.Set<Room>().Include(b => b.Tags).Where(predicate).Where(x => x.DeletedOn == null);
 
-            return !query.Any() ? Enumerable.Empty<Room>().AsQueryable() : query;
+            return !(query.Count() > 0) ? Enumerable.Empty<Room>().AsQueryable() : query;
         }
 
         public IQueryable<User> GetRoomUsers(Guid roomId)
         {
             var query = from u in context.Set<User>()
-                         join ur in context.Set<UserRoom>() on u.Id equals ur.User.Id
-                         join r in context.Set<Room>() on ur.Room.Id equals r.Id
-                         where r.Id == roomId
-                         select new User
-                         {
-                             Id = u.Id,
-                             Name = u.Name,
-                             Email = u.Email
-                         };
+                        join ur in context.Set<UserRoom>() on u.Id equals ur.User.Id
+                        join r in context.Set<Room>() on ur.Room.Id equals r.Id
+                        where r.Id == roomId
+                        select new User
+                        {
+                            Id = u.Id,
+                            Name = u.Name,
+                            Email = u.Email
+                        };
 
-            return !query.Any() ? Enumerable.Empty<User>().AsQueryable() : query;
+            return !(query.Count() > 0) ? Enumerable.Empty<User>().AsQueryable() : query;
         }
     }
 }

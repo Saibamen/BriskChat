@@ -4,7 +4,7 @@
 @{
     var alertMessages = TempData.Get<List<AlertModel>>("alertMessages");
 
-    if (alertMessages.Any())
+    if (alertMessages.Count > 0)
     {
         foreach (var alert in alertMessages)
         {
@@ -14,7 +14,7 @@
                 <div class="header">
                     @alert.Message
                 </div>
-                
+
                 @if (!string.IsNullOrEmpty(alert.MoreInfo))
                 {
                     @alert.MoreInfo

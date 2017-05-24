@@ -17,7 +17,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
         public Guid Invoke(DomainModel domain, Guid? userId = null)
         {
-            if (!domain.IsValid() || domainRepository.FindBy(x => x.Name == domain.Name).Any())
+            if (!domain.IsValid() || domainRepository.FindBy(x => x.Name == domain.Name).Count() > 0)
             {
                 return Guid.Empty;
             }

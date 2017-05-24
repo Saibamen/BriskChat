@@ -26,7 +26,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                          .Where(room => room.DeletedOn == null)
                 .AsQueryable();
 
-            return query.Any() ? query : Enumerable.Empty<Room>().AsQueryable();
+            return query.Count() > 0 ? query : Enumerable.Empty<Room>().AsQueryable();
         }
 
         public IQueryable<UserRoom> GetPrivateConversations(Guid userId)
@@ -43,7 +43,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                             Room = room
                         };
 
-            return query.Any() ? query : Enumerable.Empty<UserRoom>().AsQueryable();
+            return query.Count() > 0 ? query : Enumerable.Empty<UserRoom>().AsQueryable();
         }
 
         public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId)
@@ -67,7 +67,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              Room = room
                          };
 
-            return query2.Any() ? query2 : Enumerable.Empty<UserRoom>().AsQueryable();
+            return query2.Count() > 0 ? query2 : Enumerable.Empty<UserRoom>().AsQueryable();
         }
     }
 }

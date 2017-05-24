@@ -27,13 +27,15 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
         public async Task Execute(IJobExecutionContext context)
         {
             var emailList = getEmailMessages.Invoke(10);
-            if (!emailList.Any())
+
+            if (!(emailList.Count > 0))
             {
                 Debug.WriteLine("No emails to send");
                 return;
             }
 
             var connectionResult = await emailService.ConnectClient();
+
             if (!connectionResult)
             {
                 Debug.WriteLine("Authentication error");
@@ -44,6 +46,7 @@ namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
             {
                 var messageToSend = emailService.CreateMessage(email.Recipient, email.Subject, email.Message);
                 var sendResult = await emailService.SendEmailAsync(messageToSend);
+
                 if (sendResult)
                 {
                     deleteEmailMessageById.Invoke(email.Id);
