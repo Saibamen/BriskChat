@@ -34,7 +34,7 @@ namespace TrollChat.Web.Hubs
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
-        private static readonly List<UserConnection> _connectedClients = new List<UserConnection>();
+        private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
 
         public ChannelHub(IAddNewRoom addNewRoom,
             IAddNewMessage addNewMessage,
@@ -72,7 +72,7 @@ namespace TrollChat.Web.Hubs
         public override Task OnConnected()
         {
             Groups.Add(Context.ConnectionId, Context.DomainId().ToString());
-            _connectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
+            ConnectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
 
             return base.OnConnected();
         }
@@ -80,8 +80,8 @@ namespace TrollChat.Web.Hubs
         public override Task OnDisconnected(bool stopCalled)
         {
             Groups.Remove(Context.ConnectionId, Context.DomainId().ToString());
-            var userToDelete = _connectedClients.FirstOrDefault(x => x.UserId == Context.UserId() && x.DomainId == Context.DomainId());
-            _connectedClients.Remove(userToDelete);
+            var userToDelete = ConnectedClients.FirstOrDefault(x => x.UserId == Context.UserId() && x.DomainId == Context.DomainId());
+            ConnectedClients.Remove(userToDelete);
 
             return base.OnDisconnected(stopCalled);
         }
@@ -202,7 +202,7 @@ namespace TrollChat.Web.Hubs
 
         public static bool IsConnected(string connectionid, Guid userid)
         {
-            return _connectedClients.Any(x => x.UserId == userid);
+            return ConnectedClients.Any(x => x.UserId == userid);
         }
 
         public void GetUsersFromDomain()
