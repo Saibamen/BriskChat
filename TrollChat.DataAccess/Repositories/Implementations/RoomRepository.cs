@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices.ComTypes;
 using Microsoft.EntityFrameworkCore;
 using TrollChat.DataAccess.Context;
 using TrollChat.DataAccess.Models;

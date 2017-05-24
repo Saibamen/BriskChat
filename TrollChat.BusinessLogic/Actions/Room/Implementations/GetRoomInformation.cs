@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using AutoMapper.QueryableExtensions;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TrollChat.BusinessLogic.Actions.Base;
 using TrollChat.BusinessLogic.Models;
 

@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Room;
 

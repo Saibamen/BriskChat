@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.Metadata;
 
 namespace TrollChat.DataAccess.Models
 {
@@ -11,10 +10,12 @@ namespace TrollChat.DataAccess.Models
         {
             Tags = new HashSet<Tag>();
             UserRooms = new HashSet<UserRoom>();
+            //Users = new HashSet<User>();
         }
 
         public virtual ICollection<Tag> Tags { get; set; }
         public virtual ICollection<UserRoom> UserRooms { get; set; }
+        //public virtual ICollection<User> Users { get; set; }
 
         [Required]
         public User Owner { get; set; }
