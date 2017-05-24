@@ -47,6 +47,7 @@ namespace TrollChat.Web.Hubs
             IGetMessageById getMessageById,
             IEditMessageById editMessageById,
             IGetRoomUsers getRoomUsers,
+            IGetDomainPublicRooms getDomainPublicRooms,
             IGetRoomById getRoomById,
             IGetRoomInformation getRoomInformation,
             IGetUserById getUserById)
@@ -62,6 +63,7 @@ namespace TrollChat.Web.Hubs
             this.getMessageById = getMessageById;
             this.editMessageById = editMessageById;
             this.getRoomUsers = getRoomUsers;
+            this.getDomainPublicRooms = getDomainPublicRooms;
             this.getRoomById = getRoomById;
             this.getRoomInformation = getRoomInformation;
             this.getUserById = getUserById;
@@ -206,7 +208,6 @@ namespace TrollChat.Web.Hubs
         public void GetUsersFromDomain()
         {
             var userList = getUsersByDomainId.Invoke(Context.DomainId());
-
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
             var viewList = userList.Select(item => new PrivateConversationUserViewModel
@@ -224,9 +225,9 @@ namespace TrollChat.Web.Hubs
         {
             var roominformation = getRoomInformation.Invoke(new Guid(roomId));
             var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roominformation);
-            var createdON = informationR.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn);
+            var createdOn = informationR.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn);
 
-            Clients.Caller.RoomInfo(informationR, createdON);
+            Clients.Caller.RoomInfo(informationR, createdOn);
         }
 
         public void GetRoomUsers(string roomId)
@@ -235,8 +236,8 @@ namespace TrollChat.Web.Hubs
             {
                 return;
             }
-            var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
 
+            var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
             roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == new Guid(roomId)));
 
             var userList = roomUserList.Select(item => new RoomUsersViewModel()
