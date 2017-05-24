@@ -622,7 +622,7 @@ myHub.client.usersInRoom = function (result) {
 
 myHub.client.roomInfo = function (result, resultTime) {
     $("#AboutInfo").empty();
-    var divToAppend = '<div>Createt by '+ result.OwnerName +' on '+ resultTime +'  </div>';
+    var divToAppend = '<div>Created by '+ result.OwnerName +' on '+ resultTime +'  </div>';
     $("#AboutInfo").append(divToAppend);  
 
 }
