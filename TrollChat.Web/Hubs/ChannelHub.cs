@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
+using TrollChat.BusinessLogic.Actions.User.Implementations;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.DataAccess.Models;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Room;
 
@@ -29,8 +32,12 @@ namespace TrollChat.Web.Hubs
         private readonly IEditMessageById editMessageById;
         private readonly IGetRoomUsers getRoomUsers;
         private readonly IGetDomainPublicRooms getDomainPublicRooms;
+        private readonly IGetRoomById getRoomById;
+        private readonly IGetRoomInformation getRoomInformation;
+        private readonly IGetUserById getUserById;
 
         private const string TimeStampRepresentation = "HH:mm";
+        private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
         private static readonly List<UserConnection> _connectedClients = new List<UserConnection>();
 
         public ChannelHub(IAddNewRoom addNewRoom,
@@ -42,7 +49,11 @@ namespace TrollChat.Web.Hubs
             IGetUserPrivateConversations getUserPrivateConversations,
             IDeleteMessageById deleteMessageById,
             IGetMessageById getMessageById,
-            IEditMessageById editMessageById)
+            IEditMessageById editMessageById,
+            IGetRoomUsers getRoomUsers,
+            IGetRoomById getRoomById,
+            IGetRoomInformation getRoomInformation,
+            IGetUserById getUserById)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -54,6 +65,10 @@ namespace TrollChat.Web.Hubs
             this.deleteMessageById = deleteMessageById;
             this.getMessageById = getMessageById;
             this.editMessageById = editMessageById;
+            this.getRoomUsers = getRoomUsers;
+            this.getRoomById = getRoomById;
+            this.getRoomInformation = getRoomInformation;
+            this.getUserById = getUserById;
         }
 
         public override Task OnConnected()
@@ -209,11 +224,24 @@ namespace TrollChat.Web.Hubs
             Clients.Caller.privateConversationsUsersLoadedAction(viewList);
         }
 
-        public void GetRoomUsers(Guid roomId)
+        public void GetRoomInformation(string roomId)
         {
-            var roomUserList = getRoomUsers.Invoke(roomId);
+            var roominformation = getRoomInformation.Invoke(new Guid(roomId));
+            var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roominformation);
+            var createdON = informationR.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn);
 
-            roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == roomId));
+            Clients.Caller.RoomInfo(informationR, createdON);
+        }
+
+        public void GetRoomUsers(string roomId)
+        {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+            var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
+
+            roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == new Guid(roomId)));
 
             var userList = roomUserList.Select(item => new RoomUsersViewModel()
             {
@@ -222,7 +250,7 @@ namespace TrollChat.Web.Hubs
                 Email = item.Email
             });
 
-            if (roomId == Guid.Empty)
+            if (new Guid(roomId) == Guid.Empty)
             {
                 return;
             }
@@ -231,6 +259,7 @@ namespace TrollChat.Web.Hubs
         }
 
         public void CreateNewPrivateConversation(List<Guid> model)
+
         {
             // If list has duplicates abort!
             if (model.Distinct().Count() != model.Count)

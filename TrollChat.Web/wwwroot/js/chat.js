@@ -1,4 +1,4 @@
-﻿$(".ui.sidebar.left").sidebar("setting", {
+$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
@@ -547,7 +547,7 @@ $("#channel_actions_toggle").click(function () {
     } else {
             $("#Rrightbar").html("");
             sidebar.addClass("visible");
-            $("#rightbar_Title").html("Chanel Setings");
+            $("#rightbar_Title").html("Channel Settings");
            }
 });
 
@@ -555,13 +555,16 @@ $("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
 });
 
-
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
             if ($("#rightbar_Title").html() == "Chanel Details"){
                 sidebar.removeClass("visible");
+                var divToAppend = '';
+
+
+                $("#Rrightbar").append(divToAppend);
                 }else{
                              sidebar.addClass("visible");
         $("#Rrightbar").html("");
@@ -571,44 +574,43 @@ $("#details_toggle").click(function () {
             '<div class="accordion">' +
             '<div class="title">' +
             '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-            '<div class="content">' +
-            'Created by saibamen on March 31, 2017</div>' +
+            '<div class="content" id="aboutinfo"></div>' +
             '<div class="title">' +
             '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
             '<div class="content" id="MembersInRoom"></div></div></div>');
         $(".ui.styled.accordion").accordion();
         myHub.server.getRoomUsers(currentRoomId);
-                    }
+        myHub.server.getRoomInformation(currentRoomId);                    }
         }
      else {
          sidebar.addClass("visible");
         $("#Rrightbar").html("");
-        $("#rightbar_Title").html("Chanel Details");
+        $("#rightbar_Title").html("Channel Details");
         $("#Rrightbar").append('<div class="ui styled accordion">'+           
             '<div class="active content">' +
             '<div class="accordion">' +
             '<div class="title">' +
             '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-            '<div class="content">' +
-            'Created by saibamen on March 31, 2017</div>' +
+            '<div class="content" id="AboutInfo">Dupa  </div>' +
             '<div class="title">' +
             '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
             '<div class="content" id="MembersInRoom"></div></div></div>');
         $(".ui.styled.accordion").accordion();
         myHub.server.getRoomUsers(currentRoomId);  
+        myHub.server.getRoomInformation(currentRoomId);  
             }
 });
 
 $(document).on("click", ".private-conversation-tag", function () {
     $(this).remove();
 });
+
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
     $.each(result,
         function (index, value) {
             var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-            divToAppend +=
-                '<div class="eight wide column"><b><i class="user icon"></i></b> ';
+            divToAppend +='<div class="eight wide column"><b><i class="user icon"></i></b> ';
             divToAppend += value.Name + '</div>';
             divToAppend += '<div class="four wide column"></div>';
             divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
@@ -618,3 +620,9 @@ myHub.client.usersInRoom = function (result) {
         });
 }
 
+myHub.client.roomInfo = function (result, resultTime) {
+    $("#AboutInfo").empty();
+    var divToAppend = '<div>Createt by '+ result.OwnerName +' on '+ resultTime +'  </div>';
+    $("#AboutInfo").append(divToAppend);  
+
+}
