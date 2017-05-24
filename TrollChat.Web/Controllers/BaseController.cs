@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -19,7 +18,7 @@ namespace TrollChat.Web.Controllers
         {
             base.OnActionExecuted(context);
 
-            if (Alert.GetAlerts().Any())
+            if (Alert.GetAlerts().Count > 0)
             {
                 TempData.Put("alertMessages", Alert.GetAlerts());
             }

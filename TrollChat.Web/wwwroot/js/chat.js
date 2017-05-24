@@ -318,7 +318,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
 
 myHub.client.loadPrivateConversations = function (result) {
     $.each(result, function (index, value) {
-        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>"' + value.Name + '"</a>"';
+        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + '</a>';
 
         $("#privateConversationsMenu").append(divToAppend);
     });
@@ -340,7 +340,7 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 }
 
 myHub.client.privateConversationAddedAction = function (value) {
-    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>"' + value.Name + '"</a>"';
+    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + '</a>';
 
     $("#privateConversationsMenu").append(divToAppend);
     loadingStop();

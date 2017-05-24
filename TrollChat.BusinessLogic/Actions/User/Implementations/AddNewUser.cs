@@ -24,7 +24,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
         // TODO : Check for user in domain
         public DataAccess.Models.User Invoke(Models.UserModel user)
         {
-            if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Any())
+            if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Count() > 0)
             {
                 return null;
             }

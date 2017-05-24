@@ -22,7 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
             var result = domainRepository.FindBy(x => x.Name == name);
 
-            return result.Any();
+            return result.Count() > 0;
         }
     }
 }

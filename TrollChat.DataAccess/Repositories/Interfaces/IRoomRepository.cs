@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using TrollChat.DataAccess.Models;
 
 namespace TrollChat.DataAccess.Repositories.Interfaces
