@@ -73,7 +73,7 @@ namespace TrollChat.Web
             //I'm gonna leave it as string array becase we might want to add some log modules later
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
 
-            loggerFactory.AddDebug((category, _logLevel) => (!logOnlyThese.Any(category.Contains) && _logLevel >= logLevel));
+            loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
 
             if (env.IsDevelopment())
             {
@@ -93,7 +93,7 @@ namespace TrollChat.Web
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationScheme = "Cookies",
-                LoginPath = new PathString("/Auth/Login"),
+                LoginPath = new PathString("/Auth/SignIn"),
                 AccessDeniedPath = new PathString("/Home/AccessDenied"),
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,

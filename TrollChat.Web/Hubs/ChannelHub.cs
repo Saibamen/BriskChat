@@ -31,6 +31,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetRoomById getRoomById;
         private readonly IGetRoomInformation getRoomInformation;
         private readonly IGetUserById getUserById;
+        private readonly IAddNewUserRoom addNewUserRoom;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
@@ -50,7 +51,8 @@ namespace TrollChat.Web.Hubs
             IGetDomainPublicRooms getDomainPublicRooms,
             IGetRoomById getRoomById,
             IGetRoomInformation getRoomInformation,
-            IGetUserById getUserById)
+            IGetUserById getUserById,
+            IAddNewUserRoom addNewUserRoom)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -67,6 +69,7 @@ namespace TrollChat.Web.Hubs
             this.getRoomById = getRoomById;
             this.getRoomInformation = getRoomInformation;
             this.getUserById = getUserById;
+            this.addNewUserRoom = addNewUserRoom;
         }
 
         public override Task OnConnected()
@@ -109,7 +112,7 @@ namespace TrollChat.Web.Hubs
             {
                 var newItem = new PrivateConversationViewModel
                 {
-                    Id = item.Id,
+                    Id = item.Room.Id,
                     Name = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), item.Room.Name)
                 };
 
@@ -126,11 +129,25 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
+            // FIXME: Check if user have access to room (have userRoom record in DB) and add if not (only on public rooms)
+            var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+
+            if (userRoom == null)
+            {
+                var newUserRoom = addNewUserRoom.Invoke(new Guid(roomId), Context.UserId());
+
+                if (!newUserRoom)
+                {
+                    return;
+                }
+            }
+
             await Groups.Add(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
+            // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
 
@@ -146,6 +163,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
+            // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
@@ -168,6 +186,11 @@ namespace TrollChat.Web.Hubs
 
             // Add to database
             var userRoomModel = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+
+            if (userRoomModel == null)
+            {
+                return;
+            }
 
             var messageModel = new MessageModel
             {
@@ -240,7 +263,7 @@ namespace TrollChat.Web.Hubs
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
             roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == new Guid(roomId)));
 
-            var userList = roomUserList.Select(item => new RoomUsersViewModel()
+            var userList = roomUserList.Select(item => new RoomUsersViewModel
             {
                 UserId = item.Id,
                 Name = item.Name,

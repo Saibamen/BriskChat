@@ -17,7 +17,7 @@
 
     <div class="ui secondary pointing menu">
         <a class="ui logo icon image" href="/">
-            <img class="logo" src="~/images/troll.png" />
+            <img class="logo" src="~/images/troll.png" alt="Logo"/>
         </a>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
             TrollChat
@@ -27,7 +27,7 @@
         </div>
         @await Html.PartialAsync("_LoginPartial")
     </div>
-    <div class=" body-content">
+    <div class="body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
             @Html.Partial("_AlertsPartial")
