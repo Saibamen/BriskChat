@@ -129,7 +129,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // FIXME: Check if user have access to room (have userRoom record in DB) and add if not (only on public rooms)
+            // Check if user have access to room (have userRoom in DB) and add if not (only on public rooms)
             var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
 
             if (userRoom == null)
@@ -298,27 +298,32 @@ namespace TrollChat.Web.Hubs
             Clients.Caller.privateConversationAddedAction(new PrivateConversationViewModel { Id = room.Id, Name = tempName });
         }
 
-        public void EditMessage(string roomId, string messageId, string message)
+        public void EditMessage(string roomId, string messageId, string messageText)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(messageText))
             {
                 return;
             }
 
-            message = message.Trim();
+            messageText = messageText.Trim();
 
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(messageText))
             {
                 return;
             }
 
-            // TODO: Check author
+            var messageFromDb = getMessageById.Invoke(new Guid(messageId));
 
-            var edited = editMessageById.Invoke(new Guid(messageId), message);
+            if (messageFromDb == null || messageFromDb.UserRoom.User.Id != Context.UserId())
+            {
+                return;
+            }
+
+            var edited = editMessageById.Invoke(new Guid(messageId), messageText);
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+                Clients.Group(roomId).broadcastEditedMessage(messageId, messageText);
             }
         }
 
@@ -329,13 +334,12 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // TODO: Check author
-            /*var message = getMessageById.Invoke(new Guid(messageId));
+            var message = getMessageById.Invoke(new Guid(messageId));
 
-            if (message.UserRoom.User.Id != Context.UserId())
+            if (message == null || message.UserRoom.User.Id != Context.UserId())
             {
                 return;
-            }*/
+            }
 
             var deleted = deleteMessageById.Invoke(new Guid(messageId));
 
