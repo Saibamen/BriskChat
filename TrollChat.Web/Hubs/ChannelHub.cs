@@ -30,7 +30,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetDomainPublicRooms getDomainPublicRooms;
         private readonly IGetRoomById getRoomById;
         private readonly IGetRoomInformation getRoomInformation;
-        private readonly IGetUserById getUserById;
+        private readonly IEditRoomCustomization editRoomCustomization;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
@@ -50,7 +50,8 @@ namespace TrollChat.Web.Hubs
             IGetDomainPublicRooms getDomainPublicRooms,
             IGetRoomById getRoomById,
             IGetRoomInformation getRoomInformation,
-            IGetUserById getUserById)
+            IGetUserById getUserById,
+            IEditRoomCustomization editRoomCustomization)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -66,7 +67,7 @@ namespace TrollChat.Web.Hubs
             this.getDomainPublicRooms = getDomainPublicRooms;
             this.getRoomById = getRoomById;
             this.getRoomInformation = getRoomInformation;
-            this.getUserById = getUserById;
+            this.editRoomCustomization = editRoomCustomization;
         }
 
         public override Task OnConnected()
@@ -296,6 +297,20 @@ namespace TrollChat.Web.Hubs
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+            }
+        }
+
+        public void EditRoomCustomization(string roomId, int roomCustomization)
+        {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+
+            var edited = editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
+            if (edited)
+            {
+                Clients.Group(roomId).broadcastEditedRoomCustomnization(roomId, roomCustomization);
             }
         }
 

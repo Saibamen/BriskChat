@@ -1112,7 +1112,6 @@ button, input, textarea {
 
 .ui.sidebar.vertical.inverted.right {
     min-width: 1px;
-    max-width: 350px;
 
 }
 .rightbar_Title { 
@@ -1142,11 +1141,9 @@ button, input, textarea {
     margin-top: 3px;
 
 }
-.ui.sidebar.vertical.inverted.right{
-    z-index: 102;
-    flex-direction: column;
-    -webkit-box-orient: vertical;
-    will-change: transform;
-    position: fixed;
-    left: 213px;
+.bottom.attached.ui.item{
+    position: absolute;
+    bottom: 4%;
+    left: 15%;
+
 }
