@@ -34,6 +34,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetUserById getUserById;
         private readonly IAddNewUserRoom addNewUserRoom;
         private readonly IGetLastMessagesByRoomId getLastMessagesByRoomId;
+        private readonly IEditRoomCustomization editRoomCustomization;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
@@ -74,6 +75,7 @@ namespace TrollChat.Web.Hubs
             this.getUserById = getUserById;
             this.addNewUserRoom = addNewUserRoom;
             this.getLastMessagesByRoomId = getLastMessagesByRoomId;
+            this.editRoomCustomization = editRoomCustomization;
         }
 
         public override Task OnConnected()
@@ -340,6 +342,20 @@ namespace TrollChat.Web.Hubs
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedMessage(messageId, messageText);
+            }
+        }
+
+        public void EditRoomCustomization(string roomId, int roomCustomization)
+        {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+
+            var edited = editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
+            if (edited)
+            {
+                Clients.Group(roomId).broadcastEditedRoomCustomnization(roomId, roomCustomization);
             }
         }
 

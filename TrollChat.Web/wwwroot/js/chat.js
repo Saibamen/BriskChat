@@ -99,6 +99,7 @@ $(".menu").on("click", ".menu > a.item", function (e) {
             loadingStop();
             console.log("Current room ID: " + currentRoomId);
         });
+            myHub.server.getRoomInformation(currentRoomId);
     }
 });
 
@@ -408,6 +409,9 @@ $.connection.hub.start()
                 console.log("Connected to room");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
+                myHub.server.getRoomInformation(currentRoomId);
+
+
                 loadingStop();
 
                 $("#msg_form").keypress(function (e) {
@@ -557,74 +561,157 @@ function serializeForm(form) {
     return obj;
 }
 
+function customization() {
+    myHub.server.getRoomInformation(currentRoomId);
+    var divToAppend =  '<div class="item">\
+                            <div class="ui styled accordion">\
+                                <div class="active content">\
+                                    <div class="accordion">\
+                                        <div class="title">  <i class="theme icon">  </i>  Customization  </div>\
+                                        <div class="content" id="customization">\
+                                            <div class="ui form">\
+                                                <div class="field">\
+                                                    <select id="selecttheme" onchange="selecttheme(this);">\
+                                                        <option value="0">Black</option>\
+                                                        <option value="1">Blue</option>\
+                                                        <option value="2">Green</option>\
+                                                        <option value="3">Orange</option>\
+                                                        <option value="4">Pink</option>\
+                                                    </select>\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>';
+    var divToAppend2 ='<div class="bottom attached centered ui item">\
+                            <div class="ui buttons" tabindex="0"><button class="ui button" onclick="choicetheme(themeInDatabase);">Cancel</button>\
+                                <div class="or"></div>\
+                                <button class="ui positive button" onclick="changeValueCustomization(themeInNow);">Save</button>\
+                            </div>\
+                        </div>';
+    $("#Rrightbar").append(divToAppend); 
+    $("#rightsidebarblock").append(divToAppend2);  
+    $(".ui.styled.accordion").accordion();           
+}
+function changeValueCustomization(val){
+themeInDatabase = val;
+parseval = parseInt(themeInNow);
+myHub.server.editRoomCustomization(currentRoomId, parseval);
+
+}
+function membersInRoom() {
+    $("#Rrightbar").html("");
+
+    $("#rightbar_Title").html("Chanel Details");
+    $("#Rrightbar").append('<div class="ui styled accordion">'+           
+                                '<div class="active content">' +
+                                    '<div class="accordion">' +
+                                        '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
+                                        '<div class="content" id="aboutinfo"></div>' +
+                                        '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
+                                        '<div class="content" id="MembersInRoom"></div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>');
+    $(".ui.styled.accordion").accordion();
+    myHub.server.getRoomUsers(currentRoomId);
+}
+//Zmiana 
+
+var themeInNow;
+function choicetheme(value){  
+    switch(value){
+        case "0": 
+        {     
+            leftbar = "#1B1C1D";
+            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color",  leftbar);
+            break;
+        }    
+        case "1":
+        {   
+            leftbar = "#0080ff";
+            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
+            break;
+        }
+        case "2":
+        {
+            leftbar = "#33CC00";
+            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
+            break;
+        }
+        case "3":
+        {
+            leftbar = "#FF9900";
+            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
+            break;
+        }
+        case "4":
+        {
+            leftbar = "#D15CC1";
+            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
+            break;
+        }
+        default:
+        alert("No selected");
+
+    } 
+
+
+}
+function selecttheme(sel){
+    var choice = sel.value;
+    console.log("wybrałem :" + choice);
+    var leftbar; 
+    themeInNow=sel.value;
+    choicetheme(choice);
+};
+
 $(".ui.sidebar.vertical.inverted.right").first().sidebar('attach events', '.toggle.button');
 
 $("#channel_actions_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").text() == "Chanel Setings"){
+        if ($("#rightbar_Title").text() == "Chanel Setings") {
                 sidebar.removeClass("visible");
-                }else{
+            }
+            else {
                     $("#Rrightbar").html("");
                     sidebar.addClass("visible");
                     $("#rightbar_Title").html("Chanel Setings");
+                    customization();
                     }
     } else {
             $("#Rrightbar").html("");
             sidebar.addClass("visible");
             $("#rightbar_Title").html("Channel Settings");
+            customization();
            }
 });
 
 $("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+    choicetheme(themeInDatabase);
 });
 
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-            if ($("#rightbar_Title").html() == "Chanel Details"){
-                sidebar.removeClass("visible");
-                var divToAppend = '';
-
-
-                $("#Rrightbar").append(divToAppend);
-                }else{
-                             sidebar.addClass("visible");
-        $("#Rrightbar").html("");
-        $("#rightbar_Title").html("Chanel Details");
-        $("#Rrightbar").append('<div class="ui styled accordion">'+           
-            '<div class="active content">' +
-            '<div class="accordion">' +
-            '<div class="title">' +
-            '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-            '<div class="content" id="aboutinfo"></div>' +
-            '<div class="title">' +
-            '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
-            '<div class="content" id="MembersInRoom"></div></div></div>');
-        $(".ui.styled.accordion").accordion();
-        myHub.server.getRoomUsers(currentRoomId);
-        myHub.server.getRoomInformation(currentRoomId);                    }
+        if ($("#rightbar_Title").html() == "Chanel Details") {
+            console.log("Odpalam details_toggle pierwszy raz");
+            sidebar.removeClass("visible");
+        } else {
+            console.log("Odpalam details_toggle pierwszy raz");
+            sidebar.addClass("visible");
+            membersInRoom();
         }
-     else {
-         sidebar.addClass("visible");
-        $("#Rrightbar").html("");
-        $("#rightbar_Title").html("Channel Details");
-        $("#Rrightbar").append('<div class="ui styled accordion">'+           
-            '<div class="active content">' +
-            '<div class="accordion">' +
-            '<div class="title">' +
-            '<i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-            '<div class="content" id="AboutInfo">Dupa  </div>' +
-            '<div class="title">' +
-            '<i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
-            '<div class="content" id="MembersInRoom"></div></div></div>');
-        $(".ui.styled.accordion").accordion();
-        myHub.server.getRoomUsers(currentRoomId);  
-        myHub.server.getRoomInformation(currentRoomId);  
-            }
+    } else {
+        membersInRoom();
+        sidebar.addClass("visible");
+    }
 });
 
 $(document).on("click", ".private-conversation-tag", function () {
@@ -647,8 +734,13 @@ myHub.client.usersInRoom = function (result) {
 }
 
 myHub.client.roomInfo = function (result, resultTime) {
-    $("#AboutInfo").empty();
+    $("#aboutinfo").empty();
     var divToAppend = '<div>Created by '+ result.OwnerName +' on '+ resultTime +'  </div>';
-    $("#AboutInfo").append(divToAppend);  
-
+    $("#aboutinfo").append(divToAppend); 
+    themeInDatabase = String(result.Customization);
+    console.log("wARTOŚC Z BAZY "+ result.Customization);
+    choicetheme(themeInDatabase);
 }
+
+
+
