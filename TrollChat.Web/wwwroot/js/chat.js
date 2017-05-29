@@ -1,4 +1,4 @@
-$(".ui.sidebar.left").sidebar("setting", {
+﻿$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
@@ -85,9 +85,12 @@ $(".menu").on("click", ".menu > a.item", function (e) {
     if (currentRoomId != $(e.target).data("id")) {
         // Leave current room
         loadingStart();
+        // Clear messages
+        $("#chat_messages").empty();
         myHub.server.leaveRoom(currentRoomId);
         $(".menu > a.item.active").removeClass("active");
 
+        // TODO: Change currentRoomId later?
         currentRoomId = $(e.target).data("id");
 
         $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
@@ -292,7 +295,6 @@ myHub.client.loadRooms = function (result) {
 
 myHub.client.loadDomainPublicRooms = function (result) {
     var setActive = true;
-    $("#channelsCount").text("CHANNELS (" + result.length + ")");
 
     $.each(result, function (index, value) {
         var divToAppend = '<a class="item';
@@ -314,6 +316,23 @@ myHub.client.loadDomainPublicRooms = function (result) {
         divToAppend += value.Name + "</a>";
         $("#channelsMenu").append(divToAppend);
     });
+
+    var rooms = {};
+    var list = $("#channelsMenu > .item").filter(function() {
+        var id = $(this).data("id");
+
+        if(rooms[id]) {
+            // Duplikat pokoju
+            $(this).remove();
+            return false;   
+        } else {
+            // Pierwszy pokój z tym ID
+            rooms[id] = true;
+            return true;
+        }
+    });
+
+    $("#channelsCount").text("CHANNELS (" + $("#channelsMenu > .item").length + ")");
 }
 
 myHub.client.loadPrivateConversations = function (result) {
@@ -321,6 +340,13 @@ myHub.client.loadPrivateConversations = function (result) {
         var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + '</a>';
 
         $("#privateConversationsMenu").append(divToAppend);
+    });
+}
+
+myHub.client.parseLastMessages = function (result) {
+    $.each(result, function (index, value) {
+        // TODO: append messages
+        console.log("Autor: " + value.UserName + " Text: " + value.Text);
     });
 }
 

@@ -21,7 +21,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             this.hasher = hasher ?? new Hasher();
         }
 
-        // TODO : Check for user in domain
+        // TODO: Check for user in domain
         public DataAccess.Models.User Invoke(Models.UserModel user)
         {
             if (!user.IsValid() || userRepository.FindBy(x => x.Email == user.Email).Count() > 0)

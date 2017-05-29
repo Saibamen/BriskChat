@@ -9,6 +9,7 @@ using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Helpers;
+using TrollChat.Web.Models.Message;
 using TrollChat.Web.Models.Room;
 
 namespace TrollChat.Web.Hubs
@@ -32,6 +33,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetRoomInformation getRoomInformation;
         private readonly IGetUserById getUserById;
         private readonly IAddNewUserRoom addNewUserRoom;
+        private readonly IGetLastMessagesByRoomId getLastMessagesByRoomId;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
@@ -52,7 +54,8 @@ namespace TrollChat.Web.Hubs
             IGetRoomById getRoomById,
             IGetRoomInformation getRoomInformation,
             IGetUserById getUserById,
-            IAddNewUserRoom addNewUserRoom)
+            IAddNewUserRoom addNewUserRoom,
+            IGetLastMessagesByRoomId getLastMessagesByRoomId)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -70,6 +73,7 @@ namespace TrollChat.Web.Hubs
             this.getRoomInformation = getRoomInformation;
             this.getUserById = getUserById;
             this.addNewUserRoom = addNewUserRoom;
+            this.getLastMessagesByRoomId = getLastMessagesByRoomId;
         }
 
         public override Task OnConnected()
@@ -129,7 +133,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // Check if user have access to room (have userRoom in DB) and add if not (only on public rooms)
+            // Check if user has access to room (have userRoom in DB) and add if not (only on public rooms)
             var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
 
             if (userRoom == null)
@@ -143,6 +147,18 @@ namespace TrollChat.Web.Hubs
             }
 
             await Groups.Add(Context.ConnectionId, roomId);
+
+            var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), 15);
+
+            var viewList = messagesFromDb.Select(item => new MessageViewModel
+            {
+                Id = item.Id,
+                UserName = item.UserRoom.User.Name,
+                Text = item.Text,
+                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
+            });
+
+            Clients.Caller.parseLastMessages(viewList);
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
