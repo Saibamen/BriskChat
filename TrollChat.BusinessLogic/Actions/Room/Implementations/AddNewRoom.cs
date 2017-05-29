@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -25,7 +26,9 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public Guid Invoke(RoomModel room, Guid userId, Guid domainId)
         {
-            if (!room.IsValid() || userId == Guid.Empty || domainId == Guid.Empty)
+            if (!room.IsValid() || userId == Guid.Empty || domainId == Guid.Empty ||
+                // Check for room name duplication in domain
+                roomRepository.FindBy(x => x.Name == room.Name && x.Domain.Id == domainId).Count() > 0)
             {
                 return Guid.Empty;
             }

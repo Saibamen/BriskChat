@@ -15,23 +15,45 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         {
             var messageData = new MessageModel
             {
-                Text = "Testmessage"
+                Text = "Testmessage",
+                UserRoom = new UserRoomModel()
             };
 
             DataAccess.Models.Message messageSaved = null;
-            var mockedMessagerepository = new Mock<IMessageRepository>();
-            mockedMessagerepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Message>()))
+            var mockedMessageRepository = new Mock<IMessageRepository>();
+            mockedMessageRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Message>()))
                 .Callback<DataAccess.Models.Message>(u => messageSaved = u);
 
-            var action = new AddNewMessage(mockedMessagerepository.Object);
+            var action = new AddNewMessage(mockedMessageRepository.Object);
 
             // action
             action.Invoke(messageData);
 
             // assert
+            mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Once());
+            mockedMessageRepository.Verify(r => r.Save(), Times.Exactly(1));
             Assert.Equal("Testmessage", messageSaved.Text);
-            mockedMessagerepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Once());
-            mockedMessagerepository.Verify(r => r.Save(), Times.Exactly(1));
+        }
+
+        [Fact]
+        public void Invoke_NoUserRoom_AddNorSaveAreCalled()
+        {
+            var messageData = new MessageModel
+            {
+                Text = "Testmessage"
+            };
+
+            var mockedMessageRepository = new Mock<IMessageRepository>();
+
+            var action = new AddNewMessage(mockedMessageRepository.Object);
+
+            // action
+            var result = action.Invoke(messageData);
+
+            // assert
+            mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            Assert.Equal(Guid.Empty, result);
         }
 
         [Fact]

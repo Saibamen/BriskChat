@@ -34,7 +34,7 @@ namespace TrollChat.Web.Hubs
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
-        private static readonly List<UserConnection> _connectedClients = new List<UserConnection>();
+        private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
 
         public ChannelHub(IAddNewRoom addNewRoom,
             IAddNewMessage addNewMessage,
@@ -50,8 +50,7 @@ namespace TrollChat.Web.Hubs
             IGetDomainPublicRooms getDomainPublicRooms,
             IGetRoomById getRoomById,
             IGetRoomInformation getRoomInformation,
-            IGetUserById getUserById,
-            IEditRoomCustomization editRoomCustomization)
+            IGetUserById getUserById)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -73,7 +72,7 @@ namespace TrollChat.Web.Hubs
         public override Task OnConnected()
         {
             Groups.Add(Context.ConnectionId, Context.DomainId().ToString());
-            _connectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
+            ConnectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
 
             return base.OnConnected();
         }
@@ -81,8 +80,8 @@ namespace TrollChat.Web.Hubs
         public override Task OnDisconnected(bool stopCalled)
         {
             Groups.Remove(Context.ConnectionId, Context.DomainId().ToString());
-            var userToDelete = _connectedClients.FirstOrDefault(x => x.UserId == Context.UserId() && x.DomainId == Context.DomainId());
-            _connectedClients.Remove(userToDelete);
+            var userToDelete = ConnectedClients.FirstOrDefault(x => x.UserId == Context.UserId() && x.DomainId == Context.DomainId());
+            ConnectedClients.Remove(userToDelete);
 
             return base.OnDisconnected(stopCalled);
         }
@@ -110,7 +109,7 @@ namespace TrollChat.Web.Hubs
             {
                 var newItem = new PrivateConversationViewModel
                 {
-                    Id = item.Id,
+                    Id = item.Room.Id,
                     Name = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), item.Room.Name)
                 };
 
@@ -127,11 +126,25 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
+            // Check if user have access to room (have userRoom in DB) and add if not (only on public rooms)
+            var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+
+            if (userRoom == null)
+            {
+                var newUserRoom = addNewUserRoom.Invoke(new Guid(roomId), Context.UserId());
+
+                if (!newUserRoom)
+                {
+                    return;
+                }
+            }
+
             await Groups.Add(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
+            // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
 
@@ -147,6 +160,7 @@ namespace TrollChat.Web.Hubs
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
+            // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
@@ -169,6 +183,11 @@ namespace TrollChat.Web.Hubs
 
             // Add to database
             var userRoomModel = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+
+            if (userRoomModel == null)
+            {
+                return;
+            }
 
             var messageModel = new MessageModel
             {
@@ -203,7 +222,7 @@ namespace TrollChat.Web.Hubs
 
         public static bool IsConnected(string connectionid, Guid userid)
         {
-            return _connectedClients.Any(x => x.UserId == userid);
+            return ConnectedClients.Any(x => x.UserId == userid);
         }
 
         public void GetUsersFromDomain()
@@ -241,7 +260,7 @@ namespace TrollChat.Web.Hubs
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
             roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == new Guid(roomId)));
 
-            var userList = roomUserList.Select(item => new RoomUsersViewModel()
+            var userList = roomUserList.Select(item => new RoomUsersViewModel
             {
                 UserId = item.Id,
                 Name = item.Name,
@@ -276,27 +295,32 @@ namespace TrollChat.Web.Hubs
             Clients.Caller.privateConversationAddedAction(new PrivateConversationViewModel { Id = room.Id, Name = tempName });
         }
 
-        public void EditMessage(string roomId, string messageId, string message)
+        public void EditMessage(string roomId, string messageId, string messageText)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(messageText))
             {
                 return;
             }
 
-            message = message.Trim();
+            messageText = messageText.Trim();
 
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrEmpty(messageText))
             {
                 return;
             }
 
-            // TODO: Check author
+            var messageFromDb = getMessageById.Invoke(new Guid(messageId));
 
-            var edited = editMessageById.Invoke(new Guid(messageId), message);
+            if (messageFromDb == null || messageFromDb.UserRoom.User.Id != Context.UserId())
+            {
+                return;
+            }
+
+            var edited = editMessageById.Invoke(new Guid(messageId), messageText);
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedMessage(messageId, message);
+                Clients.Group(roomId).broadcastEditedMessage(messageId, messageText);
             }
         }
 
@@ -321,13 +345,12 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            // TODO: Check author
-            /*var message = getMessageById.Invoke(new Guid(messageId));
+            var message = getMessageById.Invoke(new Guid(messageId));
 
-            if (message.UserRoom.User.Id != Context.UserId())
+            if (message == null || message.UserRoom.User.Id != Context.UserId())
             {
                 return;
-            }*/
+            }
 
             var deleted = deleteMessageById.Invoke(new Guid(messageId));
 

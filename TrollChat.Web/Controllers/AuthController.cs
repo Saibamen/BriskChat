@@ -166,7 +166,7 @@ namespace TrollChat.Web.Controllers
                 new Claim(ClaimTypes.Role, Role.User),
                 // TODO: MOVE TO CONST STRING
                 new Claim("DomainName", access.Domain.Name),
-                new Claim("DomainId", access.Domain.Id.ToString()),
+                new Claim("DomainId", access.Domain.Id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Claims");
@@ -252,8 +252,7 @@ namespace TrollChat.Web.Controllers
 
             var token = addUserTokenToUser.Invoke(user.Id);
 
-            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token },
-                Request.Scheme);
+            var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token }, Request.Scheme);
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
             var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
@@ -334,7 +333,7 @@ namespace TrollChat.Web.Controllers
 
             var model = new ResetPasswordNewPasswordViewModel()
             {
-                Token = token,
+                Token = token
             };
 
             return View(model);
