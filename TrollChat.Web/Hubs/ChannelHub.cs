@@ -56,7 +56,8 @@ namespace TrollChat.Web.Hubs
             IGetRoomInformation getRoomInformation,
             IGetUserById getUserById,
             IAddNewUserRoom addNewUserRoom,
-            IGetLastMessagesByRoomId getLastMessagesByRoomId)
+            IGetLastMessagesByRoomId getLastMessagesByRoomId,
+            IEditRoomCustomization editRoomCustomization)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;

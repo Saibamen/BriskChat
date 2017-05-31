@@ -16,7 +16,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetLastRoomMessages(Guid roomId, int number)
         {
-            var query = context.Set<Message>().Include(x => x.UserRoom.Room).Include(x => x.UserRoom.User)
+            var query = context.Set<Message>().Include(x => x.UserRoom.User)
                 .Where(x => x.UserRoom.Room.Id == roomId).OrderByDescending(x => x.CreatedOn).Take(number);
 
             return query;
