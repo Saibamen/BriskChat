@@ -90,16 +90,14 @@ $(".menu").on("click", ".menu > a.item", function (e) {
         myHub.server.leaveRoom(currentRoomId);
         $(".menu > a.item.active").removeClass("active");
 
-        // TODO: Change currentRoomId later?
-        currentRoomId = $(e.target).data("id");
-
-        $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
+        $.when(myHub.server.joinRoom($(e.target).data("id"))).then(function () {
+            currentRoomId = $(e.target).data("id");
             $(e.target).addClass("active");
             $("#channel_title").html($(e.target).html());
+            myHub.server.getRoomInformation(currentRoomId);
             loadingStop();
             console.log("Current room ID: " + currentRoomId);
         });
-            myHub.server.getRoomInformation(currentRoomId);
     }
 });
 
@@ -189,11 +187,13 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
 $(".grid").on("click", ".private-conversation-row", function (e) {
     var item;
+
     if ($(e.target).hasClass(".private-conversation-row")) {
         item = e.target;
     } else {
         item = $(e.target).closest(".private-conversation-row");
     }
+
     var append = $(item).data("name");
     var id = $(item).data("id");
     //var input = $("#createPrivateConversationForm :input[name='Name']");
@@ -203,15 +203,14 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
 
 // This deletes the message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='delete']", function (e) {
-    $(".ui.delete.modal")
-        .modal({
-            onApprove: function () {
-                // Deleting message
-                var messageId = $(e.target).closest(".ts-message").data("id");
-                myHub.server.deleteMessage(currentRoomId, messageId);
-            }
-        })
-        .modal("show");
+    $(".ui.delete.modal").modal({
+        onApprove: function () {
+            // Deleting message
+            var messageId = $(e.target).closest(".ts-message").data("id");
+            myHub.server.deleteMessage(currentRoomId, messageId);
+        }
+    })
+    .modal("show");
 });
 
 myHub.client.broadcastEditedMessage = function (messageId, messageText) {
@@ -319,7 +318,8 @@ myHub.client.loadDomainPublicRooms = function (result) {
     });
 
     var rooms = {};
-    var list = $("#channelsMenu > .item").filter(function() {
+
+    $("#channelsMenu > .item").filter(function() {
         var id = $(this).data("id");
 
         if(rooms[id]) {
@@ -338,7 +338,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
 
 myHub.client.loadPrivateConversations = function (result) {
     $.each(result, function (index, value) {
-        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + '</a>';
+        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
 
         $("#privateConversationsMenu").append(divToAppend);
     });
@@ -346,9 +346,28 @@ myHub.client.loadPrivateConversations = function (result) {
 
 myHub.client.parseLastMessages = function (result) {
     $.each(result, function (index, value) {
-        // TODO: append messages
-        console.log("Autor: " + value.UserName + " Text: " + value.Text);
+        console.log("Autor: " + value.UserName + " Czas: " + value.CreatedOn + " Text: " + value.Text);
+
+        // TODO: move to function
+        var messageHtml = '<div class="ts-message" data-id="' + value.Id + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + value.UserName + '</a><a href="#" class="timestamp">' + value.CreatedOn + '</a></div><span class="message_body">' + Autolinker.link(value.Text);
+
+        var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+        if (youTubeMatch) {
+            messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+        } else {
+            messageHtml += "</span></div></div>";
+        }
+
+        $("#chat_messages").append(messageHtml);
     });
+
+    // Scroll #chat_messages
+    loadingStop();
+    $("#chat_messages").clearQueue();
+    $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+    addActionsToMessages();
+    $(document).trigger("reloadPopups");
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
@@ -367,7 +386,7 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 }
 
 myHub.client.privateConversationAddedAction = function (value) {
-    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + '</a>';
+    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
 
     $("#privateConversationsMenu").append(divToAppend);
     loadingStop();
@@ -394,8 +413,9 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
     });
 }
 
-
-// Start the connection
+/*
+ * Start the connection
+ */
 $.connection.hub.start()
     .done(function () {
         console.log("Connected to Hub. Getting rooms");
@@ -410,9 +430,6 @@ $.connection.hub.start()
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
                 myHub.server.getRoomInformation(currentRoomId);
-
-
-                loadingStop();
 
                 $("#msg_form").keypress(function (e) {
                     if (e.which === 13) {
@@ -432,7 +449,6 @@ $.connection.hub.start()
             });
         });
     })
-
     .fail(function (a) {
         console.log("Not connected! " + a);
     });
@@ -467,17 +483,15 @@ $("#createNewChannel").click(function () {
 
     thisModal = $(".ui.basic.create-room.modal");
 
-    $(thisModal)
-        .modal({
-            closable: false,
-            onDeny: function () {
-                $(thisModal).parent().css("background-color", "");
-            },
-            onApprove: function () {
-                $(thisModal).parent().css("background-color", "");
-            }
-        })
-        .modal("show");
+    $(thisModal).modal({
+        closable: false,
+        onDeny: function () {
+            $(thisModal).parent().css("background-color", "");
+        },
+        onApprove: function () {
+            $(thisModal).parent().css("background-color", "");
+        }
+    }).modal("show");
 
     $(thisModal).parent().css("background-color", "#fff");
 });
@@ -495,17 +509,15 @@ $("#createNewPrivateConversation").click(function () {
 
     var thisModal = $(".ui.basic.create-private-conversation.modal");
 
-    $(thisModal)
-        .modal({
-            closable: false,
-            onDeny: function () {
-                $(thisModal).parent().css("background-color", "");
-            },
-            onApprove: function () {
-                $(thisModal).parent().css("background-color", "");
-            }
-        })
-        .modal("show");
+    $(thisModal).modal({
+        closable: false,
+        onDeny: function () {
+            $(thisModal).parent().css("background-color", "");
+        },
+        onApprove: function () {
+            $(thisModal).parent().css("background-color", "");
+        }
+    }).modal("show");
 
     $(thisModal).parent().css("background-color", "#fff");
 });
@@ -595,11 +607,10 @@ function customization() {
     $("#rightsidebarblock").append(divToAppend2);  
     $(".ui.styled.accordion").accordion();           
 }
-function changeValueCustomization(val){
-themeInDatabase = val;
-parseval = parseInt(themeInNow);
-myHub.server.editRoomCustomization(currentRoomId, parseval);
-
+function changeValueCustomization(val) {
+    themeInDatabase = val;
+    parseval = parseInt(themeInNow);
+    myHub.server.editRoomCustomization(currentRoomId, parseval);
 }
 function membersInRoom() {
     $("#Rrightbar").html("");
@@ -612,17 +623,17 @@ function membersInRoom() {
                                         '<div class="content" id="aboutinfo"></div>' +
                                         '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
                                         '<div class="content" id="MembersInRoom"></div>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>');
+                                    "</div>"+
+                                "</div>"+
+                            "</div>");
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
 }
 //Zmiana 
 
 var themeInNow;
-function choicetheme(value){  
-    switch(value){
+function choicetheme(value) {  
+    switch(value) {
         case "0": 
         {     
             leftbar = "#1B1C1D";
@@ -654,41 +665,40 @@ function choicetheme(value){
             break;
         }
         default:
-        alert("No selected");
+            alert("Not selected");
 
     } 
 
 
 }
-function selecttheme(sel){
+
+function selecttheme(sel) {
     var choice = sel.value;
     console.log("wybrałem :" + choice);
-    var leftbar; 
-    themeInNow=sel.value;
+    themeInNow = sel.value;
     choicetheme(choice);
 };
 
-$(".ui.sidebar.vertical.inverted.right").first().sidebar('attach events', '.toggle.button');
+$(".ui.sidebar.vertical.inverted.right").first().sidebar();
 
 $("#channel_actions_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").text() == "Chanel Setings") {
-                sidebar.removeClass("visible");
-            }
-            else {
-                    $("#Rrightbar").html("");
-                    sidebar.addClass("visible");
-                    $("#rightbar_Title").html("Chanel Setings");
-                    customization();
-                    }
-    } else {
+        if ($("#rightbar_Title").text() === "Chanel Setings") {
+            sidebar.removeClass("visible");
+        } else {
             $("#Rrightbar").html("");
             sidebar.addClass("visible");
-            $("#rightbar_Title").html("Channel Settings");
+            $("#rightbar_Title").html("Chanel Setings");
             customization();
-           }
+        }
+    } else {
+        $("#Rrightbar").html("");
+        sidebar.addClass("visible");
+        $("#rightbar_Title").html("Channel Settings");
+        customization();
+    }
 });
 
 $("#closerightbar").click(function () {
@@ -700,7 +710,7 @@ $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
 
     if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").html() == "Chanel Details") {
+        if ($("#rightbar_Title").html() === "Chanel Details") {
             console.log("Odpalam details_toggle pierwszy raz");
             sidebar.removeClass("visible");
         } else {
@@ -724,10 +734,10 @@ myHub.client.usersInRoom = function (result) {
         function (index, value) {
             var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
             divToAppend +='<div class="eight wide column"><b><i class="user icon"></i></b> ';
-            divToAppend += value.Name + '</div>';
+            divToAppend += value.Name + "</div>";
             divToAppend += '<div class="four wide column"></div>';
             divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
-            divToAppend += '</div>';
+            divToAppend += "</div>";
 
             $("#MembersInRoom").append(divToAppend);
         });
@@ -735,12 +745,9 @@ myHub.client.usersInRoom = function (result) {
 
 myHub.client.roomInfo = function (result, resultTime) {
     $("#aboutinfo").empty();
-    var divToAppend = '<div>Created by '+ result.OwnerName +' on '+ resultTime +'  </div>';
+    var divToAppend = "<div>Created by "+ result.OwnerName +" on "+ resultTime +"  </div>";
     $("#aboutinfo").append(divToAppend); 
     themeInDatabase = String(result.Customization);
-    console.log("wARTOŚC Z BAZY "+ result.Customization);
+    console.log("Wartosc z bazy "+ result.Customization);
     choicetheme(themeInDatabase);
 }
-
-
-

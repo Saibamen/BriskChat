@@ -39,6 +39,7 @@ namespace TrollChat.Web.Hubs
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
+        private const int MessagesToLoad = 20;
 
         public ChannelHub(IAddNewRoom addNewRoom,
             IAddNewMessage addNewMessage,
@@ -151,7 +152,7 @@ namespace TrollChat.Web.Hubs
 
             await Groups.Add(Context.ConnectionId, roomId);
 
-            var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), 15);
+            var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
 
             var viewList = messagesFromDb.Select(item => new MessageViewModel
             {

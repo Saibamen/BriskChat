@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using TrollChat.DataAccess.Context;
 using TrollChat.DataAccess.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -16,10 +16,27 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetLastRoomMessages(Guid roomId, int number)
         {
-            var query = context.Set<Message>().Include(x => x.UserRoom.User)
-                .Where(x => x.UserRoom.Room.Id == roomId).OrderByDescending(x => x.CreatedOn).Take(number);
+            var query = (from message in context.Set<Message>()
+                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
+                         //orderby message.CreatedOn descending
+                         select new Message
+                         {
+                             Id = message.Id,
+                             Text = message.Text,
+                             CreatedOn = message.CreatedOn,
+                             UserRoom = new UserRoom
+                             {
+                                 User = new User { Name = message.UserRoom.User.Name }
+                             }
+                         }).AsEnumerable().Reverse().Take(number).Reverse();//.OrderBy(message => message.CreatedOn);
 
-            return query;
+            //var countQuery = query.Count();
+
+            //query = query.Skip(Math.Max(0, query.Count() - number));
+
+            //var countQuery2 = query.Count();
+
+            return query.AsQueryable();
         }
     }
 }
