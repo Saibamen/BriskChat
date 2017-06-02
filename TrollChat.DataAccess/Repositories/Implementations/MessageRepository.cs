@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using TrollChat.DataAccess.Context;
 using TrollChat.DataAccess.Models;
@@ -16,9 +15,10 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetLastRoomMessages(Guid roomId, int number)
         {
-            var query = (from message in context.Set<Message>()
-                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
-                         //orderby message.CreatedOn descending
+            var query = (from room in context.Set<Room>()
+                         join userroom in context.Set<UserRoom>() on room.Id equals userroom.Room.Id
+                         join message in context.Set<Message>() on userroom.Id equals message.UserRoom.Id
+                         where room.Id == roomId && message.DeletedOn == null
                          select new Message
                          {
                              Id = message.Id,
@@ -28,15 +28,9 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              {
                                  User = new User { Name = message.UserRoom.User.Name }
                              }
-                         }).AsEnumerable().Reverse().Take(number).Reverse();//.OrderBy(message => message.CreatedOn);
+                         }).OrderByDescending(x => x.CreatedOn).Take(number);
 
-            //var countQuery = query.Count();
-
-            //query = query.Skip(Math.Max(0, query.Count() - number));
-
-            //var countQuery2 = query.Count();
-
-            return query.AsQueryable();
+            return query;
         }
     }
 }

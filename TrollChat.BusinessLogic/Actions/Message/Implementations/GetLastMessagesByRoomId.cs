@@ -40,6 +40,8 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
                 });
             }
 
+            messageList.Reverse();
+
             return messageList;
         }
     }
