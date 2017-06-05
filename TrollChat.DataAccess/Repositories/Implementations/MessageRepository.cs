@@ -15,10 +15,9 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetLastRoomMessages(Guid roomId, int number)
         {
-            var query = (from room in context.Set<Room>()
-                         join userroom in context.Set<UserRoom>() on room.Id equals userroom.Room.Id
-                         join message in context.Set<Message>() on userroom.Id equals message.UserRoom.Id
-                         where room.Id == roomId && message.DeletedOn == null
+            var query = (from message in context.Set<Message>()
+                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
+                         orderby message.CreatedOn descending
                          select new Message
                          {
                              Id = message.Id,
@@ -28,7 +27,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              {
                                  User = new User { Name = message.UserRoom.User.Name }
                              }
-                         }).OrderByDescending(x => x.CreatedOn).Take(number);
+                         }).Take(number);
 
             return query;
         }
