@@ -1,4 +1,4 @@
-﻿$(".ui.sidebar.left").sidebar("setting", {
+$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
@@ -304,8 +304,9 @@ myHub.client.loadDomainPublicRooms = function (result) {
             setActive = false;
             currentRoomId = value.Id;
         }
-
+        divToAppend += '"data-isPublic="' + value.isPublic + '"  ';
         divToAppend += '"data-id="' + value.Id + '" > ';
+
 
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
@@ -384,7 +385,6 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     updateChannelsCount(1);
     loadingStop();
 }
-
 myHub.client.privateConversationAddedAction = function (value) {
     var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
 
@@ -577,7 +577,6 @@ function customization() {
     myHub.server.getRoomInformation(currentRoomId);
     var divToAppend =  '<div class="item">\
                             <div class="ui styled accordion">\
-                                <div class="active content">\
                                     <div class="accordion">\
                                         <div class="title">  <i class="theme icon">  </i>  Customization  </div>\
                                         <div class="content" id="customization">\
@@ -593,24 +592,59 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
+                                    <div class="title">  <i class="wpforms icon"></i>  Description  </div>\
+                                        <div class="content" id="Description">\
+                                            <div class="ui form">\
+                                                <div class="field">\
+                                                <input type="text" id="infodescription">\
+                                                </div>\
+                                            </div>\
+                                        </div>\
+                                    <div class="title">  <i class="wpforms icon"></i>  Room Name  </div>\
+                                        <div class="content" id="roomName">\
+                                            <div class="ui form">\
+                                                <div class="field">\
+                                                <input type="text" id="infoName">\
+                                                </div>\
+                                            </div>\
+                                        </div>\
                                     </div>\
-                                </div>\
                             </div>\
                         </div>';
     var divToAppend2 ='<div class="bottom attached centered ui item">\
-                            <div class="ui buttons" tabindex="0"><button class="ui button" onclick="choicetheme(themeInDatabase);">Cancel</button>\
+                            <div class="ui buttons" tabindex="0"><button class="ui button" onclick="changeSettings(themeInDatabase,descriptioninbase,roomNameinBase);">Cancel</button>\
                                 <div class="or"></div>\
-                                <button class="ui positive button" onclick="changeValueCustomization(themeInNow);">Save</button>\
+                                <button class="ui positive button" onclick="changeSettingsValue(themeInNow);">Save</button>\
                             </div>\
                         </div>';
     $("#Rrightbar").append(divToAppend); 
     $("#rightsidebarblock").append(divToAppend2);  
     $(".ui.styled.accordion").accordion();           
 }
-function changeValueCustomization(val) {
+function changeSettingsValue(val) {
     themeInDatabase = val;
     parseval = parseInt(themeInNow);
+    var Descriptionnow = $("#infodescription").val();
+    var RoomNameNow = $("#infoName").val();
+    descriptioninbase = Descriptionnow;
+
+    $("#channel_topic_text").html(Descriptionnow);
     myHub.server.editRoomCustomization(currentRoomId, parseval);
+    myHub.server.editRoomName(currentRoomId, RoomNameNow);
+    myHub.server.editRoomDescription(currentRoomId, Descriptionnow);
+
+    if ($(".menu > a.item.active").children().data().isPublic)
+    {
+        roomNameinBase = RoomNameNow;
+        $(".menu > a.item.active").html('<i class="icon left">#</i>'+RoomNameNow);
+        console.log("public");
+    }else if (!$(".menu > a.item.active").children().data().isPublic) {
+        roomNameinBase = RoomNameNow;
+        $(".menu > a.item.active").html('<i class="lock icon left"></i>'+RoomNameNow);
+        console.log("niepublic");
+    } 
+
+     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
 }
 function membersInRoom() {
     $("#Rrightbar").html("");
@@ -629,9 +663,16 @@ function membersInRoom() {
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
 }
-//Zmiana 
-
+//zmiana
 var themeInNow;
+var descriptioninbase;
+var roomNameinBase;
+function changeSettings(value,value2,value3){
+choicetheme(value);
+ $("#infodescription").val(value2);
+ $("#infoName").val(value3);
+}
+
 function choicetheme(value) {  
     switch(value) {
         case "0": 
@@ -668,8 +709,6 @@ function choicetheme(value) {
             alert("Not selected");
 
     } 
-
-
 }
 
 function selecttheme(sel) {
@@ -703,13 +742,13 @@ $("#channel_actions_toggle").click(function () {
 
 $("#closerightbar").click(function () {
     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
-    choicetheme(themeInDatabase);
+  //  choicetheme(themeInDatabase);
 });
 
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.vertical.inverted.right");
-
-    if (sidebar.hasClass("visible")) {
+    myHub.server.getRoomInformation(currentRoomId);
+        if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").html() === "Chanel Details") {
             console.log("Odpalam details_toggle pierwszy raz");
             sidebar.removeClass("visible");
@@ -747,7 +786,14 @@ myHub.client.roomInfo = function (result, resultTime) {
     $("#aboutinfo").empty();
     var divToAppend = "<div>Created by "+ result.OwnerName +" on "+ resultTime +"  </div>";
     $("#aboutinfo").append(divToAppend); 
+    $("#infodescription").val(result.Description);
+    console.log(result.Description);
     themeInDatabase = String(result.Customization);
+    themeInNow = themeInDatabase;
+    descriptioninbase = result.Description;
+    roomNameinBase = result.Name;
+     $("#channel_topic_text").html(descriptioninbase);
+     $("#infoName").val(roomNameinBase);
     console.log("Wartosc z bazy "+ result.Customization);
     choicetheme(themeInDatabase);
 }
