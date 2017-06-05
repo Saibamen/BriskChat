@@ -1,4 +1,4 @@
-$(".ui.sidebar.left").sidebar("setting", {
+﻿$(".ui.sidebar.left").sidebar("setting", {
     transition: "overlay"
 });
 
@@ -280,7 +280,7 @@ myHub.client.loadRooms = function (result) {
             currentRoomId = value.Id;
         }
 
-        divToAppend += '"data-id="' + value.Id + '" > ';
+        divToAppend += '"data-id="' + value.Id + '" data-isPublic="' + value.IsPublic + '">';
 
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
@@ -304,9 +304,8 @@ myHub.client.loadDomainPublicRooms = function (result) {
             setActive = false;
             currentRoomId = value.Id;
         }
-        divToAppend += '"data-isPublic="' + value.isPublic + '"  ';
-        divToAppend += '"data-id="' + value.Id + '" > ';
 
+        divToAppend += '"data-id="' + value.Id + '" data-isPublic="' + value.IsPublic + '">';
 
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
@@ -372,7 +371,7 @@ myHub.client.parseLastMessages = function (result) {
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
-    var divToAppend = '<a class="item" data-id="' + roomId + '">';
+    var divToAppend = '<a class="item" data-id="' + roomId + '" data-isPublic="' + isPublic + '">';
 
     if (isPublic) {
         divToAppend += '<i class="icon left">#</i>';
