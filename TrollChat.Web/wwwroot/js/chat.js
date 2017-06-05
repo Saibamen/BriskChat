@@ -280,7 +280,7 @@ myHub.client.loadRooms = function (result) {
             currentRoomId = value.Id;
         }
 
-        divToAppend += '"data-id="' + value.Id + '" data-isPublic="' + value.IsPublic + '">';
+        divToAppend += '"data-id="' + value.Id + '" data-ispublic="' + value.IsPublic + '">';
 
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
@@ -305,7 +305,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
             currentRoomId = value.Id;
         }
 
-        divToAppend += '"data-id="' + value.Id + '" data-isPublic="' + value.IsPublic + '">';
+        divToAppend += '"data-id="' + value.Id + '" data-ispublic="' + value.IsPublic + '">';
 
         if (value.IsPublic) {
             divToAppend += '<i class="icon left">#</i>';
@@ -371,7 +371,7 @@ myHub.client.parseLastMessages = function (result) {
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
-    var divToAppend = '<a class="item" data-id="' + roomId + '" data-isPublic="' + isPublic + '">';
+    var divToAppend = '<a class="item" data-id="' + roomId + '" data-ispublic="' + isPublic + '">';
 
     if (isPublic) {
         divToAppend += '<i class="icon left">#</i>';
@@ -632,14 +632,13 @@ function changeSettingsValue(val) {
     myHub.server.editRoomName(currentRoomId, RoomNameNow);
     myHub.server.editRoomDescription(currentRoomId, Descriptionnow);
 
-    if ($(".menu > a.item.active").children().data().isPublic)
-    {
+    if ($(".menu > a.item.active").data("ispublic")) {
         roomNameinBase = RoomNameNow;
-        $(".menu > a.item.active").html('<i class="icon left">#</i>'+RoomNameNow);
+        $(".menu > a.item.active").html('<i class="icon left">#</i>' + RoomNameNow);
         console.log("public");
-    }else if (!$(".menu > a.item.active").children().data().isPublic) {
+    } else {
         roomNameinBase = RoomNameNow;
-        $(".menu > a.item.active").html('<i class="lock icon left"></i>'+RoomNameNow);
+        $(".menu > a.item.active").html('<i class="lock icon left"></i>' + RoomNameNow);
         console.log("niepublic");
     } 
 
