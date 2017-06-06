@@ -28,5 +28,12 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
             return !(query.Count() > 0) ? Enumerable.Empty<UserRoom>().AsQueryable() : query;
         }
+
+        public IQueryable<Room> GetUserRoomById(Guid RoomId)
+        {
+            var query = context.Set<UserRoom>().Include(r => r.Room).Where(x => x.Id == RoomId);
+
+            return !(query.Count() > 0) ? Enumerable.Empty<Room>().AsQueryable() : (IQueryable<Room>)query;
+        }
     }
 }

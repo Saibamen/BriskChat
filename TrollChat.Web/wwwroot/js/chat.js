@@ -591,7 +591,7 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
-                                    <div class="title">  <i class="wpforms icon"></i>  Description  </div>\
+                                        <div class="title">  <i class="wpforms icon"></i>  Description  </div>\
                                         <div class="content" id="Description">\
                                             <div class="ui form">\
                                                 <div class="field">\
@@ -599,7 +599,7 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
-                                    <div class="title">  <i class="wpforms icon"></i>  Room Name  </div>\
+                                        <div class="title">  <i class="wpforms icon"></i>  Room Name  </div>\
                                         <div class="content" id="roomName">\
                                             <div class="ui form">\
                                                 <div class="field">\
@@ -607,9 +607,23 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
+                                        <div class="title">  <i class="delete icon"></i>  Delete Room</div>\
+                                        <div class="content" id="deleteRoom">\
+                                            <div class="ui two column centered grid">\
+                                                <div class="column"></div>\
+                                                    <div class="ui form ">\
+                                                        <div class="field">\
+                                                        <button class="negative ui button" id="deleteRoomButton" data-inverted="" data-tooltip="Irrevocable removal of the room" data-position="bottom center" onclick="deleteRoom();"> Delete Room</button>\
+                                                        </div>\
+                                                    </div>\
+                                                </div>\
+                                         </div>\
                                     </div>\
                             </div>\
                         </div>';
+                        $("#deleteRoomButton").popup({
+                             variation: "inverted"
+                        });
     var divToAppend2 ='<div class="bottom attached centered ui item">\
                             <div class="ui buttons" tabindex="0"><button class="ui button" onclick="changeSettings(themeInDatabase,descriptioninbase,roomNameinBase);">Cancel</button>\
                                 <div class="or"></div>\
