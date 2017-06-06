@@ -1,4 +1,5 @@
-﻿@model TrollChat.Web.Models.Room.CreateNewRoomViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model TrollChat.Web.Models.Room.CreateNewRoomViewModel
 
 <style>
     .chat_slack_button {
@@ -37,7 +38,7 @@
 </style>
 
 <div class="ui basic create-room modal">
-    <h1 class="modal-title" id="createNewChannelHeader">Create a private channel</h1>
+    <h1 class="modal-title">Create a private channel</h1>
     <label>Channels are where your team communicates. They're the best when organized around a topic - #leads for example</label>
 
     @using (Html.BeginForm(FormMethod.Post, false, new { id = "createChanelForm", @class = "ui large form" }))

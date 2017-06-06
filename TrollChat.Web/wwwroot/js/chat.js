@@ -346,8 +346,6 @@ myHub.client.loadPrivateConversations = function (result) {
 
 myHub.client.parseLastMessages = function (result) {
     $.each(result, function (index, value) {
-        console.log("Autor: " + value.UserName + " Czas: " + value.CreatedOn + " Text: " + value.Text);
-
         // TODO: move to function
         var messageHtml = '<div class="ts-message" data-id="' + value.Id + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + value.UserName + '</a><a href="#" class="timestamp">' + value.CreatedOn + '</a></div><span class="message_body">' + Autolinker.link(value.Text);
 
@@ -545,6 +543,7 @@ $("#createPrivateConversationForm").submit(function (e) {
     loadingStart();
     e.preventDefault();
     var list = [];
+    
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         var item = $(element);
         var id = $(item).data("id");
@@ -574,14 +573,15 @@ function serializeForm(form) {
 
 function customization() {
     myHub.server.getRoomInformation(currentRoomId);
-    var divToAppend =  '<div class="item">\
+
+    var divToAppend = '<div class="item">\
                             <div class="ui styled accordion">\
                                     <div class="accordion">\
-                                        <div class="title">  <i class="theme icon">  </i>  Customization  </div>\
+                                        <div class="title"><i class="theme icon"></i>Customization</div>\
                                         <div class="content" id="customization">\
                                             <div class="ui form">\
                                                 <div class="field">\
-                                                    <select id="selecttheme" onchange="selecttheme(this);">\
+                                                    <select id="selecttheme" onchange="selectTheme(this);">\
                                                         <option value="0">Black</option>\
                                                         <option value="1">Blue</option>\
                                                         <option value="2">Green</option>\
@@ -591,7 +591,7 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
-                                        <div class="title">  <i class="wpforms icon"></i>  Description  </div>\
+                                        <div class="title"><i class="wpforms icon"></i>Description</div>\
                                         <div class="content" id="Description">\
                                             <div class="ui form">\
                                                 <div class="field">\
@@ -599,7 +599,7 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
-                                        <div class="title">  <i class="wpforms icon"></i>  Room Name  </div>\
+                                        <div class="title"><i class="wpforms icon"></i>Room Name</div>\
                                         <div class="content" id="roomName">\
                                             <div class="ui form">\
                                                 <div class="field">\
@@ -607,7 +607,7 @@ function customization() {
                                                 </div>\
                                             </div>\
                                         </div>\
-                                        <div class="title">  <i class="delete icon"></i>  Delete Room</div>\
+                                        <div class="title"><i class="delete icon"></i>Delete Room</div>\
                                         <div class="content" id="deleteRoom">\
                                             <div class="ui two column centered grid">\
                                                 <div class="column"></div>\
@@ -634,106 +634,102 @@ function customization() {
     $("#rightsidebarblock").append(divToAppend2);  
     $(".ui.styled.accordion").accordion();           
 }
+
 function changeSettingsValue(val) {
     themeInDatabase = val;
     parseval = parseInt(themeInNow);
-    var Descriptionnow = $("#infodescription").val();
-    var RoomNameNow = $("#infoName").val();
-    descriptioninbase = Descriptionnow;
+    var descriptionNow = $("#infodescription").val();
+    var roomNameNow = $("#infoName").val();
+    descriptionInDatabase = descriptionNow;
 
-    $("#channel_topic_text").html(Descriptionnow);
+    $("#channel_topic_text").html(descriptionNow);
     myHub.server.editRoomCustomization(currentRoomId, parseval);
-    myHub.server.editRoomName(currentRoomId, RoomNameNow);
-    myHub.server.editRoomDescription(currentRoomId, Descriptionnow);
+    myHub.server.editRoomName(currentRoomId, roomNameNow);
+    myHub.server.editRoomDescription(currentRoomId, descriptionNow);
 
-    if ($(".menu > a.item.active").data("ispublic")) {
-        roomNameinBase = RoomNameNow;
-        $(".menu > a.item.active").html('<i class="icon left">#</i>' + RoomNameNow);
-        console.log("public");
-    } else {
-        roomNameinBase = RoomNameNow;
-        $(".menu > a.item.active").html('<i class="lock icon left"></i>' + RoomNameNow);
-        console.log("niepublic");
-    } 
+    roomNameInDatabase = roomNameNow;
 
-     $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
+    $("#channel_title").contents().last().replaceWith(roomNameNow);
+    // Room name in sidebar
+    $(".menu > a.item.active").contents().last().replaceWith(roomNameNow);
+
+    $(".ui.sidebar.right").removeClass("visible");
 }
 function membersInRoom() {
     $("#Rrightbar").html("");
 
     $("#rightbar_Title").html("Chanel Details");
     $("#Rrightbar").append('<div class="ui styled accordion">'+           
-                                '<div class="active content">' +
-                                    '<div class="accordion">' +
-                                        '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-                                        '<div class="content" id="aboutinfo"></div>' +
-                                        '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
+                                '<div class="active content">'+
+                                    '<div class="accordion">'+
+                                        '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>'+
+                                        '<div class="content" id="aboutinfo"></div>'+
+                                        '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>'+
                                         '<div class="content" id="MembersInRoom"></div>'+
                                     "</div>"+
                                 "</div>"+
                             "</div>");
+
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
 }
-//zmiana
+
+// Zmiana
 var themeInNow;
-var descriptioninbase;
-var roomNameinBase;
-function changeSettings(value,value2,value3){
-choicetheme(value);
- $("#infodescription").val(value2);
- $("#infoName").val(value3);
+var descriptionInDatabase;
+var roomNameInDatabase;
+
+function changeSettings(value, value2, value3) {
+    choiceTheme(value);
+    $("#infodescription").val(value2);
+    $("#infoName").val(value3);
 }
 
-function choicetheme(value) {  
+function choiceTheme(value) {
     switch(value) {
         case "0": 
-        {     
+        {
             leftbar = "#1B1C1D";
-            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color",  leftbar);
             break;
-        }    
+        }
         case "1":
-        {   
+        {
             leftbar = "#0080ff";
-            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
             break;
         }
         case "2":
         {
             leftbar = "#33CC00";
-            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
             break;
         }
         case "3":
         {
             leftbar = "#FF9900";
-            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
             break;
         }
         case "4":
         {
             leftbar = "#D15CC1";
-            $(".ui.vertical.inverted.sidebar.menu.visible.left").css("background-color", leftbar);
             break;
         }
         default:
-            alert("Not selected");
+            leftbar = "#1B1C1D";
+    }
 
-    } 
+    $(".ui.sidebar.left").css("background-color", leftbar);
 }
 
-function selecttheme(sel) {
+function selectTheme(sel) {
     var choice = sel.value;
-    console.log("wybrałem :" + choice);
+    console.log("Wybrałem: " + choice);
     themeInNow = sel.value;
-    choicetheme(choice);
+    choiceTheme(choice);
 };
 
-$(".ui.sidebar.vertical.inverted.right").first().sidebar();
+$(".ui.sidebar.right").first().sidebar();
 
 $("#channel_actions_toggle").click(function () {
-    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+    var sidebar = $(".ui.sidebar.right");
 
     if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").text() === "Chanel Setings") {
@@ -753,14 +749,15 @@ $("#channel_actions_toggle").click(function () {
 });
 
 $("#closerightbar").click(function () {
-    $(".ui.sidebar.vertical.inverted.right").removeClass("visible");
-  //  choicetheme(themeInDatabase);
+    $(".ui.sidebar.right").removeClass("visible");
+    // choiceTheme(themeInDatabase);
 });
 
 $("#details_toggle").click(function () {
-    var sidebar = $(".ui.sidebar.vertical.inverted.right");
+    var sidebar = $(".ui.sidebar.right");
     myHub.server.getRoomInformation(currentRoomId);
-        if (sidebar.hasClass("visible")) {
+
+    if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").html() === "Chanel Details") {
             console.log("Odpalam details_toggle pierwszy raz");
             sidebar.removeClass("visible");
@@ -781,31 +778,35 @@ $(document).on("click", ".private-conversation-tag", function () {
 
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
-    $.each(result,
-        function (index, value) {
-            var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-            divToAppend +='<div class="eight wide column"><b><i class="user icon"></i></b> ';
-            divToAppend += value.Name + "</div>";
-            divToAppend += '<div class="four wide column"></div>';
-            divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
-            divToAppend += "</div>";
 
-            $("#MembersInRoom").append(divToAppend);
-        });
+    $.each(result, function (index, value) {
+        var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        divToAppend +='<div class="eight wide column"><b><i class="user icon"></i></b> ';
+        divToAppend += value.Name + "</div>";
+        divToAppend += '<div class="four wide column"></div>';
+        divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+        divToAppend += "</div>";
+
+        $("#MembersInRoom").append(divToAppend);
+    });
 }
 
 myHub.client.roomInfo = function (result, resultTime) {
     $("#aboutinfo").empty();
-    var divToAppend = "<div>Created by "+ result.OwnerName +" on "+ resultTime +"  </div>";
+    var divToAppend = "<div>Created by "+ result.OwnerName +" on "+ resultTime +"</div>";
     $("#aboutinfo").append(divToAppend); 
     $("#infodescription").val(result.Description);
-    console.log(result.Description);
     themeInDatabase = String(result.Customization);
     themeInNow = themeInDatabase;
-    descriptioninbase = result.Description;
-    roomNameinBase = result.Name;
-     $("#channel_topic_text").html(descriptioninbase);
-     $("#infoName").val(roomNameinBase);
-    console.log("Wartosc z bazy "+ result.Customization);
-    choicetheme(themeInDatabase);
+    descriptionInDatabase = result.Description;
+    roomNameInDatabase = result.Name;
+    $("#channel_topic_text").html(descriptionInDatabase);
+    $("#infoName").val(roomNameInDatabase);
+
+    choiceTheme(themeInDatabase);
+
+    // Change selected theme in drop-down list
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        $("#selecttheme").val(themeInDatabase);
+    }
 }
