@@ -127,6 +127,12 @@ function addEditContainer(id, oldMessageText, messageIcon) {
 
 // Editing message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']", function (e) {
+    if ($(document).find("#message_edit_container").length) {
+        // Only one edit container in site
+        $(document).find("#message_edit_container").prev().show();
+        $(document).find("#message_edit_container").remove();
+    }
+
     var message = $(e.target).closest(".ts-message");
     var messageId = message.data("id");
     var oldMessageText = message.find(".message_body").text();
@@ -139,19 +145,21 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
     // Cancel
     $(".ts-message").on("click", "#cancel_edit", function (x) {
-        $(x.target).closest("#message_edit_container").remove();
         message.show();
+        $(x.target).closest("#message_edit_container").remove();
     });
 
+    // Escape key
     $(document).keydown(function (x) {
-        if (x.keyCode === 27) {
+        if (x.keyCode === 27 && $(document).find("#message_edit_container").length) {
             console.log("Escape keydown");
+            $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
-            message.show();
         }
     });
 
     $("#message_edit_form").keypress(function (x) {
+        // Enter key
         if (x.which === 13) {
             if (!x.shiftKey) {
                 if (oldMessageText !== $(".ql-editor").text().trim()) {
@@ -581,7 +589,7 @@ function customization() {
                                         <div class="content" id="customization">\
                                             <div class="ui form">\
                                                 <div class="field">\
-                                                    <select id="selecttheme" onchange="selectTheme(this);">\
+                                                    <select id="selecttheme" class="ui dropdown" onchange="selectTheme(this);">\
                                                         <option value="0">Black</option>\
                                                         <option value="1">Blue</option>\
                                                         <option value="2">Green</option>\
@@ -610,10 +618,9 @@ function customization() {
                                         <div class="title"><i class="delete icon"></i>Delete Room</div>\
                                         <div class="content" id="deleteRoom">\
                                             <div class="ui two column centered grid">\
-                                                <div class="column"></div>\
                                                     <div class="ui form ">\
                                                         <div class="field">\
-                                                        <button class="negative ui button" id="deleteRoomButton" data-inverted="" data-tooltip="Irrevocable removal of the room" data-position="bottom center" onclick="deleteRoom();"> Delete Room</button>\
+                                                            <button class="negative ui button" id="deleteRoomButton" data-inverted="" data-tooltip="Irrevocable removal of the room" data-position="bottom center" onclick="deleteRoom();">Delete Room</button>\
                                                         </div>\
                                                     </div>\
                                                 </div>\
@@ -621,18 +628,21 @@ function customization() {
                                     </div>\
                             </div>\
                         </div>';
-                        $("#deleteRoomButton").popup({
-                             variation: "inverted"
-                        });
+
+    $("#deleteRoomButton").popup({
+        variation: "inverted"
+    });
+
     var divToAppend2 ='<div class="bottom attached centered ui item">\
-                            <div class="ui buttons" tabindex="0"><button class="ui button" onclick="changeSettings(themeInDatabase,descriptioninbase,roomNameinBase);">Cancel</button>\
+                            <div class="ui buttons" tabindex="0"><button class="ui button" onclick="closeRightBarCallback();">Cancel</button>\
                                 <div class="or"></div>\
                                 <button class="ui positive button" onclick="changeSettingsValue(themeInNow);">Save</button>\
                             </div>\
                         </div>';
-    $("#Rrightbar").append(divToAppend); 
-    $("#rightsidebarblock").append(divToAppend2);  
-    $(".ui.styled.accordion").accordion();           
+
+    $("#Rrightbar").append(divToAppend);
+    $("#rightsidebarblock").append(divToAppend2);
+    $(".ui.styled.accordion").accordion();
 }
 
 function changeSettingsValue(val) {
@@ -655,10 +665,11 @@ function changeSettingsValue(val) {
 
     $(".ui.sidebar.right").removeClass("visible");
 }
+
 function membersInRoom() {
     $("#Rrightbar").html("");
 
-    $("#rightbar_Title").html("Chanel Details");
+    $("#rightbar_Title").html("Channel Details");
     $("#Rrightbar").append('<div class="ui styled accordion">'+           
                                 '<div class="active content">'+
                                     '<div class="accordion">'+
@@ -678,12 +689,6 @@ function membersInRoom() {
 var themeInNow;
 var descriptionInDatabase;
 var roomNameInDatabase;
-
-function changeSettings(value, value2, value3) {
-    choiceTheme(value);
-    $("#infodescription").val(value2);
-    $("#infoName").val(value3);
-}
 
 function choiceTheme(value) {
     switch(value) {
@@ -720,10 +725,8 @@ function choiceTheme(value) {
 }
 
 function selectTheme(sel) {
-    var choice = sel.value;
-    console.log("Wybrałem: " + choice);
     themeInNow = sel.value;
-    choiceTheme(choice);
+    choiceTheme(themeInNow);
 };
 
 $(".ui.sidebar.right").first().sidebar();
@@ -732,12 +735,12 @@ $("#channel_actions_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
 
     if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").text() === "Chanel Setings") {
+        if ($("#rightbar_Title").text() === "Channel Settings") {
             sidebar.removeClass("visible");
         } else {
             $("#Rrightbar").html("");
             sidebar.addClass("visible");
-            $("#rightbar_Title").html("Chanel Setings");
+            $("#rightbar_Title").html("Channel Settings");
             customization();
         }
     } else {
@@ -748,9 +751,21 @@ $("#channel_actions_toggle").click(function () {
     }
 });
 
-$("#closerightbar").click(function () {
+var closeRightBarCallback = function() {
     $(".ui.sidebar.right").removeClass("visible");
-    // choiceTheme(themeInDatabase);
+    choiceTheme(themeInDatabase);
+};
+
+$("#closerightbar").click(function () {
+    closeRightBarCallback();
+});
+
+// Escape key
+$(document).keydown(function (x) {
+    if (x.keyCode === 27 && $(".ui.sidebar.right").hasClass("visible")) {
+        console.log("Escape dla prawego sidebaru");
+        closeRightBarCallback();
+    }
 });
 
 $("#details_toggle").click(function () {
@@ -758,7 +773,7 @@ $("#details_toggle").click(function () {
     myHub.server.getRoomInformation(currentRoomId);
 
     if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").html() === "Chanel Details") {
+        if ($("#rightbar_Title").html() === "Channel Details") {
             console.log("Odpalam details_toggle pierwszy raz");
             sidebar.removeClass("visible");
         } else {
