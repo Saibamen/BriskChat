@@ -31,9 +31,7 @@ body > .grid {
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
+input, select, textarea {
     max-width: 280px;
 }
 
@@ -43,15 +41,16 @@ textarea {
     background-color: #E3E4E5;
     font-size: 20px;
 }
+
 .ui.inverted.menu.item {
     color: #4A4A4A;
     font-size: 24px;
 }
+
 .ui.secondary.pointing.menu {
     font-size: 17px;
     color: #4A4A4A;
     font-family: sans-serif;
-
 }
 
 /*stopka*/
@@ -60,23 +59,25 @@ textarea {
     color: #e32072;
     text-transform: uppercase;
     font-size: 15px;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: sans-serif;
     font-weight: 700;
 }
+
 .cat_1 {
     list-style-type: none;
     color: #4A4A4A;
     text-transform: lowercase;
     font-size: 15px;
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: sans-serif;
     font-weight: 700;
 }
+
 .ui.inverted.vertical.footer.segment {
     margin-top: 10px;
     color: #4A4A4A;
-    width:100%;
-    background-color:whitesmoke;
-    position:absolute;
+    width: 100%;
+    background-color: #f5f5f5;
+    position: absolute;
 }
 
 /*własny przycisk*/
@@ -111,6 +112,7 @@ textarea {
     position: relative;
     left: 10px;
 }
+
 .indexbackgrounds {
     background-color: #E3E4E5;
     background-position: bottom;
@@ -118,6 +120,7 @@ textarea {
     background-size:contain;
     background-repeat: no-repeat;
 }
+
 .indexleftcolumn {
     background-image:url(../images/emlememle.png);
     background-repeat:no-repeat;
@@ -129,8 +132,9 @@ textarea {
     align-self:center;
     text-shadow: 20px 20px 0 0 #4A4A4A;
 }
+
 .headline {
-    font-family: Slack-Lato,appleLogo,sans-serif;
+    font-family: sans-serif;
     font-weight: 900;
     font-size: 94px;
     line-height: 1;
@@ -138,6 +142,7 @@ textarea {
     position: relative;
     white-space: nowrap;
 }
+
 .middle.aligned.center.aligned.column {
     height:100%;
 }
@@ -153,9 +158,11 @@ textarea {
     background-repeat: no-repeat;
     background-position: center;
 }
+
 .domainleftcolumn {
     top:35%;
 }
+
 .socloce {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
@@ -186,21 +193,25 @@ textarea {
     text-align: center;
     padding: 5px;
 }
+
 .topic {
     text-align: center;
 }
+
 .mywrapper {
     border-width: 1px;
     border: 1px solid;
-    border-color: black;
+    border-color: #000;
     border-top: 0;
 }
+
 h1 {
     font-size: 38px;
 }
+
 .button1 {
-    background-color: white;
-    color: black;
+    background-color: #fff;
+    color: #000;
     display: inline-block;
     border: 2px solid #4CAF50;
     padding: 16px 32px;
@@ -208,17 +219,14 @@ h1 {
     margin-top: 11px;
     margin-bottom: 11px;
 }
-.button1 {
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
+
 .button1:hover {
     background-color: #4CAF50;
-    color: white;
+    color: #fff;
 }
+
 /*validation*/
 .text-danger {
-    text-align:left;
-    color:orangered;
+    text-align: left;
+    color: #ff4500;
 }
