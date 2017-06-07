@@ -85,6 +85,8 @@ namespace TrollChat.Web.Hubs
             Groups.Add(Context.ConnectionId, Context.DomainId().ToString());
             ConnectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
 
+            Clients.Caller.setDomainInformation(Context.DomainName(), Context.UserName(), Context.UserId());
+
             return base.OnConnected();
         }
 

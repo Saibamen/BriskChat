@@ -245,8 +245,14 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
     }
 }
 
-myHub.client.broadcastMessage = function (userName, messageId, messageText, timestamp) {
+function getMessageHtml(messageId, userName, timestamp, messageText) {
     var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
+
+    return messageHtml;
+}
+
+myHub.client.broadcastMessage = function (userName, messageId, messageText, timestamp) {
+    var messageHtml =  getMessageHtml(messageId, userName, timestamp, messageText);
 
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -354,8 +360,7 @@ myHub.client.loadPrivateConversations = function (result) {
 
 myHub.client.parseLastMessages = function (result) {
     $.each(result, function (index, value) {
-        // TODO: move to function
-        var messageHtml = '<div class="ts-message" data-id="' + value.Id + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + value.UserName + '</a><a href="#" class="timestamp">' + value.CreatedOn + '</a></div><span class="message_body">' + Autolinker.link(value.Text);
+        var messageHtml =  getMessageHtml(value.Id, value.UserName, value.CreatedOn, value.Text);
 
         var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -416,6 +421,19 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
         $("#privateConversationsUserList").append(divToAppend);
     });
+}
+
+var globalDomainName;
+var globalUserName;
+var globalUserId;
+
+myHub.client.setDomainInformation = function (domainName, userName, userId) {
+    globalDomainName = domainName;
+    globalUserName = userName;
+    globalUserId = userId;
+
+    $("#team_name").text(globalDomainName);
+    $("#team_menu_user_name").text(globalUserName);
 }
 
 /*
@@ -662,6 +680,7 @@ function changeSettingsValue(val) {
     $("#channel_title").contents().last().replaceWith(roomNameNow);
     // Room name in sidebar
     $(".menu > a.item.active").contents().last().replaceWith(roomNameNow);
+    $("#msg_input").attr("placeholder", "Message " + roomNameNow);
 
     $(".ui.sidebar.right").removeClass("visible");
 }
@@ -774,10 +793,8 @@ $("#details_toggle").click(function () {
 
     if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").html() === "Channel Details") {
-            console.log("Odpalam details_toggle pierwszy raz");
             sidebar.removeClass("visible");
         } else {
-            console.log("Odpalam details_toggle pierwszy raz");
             sidebar.addClass("visible");
             membersInRoom();
         }
@@ -794,12 +811,11 @@ $(document).on("click", ".private-conversation-tag", function () {
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
 
+    $("#MembersInRoom").prev().contents().last().replaceWith(result.length + " Members");
+
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend +='<div class="eight wide column"><b><i class="user icon"></i></b> ';
-        divToAppend += value.Name + "</div>";
-        divToAppend += '<div class="four wide column"></div>';
-        divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+        divToAppend +='<div class="eight wide column"><i class="user icon"></i>' + value.Name + "</div>";
         divToAppend += "</div>";
 
         $("#MembersInRoom").append(divToAppend);
@@ -817,6 +833,7 @@ myHub.client.roomInfo = function (result, resultTime) {
     roomNameInDatabase = result.Name;
     $("#channel_topic_text").html(descriptionInDatabase);
     $("#infoName").val(roomNameInDatabase);
+    $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
     choiceTheme(themeInDatabase);
 
