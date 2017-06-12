@@ -38,10 +38,10 @@
 </style>
 
 <div class="ui basic create-room modal">
-    <h1 class="modal-title">Create a private channel</h1>
+    <h1>Create a private channel</h1>
     <label>Channels are where your team communicates. They're the best when organized around a topic - #leads for example</label>
 
-    @using (Html.BeginForm(FormMethod.Post, false, new { id = "createChanelForm", @class = "ui large form" }))
+    @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "createChanelForm"} ))
     {
         <div class="content">
             <div class="row" style="display: flex; align-items: center;">
@@ -62,11 +62,11 @@
             </div>
             <div class="field">
                 @Html.LabelFor(x => x.Name)
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "# e.g. leads", required = "required" })
+                @Html.TextBoxFor(m => m.Name, new { placeholder = "# e.g. leads", required = "required" })
             </div>
             <div class="field">
                 @Html.LabelFor(x => x.Description)
-                @Html.TextBoxFor(m => m.Description, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Description)
             </div>
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         </div>

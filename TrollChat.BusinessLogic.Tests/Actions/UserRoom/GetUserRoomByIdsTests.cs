@@ -31,11 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserRoom
                 Text = "TestMessage"
             };
 
-            var room = new DataAccess.Models.Room
-            {
-                // TODO: Messages
-                //Users = new List<DataAccess.Models.User> { user }
-            };
+            var room = new DataAccess.Models.Room();
 
             var userRoomInDb = new List<DataAccess.Models.UserRoom>
             {

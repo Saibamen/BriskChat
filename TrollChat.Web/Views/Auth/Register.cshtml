@@ -3,40 +3,36 @@
 }
 @model TrollChat.Web.Models.Auth.RegisterViewModel
 
-
 <div class="ui middle aligned center aligned grid">
     <div class="column webressetbox">
-        <h2 class="ui teal header"  >Create to TrollChat Account</h2>
-        <br />
-        <br />
+        <h2 class="ui teal header">Create to TrollChat Account</h2>
+        <br/>
+        <br/>
         <h4>Once registered, you will be sent an email to the address listed below. In this way, we will confirm your email.</h4>
-        <br />
-@using (Html.BeginForm("Register", "Auth", FormMethod.Post))
-{
-        <div class="ui large form">
-            <div class="field">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Email", type = "email", required = "required" })
-                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-            </div>
-            <div class="field">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Name", required = "required" })
-                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-            </div>
-            <div class="field">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", required = "required" })
-                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-            </div>
-            <div class="field">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm Password", required = "required" })
-                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
-            </div>
-            <div class="field">
-                <div class="col-sm-10 col-sm-offset-2">
+        <br/>
+        @using (Html.BeginForm("Register", "Auth", FormMethod.Post))
+        {
+            <div class="ui large form">
+                <div class="field">
+                    @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", type = "email", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+                </div>
+                <div class="field">
+                    @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Name, "", new {@class = "text-danger"})
+                </div>
+                <div class="field">
+                    @Html.PasswordFor(m => m.Password, new { placeholder = "Password", required = "required" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                </div>
+                <div class="field">
+                    @Html.PasswordFor(m => m.ConfirmPassword, new { placeholder = "Confirm Password", required = "required" })
+                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new {@class = "text-danger"})
+                </div>
+                <div class="field">
                     <button class="orginalbutton big" type="submit" id="btnLogin">Register -></button>
                 </div>
             </div>
-        </div>
-}
+        }
     </div>
-    </div>
-        
+</div>

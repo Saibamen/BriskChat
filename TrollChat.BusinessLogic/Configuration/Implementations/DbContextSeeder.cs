@@ -37,8 +37,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
 
         private readonly string[] domains = { "jan", "roland" };
 
-        public void SeedUsers(
-            IAddNewUser addNewUser,
+        public void SeedUsers(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IGetDomainByName getDomainByName,
             ISetDomainOwner setDomainOwner)
@@ -55,6 +54,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                 };
 
                 var dbuser = addNewUser.Invoke(model);
+
                 if (dbuser != null)
                 {
                     var token = dbuser.Tokens.FirstOrDefault().SecretToken;
@@ -78,6 +78,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                 {
                     Name = domain
                 };
+
                 addNewDomain.Invoke(model);
             }
         }

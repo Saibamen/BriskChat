@@ -111,7 +111,7 @@ namespace TrollChat.Web
             migrationHelper.Migrate();
 
             // It works but we don't need to use it right now
-            var scheduler = ShedulerCreator.CreateScheduler(app);
+            //var scheduler = ShedulerCreator.CreateScheduler(app);
             //scheduler.Start().Wait();
         }
     }

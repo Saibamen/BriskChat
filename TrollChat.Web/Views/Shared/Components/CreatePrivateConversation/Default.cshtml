@@ -54,16 +54,16 @@
 </style>
 
 <div class="ui basic create-private-conversation modal">
-    <h1 class="modal-title">Direct Messages</h1>
+    <h1>Direct Messages</h1>
 
-    @using (Html.BeginForm(FormMethod.Post, false, new { id = "createPrivateConversationForm", @class = "ui large form" }))
+    @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "createPrivateConversationForm" }))
     {
-        @Html.HiddenFor(x => x.SecondUserId, new { @class = "required" });
+        @Html.HiddenFor(x => x.SecondUserId, new { @class = "required" })
         <div class="ui form">
             <div class="fields">
                 <div class="fourteen wide field">
                     <div class="inputholder" id="inputholder">
-                       @Html.TextBoxFor(m => m.Name, new {@class = "form-control", id= "inputtext", placeholder = "Find or start a conversation", autocomplete = "off" })
+                        @Html.TextBoxFor(m => m.Name, new { id = "inputtext", placeholder = "Find or start a conversation", autocomplete = "off" })
                     </div>
                 </div>
                 <div class="two wide field">

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
-    class DeleteRoom
+    public class DeleteRoom : IDeleteRoom
     {
     }
 }
