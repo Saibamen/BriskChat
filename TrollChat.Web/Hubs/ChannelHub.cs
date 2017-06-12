@@ -154,6 +154,9 @@ namespace TrollChat.Web.Hubs
 
             await Groups.Add(Context.ConnectionId, roomId);
 
+            var roomUsersCount = getRoomUsers.Invoke(new Guid(roomId)).Count;
+            Clients.Caller.updateRoomUsersCount(roomUsersCount);
+
             var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
 
             var viewList = messagesFromDb.Select(item => new MessageViewModel
@@ -278,13 +281,12 @@ namespace TrollChat.Web.Hubs
 
         public void GetRoomUsers(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrEmpty(roomId) || new Guid(roomId) == Guid.Empty)
             {
                 return;
             }
 
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
-            roomUserList.Remove(roomUserList.FirstOrDefault(x => x.Id == new Guid(roomId)));
 
             var userList = roomUserList.Select(item => new RoomUsersViewModel
             {
@@ -292,11 +294,6 @@ namespace TrollChat.Web.Hubs
                 Name = item.Name,
                 Email = item.Email
             });
-
-            if (new Guid(roomId) == Guid.Empty)
-            {
-                return;
-            }
 
             Clients.Caller.UsersInRoom(userList);
         }

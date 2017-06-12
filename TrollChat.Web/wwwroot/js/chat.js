@@ -111,8 +111,8 @@ $(".menu").on("click", ".menu > a.item", function (e) {
             $(e.target).addClass("active");
             $("#channel_title").html($(e.target).html());
             myHub.server.getRoomInformation(currentRoomId);
-            loadingStop();
             console.log("Current room ID: " + currentRoomId);
+            loadingStop();
         });
     }
 });
@@ -454,6 +454,11 @@ myHub.client.setDomainInformation = function (domainName, userName, userId) {
 
     $("#team_name").text(globalDomainName);
     $("#team_menu_user_name").text(globalUserName);
+};
+
+myHub.client.updateRoomUsersCount = function (roomUsersCount) {
+    $("#channel_members_toggle_count_count").text(roomUsersCount);
+    console.log("Updated roomUsersCount");
 };
 
 /*
