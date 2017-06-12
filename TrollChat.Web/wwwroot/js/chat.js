@@ -36,8 +36,8 @@ function loadingStart() {
 function loadingStop() {
     $(".ui.main.container").css("display", "block");
     $(".ui.dimmer").removeClass("active");
-    console.log("Loader stops");
     addActionsToMessages();
+    console.log("Loader stops");
 }
 
 function addActionsToMessages() {
@@ -397,7 +397,7 @@ myHub.client.parseLastMessages = function (result) {
     });
 
     // Scroll #chat_messages
-    loadingStop();
+    $(".ui.main.container").css("display", "block");
     $("#chat_messages").clearQueue();
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
     addActionsToMessages();
@@ -478,6 +478,8 @@ $.connection.hub.start()
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
                 myHub.server.getRoomInformation(currentRoomId);
+
+                loadingStop();
 
                 $("#msg_form").keypress(function (e) {
                     if (e.which === 13) {
