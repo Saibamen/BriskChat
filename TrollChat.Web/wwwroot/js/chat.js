@@ -2,6 +2,8 @@
     transition: "overlay"
 });
 
+$(".ui.sidebar.right").first().sidebar();
+
 $(document).on("reloadPopups", function () {
     $(".ts_tip").popup({
         variation: "inverted"
@@ -17,6 +19,15 @@ var Autolinker = new Autolinker({
     stripTrailingSlash: false
 });
 
+// Globals
+var globalDomainName;
+var globalUserName;
+var globalUserId;
+
+var currentTheme;
+var descriptionInDatabase;
+var roomNameInDatabase;
+
 function loadingStart() {
     $(".ui.main.container").css("display", "none");
     $(".ui.dimmer").addClass("active");
@@ -31,6 +42,11 @@ function loadingStop() {
 
 function addActionsToMessages() {
     $(".ts-message").not(":has(> .action_hover_container), #message_edit_container").each(function () {
+        // This is our message?
+        if ($(this).find(".message_sender").text() !== globalUserName || $(this).find(".member_image").data("member-id") !== globalUserId) {
+            return true;
+        }
+
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true">\
             <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center">\
             <i class="edit icon"></i>\
@@ -82,7 +98,7 @@ $("#channelsCount").click(function () {
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
-    if (currentRoomId != $(e.target).data("id")) {
+    if (currentRoomId !== $(e.target).data("id")) {
         // Leave current room
         loadingStart();
         // Clear messages
@@ -164,7 +180,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
             if (!x.shiftKey) {
                 if (oldMessageText !== $(".ql-editor").text().trim()) {
                     var editedMessage;
-                    
+
                     if (editedMessage === $(".ql-editor").text().trim()) {
                         console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
@@ -231,7 +247,9 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
     if (youTubeMatch) {
-        var youtubeIframeHtml = '<iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
+        var youtubeIframeHtml = '<iframe src="https://www.youtube.com/embed/' +
+            youTubeMatch[1] +
+            '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe>';
 
         if (messageBodies.last().hasClass("youtube_iframe")) {
             messageBodies.last().html(youtubeIframeHtml);
@@ -243,21 +261,23 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
             messageBodies.last().remove();
         });
     }
-}
+};
 
-function getMessageHtml(messageId, userName, timestamp, messageText) {
-    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="U42KXAW07" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
+function getMessageHtml(userName, userId, messageId, messageText, timestamp) {
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
 
     return messageHtml;
 }
 
-myHub.client.broadcastMessage = function (userName, messageId, messageText, timestamp) {
-    var messageHtml =  getMessageHtml(messageId, userName, timestamp, messageText);
+myHub.client.broadcastMessage = function (userName, userId, messageId, messageText, timestamp) {
+    var messageHtml = getMessageHtml(userName, userId, messageId, messageText, timestamp);
 
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
     if (youTubeMatch) {
-        messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+        messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' +
+            youTubeMatch[1] +
+            '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
     } else {
         messageHtml += "</span></div></div>";
     }
@@ -269,7 +289,7 @@ myHub.client.broadcastMessage = function (userName, messageId, messageText, time
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
-}
+};
 
 myHub.client.deleteMessage = function (messageId) {
     var message = $(".ts-message[data-id='" + messageId + "']");
@@ -279,7 +299,7 @@ myHub.client.deleteMessage = function (messageId) {
     message.hide("slow", function () {
         message.remove();
     });
-}
+};
 
 myHub.client.loadRooms = function (result) {
     var setActive = true;
@@ -305,7 +325,7 @@ myHub.client.loadRooms = function (result) {
         divToAppend += value.Name + "</a>";
         $("#channelsMenu").append(divToAppend);
     });
-}
+};
 
 myHub.client.loadDomainPublicRooms = function (result) {
     var setActive = true;
@@ -333,13 +353,13 @@ myHub.client.loadDomainPublicRooms = function (result) {
 
     var rooms = {};
 
-    $("#channelsMenu > .item").filter(function() {
+    $("#channelsMenu > .item").filter(function () {
         var id = $(this).data("id");
 
-        if(rooms[id]) {
+        if (rooms[id]) {
             // Duplikat pokoju
             $(this).remove();
-            return false;   
+            return false;
         } else {
             // Pierwszy pokój z tym ID
             rooms[id] = true;
@@ -348,7 +368,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
     });
 
     $("#channelsCount").text("CHANNELS (" + $("#channelsMenu > .item").length + ")");
-}
+};
 
 myHub.client.loadPrivateConversations = function (result) {
     $.each(result, function (index, value) {
@@ -356,16 +376,19 @@ myHub.client.loadPrivateConversations = function (result) {
 
         $("#privateConversationsMenu").append(divToAppend);
     });
-}
+};
 
 myHub.client.parseLastMessages = function (result) {
     $.each(result, function (index, value) {
-        var messageHtml =  getMessageHtml(value.Id, value.UserName, value.CreatedOn, value.Text);
+        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn);
 
         var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
         if (youTubeMatch) {
-            messageHtml += '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' + youTubeMatch[1] + '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+            messageHtml +=
+                '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' +
+                youTubeMatch[1] +
+                '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
         } else {
             messageHtml += "</span></div></div>";
         }
@@ -379,7 +402,7 @@ myHub.client.parseLastMessages = function (result) {
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
-}
+};
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     var divToAppend = '<a class="item" data-id="' + roomId + '" data-ispublic="' + isPublic + '">';
@@ -394,13 +417,14 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     $("#channelsMenu").append(divToAppend);
     updateChannelsCount(1);
     loadingStop();
-}
+};
+
 myHub.client.privateConversationAddedAction = function (value) {
     var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
 
     $("#privateConversationsMenu").append(divToAppend);
     loadingStop();
-}
+};
 
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
     $("#privateConversationsUserList").empty();
@@ -421,11 +445,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
         $("#privateConversationsUserList").append(divToAppend);
     });
-}
-
-var globalDomainName;
-var globalUserName;
-var globalUserId;
+};
 
 myHub.client.setDomainInformation = function (domainName, userName, userId) {
     globalDomainName = domainName;
@@ -434,7 +454,7 @@ myHub.client.setDomainInformation = function (domainName, userName, userId) {
 
     $("#team_name").text(globalDomainName);
     $("#team_menu_user_name").text(globalUserName);
-}
+};
 
 /*
  * Start the connection
@@ -569,7 +589,7 @@ $("#createPrivateConversationForm").submit(function (e) {
     loadingStart();
     e.preventDefault();
     var list = [];
-    
+
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         var item = $(element);
         var id = $(item).data("id");
@@ -651,7 +671,7 @@ function customization() {
         variation: "inverted"
     });
 
-    var divToAppend2 ='<div class="bottom attached centered ui item">\
+    var divToAppend2 = '<div class="bottom attached centered ui item">\
                             <div class="ui buttons" tabindex="0"><button class="ui button" onclick="closeRightBarCallback();">Cancel</button>\
                                 <div class="or"></div>\
                                 <button class="ui positive button" onclick="changeSettingsValue(themeInNow);">Save</button>\
@@ -665,7 +685,7 @@ function customization() {
 
 function changeSettingsValue(val) {
     themeInDatabase = val;
-    parseval = parseInt(themeInNow);
+    parseval = parseInt(currentTheme);
     var descriptionNow = $("#infodescription").val();
     var roomNameNow = $("#infoName").val();
     descriptionInDatabase = descriptionNow;
@@ -689,53 +709,48 @@ function membersInRoom() {
     $("#Rrightbar").html("");
 
     $("#rightbar_Title").html("Channel Details");
-    $("#Rrightbar").append('<div class="ui styled accordion">'+           
-                                '<div class="active content">'+
-                                    '<div class="accordion">'+
-                                        '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>'+
-                                        '<div class="content" id="aboutinfo"></div>'+
-                                        '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>'+
-                                        '<div class="content" id="MembersInRoom"></div>'+
-                                    "</div>"+
-                                "</div>"+
+    $("#Rrightbar").append('<div class="ui styled accordion">' +
+                                '<div class="active content">' +
+                                    '<div class="accordion">' +
+                                        '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
+                                        '<div class="content" id="aboutinfo"></div>' +
+                                        '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
+                                        '<div class="content" id="MembersInRoom"></div>' +
+                                    "</div>" +
+                                "</div>" +
                             "</div>");
 
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
 }
 
-// Zmiana
-var themeInNow;
-var descriptionInDatabase;
-var roomNameInDatabase;
-
-function choiceTheme(value) {
-    switch(value) {
-        case "0": 
-        {
-            leftbar = "#1B1C1D";
-            break;
-        }
+function changeTheme(value) {
+    switch (value) {
+        case "0":
+            {
+                leftbar = "#1B1C1D";
+                break;
+            }
         case "1":
-        {
-            leftbar = "#0080ff";
-            break;
-        }
+            {
+                leftbar = "#0080ff";
+                break;
+            }
         case "2":
-        {
-            leftbar = "#33CC00";
-            break;
-        }
+            {
+                leftbar = "#33CC00";
+                break;
+            }
         case "3":
-        {
-            leftbar = "#FF9900";
-            break;
-        }
+            {
+                leftbar = "#FF9900";
+                break;
+            }
         case "4":
-        {
-            leftbar = "#D15CC1";
-            break;
-        }
+            {
+                leftbar = "#D15CC1";
+                break;
+            }
         default:
             leftbar = "#1B1C1D";
     }
@@ -744,11 +759,9 @@ function choiceTheme(value) {
 }
 
 function selectTheme(sel) {
-    themeInNow = sel.value;
-    choiceTheme(themeInNow);
-};
-
-$(".ui.sidebar.right").first().sidebar();
+    currentTheme = sel.value;
+    changeTheme(currentTheme);
+}
 
 $("#channel_actions_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
@@ -770,9 +783,9 @@ $("#channel_actions_toggle").click(function () {
     }
 });
 
-var closeRightBarCallback = function() {
+var closeRightBarCallback = function () {
     $(".ui.sidebar.right").removeClass("visible");
-    choiceTheme(themeInDatabase);
+    changeTheme(themeInDatabase);
 };
 
 $("#closerightbar").click(function () {
@@ -815,30 +828,30 @@ myHub.client.usersInRoom = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend +='<div class="eight wide column"><i class="user icon"></i>' + value.Name + "</div>";
+        divToAppend += '<div class="eight wide column"><i class="user icon"></i>' + value.Name + "</div>";
         divToAppend += "</div>";
 
         $("#MembersInRoom").append(divToAppend);
     });
-}
+};
 
 myHub.client.roomInfo = function (result, resultTime) {
     $("#aboutinfo").empty();
-    var divToAppend = "<div>Created by "+ result.OwnerName +" on "+ resultTime +"</div>";
-    $("#aboutinfo").append(divToAppend); 
+    var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
+    $("#aboutinfo").append(divToAppend);
     $("#infodescription").val(result.Description);
     themeInDatabase = String(result.Customization);
-    themeInNow = themeInDatabase;
+    currentTheme = themeInDatabase;
     descriptionInDatabase = result.Description;
     roomNameInDatabase = result.Name;
     $("#channel_topic_text").html(descriptionInDatabase);
     $("#infoName").val(roomNameInDatabase);
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
-    choiceTheme(themeInDatabase);
+    changeTheme(themeInDatabase);
 
     // Change selected theme in drop-down list
     if ($(".ui.sidebar.right").hasClass("visible")) {
         $("#selecttheme").val(themeInDatabase);
     }
-}
+};

@@ -25,7 +25,11 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              CreatedOn = message.CreatedOn,
                              UserRoom = new UserRoom
                              {
-                                 User = new User { Name = message.UserRoom.User.Name }
+                                 User = new User
+                                 {
+                                     Id = message.UserRoom.User.Id,
+                                     Name = message.UserRoom.User.Name
+                                 }
                              }
                          }).Take(number);
 

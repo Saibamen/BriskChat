@@ -160,6 +160,7 @@ namespace TrollChat.Web.Hubs
             {
                 Id = item.Id,
                 UserName = item.UserRoom.User.Name,
+                UserId = item.UserRoom.User.Id,
                 Text = item.Text,
                 CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
             });
@@ -170,7 +171,7 @@ namespace TrollChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
         }
 
         public async Task LeaveRoom(string roomId)
@@ -186,7 +187,7 @@ namespace TrollChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
         }
 
         public void SendMessage(string roomId, string message)
@@ -225,7 +226,7 @@ namespace TrollChat.Web.Hubs
 
             if (dbMessageId != Guid.Empty)
             {
-                Clients.Group(roomId).broadcastMessage(Context.UserName(), dbMessageId, message, chatTime);
+                Clients.Group(roomId).broadcastMessage(Context.UserName(), Context.UserId(), dbMessageId, message, chatTime);
             }
         }
 
@@ -301,7 +302,6 @@ namespace TrollChat.Web.Hubs
         }
 
         public void CreateNewPrivateConversation(List<Guid> model)
-
         {
             // If list has duplicates abort!
             if (model.Distinct().Count() != model.Count)
@@ -357,6 +357,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var edited = editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
+
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedRoomCustomnization(roomId, roomCustomization);
@@ -371,6 +372,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var edited = editRoomName.Invoke(new Guid(roomId), roomName);
+
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedRoomName(roomId, roomName);
@@ -385,6 +387,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var edited = editRoomDescription.Invoke(new Guid(roomId), roomDescription);
+
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedRoomDescription(roomId, roomDescription);

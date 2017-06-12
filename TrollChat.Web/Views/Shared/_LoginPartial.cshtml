@@ -1,7 +1,7 @@
 ﻿@{
     if (Context.Authentication.HttpContext.User.Identity.IsAuthenticated)
     {
-        using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { @class = "navbar-right", id = "logoutForm" }))
+        using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))
         {
 
             <button type="submit" class="orginalbutton">Log off</button>

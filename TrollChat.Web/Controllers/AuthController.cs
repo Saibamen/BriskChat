@@ -132,6 +132,7 @@ namespace TrollChat.Web.Controllers
 
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.DomainName = domainName;
+
             return View();
         }
 
