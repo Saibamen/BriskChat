@@ -14,9 +14,9 @@
                 <div class="field">
                     <div class="ui left icon input">
                         @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name", required = "required" })
-                        @Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })
                         <i class="user icon"></i>
                     </div>
+                    <p>@Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })</p>
                 </div>
                 <div class="field">
                     <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>

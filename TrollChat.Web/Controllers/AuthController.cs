@@ -296,7 +296,7 @@ namespace TrollChat.Web.Controllers
 
             if (user == null)
             {
-                Alert.Danger("Something went wrong");
+                Alert.Danger("We don't have this account in database");
 
                 return View();
             }

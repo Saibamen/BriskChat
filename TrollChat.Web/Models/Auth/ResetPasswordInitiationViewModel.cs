@@ -6,7 +6,6 @@ namespace TrollChat.Web.Models.Auth
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Please enter the email address you provided when registering.")]
         public string Email { get; set; }
 
         [Required]
