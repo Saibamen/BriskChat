@@ -1,0 +1,30 @@
+﻿@{
+    Layout = "_WebLayout";
+    ViewData["Title"] = "Create Domain";
+}
+@model TrollChat.Web.Models.Auth.ChooseDomainViewModel
+
+<div class="ui two column grid">
+    <div class="middle aligned center aligned column">
+        <div class="domainleftcolumn">
+            <h1 style="font-size:48px;">Create a new Domain</h1>
+            @using (Html.BeginForm("Register", "Auth", FormMethod.Post))
+            {
+                <div class="ui large form">
+                    <div class="field">
+                        <label>Your email address</label>
+                        @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name" })
+                        <input type="email" placeholder="you@example.com" spellcheck="false">
+                    </div>
+                    <div>
+                        <button class="orginalbutton" type="submit" id="btnLogin">Next</button>
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="column socloce">
+        <div class="domainbackground"></div>
+    </div>
+</div>

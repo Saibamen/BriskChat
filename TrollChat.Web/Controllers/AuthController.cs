@@ -72,12 +72,19 @@ namespace TrollChat.Web.Controllers
         {
             if (!checkDomainExistsByName.Invoke(model.DomainName))
             {
-                ModelState.AddModelError("Domain", "Domain not found");
+                ModelState.AddModelError("DomainName", "Domain not found");
 
                 return View(model);
             }
 
             return RedirectToAction("Login", new { domainName = model.DomainName });
+        }
+
+        [AllowAnonymous]
+        [HttpGet("createdomain")]
+        public IActionResult CreateDomain()
+        {
+            return View();
         }
 
         [AllowAnonymous]
@@ -287,8 +294,6 @@ namespace TrollChat.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Alert.Danger("Something went wrong");
-
                 return View(model);
             }
 
