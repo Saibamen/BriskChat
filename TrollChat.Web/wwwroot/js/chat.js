@@ -110,9 +110,12 @@ $(".menu").on("click", ".menu > a.item", function (e) {
             currentRoomId = $(e.target).data("id");
             $(e.target).addClass("active");
             $("#channel_title").html($(e.target).html());
-            myHub.server.getRoomInformation(currentRoomId);
-            console.log("Current room ID: " + currentRoomId);
-            loadingStop();
+
+            getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+
+            $.when(getRoomInformation).then(function () {
+                loadingStop();
+            });
         });
     }
 });
@@ -477,24 +480,27 @@ $.connection.hub.start()
                 console.log("Connected to room");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
-                myHub.server.getRoomInformation(currentRoomId);
+                
+                getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
-                loadingStop();
+                $.when(getRoomInformation).then(function () {
+                    loadingStop();
 
-                $("#msg_form").keypress(function (e) {
-                    if (e.which === 13) {
-                        if (!e.shiftKey) {
-                            var message = $("#msg_input").val().trim();
+                    $("#msg_form").keypress(function (e) {
+                        if (e.which === 13) {
+                            if (!e.shiftKey) {
+                                var message = $("#msg_input").val().trim();
 
-                            if (message) {
-                                console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
-                                myHub.server.sendMessage(currentRoomId, message);
+                                if (message) {
+                                    console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                                    myHub.server.sendMessage(currentRoomId, message);
+                                }
+
+                                e.preventDefault();
+                                $("#msg_input").val("");
                             }
-
-                            e.preventDefault();
-                            $("#msg_input").val("");
                         }
-                    }
+                    });
                 });
             });
         });
@@ -843,6 +849,7 @@ myHub.client.usersInRoom = function (result) {
 };
 
 myHub.client.roomInfo = function (result, resultTime) {
+    console.log("Pobranie informacji z funkcji roomInfo()");
     $("#aboutinfo").empty();
     var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
     $("#aboutinfo").append(divToAppend);

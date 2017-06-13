@@ -46,7 +46,6 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.True(result.IsPrivateConversation);
             Assert.False(result.IsPublic);
             Assert.Equal("IssuerName", result.Owner.Name);
-            Assert.Equal("IssuerName", result.Users[0].Name);
         }
 
         [Fact]

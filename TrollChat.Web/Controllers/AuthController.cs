@@ -66,6 +66,7 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         [HttpPost("signin")]
         public IActionResult ChooseDomain(ChooseDomainViewModel model)
         {
@@ -232,6 +233,7 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         [HttpPost("{domainName}/resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
         {
@@ -279,6 +281,7 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         [HttpPost("{domainName}/resetpassword")]
         public IActionResult ResetPasswordInitiation(ResetPasswordInitiationViewModel model)
         {
@@ -341,6 +344,7 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         [HttpPost("resetpasswordbytoken")]
         public IActionResult ResetPasswordByToken(ResetPasswordNewPasswordViewModel model)
         {
