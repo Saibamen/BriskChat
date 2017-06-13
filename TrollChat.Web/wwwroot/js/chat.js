@@ -654,7 +654,7 @@ function customization() {
                                         <div class="content" id="Description">\
                                             <div class="ui form">\
                                                 <div class="field">\
-                                                <input type="text" id="infodescription">\
+                                                <input type="text" id="infoDescription">\
                                                 </div>\
                                             </div>\
                                         </div>\
@@ -687,7 +687,7 @@ function customization() {
     var divToAppend2 = '<div class="bottom attached centered ui item">\
                             <div class="ui buttons" tabindex="0"><button class="ui button" onclick="closeRightBarCallback();">Cancel</button>\
                                 <div class="or"></div>\
-                                <button class="ui positive button" onclick="changeSettingsValue(themeInNow);">Save</button>\
+                                <button class="ui positive button" onclick="changeSettingsValue(currentTheme);">Save</button>\
                             </div>\
                         </div>';
 
@@ -696,23 +696,28 @@ function customization() {
     $(".ui.styled.accordion").accordion();
 }
 
+// TODO: Edit for all users in room. Room name for all users in domain
 function changeSettingsValue(val) {
-    themeInDatabase = val;
     parseval = parseInt(currentTheme);
-    var descriptionNow = $("#infodescription").val();
+    var descriptionNow = $("#infoDescription").val();
     var roomNameNow = $("#infoName").val();
-    descriptionInDatabase = descriptionNow;
 
-    $("#channel_topic_text").html(descriptionNow);
     myHub.server.editRoomCustomization(currentRoomId, parseval);
     myHub.server.editRoomName(currentRoomId, roomNameNow);
     myHub.server.editRoomDescription(currentRoomId, descriptionNow);
 
     roomNameInDatabase = roomNameNow;
+    descriptionInDatabase = descriptionNow;
+    themeInDatabase = val;
 
+    // Channel topic
+    $("#channel_topic_text").html(descriptionNow);
+
+    // Room name in header
     $("#channel_title").contents().last().replaceWith(roomNameNow);
-    // Room name in sidebar
+    // Active room name in sidebar
     $(".menu > a.item.active").contents().last().replaceWith(roomNameNow);
+    // Room name in #msg_input
     $("#msg_input").attr("placeholder", "Message " + roomNameNow);
 
     $(".ui.sidebar.right").removeClass("visible");
@@ -726,7 +731,7 @@ function membersInRoom() {
                                 '<div class="active content">' +
                                     '<div class="accordion">' +
                                         '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
-                                        '<div class="content" id="aboutinfo"></div>' +
+                                        '<div class="content" id="aboutInfo"></div>' +
                                         '<div class="title"><i class="dropdown icon"></i><i class="users icon"></i>Members</div>' +
                                         '<div class="content" id="MembersInRoom"></div>' +
                                     "</div>" +
@@ -850,10 +855,10 @@ myHub.client.usersInRoom = function (result) {
 
 myHub.client.roomInfo = function (result, resultTime) {
     console.log("Pobranie informacji z funkcji roomInfo()");
-    $("#aboutinfo").empty();
+    $("#aboutInfo").empty();
     var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
-    $("#aboutinfo").append(divToAppend);
-    $("#infodescription").val(result.Description);
+    $("#aboutInfo").append(divToAppend);
+    $("#infoDescription").val(result.Description);
     themeInDatabase = String(result.Customization);
     currentTheme = themeInDatabase;
     descriptionInDatabase = result.Description;

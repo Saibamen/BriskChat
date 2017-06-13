@@ -126,13 +126,7 @@ namespace TrollChat.Web.Controllers
         [HttpGet("{domainName}/login")]
         public IActionResult Login(string returnUrl, string domainName)
         {
-            if (string.IsNullOrEmpty(domainName))
-            {
-                Alert.Warning("Choose existing domain");
-                return RedirectToAction("ChooseDomain", "Auth");
-            }
-
-            if (!checkDomainExistsByName.Invoke(domainName))
+            if (string.IsNullOrEmpty(domainName) || !checkDomainExistsByName.Invoke(domainName))
             {
                 Alert.Warning("Choose existing domain");
                 return RedirectToAction("ChooseDomain", "Auth");
@@ -248,7 +242,7 @@ namespace TrollChat.Web.Controllers
 
             if (user == null)
             {
-                Alert.Danger("Something went wrong");
+                Alert.Danger("We don't have this account in database");
 
                 return View(model);
             }
