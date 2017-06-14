@@ -357,7 +357,7 @@ namespace TrollChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomCustomnization(roomId, roomCustomization);
+                Clients.Group(roomId).broadcastEditedRoomCustomization(roomCustomization);
             }
         }
 
@@ -372,7 +372,8 @@ namespace TrollChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomName(roomId, roomName);
+                Clients.All.broadcastDomainEditedRoomName(roomId, roomName);
+                Clients.Group(roomId).broadcastEditedActiveRoomName(roomName);
             }
         }
 
@@ -387,7 +388,7 @@ namespace TrollChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomDescription(roomId, roomDescription);
+                Clients.Group(roomId).broadcastEditedRoomDescription(roomDescription);
             }
         }
 

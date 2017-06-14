@@ -696,33 +696,6 @@ function customization() {
     $(".ui.styled.accordion").accordion();
 }
 
-// TODO: Edit for all users in room. Room name for all users in domain
-function changeSettingsValue(val) {
-    parseval = parseInt(currentTheme);
-    var descriptionNow = $("#infoDescription").val();
-    var roomNameNow = $("#infoName").val();
-
-    myHub.server.editRoomCustomization(currentRoomId, parseval);
-    myHub.server.editRoomName(currentRoomId, roomNameNow);
-    myHub.server.editRoomDescription(currentRoomId, descriptionNow);
-
-    roomNameInDatabase = roomNameNow;
-    descriptionInDatabase = descriptionNow;
-    themeInDatabase = val;
-
-    // Channel topic
-    $("#channel_topic_text").html(descriptionNow);
-
-    // Room name in header
-    $("#channel_title").contents().last().replaceWith(roomNameNow);
-    // Active room name in sidebar
-    $(".menu > a.item.active").contents().last().replaceWith(roomNameNow);
-    // Room name in #msg_input
-    $("#msg_input").attr("placeholder", "Message " + roomNameNow);
-
-    $(".ui.sidebar.right").removeClass("visible");
-}
-
 function membersInRoom() {
     $("#Rrightbar").html("");
 
@@ -740,6 +713,60 @@ function membersInRoom() {
 
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
+}
+
+myHub.client.broadcastEditedRoomDescription = function (value) {
+    descriptionInDatabase = value;
+    $("#channel_topic_text").html(value);
+};
+
+myHub.client.broadcastEditedRoomCustomization = function (value) {
+    themeInDatabase = value.toString();
+    changeTheme(themeInDatabase);
+};
+
+// For active room only
+myHub.client.broadcastEditedActiveRoomName = function (value) {
+    roomNameInDatabase = value;
+
+    // Room name in header
+    $("#channel_title").contents().last().replaceWith(roomNameInDatabase);
+    // Active room name in sidebar
+    $("#channelsMenu > a.item.active").contents().last().replaceWith(roomNameInDatabase);
+    // Room name in #msg_input
+    $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
+};
+
+// For all clients connected to Domain
+myHub.client.broadcastDomainEditedRoomName = function (roomId, roomName) {
+    // Don't search DOM if changed room is our active room
+    if ($("#channelsMenu > a.item.active").data("id") !== roomId) {
+        // Room name in sidebar
+        $("[data-id='" + roomId + "']").contents().last().replaceWith(roomName);
+    }
+};
+
+function changeSettingsValue(val) {
+    var parseval = parseInt(currentTheme);
+    var descriptionNow = $("#infoDescription").val();
+    var roomNameNow = $("#infoName").val();
+
+    // Room name
+    if (roomNameInDatabase !== roomNameNow) {
+        myHub.server.editRoomName(currentRoomId, roomNameNow);
+    }
+
+    // Room topic
+    if (descriptionInDatabase !== descriptionNow) {
+        myHub.server.editRoomDescription(currentRoomId, descriptionNow);
+    }
+
+    // Room customization
+    if (themeInDatabase !== val) {
+        myHub.server.editRoomCustomization(currentRoomId, parseval);
+    }
+
+    $(".ui.sidebar.right").removeClass("visible");
 }
 
 function changeTheme(value) {
