@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.1.0" />
-    <PackageReference Include="MailKit" Version="1.16.1" />
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="MailKit" Version="1.16.2" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.2.0" />
     <PackageReference Include="Quartz" Version="3.0.0-alpha2" />
   </ItemGroup>
