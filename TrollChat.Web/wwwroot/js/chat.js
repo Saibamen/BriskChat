@@ -146,8 +146,8 @@ function addEditContainer(id, oldMessageText, messageIcon) {
 
 // Editing message
 $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']", function (e) {
+    // Only one edit container on site
     if ($(document).find("#message_edit_container").length) {
-        // Only one edit container in site
         $(document).find("#message_edit_container").prev().show();
         $(document).find("#message_edit_container").remove();
     }
@@ -156,22 +156,38 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     var messageId = message.data("id");
     var oldMessageText = message.find(".message_body").text();
 
-    message.hide();
+    // Adding edit container and hide message
+    message.hide(); 
     message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
+
+    // Focus on textbox
     $(".ql-editor").focus();
 
-    // FIXME: Check click outside #message_edit_container
+    var range = document.createRange();
+    range.selectNodeContents($(".ql-editor").get(0));
+    range.collapse(false);
+    //range.setStart($(".ql-editor").get(0).childNodes[0], 0);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+
+    if ($(document).find("#message_edit_container").length) {
+        document.addEventListener("click", clickOutsideEditContainer, true);
+    }
 
     // Cancel
     $(".ts-message").on("click", "#cancel_edit", function (x) {
+        document.removeEventListener("click", clickOutsideEditContainer, true);
         message.show();
         $(x.target).closest("#message_edit_container").remove();
     });
 
     // Escape key
     $(document).keydown(function (x) {
+        console.log("keydown listener");
         if (x.keyCode === 27 && $(document).find("#message_edit_container").length) {
-            console.log("Escape keydown");
+            console.log("Escape keydown on #MED");
+            document.removeEventListener("click", clickOutsideEditContainer, true);
             $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
         }
@@ -190,14 +206,16 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
                     }
                 }
 
-                $(x.target).closest("#message_edit_container").remove();
+                document.removeEventListener("click", clickOutsideEditContainer, true);
                 message.show();
+                $(x.target).closest("#message_edit_container").remove();
             }
         }
     });
 
     // Save
     $(".ts-message").on("click", "#commit_edit", function (x) {
+        // Send to server when text is changed
         if (oldMessageText !== $(".ql-editor").text().trim()) {
             var editedMessage = $(".ql-editor").text().trim();
 
@@ -207,9 +225,26 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
             }
         }
 
-        $(x.target).closest("#message_edit_container").remove();
+        document.removeEventListener("click", clickOutsideEditContainer, true);
         message.show();
+        $(x.target).closest("#message_edit_container").remove();
+        // TODO: delete this listener?
     });
+
+    // FIXME: Check click outside #message_edit_container
+    function clickOutsideEditContainer(event) {
+        console.log("Click listener");
+        // Do only if #message_edit_container exists
+        if ($(document).find("#message_edit_container").length) {
+            // Check for x.target and parents
+            if (!$(event.target).parents().addBack().is("#message_edit_container")) {
+                console.log("Kliknięto poza. Usuwam #MEC");
+                document.removeEventListener("click", clickOutsideEditContainer, true);
+                $(document).find("#message_edit_container").prev().show();
+                $(document).find("#message_edit_container").remove();
+            }
+        }
+    }
 });
 
 $(".grid").on("click", ".private-conversation-row", function (e) {
