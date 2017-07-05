@@ -183,10 +183,8 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     // Escape key
-    $(document).keydown(function (x) {
-        console.log("keydown listener");
-        if (x.keyCode === 27 && $(document).find("#message_edit_container").length) {
-            console.log("Escape keydown on #MED");
+    $("#message_edit_container").keydown(function (x) {
+        if (x.keyCode === 27) {
             document.removeEventListener("click", clickOutsideEditContainer, true);
             $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
@@ -228,10 +226,9 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
         document.removeEventListener("click", clickOutsideEditContainer, true);
         message.show();
         $(x.target).closest("#message_edit_container").remove();
-        // TODO: delete this listener?
     });
 
-    // FIXME: Check click outside #message_edit_container
+    // TODO: Need more testing?
     function clickOutsideEditContainer(event) {
         console.log("Click listener");
         // Do only if #message_edit_container exists
