@@ -299,20 +299,22 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
 };
 
 function emoReplacer() {
-    var emoticonsGroup = { 1: "smile", 2: "smile_big", 3: "sad", 4: "tongue" };
+    var emoticonsGroup = {
+        1: "smile", 2: "smile_big", 3: "sad", 4: "tongue", 5: "crying", 6: "wink"
+    };
     var args = Array.slice(arguments);
 
     // Arguments for emoReplacer are: match, regexGroup1, ..., regexGroupN, offset, string
     for (var i = 1; i < args.length - 2; i++) {
         if (args[i]) {
-            return '<img src="/images/emoticons/' + emoticonsGroup[i] + '.png" alt="' + emoticonsGroup[i] + '">';
+            return '<img src="/images/emoticons/' + emoticonsGroup[i] + '.png" alt="' + emoticonsGroup[i] + '" title="' + emoticonsGroup[i] + '">';
         }
     }
 }
 
 function parseEmoticons(text) {
-    // https://regex101.com/r/zJ9XXL/5
-    var regex = new RegExp("(:-?[)])|(:-?[D])|(:-?[(])|(:-?[P])", "gi");
+    // https://regex101.com/r/zJ9XXL/8
+    var regex = new RegExp("(:-?[)])|(:-?[D])|(:-?[(])|(:-?[P])|(;-?[(])|(;-?[)])", "gi");
     text = text.replace(regex, emoReplacer);
 
     return text;
