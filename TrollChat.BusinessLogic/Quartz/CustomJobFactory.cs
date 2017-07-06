@@ -22,7 +22,7 @@ namespace TrollChat.BusinessLogic.Quartz
 
         public void ReturnJob(IJob job)
         {
-            //this shall remain empty
+            // This shall remain empty
         }
     }
 }

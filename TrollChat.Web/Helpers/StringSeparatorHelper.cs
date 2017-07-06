@@ -14,6 +14,7 @@ namespace TrollChat.Web.Helpers
         {
             var list = TransformCommaSeparatedStringToList(userNames);
             var tempString = "";
+
             foreach (var item in list)
             {
                 if (item != userName)
@@ -21,7 +22,9 @@ namespace TrollChat.Web.Helpers
                     tempString += item + ", ";
                 }
             }
+
             tempString = tempString.TrimEnd(',', ' ');
+
             return tempString;
         }
     }

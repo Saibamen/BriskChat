@@ -6,8 +6,8 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
 {
     public class Hasher : IHasher
     {
-        private const int KeySize = 192; //256 chars
-        private const int SaltSize = 96; //128 chars
+        private const int KeySize = 192; // 256 chars
+        private const int SaltSize = 96; // 128 chars
         private const int Iterations = 10000;
 
         public string CreatePasswordHash(string plaintext, string salt)

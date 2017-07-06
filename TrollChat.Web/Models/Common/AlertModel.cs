@@ -11,7 +11,9 @@
         }
 
         public Class Type { get; set; }
+
         public string Message { get; set; }
+
         public string MoreInfo { get; set; }
     }
 }
