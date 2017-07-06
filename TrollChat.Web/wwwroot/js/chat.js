@@ -277,7 +277,7 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
     var messageBodies = message.find(".message_body");
 
     // Change text
-    messageBodies.first().html(Autolinker.link(messageText));
+    messageBodies.first().html(Autolinker.link(parseEmoticons(messageText)));
 
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -297,6 +297,26 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
         });
     }
 };
+
+function emoReplacer() {
+    var emoticonsGroup = { 1: "smile", 2: "smile_big", 3: "sad", 4: "tongue" };
+    var args = Array.slice(arguments);
+
+    // Arguments for emoReplacer are: match, regexGroup1, ..., regexGroupN, offset, string
+    for (var i = 1; i < args.length - 2; i++) {
+        if (args[i]) {
+            return '<img src="/images/emoticons/' + emoticonsGroup[i] + '.png" alt="' + emoticonsGroup[i] + '">';
+        }
+    }
+}
+
+function parseEmoticons(text) {
+    // https://regex101.com/r/zJ9XXL/5
+    var regex = new RegExp("(:-?[)])|(:-?[D])|(:-?[(])|(:-?[P])", "gi");
+    text = text.replace(regex, emoReplacer);
+
+    return text;
+}
 
 function getMessageHtml(userName, userId, messageId, messageText, timestamp) {
     var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
