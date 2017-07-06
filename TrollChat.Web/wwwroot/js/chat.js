@@ -511,6 +511,8 @@ myHub.client.setDomainInformation = function (domainName, userName, userId) {
 
     $("#team_name").text(globalDomainName);
     $("#team_menu_user_name").text(globalUserName);
+    // Add domain name to HTML <title>
+    document.title = globalDomainName + " " + document.title;
 };
 
 myHub.client.updateRoomUsersCount = function (roomUsersCount) {

@@ -39,7 +39,7 @@ namespace TrollChat.Web
 
             services.AddSession();
 
-            DependencyRegister.RegisterDependecy.Register(services);
+            DependencyRegister.Register(services);
 
             QuartzDependencyRegister.Register(services);
 
@@ -70,7 +70,7 @@ namespace TrollChat.Web
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
             var logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
 
-            //I'm gonna leave it as string array becase we might want to add some log modules later
+            // I'm gonna leave it as string array becase we might want to add some log modules later
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
 
             loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
