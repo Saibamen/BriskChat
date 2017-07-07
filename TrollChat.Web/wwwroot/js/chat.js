@@ -300,7 +300,7 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
 
 function emoReplacer() {
     var emoticonsGroup = {
-        1: "smile", 2: "smile_big", 3: "sad", 4: "tongue", 5: "crying", 6: "wink"
+        1: "smile", 2: "smile_big", 3: "sad", 4: "tongue", 5: "crying", 6: "wink", 7: "poop"
     };
     var args = Array.slice(arguments);
 
@@ -313,8 +313,8 @@ function emoReplacer() {
 }
 
 function parseEmoticons(text) {
-    // https://regex101.com/r/zJ9XXL/9
-    var regex = new RegExp("(:smile:|:-?[)])|(:smile_big:|:-?[D])|(:sad:|:-?[(])|(:tongue:|:-?[P])|(:crying:|;-?[(])|(:wink:|;-?[)])", "gi");
+    // https://regex101.com/r/zJ9XXL/11
+    var regex = new RegExp('(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)|(:poop:)', "gi");
     text = text.replace(regex, emoReplacer);
 
     return text;
