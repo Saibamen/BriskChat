@@ -307,21 +307,21 @@ function emoReplacer() {
     // Arguments for emoReplacer are: match, regexGroup1, ..., regexGroupN, offset, string
     for (var i = 1; i < args.length - 2; i++) {
         if (args[i]) {
-            return '<img src="/images/emoticons/' + emoticonsGroup[i] + '.png" alt="' + emoticonsGroup[i] + '" title="' + emoticonsGroup[i] + '">';
+            return '<span class="emoji-outer emoji-sizer" style="background: url(/images/emoticons/' + emoticonsGroup[i] + '.png)" title="' + emoticonsGroup[i] + '">:' + emoticonsGroup[i] + ':</span>';
         }
     }
 }
 
 function parseEmoticons(text) {
-    // https://regex101.com/r/zJ9XXL/8
-    var regex = new RegExp("(:-?[)])|(:-?[D])|(:-?[(])|(:-?[P])|(;-?[(])|(;-?[)])", "gi");
+    // https://regex101.com/r/zJ9XXL/9
+    var regex = new RegExp("(:smile:|:-?[)])|(:smile_big:|:-?[D])|(:sad:|:-?[(])|(:tongue:|:-?[P])|(:crying:|;-?[(])|(:wink:|;-?[)])", "gi");
     text = text.replace(regex, emoReplacer);
 
     return text;
 }
 
 function getMessageHtml(userName, userId, messageId, messageText, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(messageText);
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
 
     return messageHtml;
 }
@@ -511,7 +511,7 @@ myHub.client.setDomainInformation = function (domainName, userName, userId) {
 
     $("#team_name").text(globalDomainName);
     $("#team_menu_user_name").text(globalUserName);
-    // Add domain name to HTML <title>
+    // Add domain name to HTML <title> tag
     document.title = globalDomainName + " " + document.title;
 };
 

@@ -668,6 +668,28 @@ button, input, textarea {
 }
 
 /*
+ *  Emotikony
+ */
+
+span.emoji-outer:not(:empty) {
+    color: transparent !important;
+    text-indent: 100%;
+    text-shadow: none;
+}
+span.emoji-outer {
+    display: inline-block;
+    height: 1em;
+    overflow: hidden;
+    width: 1em;
+}
+.emoji-sizer {
+    line-height: 18px;
+    font-size: 24px;
+    vertical-align: middle;
+    margin-top: -4px;
+}
+
+/*
  *  Edycja wiadomości
  */
 
