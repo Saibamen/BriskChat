@@ -35,6 +35,7 @@ namespace TrollChat.Web.Hubs
         private readonly IEditRoomCustomization editRoomCustomization;
         private readonly IEditRoomName editRoomName;
         private readonly IEditRoomDescription editRoomDescription;
+        private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
@@ -58,7 +59,8 @@ namespace TrollChat.Web.Hubs
             IGetLastMessagesByRoomId getLastMessagesByRoomId,
             IEditRoomCustomization editRoomCustomization,
             IEditRoomDescription editRoomDescription,
-            IEditRoomName editRoomName)
+            IEditRoomName editRoomName,
+            IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -78,6 +80,7 @@ namespace TrollChat.Web.Hubs
             this.editRoomCustomization = editRoomCustomization;
             this.editRoomDescription = editRoomDescription;
             this.editRoomName = editRoomName;
+            this.getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
         }
 
         public override Task OnConnected()
@@ -97,6 +100,32 @@ namespace TrollChat.Web.Hubs
             ConnectedClients.Remove(userToDelete);
 
             return base.OnDisconnected(stopCalled);
+        }
+
+        public void GetPreviousMessages(string roomId, int loadedMessagesIteration)
+        {
+            if (string.IsNullOrEmpty(roomId) || loadedMessagesIteration < 1)
+            {
+                return;
+            }
+
+            var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), loadedMessagesIteration, MessagesToLoad);
+
+            if (messagesFromDb.Count <= 0)
+            {
+                return;
+            }
+
+            var viewList = messagesFromDb.Select(item => new MessageViewModel
+            {
+                Id = item.Id,
+                UserName = item.UserRoom.User.Name,
+                UserId = item.UserRoom.User.Id,
+                Text = item.Text,
+                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
+            });
+
+            Clients.Caller.parseOffsetMessages(viewList);
         }
 
         public void GetRooms()

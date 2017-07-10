@@ -27,6 +27,8 @@ var globalUserId;
 var currentTheme;
 var descriptionInDatabase;
 var roomNameInDatabase;
+var currentRoomId = 0;
+var loadedMessagesIteration = 1;
 
 function loadingStart() {
     $(".ui.main.container").css("display", "none");
@@ -86,8 +88,6 @@ $(window).trigger("resize");
  *  SignalR
  */
 
-currentRoomId = 0;
-
 $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
@@ -115,6 +115,7 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
             $.when(getRoomInformation).then(function () {
                 loadingStop();
+                loadedMessagesIteration = 1;
             });
         });
     }
@@ -183,8 +184,11 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     // Escape key
+    // FIXME: move to message_edit_form?
     $("#message_edit_container").keydown(function (x) {
+        console.log("keydown dla #message_edit_container");
         if (x.keyCode === 27) {
+            console.log("Escape key dla #message_edit_container");
             document.removeEventListener("click", clickOutsideEditContainer, true);
             $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
@@ -192,10 +196,13 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     $("#message_edit_form").keypress(function (x) {
+        console.log("keypress dla #message_edit_form");
         // Enter key
         if (x.which === 13) {
             if (!x.shiftKey) {
+                console.log("Enter key dla #message_edit_form");
                 if (oldMessageText !== $(".ql-editor").text().trim()) {
+                    console.log("Wiadomosci sie roznia");
                     var editedMessage;
 
                     if (editedMessage === $(".ql-editor").text().trim()) {
@@ -314,11 +321,47 @@ function emoReplacer() {
 
 function parseEmoticons(text) {
     // https://regex101.com/r/zJ9XXL/11
+    // TODO: dodawać nowe emotki :cos: do jednego arraya i dodawać do zmiennej regex i obiektu emoticonsGroup
     var regex = new RegExp('(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)|(:poop:)', "gi");
     text = text.replace(regex, emoReplacer);
 
     return text;
 }
+
+var loadingMessageOffset = false;
+
+// Load previous messages when we scroll up
+$("#chat_messages").scroll(function() {
+    if (!$(".ui.dimmer").hasClass("active") && !loadingMessageOffset) {
+        var height = $("#chat_messages").scrollTop();
+
+        if (height < 100) {
+            loadingMessageOffset = true;
+            var firstMessage = $("#chat_messages").children().first();
+            $(".ui.dimmer").addClass("active");
+
+            getPreviousMessages = myHub.server.getPreviousMessages(currentRoomId, loadedMessagesIteration);
+
+            $.when(getPreviousMessages).then(function () {
+                var previousMessages = firstMessage.prevAll();
+
+                if (previousMessages.length > 0) {
+                    var prevHeight = 0;
+
+                    previousMessages.each(function() {
+                        prevHeight += $(this).outerHeight();
+                    });
+
+                    $("#chat_messages").scrollTop(prevHeight);
+                }
+
+                $(".ui.dimmer").removeClass("active");
+                loadingMessageOffset = false;
+                loadedMessagesIteration++;
+            });
+        }
+    }
+});
 
 function getMessageHtml(userName, userId, messageId, messageText, timestamp) {
     var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
@@ -457,6 +500,28 @@ myHub.client.parseLastMessages = function (result) {
     $(".ui.main.container").css("display", "block");
     $("#chat_messages").clearQueue();
     $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+    addActionsToMessages();
+    $(document).trigger("reloadPopups");
+};
+
+myHub.client.parseOffsetMessages = function (result) {
+    $.each(result, function (index, value) {
+        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn);
+
+        var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
+
+        if (youTubeMatch) {
+            messageHtml +=
+                '</span><span class="message_body youtube_iframe"><iframe src="https://www.youtube.com/embed/' +
+                youTubeMatch[1] +
+                '?feature=oembed&amp;autoplay=0&amp;iv_load_policy=3" allowfullscreen="" height="300" frameborder="0" width="400"></iframe></span></div></div>';
+        } else {
+            messageHtml += "</span></div></div>";
+        }
+
+        $("#chat_messages").prepend(messageHtml);
+    });
+
     addActionsToMessages();
     $(document).trigger("reloadPopups");
 };

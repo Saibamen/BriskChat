@@ -35,5 +35,28 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
             return query;
         }
+
+        public IQueryable<Message> GetRoomMessagesOffset(Guid roomId, int loadedMessagesIteration, int limit)
+        {
+            var query = (from message in context.Set<Message>()
+                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
+                         orderby message.CreatedOn descending
+                         select new Message
+                         {
+                             Id = message.Id,
+                             Text = message.Text,
+                             CreatedOn = message.CreatedOn,
+                             UserRoom = new UserRoom
+                             {
+                                 User = new User
+                                 {
+                                     Id = message.UserRoom.User.Id,
+                                     Name = message.UserRoom.User.Name
+                                 }
+                             }
+                         }).Skip(limit * loadedMessagesIteration).Take(limit);
+
+            return query;
+        }
     }
 }
