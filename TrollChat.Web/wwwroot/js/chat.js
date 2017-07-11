@@ -331,6 +331,7 @@ function parseEmoticons(text) {
 var loadingMessageOffset = false;
 
 // Load previous messages when we scroll up
+// TODO: Load messages from last message ID (to avoid duplicates)
 $("#chat_messages").scroll(function() {
     if (!$(".ui.dimmer").hasClass("active") && !loadingMessageOffset) {
         var height = $("#chat_messages").scrollTop();
