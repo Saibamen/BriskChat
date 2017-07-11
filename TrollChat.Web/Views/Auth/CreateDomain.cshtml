@@ -2,23 +2,44 @@
     Layout = "_WebLayout";
     ViewData["Title"] = "Create Domain";
 }
-@model TrollChat.Web.Models.Auth.ChooseDomainViewModel
+@model TrollChat.Web.Models.Auth.CreateDomainViewModel
 
 <div class="ui two column grid">
     <div class="middle aligned center aligned column">
         <div class="domainleftcolumn">
             <h1 style="font-size:48px;">Create a new Domain</h1>
-            @using (Html.BeginForm("Register", "Auth", FormMethod.Post))
+            <h4>Once registered, you will be sent an email to the address listed below. In this way, we will confirm your email.</h4>
+            <br />
+            @using (Html.BeginForm("CreateDomain", "Auth", FormMethod.Post))
             {
                 <div class="ui large form">
                     <div class="field">
-                        <label>Your email address</label>
+                        @Html.LabelFor(m => m.DomainName)
                         @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name" })
-                        <input type="email" placeholder="you@example.com" spellcheck="false">
+                        <p>@Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })</p>
+                    </div>
+                    <div class="field">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", type = "email", requiredd = "required" })
+                        <p>@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })</p>
+                    </div>
+                    <div class="field">
+                        @Html.LabelFor(m => m.Name)
+                        @Html.TextBoxFor(m => m.Name, new { placeholder = "Name", requiredd = "required" })
+                        <p>@Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })</p>
+                    </div>
+                    <div class="field">
+                        @Html.LabelFor(m => m.Password)
+                        @Html.PasswordFor(m => m.Password, new { placeholder = "Password", requiredd = "required" })
+                        <p>@Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})</p>
+                    </div>
+                    <div class="field">
+                        @Html.LabelFor(m => m.ConfirmPassword)
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { placeholder = "Confirm Password", requiredd = "required" })
+                        <p>@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })</p>
                     </div>
                     <div>
-                        <button class="orginalbutton" type="submit" id="btnLogin">Next</button>
-                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        <button class="orginalbutton" type="submit" id="btnLogin">Register -></button>
                     </div>
                 </div>
             }

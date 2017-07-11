@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,8 @@ namespace TrollChat.Web.Controllers
         private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
         private readonly IAddNewEmailMessage addNewEmailMessage;
         private readonly ICheckDomainExistsByName checkDomainExistsByName;
+        private readonly IAddNewDomain addNewDomain;
+        private readonly ISetDomainOwner setDomainOwner;
 
         public AuthController(IAuthenticateUser authenticateUser,
             IAddNewUser addNewUser,
@@ -42,8 +45,9 @@ namespace TrollChat.Web.Controllers
             IEditUserPassword editIUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
             IAddNewEmailMessage addNewEmailMessage,
-            ICheckDomainExistsByName checkDomainExistsByName
-            )
+            ICheckDomainExistsByName checkDomainExistsByName,
+            IAddNewDomain addNewDomain,
+            ISetDomainOwner setDomainOwner)
         {
             this.authenticateUser = authenticateUser;
             this.addNewUser = addNewUser;
@@ -56,6 +60,8 @@ namespace TrollChat.Web.Controllers
             this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
             this.addNewEmailMessage = addNewEmailMessage;
             this.checkDomainExistsByName = checkDomainExistsByName;
+            this.addNewDomain = addNewDomain;
+            this.setDomainOwner = setDomainOwner;
         }
 
         [AllowAnonymous]
@@ -70,7 +76,7 @@ namespace TrollChat.Web.Controllers
         [HttpPost("signin")]
         public IActionResult ChooseDomain(ChooseDomainViewModel model)
         {
-            if (!checkDomainExistsByName.Invoke(model.DomainName))
+            if (!ModelState.IsValid || !checkDomainExistsByName.Invoke(model.DomainName))
             {
                 ModelState.AddModelError("DomainName", "Domain not found");
 
@@ -88,18 +94,25 @@ namespace TrollChat.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("register")]
-        public IActionResult Register(string domainName)
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [HttpPost("register")]
-        public IActionResult Register(RegisterViewModel model)
+        [HttpPost("createdomain")]
+        public IActionResult CreateDomain(CreateDomainViewModel model)
         {
-            var userModel = new UserModel { Email = model.Email, Password = model.Password, Name = model.Name };
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var domain = addNewDomain.Invoke(new DomainModel { Name = model.DomainName });
+
+            if (domain == Guid.Empty)
+            {
+                ModelState.AddModelError("DomainName", "This domain already exists in our database");
+
+                return View(model);
+            }
+
+            var userModel = new UserModel { Email = model.Email, Password = model.Password, Name = model.Name, Domain = new DomainModel { Id = domain } };
             var userAddAction = addNewUser.Invoke(userModel);
 
             if (userAddAction == null)
@@ -117,9 +130,11 @@ namespace TrollChat.Web.Controllers
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
             addNewEmailMessage.Invoke(mappedMessage);
 
+            setDomainOwner.Invoke(userAddAction.Id, domain);
+
             Alert.Success("Confirmation email has been sent to your email address");
 
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("Login", "Auth", new { domainName = model.DomainName });
         }
 
         [AllowAnonymous]
@@ -155,7 +170,7 @@ namespace TrollChat.Web.Controllers
 
             if (access == null)
             {
-                ModelState.AddModelError("Email", "Invalid email or password");
+                ModelState.AddModelError("Email", "Invalid email or password or email not confirmed");
                 Alert.Warning();
                 ViewBag.ReturnUrl = returnUrl;
 
@@ -238,6 +253,13 @@ namespace TrollChat.Web.Controllers
         [HttpPost("{domainName}/resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(ResendConfirmationEmailViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                Alert.Warning();
+
+                return View(model);
+            }
+
             var user = getuserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)

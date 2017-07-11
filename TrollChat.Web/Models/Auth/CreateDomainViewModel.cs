@@ -2,8 +2,12 @@
 
 namespace TrollChat.Web.Models.Auth
 {
-    public class RegisterViewModel
+    public class CreateDomainViewModel
     {
+        [Required]
+        [Display(Name = "Domain name")]
+        public string DomainName { get; set; }
+        
         [Required]
         [EmailAddress]
         public string Email { get; set; }

@@ -1002,7 +1002,6 @@ myHub.client.usersInRoom = function (result) {
 };
 
 myHub.client.roomInfo = function (result, resultTime) {
-    console.log("Pobranie informacji z funkcji roomInfo()");
     $("#aboutInfo").empty();
     var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
     $("#aboutInfo").append(divToAppend);
