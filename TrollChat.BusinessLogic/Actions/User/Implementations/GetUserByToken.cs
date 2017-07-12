@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -21,7 +22,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var result = userTokenRepository.FindBy(y => y.SecretToken == token).FirstOrDefault();
+            var result = userTokenRepository.FindBy(y => y.SecretToken == token).Include(x => x.User).FirstOrDefault();
 
             if (result == null)
             {

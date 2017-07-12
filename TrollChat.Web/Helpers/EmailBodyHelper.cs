@@ -9,11 +9,11 @@ namespace TrollChat.Web.Helpers
             var body = new EmailBodyModel
             {
                 TopicFirst = "We are ready to activate your account.",
-                TopicSecend = "Only we have to check if the email is yours.",
+                TopicSecond = "Only we have to check if the email is yours.",
                 ButtonValue = callbackUrl,
-                Buttontext = "Confirm Email",
-                AditionalNotesFirst = "If you did not create a TrollChat account,",
-                AditionalNotesSecend = "remove this email and everything will return to normal."
+                ButtonText = "Confirm email",
+                AdditionalNotesFirst = "If you did not create a TrollChat account,",
+                AdditionalNotesSecond = "remove this email and everything will return to normal."
             };
 
             return body;
@@ -23,12 +23,12 @@ namespace TrollChat.Web.Helpers
         {
             var body = new EmailBodyModel
             {
-                TopicFirst = "Password reset action has been initiated,",
-                TopicSecend = "Please click on the button to confirm this action",
+                TopicFirst = "Password reset action has been initiated.",
+                TopicSecond = "Please click on the button to confirm this action:",
                 ButtonValue = callbackUrl,
-                Buttontext = "Reset password",
-                AditionalNotesFirst = "Disregard this email if you didn't want to reset the password,",
-                AditionalNotesSecend = "this is not the email you are looking for"
+                ButtonText = "Reset password",
+                AdditionalNotesFirst = "Disregard this email if you didn't want to reset the password,",
+                AdditionalNotesSecond = "this is not the email you are looking for."
             };
 
             return body;

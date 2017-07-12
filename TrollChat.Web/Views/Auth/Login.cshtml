@@ -14,28 +14,27 @@
             <div class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", type = "email", required = "required" })
-                        @*@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })*@
+                        @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", type = "email", required = "required", autofocus = "autofocus" })
                         <i class="user icon"></i>
                     </div>
+                    <p>@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })</p>
                 </div>
                 <div class="field">
                     <div class="ui left icon input">
                         @Html.PasswordFor(m => m.Password, new { placeholder = "Password", required = "required" })
-                        @*@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })*@
                         <i class="lock icon"></i>
                     </div>
+                    <p>@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })</p>
                 </div>
 
                 <div class="field">
                     <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
-                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                 </div>
             </div>
         }
         <br />
         <div>
-            <a href="@Url.Action("ResendConfirmationEmail", "Auth", new { domainName = ViewBag.DomainName })">Resend confirmation email?</a>
+            <a href="@Url.Action("ResendConfirmationEmail", "Auth")">Resend confirmation email?</a>
         </div>
         <div>
             <a href="@Url.Action("ResetPasswordInitiation", "Auth")">Reset password</a>

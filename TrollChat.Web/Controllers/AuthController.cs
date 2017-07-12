@@ -125,7 +125,7 @@ namespace TrollChat.Web.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken },
                 Request.Scheme);
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
+            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
             addNewEmailMessage.Invoke(mappedMessage);
@@ -160,7 +160,6 @@ namespace TrollChat.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Alert.Warning();
                 ViewBag.ReturnUrl = returnUrl;
 
                 return View(model);
@@ -171,7 +170,6 @@ namespace TrollChat.Web.Controllers
             if (access == null)
             {
                 ModelState.AddModelError("Email", "Invalid email or password or email not confirmed");
-                Alert.Warning();
                 ViewBag.ReturnUrl = returnUrl;
 
                 return View(model);
@@ -228,11 +226,11 @@ namespace TrollChat.Web.Controllers
             {
                 Alert.Danger("Couldn't finish this action");
 
-                return RedirectToAction("Login", "Auth");
+                return RedirectToAction("ChooseDomain", "Auth");
             }
 
             Alert.Success("Email confirmed");
-            return RedirectToAction("Login", "Auth");
+            return RedirectToAction("ChooseDomain", "Auth");
         }
 
         [AllowAnonymous]
@@ -255,8 +253,6 @@ namespace TrollChat.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Alert.Warning();
-
                 return View(model);
             }
 
@@ -271,7 +267,7 @@ namespace TrollChat.Web.Controllers
 
             if (user.EmailConfirmedOn != null)
             {
-                Alert.Danger("Email already confirmed");
+                Alert.Info("Email already confirmed");
 
                 return RedirectToAction("Login");
             }
@@ -279,8 +275,8 @@ namespace TrollChat.Web.Controllers
             var token = addUserTokenToUser.Invoke(user.Id);
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token }, Request.Scheme);
-            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("ConfirmEmail", emailinfo);
+            var emailInfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailInfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
@@ -319,15 +315,15 @@ namespace TrollChat.Web.Controllers
             {
                 Alert.Danger("We don't have this account in database");
 
-                return View();
+                return View(model);
             }
 
             var token = addUserTokenToUser.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
                 Request.Scheme);
-            var emailinfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("ResetPassword", emailinfo);
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var emailInfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
+            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailInfo);
+            var message = emailService.CreateMessage(model.Email, "Reset your password", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
             addNewEmailMessage.Invoke(mappedMessage);
@@ -344,19 +340,19 @@ namespace TrollChat.Web.Controllers
             {
                 Alert.Danger("Invalid token");
 
-                return View("Error");
+                return View();
             }
 
             var user = getUserByToken.Invoke(token);
 
             if (user == null)
             {
-                Alert.Danger("Invalid token");
+                Alert.Danger("User not found or not activated");
 
-                return View("Error");
+                return View();
             }
 
-            var model = new ResetPasswordNewPasswordViewModel()
+            var model = new ResetPasswordViewModel
             {
                 Token = token
             };
@@ -366,13 +362,11 @@ namespace TrollChat.Web.Controllers
 
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        [HttpPost("resetpasswordbytoken")]
-        public IActionResult ResetPasswordByToken(ResetPasswordNewPasswordViewModel model)
+        [HttpPost("resetpasswordbytoken/{token}")]
+        public IActionResult ResetPasswordByToken(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                Alert.Danger("Something went wrong");
-
                 return View(model);
             }
 
@@ -380,9 +374,9 @@ namespace TrollChat.Web.Controllers
 
             if (user == null)
             {
-                Alert.Danger("You can't complete this action");
+                Alert.Danger("User not found or not activated");
 
-                return View("Login");
+                return RedirectToAction("ChooseDomain", "Auth");
             }
 
             var result = editUserPassword.Invoke(user.Id, model.Password);

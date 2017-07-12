@@ -13,7 +13,7 @@
             <div class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
-                        @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name", required = "required" })
+                        @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name", required = "required", autofocus = "autofocus" })
                         <i class="user icon"></i>
                     </div>
                     <p>@Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })</p>
