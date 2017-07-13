@@ -36,7 +36,7 @@ function loadingStart() {
 }
 
 function loadingStop() {
-    $(".ui.main.container").css("display", "block");
+    $(".ui.main.container").removeAttr("style");
     $(".ui.dimmer").removeClass("active");
     addActionsToMessages();
     console.log("Loader stops");
@@ -50,10 +50,10 @@ function addActionsToMessages() {
         }
 
         $(this).prepend('<div class="action_hover_container stretch_btn_heights narrow_buttons" data-js="action_hover_container" data-show_rxn_action="true">\
-            <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="top center">\
+            <button type="button" data-action="edit" class="btn_unstyle btn_msg_action ts_tip" data-content="Edit message" data-position="bottom center">\
             <i class="edit icon"></i>\
             </button>\
-            <button type="button" data-action="delete" class="btn_unstyle btn_msg_action ts_tip danger" data-content="Delete message" data-position="top center">\
+            <button type="button" data-action="delete" class="btn_unstyle btn_msg_action ts_tip danger" data-content="Delete message" data-position="bottom right">\
             <i class="delete icon"></i>\
             </button>\
             </div>');
@@ -753,7 +753,7 @@ function serializeForm(form) {
 }
 
 function customization() {
-    myHub.server.getRoomInformation(currentRoomId);
+    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
     var divToAppend = '<div class="item">\
                             <div class="ui styled accordion">\
@@ -813,9 +813,11 @@ function customization() {
                             </div>\
                         </div>';
 
-    $("#Rrightbar").append(divToAppend);
-    $("#rightsidebarblock").append(divToAppend2);
-    $(".ui.styled.accordion").accordion();
+    $.when(getRoomInformation).then(function () {
+        $("#Rrightbar").append(divToAppend);
+        $("#rightsidebarblock").append(divToAppend2);
+        $(".ui.styled.accordion").accordion();
+    });
 }
 
 function membersInRoom() {
@@ -889,6 +891,7 @@ function changeSettingsValue(val) {
     }
 
     $(".ui.sidebar.right").removeClass("visible");
+    $(".ui.main.container").removeAttr("style");
 }
 
 function changeTheme(value) {
@@ -936,9 +939,9 @@ $("#channel_actions_toggle").click(function () {
     if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").text() === "Channel Settings") {
             sidebar.removeClass("visible");
+            $(".ui.main.container").removeAttr("style");
         } else {
             $("#Rrightbar").html("");
-            sidebar.addClass("visible");
             $("#rightbar_Title").html("Channel Settings");
             customization();
         }
@@ -947,11 +950,13 @@ $("#channel_actions_toggle").click(function () {
         sidebar.addClass("visible");
         $("#rightbar_Title").html("Channel Settings");
         customization();
+        $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
 });
 
 var closeRightBarCallback = function () {
     $(".ui.sidebar.right").removeClass("visible");
+    $(".ui.main.container").removeAttr("style");
     changeTheme(themeInDatabase);
 };
 
@@ -969,19 +974,22 @@ $(document).keydown(function (x) {
 
 $("#details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
-    myHub.server.getRoomInformation(currentRoomId);
+    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
-    if (sidebar.hasClass("visible")) {
-        if ($("#rightbar_Title").html() === "Channel Details") {
-            sidebar.removeClass("visible");
+    $.when(getRoomInformation).then(function () {
+        if (sidebar.hasClass("visible")) {
+            if ($("#rightbar_Title").html() === "Channel Details") {
+                sidebar.removeClass("visible");
+                $(".ui.main.container").removeAttr("style");
+            } else {
+                membersInRoom();
+            }
         } else {
-            sidebar.addClass("visible");
             membersInRoom();
+            sidebar.addClass("visible");
+            $(".ui.main.container").css("cssText", "margin-left: 260px !important");
         }
-    } else {
-        membersInRoom();
-        sidebar.addClass("visible");
-    }
+    });
 });
 
 $(document).on("click", ".private-conversation-tag", function () {
@@ -1003,22 +1011,22 @@ myHub.client.usersInRoom = function (result) {
 };
 
 myHub.client.roomInfo = function (result, resultTime) {
-    $("#aboutInfo").empty();
-    var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
-    $("#aboutInfo").append(divToAppend);
-    $("#infoDescription").val(result.Description);
     themeInDatabase = String(result.Customization);
     currentTheme = themeInDatabase;
     descriptionInDatabase = result.Description;
     roomNameInDatabase = result.Name;
-    $("#channel_topic_text").html(descriptionInDatabase);
-    $("#infoName").val(roomNameInDatabase);
-    $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
     changeTheme(themeInDatabase);
 
-    // Change selected theme in drop-down list
     if ($(".ui.sidebar.right").hasClass("visible")) {
         $("#selecttheme").val(themeInDatabase);
+        $("#aboutInfo").empty();
+        var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
+        $("#aboutInfo").append(divToAppend);
+        $("#infoDescription").val(result.Description);
+        $("#infoName").val(roomNameInDatabase);
+    } else {
+        $("#channel_topic_text").html(descriptionInDatabase);
+        $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
     }
 };

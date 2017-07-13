@@ -133,7 +133,7 @@ div {
 }
 
 .ui.main.container {
-    width: 100%;
+    width: auto;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;
@@ -539,6 +539,7 @@ button, input, textarea {
     -ms-flex: 1;
     -webkit-flex: 1;
     flex: 1;
+    margin-right: 260px;
 }
 
 #client_body:not(.onboarding):before {
@@ -551,6 +552,7 @@ button, input, textarea {
     background: #fff;
     content: '';
     z-index: 200;
+    margin-right: 260px;
 }
 
 #messages_container {
@@ -560,6 +562,7 @@ button, input, textarea {
 
 #col_messages {
     margin-left: 0;
+    margin-top: 8px;
     position: relative;
     display: -webkit-box;
     display: -webkit-flex;
@@ -579,7 +582,6 @@ button, input, textarea {
 #chat_messages {
     overflow-x: hidden;
     overflow-y: scroll;
-    border-right: .25rem solid transparent;
     outline: 0;
 }
 
@@ -616,7 +618,7 @@ button, input, textarea {
     display: none;
     position: absolute;
     top: -20px;
-    right: 245px; /* 18px */
+    right: 18px;
     border: .0625rem solid rgba(0,0,0,.15);
     border-radius: .375rem;
     overflow: hidden;
@@ -996,7 +998,6 @@ span.emoji-outer {
  */
 
 #chat_input {
-    width: 86%;
     -webkit-order: 1;
     -moz-order: 1;
     -ms-flex-order: 1;
