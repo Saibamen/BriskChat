@@ -583,7 +583,6 @@ myHub.client.setDomainInformation = function (domainName, userName, userId) {
 
 myHub.client.updateRoomUsersCount = function (roomUsersCount) {
     $("#channel_members_toggle_count_count").text(roomUsersCount);
-    console.log("Updated roomUsersCount");
 };
 
 /*
@@ -752,8 +751,10 @@ function serializeForm(form) {
     return obj;
 }
 
-function customization() {
-    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+function channelSettings() {
+    $("#Rightbar").html("");
+
+    $("#rightbar_Title").html("Channel Settings");
 
     var divToAppend = '<div class="item">\
                             <div class="ui styled accordion">\
@@ -806,25 +807,32 @@ function customization() {
         variation: "inverted"
     });
 
-    var divToAppend2 = '<div class="bottom attached centered ui item">\
+    var divToAppend2 = '<div class="bottom attached centered ui item" id="right_bar_save_cancel_buttons">\
                             <div class="ui buttons" tabindex="0"><button class="ui button" onclick="closeRightBarCallback();">Cancel</button>\
                                 <div class="or"></div>\
                                 <button class="ui positive button" onclick="changeSettingsValue(currentTheme);">Save</button>\
                             </div>\
                         </div>';
 
+    $("#Rightbar").append(divToAppend);
+
+    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+
     $.when(getRoomInformation).then(function () {
-        $("#Rrightbar").append(divToAppend);
         $("#rightsidebarblock").append(divToAppend2);
         $(".ui.styled.accordion").accordion();
     });
 }
 
-function membersInRoom() {
-    $("#Rrightbar").html("");
+function channelDetails() {
+    $("#Rightbar").html("");
+
+    if ($("#right_bar_save_cancel_buttons").length) {
+        $("#right_bar_save_cancel_buttons").remove();
+    }
 
     $("#rightbar_Title").html("Channel Details");
-    $("#Rrightbar").append('<div class="ui styled accordion">' +
+    $("#Rightbar").append('<div class="ui styled accordion">' +
                                 '<div class="active content">' +
                                     '<div class="accordion">' +
                                         '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
@@ -837,6 +845,7 @@ function membersInRoom() {
 
     $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
+    myHub.server.getRoomInformation(currentRoomId);
 }
 
 myHub.client.broadcastEditedRoomDescription = function (value) {
@@ -859,6 +868,10 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
     $("#channelsMenu > a.item.active").contents().last().replaceWith(roomNameInDatabase);
     // Room name in #msg_input
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
+
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        $("#infoName").val(roomNameInDatabase);
+    }
 };
 
 // For all clients connected to Domain
@@ -933,7 +946,7 @@ function selectTheme(sel) {
     changeTheme(currentTheme);
 }
 
-$("#channel_actions_toggle").click(function () {
+$("#channel_settings_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
 
     if (sidebar.hasClass("visible")) {
@@ -941,17 +954,14 @@ $("#channel_actions_toggle").click(function () {
             sidebar.removeClass("visible");
             $(".ui.main.container").removeAttr("style");
         } else {
-            $("#Rrightbar").html("");
-            $("#rightbar_Title").html("Channel Settings");
-            customization();
+            channelSettings();
         }
     } else {
-        $("#Rrightbar").html("");
+        channelSettings();
         sidebar.addClass("visible");
-        $("#rightbar_Title").html("Channel Settings");
-        customization();
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
+
 });
 
 var closeRightBarCallback = function () {
@@ -972,24 +982,22 @@ $(document).keydown(function (x) {
     }
 });
 
-$("#details_toggle").click(function () {
+$("#channel_details_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
-    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
-    $.when(getRoomInformation).then(function () {
-        if (sidebar.hasClass("visible")) {
-            if ($("#rightbar_Title").html() === "Channel Details") {
-                sidebar.removeClass("visible");
-                $(".ui.main.container").removeAttr("style");
-            } else {
-                membersInRoom();
-            }
+    if (sidebar.hasClass("visible")) {
+        if ($("#rightbar_Title").html() === "Channel Details") {
+            sidebar.removeClass("visible");
+            $(".ui.main.container").removeAttr("style");
         } else {
-            membersInRoom();
-            sidebar.addClass("visible");
-            $(".ui.main.container").css("cssText", "margin-left: 260px !important");
+            channelDetails();
         }
-    });
+    } else {
+        channelDetails();
+        sidebar.addClass("visible");
+        $(".ui.main.container").css("cssText", "margin-left: 260px !important");
+    }
+
 });
 
 $(document).on("click", ".private-conversation-tag", function () {
@@ -1010,7 +1018,7 @@ myHub.client.usersInRoom = function (result) {
     });
 };
 
-myHub.client.roomInfo = function (result, resultTime) {
+myHub.client.roomInfo = function (result, createdOn) {
     themeInDatabase = String(result.Customization);
     currentTheme = themeInDatabase;
     descriptionInDatabase = result.Description;
@@ -1021,7 +1029,7 @@ myHub.client.roomInfo = function (result, resultTime) {
     if ($(".ui.sidebar.right").hasClass("visible")) {
         $("#selecttheme").val(themeInDatabase);
         $("#aboutInfo").empty();
-        var divToAppend = "<div>Created by " + result.OwnerName + " on " + resultTime + "</div>";
+        var divToAppend = "<div>Created by " + result.OwnerName + " on " + createdOn + "</div>";
         $("#aboutInfo").append(divToAppend);
         $("#infoDescription").val(result.Description);
         $("#infoName").val(roomNameInDatabase);
