@@ -25,8 +25,9 @@ var globalUserName;
 var globalUserId;
 
 var currentTheme;
-var descriptionInDatabase;
+var topicInDatabase;
 var roomNameInDatabase;
+var descriptionInDatabase;
 var currentRoomId = 0;
 var loadedMessagesIteration = 1;
 
@@ -643,8 +644,6 @@ $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
         console.log("Re-connecting");
         loadingStart();
-    } else if (change.newState === $.signalR.connectionState.connected) {
-        console.log("The server is online");
     }
 });
 
@@ -778,6 +777,14 @@ function channelSettings() {
                                                 </div>\
                                             </div>\
                                         </div>\
+                                        <div class="title"><i class="wpforms icon"></i>Topic</div>\
+                                        <div class="content" id="Topic">\
+                                            <div class="ui form">\
+                                                <div class="field">\
+                                                <input type="text" id="infoTopic">\
+                                                </div>\
+                                            </div>\
+                                        </div>\
                                         <div class="title"><i class="wpforms icon"></i>Description</div>\
                                         <div class="content" id="Description">\
                                             <div class="ui form">\
@@ -853,14 +860,38 @@ function channelDetails() {
     myHub.server.getRoomInformation(currentRoomId);
 }
 
+myHub.client.broadcastEditedRoomTopic = function (value) {
+    topicInDatabase = value;
+    $("#channel_topic_text").html(value);
+
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        if ($("#rightbar_Title").text() === "Channel Settings") {
+            $("#infoTopic").val(topicInDatabase);
+        }
+    };
+};
+
 myHub.client.broadcastEditedRoomDescription = function (value) {
     descriptionInDatabase = value;
-    $("#channel_topic_text").html(value);
+
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        if ($("#rightbar_Title").text() === "Channel Settings") {
+            $("#infoDescription").val(descriptionInDatabase);
+        } else {
+            $("#channelDetailsDescription").text(descriptionInDatabase);
+        }
+    };
 };
 
 myHub.client.broadcastEditedRoomCustomization = function (value) {
     themeInDatabase = value.toString();
     changeTheme(themeInDatabase);
+
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        if ($("#rightbar_Title").text() === "Channel Settings") {
+            $("#selecttheme").val(value);
+        }
+    };
 };
 
 // For active room only
@@ -875,7 +906,9 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
     if ($(".ui.sidebar.right").hasClass("visible")) {
-        $("#infoName").val(roomNameInDatabase);
+        if ($("#rightbar_Title").text() === "Channel Settings") {
+            $("#infoName").val(roomNameInDatabase);
+        }
     }
 };
 
@@ -890,8 +923,9 @@ myHub.client.broadcastDomainEditedRoomName = function (roomId, roomName) {
 
 function changeSettingsValue(val) {
     var parseval = parseInt(currentTheme);
-    var descriptionNow = $("#infoDescription").val();
+    var topicNow = $("#infoTopic").val();
     var roomNameNow = $("#infoName").val();
+    var descriptionNow = $("#infoDescription").val();
 
     // Room name
     if (roomNameInDatabase !== roomNameNow) {
@@ -899,6 +933,11 @@ function changeSettingsValue(val) {
     }
 
     // Room topic
+    if (topicInDatabase !== topicNow) {
+        myHub.server.editRoomTopic(currentRoomId, topicNow);
+    }
+
+    // Room description
     if (descriptionInDatabase !== descriptionNow) {
         myHub.server.editRoomDescription(currentRoomId, descriptionNow);
     }
@@ -1011,11 +1050,12 @@ $(document).on("click", ".private-conversation-tag", function () {
 
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
+    console.log(result);
 
     $("#MembersInRoom").prev().contents().last().replaceWith(result.length + " Members");
 
     $.each(result, function (index, value) {
-        var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.UserId + '" data-name="' + value.Name + '">';
         divToAppend += '<div class="eight wide column"><i class="user icon"></i>' + value.Name + "</div>";
         divToAppend += "</div>";
 
@@ -1026,20 +1066,26 @@ myHub.client.usersInRoom = function (result) {
 myHub.client.roomInfo = function (result, createdOn) {
     themeInDatabase = String(result.Customization);
     currentTheme = themeInDatabase;
-    descriptionInDatabase = result.Description;
+    topicInDatabase = result.Topic;
     roomNameInDatabase = result.Name;
+    descriptionInDatabase = result.Description;
 
     changeTheme(themeInDatabase);
 
     if ($(".ui.sidebar.right").hasClass("visible")) {
-        $("#selecttheme").val(themeInDatabase);
-        $("#aboutInfo").empty();
-        var divToAppend = "<div>Created by " + result.OwnerName + " on " + createdOn + "</div>";
-        $("#aboutInfo").append(divToAppend);
-        $("#infoDescription").val(result.Description);
-        $("#infoName").val(roomNameInDatabase);
-    } else {
-        $("#channel_topic_text").html(descriptionInDatabase);
-        $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
+        if ($("#rightbar_Title").html() === "Channel Details") {
+            var divToAppend = "<div>Created by <b>" + result.OwnerName + "</b> on " + createdOn + '<h5>Description</h5><span id="channelDetailsDescription">' + result.Description + "</span></div>";
+
+            $("#aboutInfo").empty();
+            $("#aboutInfo").append(divToAppend);
+        } else {
+            $("#selecttheme").val(themeInDatabase);
+            $("#infoTopic").val(result.Topic);
+            $("#infoName").val(roomNameInDatabase);
+            $("#infoDescription").val(result.Description);
+        }
     }
+
+    $("#channel_topic_text").html(topicInDatabase);
+    $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 };

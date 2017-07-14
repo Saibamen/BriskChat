@@ -4,18 +4,18 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
-    public class EditRoomName : IEditRoomName
+    public class EditRoomTopic : IEditRoomTopic
     {
         private readonly IRoomRepository roomRepository;
 
-        public EditRoomName(IRoomRepository roomRepository)
+        public EditRoomTopic(IRoomRepository roomRepository)
         {
             this.roomRepository = roomRepository;
         }
 
-        public bool Invoke(Guid roomId, string roomName)
+        public bool Invoke(Guid roomId, string roomTopic)
         {
-            if (roomId == Guid.Empty || string.IsNullOrEmpty(roomName) || roomName.Length > 100)
+            if (roomId == Guid.Empty || roomTopic.Length > 100)
             {
                 return false;
             }
@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             switch (roomToEdit)
             {
                 default:
-                    roomToEdit.Name = roomName;
+                    roomToEdit.Topic = roomTopic;
                     roomRepository.Edit(roomToEdit);
                     roomRepository.Save();
                     return true;

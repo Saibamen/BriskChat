@@ -966,6 +966,11 @@ span.emoji-outer {
     outline: 0;
 }
 
+.inline_edit .inline_edit_input[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    font-style: italic;
+}
+
 .flex_header {
     display: -webkit-box;
     display: -webkit-flex;

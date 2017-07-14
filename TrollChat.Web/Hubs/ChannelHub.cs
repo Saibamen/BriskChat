@@ -35,6 +35,7 @@ namespace TrollChat.Web.Hubs
         private readonly IEditRoomCustomization editRoomCustomization;
         private readonly IEditRoomName editRoomName;
         private readonly IEditRoomDescription editRoomDescription;
+        private readonly IEditRoomTopic editRoomTopic;
         private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
 
         private const string TimeStampRepresentation = "HH:mm";
@@ -44,10 +45,10 @@ namespace TrollChat.Web.Hubs
 
         public ChannelHub(IAddNewRoom addNewRoom,
             IAddNewMessage addNewMessage,
-            IGetUserRoomByIds getUserRoomByIds,
             IGetUserRooms getUserRooms,
-            IGetUsersByDomainId getUsersByDomainId,
+            IGetUserRoomByIds getUserRoomByIds,
             IAddNewPrivateConversation addNewPrivateConversation,
+            IGetUsersByDomainId getUsersByDomainId,
             IGetUserPrivateConversations getUserPrivateConversations,
             IDeleteMessageById deleteMessageById,
             IGetMessageById getMessageById,
@@ -58,16 +59,17 @@ namespace TrollChat.Web.Hubs
             IAddNewUserRoom addNewUserRoom,
             IGetLastMessagesByRoomId getLastMessagesByRoomId,
             IEditRoomCustomization editRoomCustomization,
-            IEditRoomDescription editRoomDescription,
             IEditRoomName editRoomName,
+            IEditRoomDescription editRoomDescription,
+            IEditRoomTopic editRoomTopic,
             IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
-            this.getUserRoomByIds = getUserRoomByIds;
             this.getUserRooms = getUserRooms;
-            this.getUsersByDomainId = getUsersByDomainId;
+            this.getUserRoomByIds = getUserRoomByIds;
             this.addNewPrivateConversation = addNewPrivateConversation;
+            this.getUsersByDomainId = getUsersByDomainId;
             this.getUserPrivateConversations = getUserPrivateConversations;
             this.deleteMessageById = deleteMessageById;
             this.getMessageById = getMessageById;
@@ -78,8 +80,9 @@ namespace TrollChat.Web.Hubs
             this.addNewUserRoom = addNewUserRoom;
             this.getLastMessagesByRoomId = getLastMessagesByRoomId;
             this.editRoomCustomization = editRoomCustomization;
-            this.editRoomDescription = editRoomDescription;
             this.editRoomName = editRoomName;
+            this.editRoomDescription = editRoomDescription;
+            this.editRoomTopic = editRoomTopic;
             this.getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
         }
 
@@ -392,7 +395,7 @@ namespace TrollChat.Web.Hubs
 
         public void EditRoomName(string roomId, string roomName)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(roomName) || roomName.Length > 100)
             {
                 return;
             }
@@ -408,7 +411,7 @@ namespace TrollChat.Web.Hubs
 
         public void EditRoomDescription(string roomId, string roomDescription)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrEmpty(roomId) || roomDescription.Length > 100)
             {
                 return;
             }
@@ -418,6 +421,21 @@ namespace TrollChat.Web.Hubs
             if (edited)
             {
                 Clients.Group(roomId).broadcastEditedRoomDescription(roomDescription);
+            }
+        }
+
+        public void EditRoomTopic(string roomId, string roomTopic)
+        {
+            if (string.IsNullOrEmpty(roomId) || roomTopic.Length > 100)
+            {
+                return;
+            }
+
+            var edited = editRoomTopic.Invoke(new Guid(roomId), roomTopic);
+
+            if (edited)
+            {
+                Clients.Group(roomId).broadcastEditedRoomTopic(roomTopic);
             }
         }
 
