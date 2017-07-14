@@ -96,7 +96,7 @@ namespace TrollChat.Web
                 LoginPath = new PathString("/Auth/SignIn"),
                 AccessDeniedPath = new PathString("/Home/AccessDenied"),
                 AutomaticAuthenticate = true,
-                AutomaticChallenge = true,
+                AutomaticChallenge = true
             });
 
             app.UseSignalR();
