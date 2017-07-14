@@ -36,7 +36,12 @@ function loadingStart() {
 }
 
 function loadingStop() {
-    $(".ui.main.container").removeAttr("style");
+    if ($(".ui.sidebar.right").hasClass("visible")) {
+        $(".ui.main.container").css("cssText", "margin-left: 260px !important");
+    } else {
+        $(".ui.main.container").removeAttr("style");
+    }
+
     $(".ui.dimmer").removeClass("active");
     addActionsToMessages();
     console.log("Loader stops");
