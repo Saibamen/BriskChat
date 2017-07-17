@@ -30,6 +30,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var message = action.Invoke(guid);
 
             // check
+            Assert.NotNull(message);
             Assert.Equal(guid, message.Id);
             Assert.Equal("Testowa wiadomość", message.Text);
             Assert.Null(message.DeletedOn);

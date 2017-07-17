@@ -33,7 +33,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              }
                          }).Take(number);
 
-            return query;
+            return !(query.Count() > 0) ? Enumerable.Empty<Message>().AsQueryable() : query;
         }
 
         public IQueryable<Message> GetRoomMessagesOffset(Guid roomId, int loadedMessagesIteration, int limit)
@@ -56,7 +56,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                              }
                          }).Skip(limit * loadedMessagesIteration).Take(limit);
 
-            return query;
+            return !(query.Count() > 0) ? Enumerable.Empty<Message>().AsQueryable() : query;
         }
     }
 }

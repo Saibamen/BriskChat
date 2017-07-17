@@ -15,7 +15,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public bool Invoke(Guid roomId, int roomCustomization)
         {
-            if (roomId == Guid.Empty)
+            if (roomId == Guid.Empty || roomCustomization < 0)
             {
                 return false;
             }

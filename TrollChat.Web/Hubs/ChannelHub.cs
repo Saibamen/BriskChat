@@ -114,7 +114,7 @@ namespace TrollChat.Web.Hubs
 
             var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), loadedMessagesIteration, MessagesToLoad);
 
-            if (messagesFromDb.Count <= 0)
+            if (messagesFromDb == null || messagesFromDb.Count <= 0)
             {
                 return;
             }
@@ -191,16 +191,19 @@ namespace TrollChat.Web.Hubs
 
             var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
 
-            var viewList = messagesFromDb.Select(item => new MessageViewModel
+            if (messagesFromDb != null && messagesFromDb.Count > 0)
             {
-                Id = item.Id,
-                UserName = item.UserRoom.User.Name,
-                UserId = item.UserRoom.User.Id,
-                Text = item.Text,
-                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
-            });
+                var viewList = messagesFromDb.Select(item => new MessageViewModel
+                {
+                    Id = item.Id,
+                    UserName = item.UserRoom.User.Name,
+                    UserId = item.UserRoom.User.Id,
+                    Text = item.Text,
+                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
+                });
 
-            Clients.Caller.parseLastMessages(viewList);
+                Clients.Caller.parseLastMessages(viewList);
+            }
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
@@ -380,7 +383,7 @@ namespace TrollChat.Web.Hubs
 
         public void EditRoomCustomization(string roomId, int roomCustomization)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrEmpty(roomId) || roomCustomization < 0)
             {
                 return;
             }
