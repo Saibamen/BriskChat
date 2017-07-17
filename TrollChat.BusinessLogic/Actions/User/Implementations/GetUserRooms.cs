@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
             var dbUser = userRepository.GetUserRooms(userId, isPrivateConversation);
 
-            if (dbUser == null)
+            if (dbUser == null || dbUser.Count() <= 0)
             {
                 return null;
             }

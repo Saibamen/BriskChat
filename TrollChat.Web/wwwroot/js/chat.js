@@ -104,7 +104,9 @@ $("#channelsCount").click(function () {
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
-    if (currentRoomId !== $(e.target).data("id")) {
+    var newRoomId;
+
+    if ((newRoomId = $(e.currentTarget).data("id")) && currentRoomId !== newRoomId) {
         // Leave current room
         loadingStart();
         // Clear messages
@@ -112,10 +114,12 @@ $(".menu").on("click", ".menu > a.item", function (e) {
         myHub.server.leaveRoom(currentRoomId);
         $(".menu > a.item.active").removeClass("active");
 
-        $.when(myHub.server.joinRoom($(e.target).data("id"))).then(function () {
-            currentRoomId = $(e.target).data("id");
-            $(e.target).addClass("active");
-            $("#channel_title").html($(e.target).html());
+        joinRoom = myHub.server.joinRoom(newRoomId);
+
+        $.when(joinRoom).then(function () {
+            currentRoomId = newRoomId;
+            $(e.currentTarget).addClass("active");
+            $("#channel_title").html($(e.currentTarget).html());
 
             getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 

@@ -72,7 +72,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var result = action.Invoke(Guid.NewGuid());
 
             // assert
-            Assert.Equal(0, result.Count);
+            Assert.Null(result);
             mockedUserRepository.Verify(r => r.GetPrivateConversations(It.IsAny<Guid>()), Times.Once);
         }
 

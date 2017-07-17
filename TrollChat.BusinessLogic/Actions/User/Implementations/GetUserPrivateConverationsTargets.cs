@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -24,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
 
             var dbUserRooms = userRepository.GetPrivateConversationsTargets(userId);
 
-            if (dbUserRooms == null)
+            if (dbUserRooms == null || dbUserRooms.Count() <= 0)
             {
                 return null;
             }

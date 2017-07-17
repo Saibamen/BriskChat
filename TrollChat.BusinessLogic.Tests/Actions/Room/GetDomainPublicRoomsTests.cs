@@ -59,7 +59,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var result = action.Invoke(Guid.NewGuid());
 
             // assert
-            Assert.Equal(0, result.Count);
+            Assert.Null(result);
             mockedRoomRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()), Times.Once);
         }
 

@@ -307,6 +307,11 @@ namespace TrollChat.Web.Hubs
 
         public void GetRoomInformation(string roomId)
         {
+            if (string.IsNullOrEmpty(roomId))
+            {
+                return;
+            }
+
             var roominformation = getRoomInformation.Invoke(new Guid(roomId));
             var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roominformation);
             var createdOn = informationR.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn);

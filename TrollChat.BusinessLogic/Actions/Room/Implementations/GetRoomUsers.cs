@@ -25,7 +25,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var dbRoom = roomRepository.GetRoomUsers(roomId);
 
-            if (dbRoom == null)
+            if (dbRoom == null || dbRoom.Count() <= 0)
             {
                 return null;
             }
