@@ -13,7 +13,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         [Fact]
         public void Invoke_ValidData_AddsEmailMessageToDatabaseWithCorrectValues()
         {
-            //prepare
+            // prepare
             var emailMessage = new EmailMessageModel
             {
                 From = "from@from.from",
@@ -28,10 +28,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
                 .Callback<EmailMessage>(u => emailMessageFromDb = u);
             var action = new AddNewEmailMessage(mockedEmailMessageRepository.Object);
 
-            //action
+            // action
             var result = action.Invoke(emailMessage);
 
-            //assert
+            // assert
             Assert.True(result);
             Assert.Equal("from@from.from", emailMessageFromDb.From);
             Assert.Equal("to@to.to", emailMessageFromDb.Recipient);

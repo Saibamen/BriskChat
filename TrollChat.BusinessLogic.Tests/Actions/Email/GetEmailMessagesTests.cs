@@ -29,10 +29,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
 
             var action = new GetEmailMessages(mockedEmailRepository.Object);
 
-            //action
+            // action
             var list = action.Invoke(2);
 
-            //assert
+            // assert
             Assert.NotNull(list);
             Assert.Equal(2, list.Count);
             mockedEmailRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<EmailMessage, bool>>>()), Times.Once);
@@ -45,10 +45,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var mockedEmailRepository = new Mock<IEmailRepository>();
             var action = new GetEmailMessages(mockedEmailRepository.Object);
 
-            //action
+            // action
             var list = action.Invoke(2);
 
-            //assert
+            // assert
             Assert.Equal(0, list.Count);
             mockedEmailRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<EmailMessage, bool>>>()), Times.Once);
         }
