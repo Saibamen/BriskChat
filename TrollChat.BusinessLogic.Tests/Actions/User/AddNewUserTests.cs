@@ -69,7 +69,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var actionResult = action.Invoke(userToAdd);
 
             // assert
-            Assert.Equal(null, actionResult);
+            Assert.Null(actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);
@@ -102,7 +102,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var actionResult = action.Invoke(userToAdd);
 
             // assert
-            Assert.Equal(null, actionResult);
+            Assert.Null(actionResult);
             mockedUserRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserRepository.Verify(r => r.Save(), Times.Never);

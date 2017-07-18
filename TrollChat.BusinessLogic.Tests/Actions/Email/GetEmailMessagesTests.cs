@@ -34,7 +34,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
 
             //assert
             Assert.NotNull(list);
-            Assert.Equal(list.Count, 2);
+            Assert.Equal(2, list.Count);
             mockedEmailRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<EmailMessage, bool>>>()), Times.Once);
         }
 
@@ -49,7 +49,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var list = action.Invoke(2);
 
             //assert
-            Assert.Equal(list.Count, 0);
+            Assert.Equal(0, list.Count);
             mockedEmailRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<EmailMessage, bool>>>()), Times.Once);
         }
     }
