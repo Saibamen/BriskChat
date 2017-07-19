@@ -315,13 +315,29 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
     }
 };
 
+// Add new emoticon names here:
+var additionalEmoticonNames = ["poop", "party"];
+
+var emoticonRegex = '(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)';
+
+// Add emoticon names to regex string for emoReplacer() function
+for (var i = 0; i < additionalEmoticonNames.length; i++) {
+    emoticonRegex += "|(:" + additionalEmoticonNames[i] + ":)";
+}
+
+var emoticonsGroup = {
+    1: "smile", 2: "smile_big", 3: "sad", 4: "tongue", 5: "crying", 6: "wink"
+};
+
+// Add emoticon names to object for parseEmoticons(text) function
+for (var i = Object.keys(emoticonsGroup).length + 1, j = 0; j < additionalEmoticonNames.length; i++, j++) {
+    emoticonsGroup[i] = additionalEmoticonNames[j];
+}
+
 function emoReplacer() {
-    var emoticonsGroup = {
-        1: "smile", 2: "smile_big", 3: "sad", 4: "tongue", 5: "crying", 6: "wink", 7: "poop"
-    };
     var args = Array.slice(arguments);
 
-    // Arguments for emoReplacer are: match, regexGroup1, ..., regexGroupN, offset, string
+    // Arguments for emoReplacer() are: match, regexGroup1, ..., regexGroupN, offset, string
     for (var i = 1; i < args.length - 2; i++) {
         if (args[i]) {
             return '<span class="emoji-outer emoji-sizer" style="background: url(/images/emoticons/' + emoticonsGroup[i] + '.png)" title="' + emoticonsGroup[i] + '">:' + emoticonsGroup[i] + ':</span>';
@@ -331,8 +347,7 @@ function emoReplacer() {
 
 function parseEmoticons(text) {
     // https://regex101.com/r/zJ9XXL/11
-    // TODO: dodawać nowe emotki :cos: do jednego arraya i dodawać do zmiennej regex i obiektu emoticonsGroup
-    var regex = new RegExp('(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)|(:poop:)', "gi");
+    var regex = new RegExp(emoticonRegex, "gi");
     text = text.replace(regex, emoReplacer);
 
     return text;
