@@ -48,7 +48,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.Equal("plain-hashed", userSaved.PasswordHash);
             Assert.Equal("salt-generated", userSaved.PasswordSalt);
-            Assert.Equal("Ryszardd", userSaved.Name);
+            Assert.Equal("Ryszard", userSaved.Name);
             mockedUserRepo.Verify(r => r.Add(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
             mockedUserRepo.Verify(r => r.Save(), Times.Exactly(1));
