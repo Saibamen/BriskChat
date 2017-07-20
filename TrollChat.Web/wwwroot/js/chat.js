@@ -43,7 +43,7 @@ function loadingStop() {
         $(".ui.main.container").removeAttr("style");
     }
 
-    $(".ui.dimmer").removeClass("active");
+    $(".ui.dimmer").removeClass("active"); 
     addActionsToMessages();
     console.log("Loader stops");
 }
@@ -743,6 +743,8 @@ $("#createChanelForm").submit(function (e) {
 });
 
 $("#createPrivateConversationForm").submit(function (e) {
+    // TODO: Start loading when form is not empty
+    // FIXME: FIX for duplicates!!
     loadingStart();
     e.preventDefault();
     var list = [];
@@ -752,6 +754,9 @@ $("#createPrivateConversationForm").submit(function (e) {
         var id = $(item).data("id");
         list.push(id);
     });
+
+    console.log(list);
+    console.log(list.length);
 
     myHub.server.createNewPrivateConversation(list);
     $(".ui.basic.create-private-conversation.modal").modal("hide");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
@@ -340,6 +341,9 @@ namespace TrollChat.Web.Hubs
 
         public void CreateNewPrivateConversation(List<Guid> model)
         {
+            Debug.WriteLine("model.Count: " + model.Count);
+            Debug.WriteLine("model.Distinct().Count(): " + model.Distinct().Count());
+
             // If list has duplicates abort!
             if (model.Distinct().Count() != model.Count)
             {
