@@ -28,9 +28,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
         public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
         {
-            Debug.WriteLine("users.Count: " + users.Count);
-            Debug.WriteLine("users.Distinct().Count(): " + users.Distinct().Count());
-
             // Check if users wants to create a conversation with himself
             if (issuerUserId == Guid.Empty || users.Any(x => x.Equals(issuerUserId)) || users.Count <= 0 || users.Distinct().Count() != users.Count)
             {
