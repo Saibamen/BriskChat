@@ -109,15 +109,10 @@ $("#channelsCount").click(function () {
     myHub.server.getDomainPublicRooms();
 });
 
-// Change room
-$(".menu").on("click", ".menu > a.item", function (e) {
-    if (loading) {
-        return;
-    }
-
+function changeRoom(newRoom) {
     var newRoomId;
 
-    if ((newRoomId = $(e.currentTarget).data("id")) && currentRoomId !== newRoomId) {
+    if ((newRoomId = newRoom.data("id")) && currentRoomId !== newRoomId) {
         // Leave current room
         loadingStart();
         // Clear messages
@@ -129,8 +124,8 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 
         $.when(joinRoom).then(function () {
             currentRoomId = newRoomId;
-            $(e.currentTarget).addClass("active");
-            $("#channel_title").html($(e.currentTarget).html());
+            newRoom.addClass("active");
+            $("#channel_title").html(newRoom.html());
 
             getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
@@ -140,6 +135,16 @@ $(".menu").on("click", ".menu > a.item", function (e) {
             });
         });
     }
+}
+
+
+// Change room
+$(".menu").on("click", ".menu > a.item", function (e) {
+    if (loading) {
+        return;
+    }
+    
+    changeRoom($(e.currentTarget));
 });
 
 function addEditContainer(id, oldMessageText, messageIcon) {
@@ -278,6 +283,8 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
     var id = $(item).data("id");
     var input = $("#inputtext");
     $(item).hide();
+
+    $(input).attr("placeholder", "");
 
     $("#createPrivateConversationForm").find(":submit").removeClass("disabled").addClass("positive");
 
@@ -571,14 +578,14 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     divToAppend += channelName + "</a>";
     $("#channelsMenu").append(divToAppend);
     updateChannelsCount(1);
-    loadingStop();
+    changeRoom($("#channelsMenu").children().last());
 };
 
 myHub.client.privateConversationAddedAction = function (value) {
     var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
 
     $("#privateConversationsMenu").append(divToAppend);
-    loadingStop();
+    changeRoom($("#privateConversationsMenu").children().last());
 };
 
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
@@ -693,7 +700,7 @@ $("#createNewChannel").click(function () {
     var item = $("input[name*='IsPublic']")[1];
     item.value = false;
 
-    thisModal = $(".ui.basic.create-room.modal");
+    var thisModal = $(".ui.basic.create-room.modal");
 
     $(thisModal).modal({
         closable: false,
@@ -714,12 +721,8 @@ $("#createNewPrivateConversation").click(function () {
     }
 
     $("#createPrivateConversationForm")[0].reset();
-
     // Remove all added tags
-    $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
-        console.log(element);
-        $(element).remove();
-    });
+    $("#createPrivateConversationForm").find(".private-conversation-tag").remove();
 
     myHub.server.getUsersFromDomain();
 
@@ -735,6 +738,7 @@ $("#createNewPrivateConversation").click(function () {
         }
     }).modal("show");
 
+    // FIXME: random visual bug with background color
     $(thisModal).parent().css("background-color", "#fff");
 });
 
@@ -761,14 +765,28 @@ $("#createChanelForm").submit(function (e) {
 $("#createPrivateConversationForm").submit(function (e) {
     e.preventDefault();
     var list = [];
+    var users = [];
 
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         list.push($(element).data("id"));
+        users.push($.trim($(element).text()));
+        console.log($.trim($(element).text()));
     });
 
+    console.log(users[0]);
+    // TODO: search multiple users in one private conversation
+
     if (list.length > 0) {
-        loadingStart();
-        myHub.server.createNewPrivateConversation(list);
+        var searchedPriv = $("#privateConversationsMenu a:contains('"+ users[0] +"')");
+        console.log(searchedPriv);
+
+        if (searchedPriv.length) {
+            changeRoom(searchedPriv);
+        } else {
+            loadingStart();
+            myHub.server.createNewPrivateConversation(list);
+        }
+
         $(".ui.basic.create-private-conversation.modal").modal("hide");
     }
 });
@@ -1089,6 +1107,7 @@ $(document).on("click", ".private-conversation-tag", function (e) {
     // Disable submit when users input list are empty
     if (!$("#createPrivateConversationForm").find(".private-conversation-tag").length) {
         $("#createPrivateConversationForm").find(":submit").addClass("disabled").removeClass("positive");
+        $("#inputtext").attr("placeholder", "Find or start a conversation");
     }
 });
 
