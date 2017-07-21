@@ -23,6 +23,7 @@ var Autolinker = new Autolinker({
 var globalDomainName;
 var globalUserName;
 var globalUserId;
+var loading = true;
 
 var currentTheme;
 var topicInDatabase;
@@ -32,11 +33,13 @@ var currentRoomId = 0;
 var loadedMessagesIteration = 1;
 
 function loadingStart() {
+    loading = true;
     $(".ui.main.container").css("display", "none");
     $(".ui.dimmer").addClass("active");
 }
 
 function loadingStop() {
+    loading = false;
     if ($(".ui.sidebar.right").hasClass("visible")) {
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     } else {
@@ -98,12 +101,20 @@ $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
 $("#channelsCount").click(function () {
+    // TODO
     console.log("Click na licznik kanałów");
+    if (loading) {
+        return;
+    }
     myHub.server.getDomainPublicRooms();
 });
 
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
+    if (loading) {
+        return;
+    }
+
     var newRoomId;
 
     if ((newRoomId = $(e.currentTarget).data("id")) && currentRoomId !== newRoomId) {
@@ -262,19 +273,15 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 });
 
 $(".grid").on("click", ".private-conversation-row", function (e) {
-    var item;
-
-    if ($(e.target).hasClass(".private-conversation-row")) {
-        item = e.target;
-    } else {
-        item = $(e.target).closest(".private-conversation-row");
-    }
-
+    var item = e.currentTarget;
     var append = $(item).data("name");
     var id = $(item).data("id");
-    //var input = $("#createPrivateConversationForm :input[name='Name']");
     var input = $("#inputtext");
-    input.before('<span class="private-conversation-tag" data-id="' + id + '">' + append + "</span>");
+    $(item).hide();
+
+    $("#createPrivateConversationForm").find(":submit").removeClass("disabled").addClass("positive");
+
+    $(input).before('<span class="private-conversation-tag" data-id="' + id + '">' + append + ' <i class="remove icon"></i></span>');
 });
 
 // This deletes the message
@@ -576,6 +583,7 @@ myHub.client.privateConversationAddedAction = function (value) {
 
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
     $("#privateConversationsUserList").empty();
+
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
         divToAppend += '<div class="eight wide column"><b>' + value.UserName + "</b> ";
@@ -676,6 +684,10 @@ window.onbeforeunload = function () {
 };
 
 $("#createNewChannel").click(function () {
+    if (loading) {
+        return;
+    }
+
     $("#createChanelForm")[0].reset();
 
     var item = $("input[name*='IsPublic']")[1];
@@ -697,6 +709,10 @@ $("#createNewChannel").click(function () {
 });
 
 $("#createNewPrivateConversation").click(function () {
+    if (loading) {
+        return;
+    }
+
     $("#createPrivateConversationForm")[0].reset();
 
     // Remove all added tags
@@ -743,23 +759,18 @@ $("#createChanelForm").submit(function (e) {
 });
 
 $("#createPrivateConversationForm").submit(function (e) {
-    // TODO: Start loading when form is not empty
-    // FIXME: FIX for duplicates!!
-    loadingStart();
     e.preventDefault();
     var list = [];
 
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
-        var item = $(element);
-        var id = $(item).data("id");
-        list.push(id);
+        list.push($(element).data("id"));
     });
 
-    console.log(list);
-    console.log(list.length);
-
-    myHub.server.createNewPrivateConversation(list);
-    $(".ui.basic.create-private-conversation.modal").modal("hide");
+    if (list.length > 0) {
+        loadingStart();
+        myHub.server.createNewPrivateConversation(list);
+        $(".ui.basic.create-private-conversation.modal").modal("hide");
+    }
 });
 
 function updateChannelsCount(diff) {
@@ -1068,14 +1079,23 @@ $("#channel_details_toggle").click(function () {
 
 });
 
-$(document).on("click", ".private-conversation-tag", function () {
-    $(this).remove();
+// Click on added users in input when creating new private conversation
+$(document).on("click", ".private-conversation-tag", function (e) {
+    var userId = $(e.currentTarget).data("id");
+
+    $('.row.private-conversation-row[data-id="' + userId + '"]').show();
+    $(e.currentTarget).remove();
+
+    // Disable submit when users input list are empty
+    if (!$("#createPrivateConversationForm").find(".private-conversation-tag").length) {
+        $("#createPrivateConversationForm").find(":submit").addClass("disabled").removeClass("positive");
+    }
 });
 
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
-    console.log(result);
 
+    // TODO: Add online/offline status
     $("#MembersInRoom").prev().contents().last().replaceWith(result.length + " Members");
 
     $.each(result, function (index, value) {
