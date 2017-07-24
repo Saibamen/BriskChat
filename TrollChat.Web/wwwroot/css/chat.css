@@ -44,6 +44,17 @@ div {
     color: #eb4d5c !important;
 }
 
+.gravatarMembersList {
+    border-radius: .2rem;
+    margin-right: .5625rem;
+}
+
+.MembersInRoom-row {
+    line-height: 20px;
+    height: 30px;
+    color: #555459;
+}
+
 /*
  *  Loader
  */
@@ -1194,6 +1205,11 @@ span.emoji-outer {
     text-align: center;
     font-size: 26px;
     top: 15px;
+}
+
+.MembersInRoom-row i.circle.icon {
+    float: right;
+    margin-top: 6px;
 }
 
 .header {

@@ -28,7 +28,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                                  User = new User
                                  {
                                      Id = message.UserRoom.User.Id,
-                                     Name = message.UserRoom.User.Name
+                                     Name = message.UserRoom.User.Name,
+                                     Email = message.UserRoom.User.Email
                                  }
                              }
                          }).Take(number);
@@ -51,7 +52,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                                  User = new User
                                  {
                                      Id = message.UserRoom.User.Id,
-                                     Name = message.UserRoom.User.Name
+                                     Name = message.UserRoom.User.Name,
+                                     Email = message.UserRoom.User.Email
                                  }
                              }
                          }).Skip(limit * loadedMessagesIteration).Take(limit);

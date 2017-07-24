@@ -13,5 +13,7 @@ namespace TrollChat.Web.Models.Message
         public Guid UserId { get; set; }
 
         public string CreatedOn { get; set; }
+
+        public string EmailHash { get; set; }
     }
 }

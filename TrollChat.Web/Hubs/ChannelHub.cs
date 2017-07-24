@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TrollChat.BusinessLogic.Actions.Message.Interfaces;
@@ -126,7 +127,8 @@ namespace TrollChat.Web.Hubs
                 UserName = item.UserRoom.User.Name,
                 UserId = item.UserRoom.User.Id,
                 Text = item.Text,
-                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
+                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                EmailHash = GetMd5Hash(item.UserRoom.User.Email)
             });
 
             Clients.Caller.parseOffsetMessages(viewList);
@@ -200,7 +202,8 @@ namespace TrollChat.Web.Hubs
                     UserName = item.UserRoom.User.Name,
                     UserId = item.UserRoom.User.Id,
                     Text = item.Text,
-                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation)
+                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                    EmailHash = GetMd5Hash(item.UserRoom.User.Email)
                 });
 
                 Clients.Caller.parseLastMessages(viewList);
@@ -265,7 +268,7 @@ namespace TrollChat.Web.Hubs
 
             if (dbMessageId != Guid.Empty)
             {
-                Clients.Group(roomId).broadcastMessage(Context.UserName(), Context.UserId(), dbMessageId, message, chatTime);
+                Clients.Group(roomId).broadcastMessage(Context.UserName(), Context.UserId(), dbMessageId, message, chatTime, GetMd5Hash(messageModel.UserRoom.User.Email));
             }
         }
 
@@ -290,17 +293,39 @@ namespace TrollChat.Web.Hubs
             return ConnectedClients.Any(x => x.UserId == userid);
         }
 
+        public static string GetMd5Hash(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return null;
+            }
+
+            var encoder = new UTF8Encoding();
+            var hasher = MD5.Create();
+
+            var hashedBytes = hasher.ComputeHash(encoder.GetBytes(email.ToLower()));
+            var sb = new StringBuilder(hashedBytes.Length * 2);
+
+            foreach (var t in hashedBytes)
+            {
+                sb.Append(t.ToString("X2"));
+            }
+
+            return sb.ToString().ToLower();
+        }
+
         public void GetUsersFromDomain()
         {
             var userList = getUsersByDomainId.Invoke(Context.DomainId());
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
-            var viewList = userList.Select(item => new PrivateConversationUserViewModel
+            var viewList = userList.Select(item => new UserViewModel
             {
                 Id = item.Id,
-                UserName = item.Email,
+                Email = item.Email,
                 Name = item.Name,
-                IsOnline = IsConnected(Context.ConnectionId, item.Id)
+                IsOnline = IsConnected(Context.ConnectionId, item.Id),
+                EmailHash = GetMd5Hash(item.Email)
             });
 
             Clients.Caller.privateConversationsUsersLoadedAction(viewList);
@@ -329,12 +354,13 @@ namespace TrollChat.Web.Hubs
 
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
 
-            // TODO: isOnline
-            var userList = roomUserList.Select(item => new RoomUsersViewModel
+            var userList = roomUserList.Select(item => new UserViewModel
             {
-                UserId = item.Id,
+                Id = item.Id,
                 Name = item.Name,
-                Email = item.Email
+                Email = item.Email,
+                IsOnline = IsConnected(Context.ConnectionId, item.Id),
+                EmailHash = GetMd5Hash(item.Email)
             });
 
             Clients.Caller.UsersInRoom(userList);

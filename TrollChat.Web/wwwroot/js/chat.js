@@ -32,6 +32,9 @@ var descriptionInDatabase;
 var currentRoomId = 0;
 var loadedMessagesIteration = 1;
 
+var GravatarUrl = "https://www.gravatar.com/avatar/";
+var GravatarOptions = "d=retro";
+
 function loadingStart() {
     loading = true;
     $(".ui.main.container").css("display", "none");
@@ -403,14 +406,14 @@ $("#chat_messages").scroll(function() {
     }
 });
 
-function getMessageHtml(userName, userId, messageId, messageText, timestamp) {
-    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(\'../images/troll.png\')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
+function getMessageHtml(userName, userId, messageId, messageText, timestamp, emailHash) {
+    var messageHtml = '<div class="ts-message" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(' + GravatarUrl + emailHash + '?s=36&' + GravatarOptions + ')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
 
     return messageHtml;
 }
 
-myHub.client.broadcastMessage = function (userName, userId, messageId, messageText, timestamp) {
-    var messageHtml = getMessageHtml(userName, userId, messageId, messageText, timestamp);
+myHub.client.broadcastMessage = function (userName, userId, messageId, messageText, timestamp, emailHash) {
+    var messageHtml = getMessageHtml(userName, userId, messageId, messageText, timestamp, emailHash);
 
     var youTubeMatch = messageText.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -520,7 +523,7 @@ myHub.client.loadPrivateConversations = function (result) {
 
 myHub.client.parseLastMessages = function (result) {
     $.each(result, function (index, value) {
-        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn);
+        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn, value.EmailHash);
 
         var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -546,7 +549,7 @@ myHub.client.parseLastMessages = function (result) {
 
 myHub.client.parseOffsetMessages = function (result) {
     $.each(result, function (index, value) {
-        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn);
+        var messageHtml = getMessageHtml(value.UserName, value.UserId, value.Id, value.Text, value.CreatedOn, value.EmailHash);
 
         var youTubeMatch = value.Text.match(/watch\?v=([a-zA-Z0-9\-_]+)/);
 
@@ -593,7 +596,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><b>' + value.UserName + "</b> ";
+        divToAppend += '<div class="eight wide column"><b>' + value.Email + "</b> ";
 
         if (value.IsOnline) {
             divToAppend += '<i class="circle icon green"></i>';
@@ -1114,13 +1117,23 @@ $(document).on("click", ".private-conversation-tag", function (e) {
 myHub.client.usersInRoom = function (result) {
     $("#MembersInRoom").empty();
 
-    // TODO: Add online/offline status
     $("#MembersInRoom").prev().contents().last().replaceWith(result.length + " Members");
 
     $.each(result, function (index, value) {
-        var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.UserId + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><i class="user icon"></i>' + value.Name + "</div>";
-        divToAppend += "</div>";
+        var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash +'?s=20&'+ GravatarOptions +'">' + value.Name;
+
+        if (globalUserName == value.Name) {
+            divToAppend += "(you)";
+        }
+
+        if (value.IsOnline) {
+            divToAppend += '<i class="small circle icon green"></i>';
+        } else {
+            divToAppend += '<i class="small circle thin icon"></i>';
+        }
+
+        divToAppend += "</div></div>";
 
         $("#MembersInRoom").append(divToAppend);
     });
