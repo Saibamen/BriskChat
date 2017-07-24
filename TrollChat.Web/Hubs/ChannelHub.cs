@@ -329,6 +329,7 @@ namespace TrollChat.Web.Hubs
 
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
 
+            // TODO: isOnline
             var userList = roomUserList.Select(item => new RoomUsersViewModel
             {
                 UserId = item.Id,

@@ -74,7 +74,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             foreach (var item in userList)
             {
-                roomName += item.Name + ",";
+                roomName += item.Name + ", ";
             }
 
             roomName += issuerUser.Name;
