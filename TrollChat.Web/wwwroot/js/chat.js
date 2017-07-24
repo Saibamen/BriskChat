@@ -707,15 +707,13 @@ $("#createNewChannel").click(function () {
 
     $(thisModal).modal({
         closable: false,
-        onDeny: function () {
-            $(thisModal).parent().css("background-color", "");
+        onShow: function() {
+            $(".ui.dimmer.modals").css("background-color", "#fff");
         },
-        onApprove: function () {
-            $(thisModal).parent().css("background-color", "");
-        }
+        onHide: function () {
+            $(".ui.dimmer.modals").css("background-color", "");
+        },
     }).modal("show");
-
-    $(thisModal).parent().css("background-color", "#fff");
 });
 
 $("#createNewPrivateConversation").click(function () {
@@ -733,16 +731,13 @@ $("#createNewPrivateConversation").click(function () {
 
     $(thisModal).modal({
         closable: false,
-        onDeny: function () {
-            $(thisModal).parent().css("background-color", "");
+        onShow: function() {
+            $(".ui.dimmer.modals").css("background-color", "#fff");
         },
-        onApprove: function () {
-            $(thisModal).parent().css("background-color", "");
-        }
+        onHide: function () {
+            $(".ui.dimmer.modals").css("background-color", "");
+        },
     }).modal("show");
-
-    // FIXME: random visual bug with background color
-    $(thisModal).parent().css("background-color", "#fff");
 });
 
 $("#myCheckBox").click(function () {
