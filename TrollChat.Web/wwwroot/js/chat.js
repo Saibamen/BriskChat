@@ -352,7 +352,7 @@ for (var i = Object.keys(emoticonsGroup).length + 1, j = 0; j < additionalEmotic
 }
 
 function emoReplacer() {
-    var args = Array.slice(arguments);
+    var args = Array.prototype.slice.call(arguments);
 
     // Arguments for emoReplacer() are: match, regexGroup1, ..., regexGroupN, offset, string
     for (var i = 1; i < args.length - 2; i++) {
