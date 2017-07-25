@@ -51,7 +51,7 @@ function loadingStop() {
 
     $(".ui.dimmer").removeClass("active"); 
     addActionsToMessages();
-    console.log("Loader stops");
+    printLog("Loader stops");
 }
 
 function addActionsToMessages() {
@@ -105,7 +105,7 @@ var myHub = $.connection.channelHub;
 
 $("#channelsCount").click(function () {
     // TODO
-    console.log("Click na licznik kanałów");
+    printLog("Click na licznik kanałów");
     if (loading) {
         return;
     }
@@ -215,9 +215,9 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     // Escape key
     // FIXME: move to message_edit_form?
     $("#message_edit_container").keydown(function (x) {
-        console.log("keydown dla #message_edit_container");
+        printLog("keydown dla #message_edit_container");
         if (x.keyCode === 27) {
-            console.log("Escape key dla #message_edit_container");
+            printLog("Escape key dla #message_edit_container");
             document.removeEventListener("click", clickOutsideEditContainer, true);
             $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
@@ -225,17 +225,17 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     $("#message_edit_form").keypress(function (x) {
-        console.log("keypress dla #message_edit_form");
+        printLog("keypress dla #message_edit_form");
         // Enter key
         if (x.which === 13) {
             if (!x.shiftKey) {
-                console.log("Enter key dla #message_edit_form");
+                printLog("Enter key dla #message_edit_form");
                 if (oldMessageText !== $(".ql-editor").text().trim()) {
-                    console.log("Wiadomosci sie roznia");
+                    printLog("Wiadomosci sie roznia");
                     var editedMessage;
 
                     if (editedMessage === $(".ql-editor").text().trim()) {
-                        console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                        printLog("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
                     }
                 }
@@ -254,7 +254,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
             var editedMessage = $(".ql-editor").text().trim();
 
             if (editedMessage) {
-                console.log("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                printLog("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                 myHub.server.editMessage(currentRoomId, messageId, editedMessage);
             }
         }
@@ -266,12 +266,12 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
     // TODO: Need more testing?
     function clickOutsideEditContainer(event) {
-        console.log("Click listener");
+        printLog("Click listener: clickOutsideEditContainer()");
         // Do only if #message_edit_container exists
         if ($(document).find("#message_edit_container").length) {
             // Check for x.target and parents
             if (!$(event.target).parents().addBack().is("#message_edit_container")) {
-                console.log("Kliknięto poza. Usuwam #MEC");
+                printLog("Kliknięto poza. Usuwam #MEC");
                 document.removeEventListener("click", clickOutsideEditContainer, true);
                 $(document).find("#message_edit_container").prev().show();
                 $(document).find("#message_edit_container").remove();
@@ -436,7 +436,7 @@ myHub.client.broadcastMessage = function (userName, userId, messageId, messageTe
 myHub.client.deleteMessage = function (messageId) {
     var message = $(".ts-message[data-id='" + messageId + "']");
 
-    console.log("Klient usuwa wiadomosc o ID: " + message.data("id"));
+    printLog("Klient usuwa wiadomosc o ID: " + message.data("id"));
 
     message.hide("slow", function () {
         message.remove();
@@ -632,15 +632,17 @@ myHub.client.updateRoomUsersCount = function (roomUsersCount) {
  */
 $.connection.hub.start()
     .done(function () {
-        console.log("Connected to Hub. Getting rooms");
+        printLog("Connected to Hub. Getting rooms");
         // Getting rooms
         getRooms = myHub.server.getRooms();
         getPrivateConversations = myHub.server.getPrivateConversations();
 
         $.when(getRooms).then(function () {
+            var bootTime = ($.now() - startTime) / 1000;
+            printLog("Finished first boot " + bootTime + " seconds after DOM ready");
             // Joining to room
             $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
-                console.log("Connected to room");
+                printLog("Connected to room after boot");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
                 
@@ -655,7 +657,7 @@ $.connection.hub.start()
                                 var message = $("#msg_input").val().trim();
 
                                 if (message) {
-                                    console.log("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                                    printLog("Wysyłam: " + message + " do pokoju " + currentRoomId);
                                     myHub.server.sendMessage(currentRoomId, message);
                                 }
 
@@ -669,22 +671,23 @@ $.connection.hub.start()
         });
     })
     .fail(function (a) {
-        console.log("Not connected! " + a);
+        printLog("Not connected! " + a);
     });
 
 $.connection.hub.error = function (error) {
-    console.warn(error);
+    console.error(error);
+    printLog(error);
 };
 
 $.connection.hub.stateChanged(function (change) {
     if (change.newState === $.signalR.connectionState.reconnecting) {
-        console.log("Re-connecting");
+        printLog("Re-connecting");
         loadingStart();
     }
 });
 
 $.connection.hub.reconnected(function () {
-    console.log("Reconnected");
+    printLog("Reconnected");
     loadingStop();
 });
 
@@ -767,15 +770,15 @@ $("#createPrivateConversationForm").submit(function (e) {
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         list.push($(element).data("id"));
         users.push($.trim($(element).text()));
-        console.log($.trim($(element).text()));
+        printLog($.trim($(element).text()));
     });
 
-    console.log(users[0]);
+    printLog(users[0]);
     // TODO: search multiple users in one private conversation
 
     if (list.length > 0) {
         var searchedPriv = $("#privateConversationsMenu a:contains('"+ users[0] +"')");
-        console.log(searchedPriv);
+        printLog(searchedPriv);
 
         if (searchedPriv.length) {
             changeRoom(searchedPriv);
@@ -1071,7 +1074,7 @@ $("#closerightbar").click(function () {
 // Escape key
 $(document).keydown(function (x) {
     if (x.keyCode === 27 && $(".ui.sidebar.right").hasClass("visible")) {
-        console.log("Escape dla prawego sidebaru");
+        printLog("Escape dla prawego sidebaru");
         closeRightBarCallback();
     }
 });

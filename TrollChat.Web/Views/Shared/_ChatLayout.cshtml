@@ -12,6 +12,25 @@
         <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/modals.min.css" asp-append-version="true" />
     </environment>
+
+    <script type="text/javascript">
+        var startTime = 0;
+
+        function printLog(message, time) {
+            if (!time) {
+                var time = new Date();
+            }
+
+            var timeString = time.toLocaleTimeString() + "." + time.getMilliseconds();
+
+            console.log(timeString + "  " + message);
+        }
+
+        (function() {
+            startTime = new Date();
+            printLog("DOM ready", startTime);
+        })();
+    </script>
 }
 
 @section Pre_Body
@@ -114,15 +133,15 @@
 
 @section Scripts
 {
-    <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true"></script>
-    <script src="signalr/hubs"></script>
-    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js"></script>
+    <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    <script src="signalr/hubs" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" onerror="loadAssetsError(this)"></script>
 
     <environment names="Development">
-        <script src="~/js/chat.js" asp-append-version="true"></script>
+        <script src="~/js/chat.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/js/chat.min.js" asp-append-version="true"></script>
+        <script src="~/js/chat.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
 }
 

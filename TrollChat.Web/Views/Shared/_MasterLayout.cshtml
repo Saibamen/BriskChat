@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - TrollChat</title>
 
-    <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" />
+    <script type="text/javascript">
+        function loadAssetsError(sth) {
+            var url = sth.href || sth.src;
+            throw new URIError("The file " + url + " is not accessible.");
+        }
+    </script>
+
+    <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" onerror="loadAssetsError(this)" />
     @RenderSection("CSS", required: false)
 </head>
 
@@ -14,15 +21,15 @@
     @RenderBody()
     @RenderSection("Post_Body", required: false)
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/semantic/dist/semantic.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/semantic/dist/semantic.min.js" onerror="loadAssetsError(this)"></script>
 
     <environment names="Development">
         <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
-        <script src="~/js/alert.js"></script>
+        <script src="~/js/alert.js" onerror="loadAssetsError(this)"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/js/alert.min.js"></script>
+        <script src="~/js/alert.min.js" onerror="loadAssetsError(this)"></script>
     </environment>
     @RenderSection("Scripts", required: false)
 </body>
