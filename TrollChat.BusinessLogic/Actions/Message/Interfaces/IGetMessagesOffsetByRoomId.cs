@@ -7,6 +7,6 @@ namespace TrollChat.BusinessLogic.Actions.Message.Interfaces
 {
     public interface IGetMessagesOffsetByRoomId : IAction
     {
-        List<MessageModel> Invoke(Guid roomId, int loadedMessagesIteration, int limit);
+        List<MessageModel> Invoke(Guid roomId, Guid lastMessageId, int limit);
     }
 }

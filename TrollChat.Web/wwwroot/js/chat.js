@@ -373,7 +373,6 @@ function parseEmoticons(text) {
 var loadingMessageOffset = false;
 
 // Load previous messages when we scroll up
-// TODO: Load messages from last message ID (to avoid duplicates)
 $("#chat_messages").scroll(function() {
     if (!$(".ui.dimmer").hasClass("active") && !loadingMessageOffset) {
         var height = $("#chat_messages").scrollTop();
@@ -383,7 +382,7 @@ $("#chat_messages").scroll(function() {
             var firstMessage = $("#chat_messages").children().first();
             $(".ui.dimmer").addClass("active");
 
-            getPreviousMessages = myHub.server.getPreviousMessages(currentRoomId, loadedMessagesIteration);
+            getPreviousMessages = myHub.server.getPreviousMessages(currentRoomId, firstMessage.data("id"));
 
             $.when(getPreviousMessages).then(function () {
                 var previousMessages = firstMessage.prevAll();

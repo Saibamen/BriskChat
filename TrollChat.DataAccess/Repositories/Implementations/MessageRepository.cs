@@ -37,10 +37,10 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             return !(query.Count() > 0) ? Enumerable.Empty<Message>().AsQueryable() : query;
         }
 
-        public IQueryable<Message> GetRoomMessagesOffset(Guid roomId, int loadedMessagesIteration, int limit)
+        public IQueryable<Message> GetRoomMessagesOffset(Guid roomId, DateTime lastMessageDate, int limit)
         {
             var query = (from message in context.Set<Message>()
-                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
+                         where message.DeletedOn == null && message.UserRoom.Room.Id == roomId && message.CreatedOn < lastMessageDate
                          orderby message.CreatedOn descending
                          select new Message
                          {
@@ -56,7 +56,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                                      Email = message.UserRoom.User.Email
                                  }
                              }
-                         }).Skip(limit * loadedMessagesIteration).Take(limit);
+                         }).Take(limit);
 
             return !(query.Count() > 0) ? Enumerable.Empty<Message>().AsQueryable() : query;
         }

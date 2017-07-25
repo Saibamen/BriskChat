@@ -16,14 +16,21 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             this.messageRepository = messageRepository;
         }
 
-        public List<MessageModel> Invoke(Guid roomId, int loadedMessagesIteration, int limit)
+        public List<MessageModel> Invoke(Guid roomId, Guid lastMessageId, int limit)
         {
-            if (roomId == Guid.Empty || loadedMessagesIteration < 1 || limit < 1)
+            if (roomId == Guid.Empty || lastMessageId == Guid.Empty || limit < 1)
             {
                 return null;
             }
 
-            var dbMessages = messageRepository.GetRoomMessagesOffset(roomId, loadedMessagesIteration, limit);
+            var lastMessage = messageRepository.GetById(lastMessageId);
+
+            if (lastMessage == null)
+            {
+                return null;
+            }
+
+            var dbMessages = messageRepository.GetRoomMessagesOffset(roomId, lastMessage.CreatedOn, limit);
 
             if (dbMessages.Count() <= 0)
             {

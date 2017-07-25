@@ -41,70 +41,105 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
 
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
-            mockedMessageRepository.Setup(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()))
+            mockedMessageRepository.Setup(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()))
                 .Returns(messageFromDb.AsQueryable());
+            mockedMessageRepository.Setup(r => r.GetById(It.IsAny<Guid>())).Returns(new DataAccess.Models.Message());
             var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
 
             // action
-            var message = action.Invoke(guid, 2, 2);
+            var message = action.Invoke(guid, Guid.NewGuid(), 2);
 
             // check
             Assert.NotNull(message);
             Assert.Equal("Testowa wiadomość", message[0].Text);
             Assert.Equal("Testowa wiadomość2", message[1].Text);
             Assert.Null(message[0].DeletedOn);
-            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Once);
         }
 
         [Fact]
-        public void Invoke_InvalidData_EmptyRepository()
+        public void Invoke_EmptyRepository_ReturnNull()
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
             var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
 
             // action
-            var message = action.Invoke(Guid.NewGuid(), 2, 2);
+            var message = action.Invoke(Guid.NewGuid(), Guid.NewGuid(), 2);
 
             // check
             Assert.Null(message);
-            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Never);
         }
 
         [Fact]
-        public void Invoke_EmptyGuid_ReturnsNull()
+        public void Invoke_NoMessages_ReturnNull()
+        {
+            // prepare
+            var mockedMessageRepository = new Mock<IMessageRepository>();
+            var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
+            mockedMessageRepository.Setup(r => r.GetById(It.IsAny<Guid>())).Returns(new DataAccess.Models.Message());
+
+            // action
+            var message = action.Invoke(Guid.NewGuid(), Guid.NewGuid(), 2);
+
+            // check
+            Assert.Null(message);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Once);
+        }
+
+        [Fact]
+        public void Invoke_EmptyRoomId_ReturnsNull()
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
             var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
 
             // action
-            var message = action.Invoke(new Guid(), 2, 2);
+            var message = action.Invoke(new Guid(), Guid.NewGuid(), 2);
 
             // check
             Assert.Null(message);
-            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Never);
+        }
+
+        [Fact]
+        public void Invoke_EmptyMessageId_ReturnsNull()
+        {
+            // prepare
+            var mockedMessageRepository = new Mock<IMessageRepository>();
+            var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
+
+            // action
+            var message = action.Invoke(Guid.NewGuid(), new Guid(), 2);
+
+            // check
+            Assert.Null(message);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Never);
         }
 
         [Theory]
-        [InlineData(0, 0)]
-        [InlineData(-2, -2)]
-        [InlineData(1, 0)]
-        [InlineData(1, -2)]
-        [InlineData(0, 1)]
-        [InlineData(-2, 1)]
-        public void Invoke_InvalidNumbers_ReturnsNull(int loadedMessagesIteration, int limit)
+        [InlineData(0)]
+        [InlineData(-2)]
+        [InlineData(1)]
+        public void Invoke_InvalidNumbers_ReturnsNull(int limit)
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
             var action = new GetMessagesOffsetByRoomId(mockedMessageRepository.Object);
 
             // action
-            var message = action.Invoke(Guid.NewGuid(), loadedMessagesIteration, limit);
+            var message = action.Invoke(Guid.NewGuid(), new Guid(), limit);
 
             // check
             Assert.Null(message);
-            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.GetRoomMessagesOffset(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<int>()), Times.Never);
         }
     }
 }

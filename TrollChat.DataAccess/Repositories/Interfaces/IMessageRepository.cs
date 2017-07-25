@@ -8,6 +8,6 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
     {
         IQueryable<Message> GetLastRoomMessages(Guid roomId, int number);
 
-        IQueryable<Message> GetRoomMessagesOffset(Guid roomId, int loadedMessagesIteration, int limit);
+        IQueryable<Message> GetRoomMessagesOffset(Guid roomId, DateTime lastMessageDate, int limit);
     }
 }

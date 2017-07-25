@@ -107,14 +107,14 @@ namespace TrollChat.Web.Hubs
             return base.OnDisconnected(stopCalled);
         }
 
-        public void GetPreviousMessages(string roomId, int loadedMessagesIteration)
+        public void GetPreviousMessages(string roomId, string lastMessageId)
         {
-            if (string.IsNullOrEmpty(roomId) || loadedMessagesIteration < 1)
+            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(lastMessageId))
             {
                 return;
             }
 
-            var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), loadedMessagesIteration, MessagesToLoad);
+            var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), new Guid(lastMessageId), MessagesToLoad);
 
             if (messagesFromDb == null || messagesFromDb.Count <= 0)
             {
