@@ -35,7 +35,7 @@ input, select, textarea {
     max-width: 280px;
 }
 
-/*naglowek*/
+/* Nagłówek */
 .ui.inverted.menu {
     color: #4A4A4A;
     background-color: #E3E4E5;
@@ -53,7 +53,7 @@ input, select, textarea {
     font-family: sans-serif;
 }
 
-/*stopka*/
+/* Stopka */
 .cat_2 {
     list-style-type: none;
     color: #e32072;
@@ -80,7 +80,7 @@ input, select, textarea {
     position: absolute;
 }
 
-/*własny przycisk*/
+/* Własny przycisk */
 .orginalbutton {
     border: 0;
     text-align: center;
@@ -98,13 +98,13 @@ input, select, textarea {
     line-height: 32px;
 }
 
-/*powiekdzenie własnego przycisku*/
+/* Powiekdzenie własnego przycisku */
 .big {
     height: 40px;
     width: 200px;
 }
 
-/* w Index*/
+/* W Index*/
 .logo {
     margin-right: 10px;
     width: 50px;
@@ -146,7 +146,7 @@ input, select, textarea {
 .middle.aligned.center.aligned.column {
     height:100%;
 }
-/* w create new domain*/
+/* W create new domain*/
 
 .domainbackground {
     background-color: #21B2FE;
@@ -168,10 +168,9 @@ input, select, textarea {
     padding-bottom: 0 !important;
 }
 
-/* we wszystkich auth views*/
+/* We wszystkich auth views */
 .webressetbox {
     top: -10%;
-    /*padding-top: 40px;*/
     max-width: 500px;
     text-align: center;
     background-color: #fff;
@@ -180,14 +179,14 @@ input, select, textarea {
     border: 1px solid #E8E8E8;
 }
 
-/*w rejestracji*/
+/* W rejestracji */
 .column.webressetbox {
     padding-left: 50%;
     padding-right: 5%;
     padding-top: 5%;
 }
 
-/*w confirm email*/
+/* W confirm email */
 .pages {
     background-color: #1377db;
     text-align: center;
@@ -225,7 +224,7 @@ h1 {
     color: #fff;
 }
 
-/*validation*/
+/* Validation */
 .text-danger {
     text-align: left;
     color: #ff4500;

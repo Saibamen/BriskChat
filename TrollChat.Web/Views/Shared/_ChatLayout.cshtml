@@ -6,9 +6,11 @@
 {
     <environment names="Development">
         <link rel="stylesheet" href="~/css/chat.css" />
+        <link rel="stylesheet" href="~/css/modals.css" />
     </environment>
     <environment names="Staging,Production">
-        <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/modals.min.css" asp-append-version="true" />
     </environment>
 }
 
@@ -112,17 +114,14 @@
 
 @section Scripts
 {
+    <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true"></script>
+    <script src="signalr/hubs"></script>
+    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js"></script>
+
     <environment names="Development">
-        <script src="~/lib/signalr/jquery.signalR.js" asp-append-version="true"></script>
-        <script src="signalr/hubs"></script>
-        <script src="~/lib/Autolinker.js/dist/Autolinker.js"></script>
         <script src="~/js/chat.js" asp-append-version="true"></script>
     </environment>
-
     <environment names="Staging,Production">
-        <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true"></script>
-        <script src="signalr/hubs"></script>
-        <script src="~/lib/Autolinker.js/dist/Autolinker.min.js"></script>
         <script src="~/js/chat.min.js" asp-append-version="true"></script>
     </environment>
 }
