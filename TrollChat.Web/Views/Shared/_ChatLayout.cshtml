@@ -16,17 +16,69 @@
     <script type="text/javascript">
         var startTime = 0;
 
-        function printLog(message, time) {
-            if (!time) {
-                var time = new Date();
-            }
+        function getCallerLine(stack) {
+            // We want our caller's frame. It's index into |stack| depends on the
+            // browser and browser version, so we need to search for the second frame:
+            var frameRe = /:(\d+):(?:\d+)[^\d]*$/;
+            var frame;
 
-            var timeString = time.toLocaleTimeString() + "." + time.getMilliseconds();
+            do {
+                frame = stack.shift();
+            } while (!frameRe.exec(frame) && stack.length);
 
-            console.log(timeString + "  " + message);
+            return frameRe.exec(stack.shift())[1];
         }
 
-        (function() {
+        function printLog(message, time) {
+            // See https://stackoverflow.com/a/27074218/470749
+            var e = new Error();
+
+            if (!e.stack) {
+                try {
+                    // IE requires the Error to actually be thrown or else the
+                    // Error's 'stack' property is undefined.
+                    throw e;
+                } catch (e) {
+                    if (!e.stack) {
+                        //return 0; // IE < 10, likely
+                    }
+                }
+            }
+
+            var stack = e.stack.toString().split(/\r\n|\n/);
+
+            var regexJsExtension = /\.js/;
+            var isJsFile = stack[1].match(regexJsExtension);
+            var fileName;
+
+            if (isJsFile) {
+                // Get JavaScript filename
+                fileName = stack[1].substring(stack[1].lastIndexOf("/") + 1, stack[1].indexOf(".js") + 3);
+            } else {
+                // tempFileName: ex. User:91:13
+                var tempFileName = stack[1].substring(stack[1].lastIndexOf("/") + 1);
+                var firstDigit = tempFileName.match(/\d/);
+
+                // Remove line and column name. Will be added later with getCallerLine()
+                fileName = tempFileName.substring(0, tempFileName.indexOf(firstDigit) - 1);
+            }
+
+            // Ex. @@ or loadingStop@@
+            var callerFunction = stack[1].substring(0, stack[1].lastIndexOf("@@") + 1);
+            // Together: loadingStop@chat.js:54
+            var caller = callerFunction + fileName + ":" + getCallerLine(stack);
+
+            if (!time) {
+                time = new Date();
+            }
+
+            // Add leading zeros to miliseconds
+            var timeString = time.toLocaleTimeString() + "." + ("00" + time.getMilliseconds()).slice(-3);
+
+            console.log(timeString + "  [" + caller + "]  " + message);
+        }
+
+        (function () {
             startTime = new Date();
             printLog("DOM ready", startTime);
         })();
