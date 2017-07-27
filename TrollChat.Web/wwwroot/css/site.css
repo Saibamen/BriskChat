@@ -117,20 +117,19 @@ input, select, textarea {
     background-color: #E3E4E5;
     background-position: bottom;
     background-image: url(../images/illos-large.png);
-    background-size:contain;
+    background-size: contain;
     background-repeat: no-repeat;
 }
 
 .indexleftcolumn {
-    background-image:url(../images/emlememle.png);
-    background-repeat:no-repeat;
-    background-size:contain;
-    background-position:center;
-    height:100%;
-    margin:auto;
-    position:center;
-    align-self:center;
-    text-shadow: 20px 20px 0 0 #4A4A4A;
+    background-image: url(../images/emlememle.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: 100%;
+    margin: auto;
+    align-self: center;
+    text-shadow: -3px 3px #CFD1D3;
 }
 
 .headline {
@@ -138,13 +137,14 @@ input, select, textarea {
     font-weight: 900;
     font-size: 94px;
     line-height: 1;
-    top:30%;
+    top: 30%;
     position: relative;
     white-space: nowrap;
+    color: #253039;
 }
 
 .middle.aligned.center.aligned.column {
-    height:100%;
+    height: 100%;
 }
 /* W create new domain*/
 
@@ -160,7 +160,7 @@ input, select, textarea {
 }
 
 .domainleftcolumn {
-    top:35%;
+    top: 35%;
 }
 
 .socloce {

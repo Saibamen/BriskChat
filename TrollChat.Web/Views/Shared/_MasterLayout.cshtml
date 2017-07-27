@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,6 +11,7 @@
             throw new URIError("The file " + url + " is not accessible.");
         }
     </script>
+    @RenderSection("HeaderScripts", required: false)
 
     <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" onerror="loadAssetsError(this)" />
     @RenderSection("CSS", required: false)

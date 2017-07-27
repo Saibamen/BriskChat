@@ -12,7 +12,10 @@
         <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/modals.min.css" asp-append-version="true" />
     </environment>
+}
 
+@section HeaderScripts
+{
     <script type="text/javascript">
         var startTime = 0;
 
@@ -30,9 +33,9 @@
         }
 
         function printLog(message, time) {
-            // See https://stackoverflow.com/a/27074218/470749
             var e = new Error();
 
+            // See https://stackoverflow.com/a/27074218/470749
             if (!e.stack) {
                 try {
                     // IE requires the Error to actually be thrown or else the
@@ -45,28 +48,57 @@
                 }
             }
 
-            var stack = e.stack.toString().split(/\r\n|\n/);
+            /*
+             *  1st index is for Firefox, 2nd for Chrome, Edge, IE
+             */
+            var callerIndexNumber = 1;
 
-            var regexJsExtension = /\.js/;
-            var isJsFile = stack[1].match(regexJsExtension);
-            var fileName;
-
-            if (isJsFile) {
-                // Get JavaScript filename
-                fileName = stack[1].substring(stack[1].lastIndexOf("/") + 1, stack[1].indexOf(".js") + 3);
-            } else {
-                // tempFileName: ex. User:91:13
-                var tempFileName = stack[1].substring(stack[1].lastIndexOf("/") + 1);
-                var firstDigit = tempFileName.match(/\d/);
-
-                // Remove line and column name. Will be added later with getCallerLine()
-                fileName = tempFileName.substring(0, tempFileName.indexOf(firstDigit) - 1);
+            if (e.stack.toString().match(/@@/) == null) {
+                callerIndexNumber = 2;
             }
 
-            // Ex. @@ or loadingStop@@
-            var callerFunction = stack[1].substring(0, stack[1].lastIndexOf("@@") + 1);
+            var stack = e.stack.toString().split(/\r\n|\n/);
+
+            var fileName;
+            var callerFunction;
+
+            if (stack[callerIndexNumber]) {
+                var regexJsExtension = /\.js/;
+                var isJsFile = stack[callerIndexNumber].match(regexJsExtension);
+
+                //console.log(e.stack);
+
+                if (isJsFile) {
+                    // Get JavaScript filename
+                    fileName = stack[callerIndexNumber].substring(stack[callerIndexNumber].lastIndexOf("/") + 1, stack[callerIndexNumber].indexOf(".js") + 3);
+                } else {
+                    // tempFileName: ex. User:91:13
+                    var tempFileName = stack[callerIndexNumber].substring(stack[callerIndexNumber].lastIndexOf("/") + 1);
+                    var firstDigit = tempFileName.match(/\d/);
+
+                    // Remove line and column name. Will be added later with getCallerLine()
+                    fileName = tempFileName.substring(0, tempFileName.indexOf(firstDigit) - 1);
+                }
+
+                // Ex. @@ or loadingStop@@
+                if (callerIndexNumber == 1) {
+                    // Firefox
+                    callerFunction = stack[callerIndexNumber].substring(0, stack[callerIndexNumber].indexOf("@@") + 1);
+                } else {
+                    // Chrome, Edge, IE
+                    callerFunction = stack[callerIndexNumber].substring(stack[callerIndexNumber].indexOf("   at ") + 6, stack[callerIndexNumber].indexOf(" (")) + "@@";
+                    //console.error(callerFunction);
+
+                    // Don't display anon or empty functions
+                    if (callerFunction.match(/anonymous/i) || callerFunction.match(/at @@/)) {
+                        callerFunction = "@@";
+                        //console.info("zmiana na @@");
+                    }
+                }
+            }
+
             // Together: loadingStop@chat.js:54
-            var caller = callerFunction + fileName + ":" + getCallerLine(stack);
+            var callerString = callerFunction + fileName + ":" + getCallerLine(stack);
 
             if (!time) {
                 time = new Date();
@@ -75,7 +107,7 @@
             // Add leading zeros to miliseconds
             var timeString = time.toLocaleTimeString() + "." + ("00" + time.getMilliseconds()).slice(-3);
 
-            console.log(timeString + "  [" + caller + "]  " + message);
+            console.log(timeString + "  [" + callerString + "]  " + message);
         }
 
         (function () {
@@ -126,10 +158,10 @@
                         </div>
 
                         <div class="channel_title_info">
-                            <button type="button" id="channel_settings_toggle" data-content="Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
+                            <button type="button" id="channel_settings_toggle" aria-label="Show Channel Settings" data-content="Show Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
                                 <i class="setting icon"></i>
                             </button>
-                            <button type="button" id="channel_details_toggle" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
+                            <button type="button" id="channel_details_toggle" aria-label="Show Channel Details" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
                                 <i class="list layout icon"></i>
                             </button>
                         </div>
