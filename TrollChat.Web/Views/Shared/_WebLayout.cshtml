@@ -5,7 +5,7 @@
 @section CSS
 {
     <environment names="Development">
-        <link rel="stylesheet" href="~/css/site.css" onerror="loadAssetsError(this)" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" onerror="loadAssetsError(this)" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" onerror="loadAssetsError(this)" />

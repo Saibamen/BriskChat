@@ -4,6 +4,10 @@
 
 $(".ui.sidebar.right").first().sidebar();
 
+$("#directMessagesTitle, #channelsCount").popup({
+    variation: "inverted"
+});
+
 $(document).on("reloadPopups", function () {
     $(".ts_tip").popup({
         variation: "inverted"
@@ -722,7 +726,7 @@ $("#createNewChannel").click(function () {
     }).modal("show");
 });
 
-$("#createNewPrivateConversation").click(function () {
+$("#createNewPrivateConversation, #directMessagesTitle").click(function () {
     if (loading) {
         return;
     }

@@ -5,8 +5,8 @@
 @section CSS
 {
     <environment names="Development">
-        <link rel="stylesheet" href="~/css/chat.css" />
-        <link rel="stylesheet" href="~/css/modals.css" />
+        <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/modals.css" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
@@ -49,7 +49,7 @@
             }
 
             /*
-             *  1st index is for Firefox, 2nd for Chrome, Edge, IE
+             *  1st index is for Firefox, 2nd for Chrome, Edge, IE, Opera
              */
             var callerIndexNumber = 1;
 
@@ -83,7 +83,7 @@
                     // Firefox
                     callerFunction = stack[callerIndexNumber].substring(0, stack[callerIndexNumber].indexOf("@@") + 1);
                 } else {
-                    // Chrome, Edge, IE
+                    // Chrome, Edge, IE, Opera
                     callerFunction = stack[callerIndexNumber].substring(stack[callerIndexNumber].indexOf("   at ") + 6, stack[callerIndexNumber].indexOf(" (")) + "@@";
 
                     // Don't display anon or empty functions
@@ -215,7 +215,7 @@
 {
     <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     <script src="signalr/hubs" onerror="loadAssetsError(this)"></script>
-    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
 
     <environment names="Development">
         <script src="~/js/chat.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>

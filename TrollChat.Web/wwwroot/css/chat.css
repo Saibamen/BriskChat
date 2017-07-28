@@ -105,6 +105,10 @@ div {
     z-index: 1;
 }
 
+#directMessagesTitle, #channelsCount {
+    cursor: pointer;
+}
+
 #presence_container {
     float: left;
     margin-left: -4px;

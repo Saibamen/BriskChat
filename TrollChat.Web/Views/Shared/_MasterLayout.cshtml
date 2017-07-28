@@ -13,7 +13,7 @@
     </script>
     @RenderSection("HeaderScripts", required: false)
 
-    <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" onerror="loadAssetsError(this)" />
+    <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" asp-append-version="true" onerror="loadAssetsError(this)" />
     @RenderSection("CSS", required: false)
 </head>
 
@@ -22,15 +22,15 @@
     @RenderBody()
     @RenderSection("Post_Body", required: false)
 
-    <script src="~/lib/jquery/dist/jquery.min.js" onerror="loadAssetsError(this)"></script>
-    <script src="~/lib/semantic/dist/semantic.min.js" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/semantic/dist/semantic.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
 
     <environment names="Development">
         <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
-        <script src="~/js/alert.js" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/alert.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
     <environment names="Staging,Production">
-        <script src="~/js/alert.min.js" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/alert.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
     @RenderSection("Scripts", required: false)
 </body>
