@@ -17,4 +17,12 @@ namespace TrollChat.Web.Controllers
             return View();
         }
     }
+
+    public class BrowseRoomsViewComponent : ViewComponent
+    {
+        public IViewComponentResult Invoke()
+        {
+            return View();
+        }
+    }
 }

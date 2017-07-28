@@ -225,6 +225,9 @@
     </environment>
 }
 
+@await Component.InvokeAsync("CreateRoom")
+@await Component.InvokeAsync("CreatePrivateConversation")
+@await Component.InvokeAsync("BrowseRooms")
 @Html.Partial("_DeleteModalPartial")
 
 @RenderBody()
