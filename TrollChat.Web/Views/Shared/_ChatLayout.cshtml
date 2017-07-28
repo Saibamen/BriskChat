@@ -66,8 +66,6 @@
                 var regexJsExtension = /\.js/;
                 var isJsFile = stack[callerIndexNumber].match(regexJsExtension);
 
-                //console.log(e.stack);
-
                 if (isJsFile) {
                     // Get JavaScript filename
                     fileName = stack[callerIndexNumber].substring(stack[callerIndexNumber].lastIndexOf("/") + 1, stack[callerIndexNumber].indexOf(".js") + 3);
@@ -81,18 +79,16 @@
                 }
 
                 // Ex. @@ or loadingStop@@
-                if (callerIndexNumber == 1) {
+                if (callerIndexNumber === 1) {
                     // Firefox
                     callerFunction = stack[callerIndexNumber].substring(0, stack[callerIndexNumber].indexOf("@@") + 1);
                 } else {
                     // Chrome, Edge, IE
                     callerFunction = stack[callerIndexNumber].substring(stack[callerIndexNumber].indexOf("   at ") + 6, stack[callerIndexNumber].indexOf(" (")) + "@@";
-                    //console.error(callerFunction);
 
                     // Don't display anon or empty functions
                     if (callerFunction.match(/anonymous/i) || callerFunction.match(/at @@/)) {
                         callerFunction = "@@";
-                        //console.info("zmiana na @@");
                     }
                 }
             }

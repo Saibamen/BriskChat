@@ -29,6 +29,7 @@ var currentTheme;
 var topicInDatabase;
 var roomNameInDatabase;
 var descriptionInDatabase;
+var themeInDatabase;
 var currentRoomId = 0;
 var loadedMessagesIteration = 1;
 
@@ -49,7 +50,7 @@ function loadingStop() {
         $(".ui.main.container").removeAttr("style");
     }
 
-    $(".ui.dimmer").removeClass("active"); 
+    $(".ui.dimmer").removeClass("active");
     addActionsToMessages();
     printLog("Loader stops");
 }
@@ -69,6 +70,8 @@ function addActionsToMessages() {
             <i class="delete icon"></i>\
             </button>\
             </div>');
+
+        return true;
     });
 }
 
@@ -109,6 +112,7 @@ $("#channelsCount").click(function () {
     if (loading) {
         return;
     }
+
     myHub.server.getDomainPublicRooms();
 });
 
@@ -123,14 +127,14 @@ function changeRoom(newRoom) {
         myHub.server.leaveRoom(currentRoomId);
         $(".menu > a.item.active").removeClass("active");
 
-        joinRoom = myHub.server.joinRoom(newRoomId);
+        var joinRoom = myHub.server.joinRoom(newRoomId);
 
         $.when(joinRoom).then(function () {
             currentRoomId = newRoomId;
             newRoom.addClass("active");
             $("#channel_title").html(newRoom.html());
 
-            getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+            var getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
             $.when(getRoomInformation).then(function () {
                 loadingStop();
@@ -140,13 +144,12 @@ function changeRoom(newRoom) {
     }
 }
 
-
 // Change room
 $(".menu").on("click", ".menu > a.item", function (e) {
     if (loading) {
         return;
     }
-    
+
     changeRoom($(e.currentTarget));
 });
 
@@ -187,7 +190,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     var oldMessageText = message.find(".message_body").text();
 
     // Adding edit container and hide message
-    message.hide(); 
+    message.hide();
     message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
 
     // Focus on textbox
@@ -196,7 +199,6 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     var range = document.createRange();
     range.selectNodeContents($(".ql-editor").get(0));
     range.collapse(false);
-    //range.setStart($(".ql-editor").get(0).childNodes[0], 0);
     var sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(range);
@@ -335,7 +337,7 @@ myHub.client.broadcastEditedMessage = function (messageId, messageText) {
 // Add new emoticon names here:
 var additionalEmoticonNames = ["poop", "party"];
 
-var emoticonRegex = '(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)';
+var emoticonRegex = "(:smile:|\\B:-?[)]\\B)|(:smile_big:|\\B:-?[D]\\b)|(:sad:|\\B:-?[(]\\B)|(:tongue:|\\B:-?[P]\\b)|(:crying:|\\B;-?[(]\\B)|(:wink:|\\B;-?[)]\\B)";
 
 // Add emoticon names to regex string for emoReplacer() function
 for (var i = 0; i < additionalEmoticonNames.length; i++) {
@@ -357,7 +359,7 @@ function emoReplacer() {
     // Arguments for emoReplacer() are: match, regexGroup1, ..., regexGroupN, offset, string
     for (var i = 1; i < args.length - 2; i++) {
         if (args[i]) {
-            return '<span class="emoji-outer emoji-sizer" style="background: url(/images/emoticons/' + emoticonsGroup[i] + '.png)" title="' + emoticonsGroup[i] + '">:' + emoticonsGroup[i] + ':</span>';
+            return '<span class="emoji-outer emoji-sizer" style="background: url(/images/emoticons/' + emoticonsGroup[i] + '.png)" title="' + emoticonsGroup[i] + '">:' + emoticonsGroup[i] + ":</span>";
         }
     }
 }
@@ -373,7 +375,7 @@ function parseEmoticons(text) {
 var loadingMessageOffset = false;
 
 // Load previous messages when we scroll up
-$("#chat_messages").scroll(function() {
+$("#chat_messages").scroll(function () {
     if (!$(".ui.dimmer").hasClass("active") && !loadingMessageOffset) {
         var height = $("#chat_messages").scrollTop();
 
@@ -382,7 +384,7 @@ $("#chat_messages").scroll(function() {
             var firstMessage = $("#chat_messages").children().first();
             $(".ui.dimmer").addClass("active");
 
-            getPreviousMessages = myHub.server.getPreviousMessages(currentRoomId, firstMessage.data("id"));
+            var getPreviousMessages = myHub.server.getPreviousMessages(currentRoomId, firstMessage.data("id"));
 
             $.when(getPreviousMessages).then(function () {
                 var previousMessages = firstMessage.prevAll();
@@ -390,7 +392,7 @@ $("#chat_messages").scroll(function() {
                 if (previousMessages.length > 0) {
                     var prevHeight = 0;
 
-                    previousMessages.each(function() {
+                    previousMessages.each(function () {
                         prevHeight += $(this).outerHeight();
                     });
 
@@ -634,19 +636,21 @@ $.connection.hub.start()
     .done(function () {
         printLog("Connected to Hub. Getting rooms");
         // Getting rooms
-        getRooms = myHub.server.getRooms();
-        getPrivateConversations = myHub.server.getPrivateConversations();
+        var getRooms = myHub.server.getRooms();
+        var getPrivateConversations = myHub.server.getPrivateConversations();
 
-        $.when(getRooms).then(function () {
+        $.when(getRooms && getPrivateConversations).then(function () {
             var bootTime = ($.now() - startTime) / 1000;
             printLog("Finished first boot " + bootTime + " seconds after DOM ready");
+
             // Joining to room
-            $.when(myHub.server.joinRoom(currentRoomId)).then(function () {
+            var joinRoom = myHub.server.joinRoom(currentRoomId);
+            $.when(joinRoom).then(function () {
                 printLog("Connected to room after boot");
                 var firstChannelTitle = $(".menu > a.item.active");
                 $("#channel_title").html($(firstChannelTitle).html());
-                
-                getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+
+                var getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
                 $.when(getRoomInformation).then(function () {
                     loadingStop();
@@ -709,7 +713,7 @@ $("#createNewChannel").click(function () {
 
     $(thisModal).modal({
         closable: false,
-        onShow: function() {
+        onShow: function () {
             $(".ui.dimmer.modals").css("background-color", "#fff");
         },
         onHide: function () {
@@ -733,7 +737,7 @@ $("#createNewPrivateConversation").click(function () {
 
     $(thisModal).modal({
         closable: false,
-        onShow: function() {
+        onShow: function () {
             $(".ui.dimmer.modals").css("background-color", "#fff");
         },
         onHide: function () {
@@ -757,7 +761,7 @@ $("#myCheckBox").click(function () {
 $("#createChanelForm").submit(function (e) {
     loadingStart();
     e.preventDefault();
-    data = serializeForm($(this));
+    var data = serializeForm($(this));
     myHub.server.createNewChannel(data);
     $(".ui.basic.create-room.modal").modal("hide");
 });
@@ -777,7 +781,7 @@ $("#createPrivateConversationForm").submit(function (e) {
     // TODO: search multiple users in one private conversation
 
     if (list.length > 0) {
-        var searchedPriv = $("#privateConversationsMenu a:contains('"+ users[0] +"')");
+        var searchedPriv = $("#privateConversationsMenu a:contains('" + users[0] + "')");
         printLog(searchedPriv);
 
         if (searchedPriv.length) {
@@ -798,7 +802,7 @@ function updateChannelsCount(diff) {
 }
 
 function serializeForm(form) {
-    data = $(form).serializeArray();
+    var data = $(form).serializeArray();
     var obj = {};
 
     $.each(data, function (key, value) {
@@ -881,7 +885,7 @@ function channelSettings() {
 
     $("#Rightbar").append(divToAppend);
 
-    getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+    var getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
     $.when(getRoomInformation).then(function () {
         $("#rightsidebarblock").append(divToAppend2);
@@ -1005,6 +1009,8 @@ function changeSettingsValue(val) {
 }
 
 function changeTheme(value) {
+    var leftbar;
+
     switch (value) {
         case "0":
             {
@@ -1058,7 +1064,6 @@ $("#channel_settings_toggle").click(function () {
         sidebar.addClass("visible");
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
-
 });
 
 var closeRightBarCallback = function () {
@@ -1094,7 +1099,6 @@ $("#channel_details_toggle").click(function () {
         sidebar.addClass("visible");
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
-
 });
 
 // Click on added users in input when creating new private conversation
@@ -1118,9 +1122,9 @@ myHub.client.usersInRoom = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash +'?s=20&'+ GravatarOptions +'">' + value.Name;
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '">' + value.Name;
 
-        if (globalUserName == value.Name) {
+        if (globalUserName === value.Name) {
             divToAppend += "(you)";
         }
 
