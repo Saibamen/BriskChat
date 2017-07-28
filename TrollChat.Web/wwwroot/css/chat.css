@@ -105,7 +105,7 @@ div {
     z-index: 1;
 }
 
-#directMessagesTitle, #channelsCount {
+#directMessagesTitle, #channelsCount, #closerightbar {
     cursor: pointer;
 }
 

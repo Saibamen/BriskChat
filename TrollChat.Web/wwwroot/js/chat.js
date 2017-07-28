@@ -1,10 +1,7 @@
-﻿$(".ui.sidebar.left").sidebar("setting", {
-    transition: "overlay"
-});
+﻿$(".ui.sidebar.left").sidebar();
+$(".ui.sidebar.right").sidebar();
 
-$(".ui.sidebar.right").first().sidebar();
-
-$("#directMessagesTitle, #channelsCount").popup({
+$("#directMessagesTitle, #channelsCount, #closerightbar").popup({
     variation: "inverted"
 });
 
@@ -1053,18 +1050,36 @@ function selectTheme(sel) {
     changeTheme(currentTheme);
 }
 
+function changeChannelSettingsPopup(tip) {
+    $("#channel_settings_toggle").attr({ 
+        "data-content": tip + " Channel Settings",
+        "aria-label": tip + " Channel Settings"
+    });
+}
+
+function changeChannelDetailsPopup(tip) {
+    $("#channel_details_toggle").attr({ 
+        "data-content": tip + " Channel Details",
+        "aria-label": tip + " Channel Details"
+    });
+}
+
 $("#channel_settings_toggle").click(function () {
     var sidebar = $(".ui.sidebar.right");
 
     if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").text() === "Channel Settings") {
+            changeChannelSettingsPopup("Show");
             sidebar.removeClass("visible");
             $(".ui.main.container").removeAttr("style");
         } else {
             channelSettings();
+            changeChannelSettingsPopup("Hide");
+            changeChannelDetailsPopup("Show");
         }
     } else {
         channelSettings();
+        changeChannelSettingsPopup("Hide");
         sidebar.addClass("visible");
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
@@ -1088,18 +1103,22 @@ $(document).keydown(function (x) {
     }
 });
 
-$("#channel_details_toggle").click(function () {
+$("#channel_details_toggle, #channel_members_toggle_count").click(function () {
     var sidebar = $(".ui.sidebar.right");
 
     if (sidebar.hasClass("visible")) {
         if ($("#rightbar_Title").html() === "Channel Details") {
+            changeChannelDetailsPopup("Show");
             sidebar.removeClass("visible");
             $(".ui.main.container").removeAttr("style");
         } else {
             channelDetails();
+            changeChannelDetailsPopup("Hide");
+            changeChannelSettingsPopup("Show");
         }
     } else {
         channelDetails();
+        changeChannelDetailsPopup("Hide");
         sidebar.addClass("visible");
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     }
