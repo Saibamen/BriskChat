@@ -5,10 +5,11 @@
 }
 
 /*
- *  Create Private Conversation Modal
+ *  Create Private Conversation Modal and Browse Room Modal
  */
 
-.private-conversation-row {
+.private-conversation-row,
+.browse-room-row {
     border-style: solid;
     border-width: 1px 0 0;
     border-color: #E8E8E8;
@@ -16,18 +17,25 @@
     padding: 0;
 }
 
-    .private-conversation-row:hover {
+    .private-conversation-row:hover,
+    .browse-room-row:hover {
         border-radius: 5px;
         background-color: #c4e5f2;
+        cursor: pointer;
     }
 
-        .private-conversation-row:hover .mycheckmark {
+        .private-conversation-row:hover .mycheckmark,
+        .browse-room-row:hover .mycheckmark {
             visibility: visible;
         }
 
 .mycheckmark {
     visibility: hidden;
 }
+
+/*
+ *  Now only Create Private Conversation Modal
+ */
 
 .private-conversation-tag {
     margin-right: 2px;
@@ -62,9 +70,4 @@
 .ui.basic.create-room.modal > .actions {
     border: none;
 }
-
-/*
- *  Browse Rooms
- */
-
  

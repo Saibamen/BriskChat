@@ -34,8 +34,14 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             {
                 Id = item.Id,
                 Name = item.Name,
+                Description = item.Description,
                 IsPublic = item.IsPublic,
-                IsPrivateConversation = item.IsPrivateConversation
+                Owner = new UserModel
+                {
+                    Name = item.Owner.Name
+                },
+                IsPrivateConversation = item.IsPrivateConversation,
+                CreatedOn = item.CreatedOn
             }).ToList();
 
             return returnList;

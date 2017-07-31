@@ -109,12 +109,29 @@ var myHub = $.connection.channelHub;
 
 $("#channelsCount").click(function () {
     // TODO
-    printLog("Click na licznik kanałów");
     if (loading) {
         return;
     }
 
-    myHub.server.getDomainPublicRooms();
+    printLog("Click na licznik kanałów");
+
+    $("#browseChannelsForm")[0].reset();
+
+    var domainRooms = myHub.server.getDomainPublicRooms();
+
+    var thisModal = $(".ui.basic.browse-channels.modal");
+
+    $.when(domainRooms).then(function () {
+        $(thisModal).modal({
+            closable: false,
+            onShow: function () {
+                $(".ui.dimmer.modals").css("background-color", "#fff");
+            },
+            onHide: function () {
+                $(".ui.dimmer.modals").css("background-color", "");
+            },
+        }).modal("show");
+    });
 });
 
 function changeRoom(newRoom) {
@@ -473,46 +490,37 @@ myHub.client.loadRooms = function (result) {
 };
 
 myHub.client.loadDomainPublicRooms = function (result) {
-    var setActive = true;
+    $("#browseChannelsList").empty();
+
+    console.log(result);
 
     $.each(result, function (index, value) {
-        var divToAppend = '<a class="item';
-
-        if (setActive) {
-            divToAppend += " active";
-            setActive = false;
-            currentRoomId = value.Id;
-        }
-
-        divToAppend += '"data-id="' + value.Id + '" data-ispublic="' + value.IsPublic + '">';
+        var divToAppend = '<div class="row browse-room-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        divToAppend += '<div class="eight wide column">';
 
         if (value.IsPublic) {
-            divToAppend += '<i class="icon left">#</i>';
+            divToAppend += "# ";
         } else {
-            divToAppend += '<i class="lock icon left"></i>';
+            divToAppend += '<i class="lock icon"></i> ';
         }
 
-        divToAppend += value.Name + "</a>";
-        $("#channelsMenu").append(divToAppend);
-    });
+        divToAppend += "<strong>" + value.Name + "</strong>";
 
-    var rooms = {};
-
-    $("#channelsMenu > .item").filter(function () {
-        var id = $(this).data("id");
-
-        if (rooms[id]) {
-            // Duplikat pokoju
-            $(this).remove();
-            return false;
-        } else {
-            // Pierwszy pokój z tym ID
-            rooms[id] = true;
-            return true;
+        // Mark joined channels
+        if ($("#channelsMenu").find("a:contains(" + value.Name + ")").length) {
+            divToAppend += '  <small>JOINED</small>';
         }
-    });
 
-    $("#channelsCount").text("CHANNELS (" + $("#channelsMenu > .item").length + ")");
+        divToAppend += "<br><i>Created by <strong>" + value.Owner.Name + "</strong> on </i>";
+
+        divToAppend += "<br>" + value.Description + "</div>";
+
+        divToAppend += '<div class="four wide column"></div>';
+        divToAppend += '<div class="four wide column mycheckmark"><i class="level down rotated big icon"></i></div>';
+        divToAppend += "</div>";
+
+        $("#browseChannelsList").append(divToAppend);
+    });
 };
 
 myHub.client.loadPrivateConversations = function (result) {
@@ -598,7 +606,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><b>' + value.Email + "</b> ";
+        divToAppend += '<div class="eight wide column"><strong>' + value.Email + "</strong> ";
 
         if (value.IsOnline) {
             divToAppend += '<i class="circle icon green"></i>';
@@ -732,19 +740,21 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
     // Remove all added tags
     $("#createPrivateConversationForm").find(".private-conversation-tag").remove();
 
-    myHub.server.getUsersFromDomain();
+    var domainUsers = myHub.server.getUsersFromDomain();
 
     var thisModal = $(".ui.basic.create-private-conversation.modal");
 
-    $(thisModal).modal({
-        closable: false,
-        onShow: function () {
-            $(".ui.dimmer.modals").css("background-color", "#fff");
-        },
-        onHide: function () {
-            $(".ui.dimmer.modals").css("background-color", "");
-        },
-    }).modal("show");
+    $.when(domainUsers).then(function () {
+        $(thisModal).modal({
+            closable: false,
+            onShow: function () {
+                $(".ui.dimmer.modals").css("background-color", "#fff");
+            },
+            onHide: function () {
+                $(".ui.dimmer.modals").css("background-color", "");
+            },
+        }).modal("show");
+    });
 });
 
 $("#myCheckBox").click(function () {
@@ -1097,9 +1107,13 @@ $("#closerightbar").click(function () {
 
 // Escape key
 $(document).keydown(function (x) {
-    if (x.keyCode === 27 && $(".ui.sidebar.right").hasClass("visible")) {
-        printLog("Escape dla prawego sidebaru");
-        closeRightBarCallback();
+    if (x.keyCode === 27) {
+        if ($(".ui.sidebar.right").hasClass("visible")) {
+            printLog("Escape dla prawego sidebaru");
+            closeRightBarCallback();
+        }
+
+        $(".ui.basic.modal").modal("hide");
     }
 });
 
@@ -1174,7 +1188,7 @@ myHub.client.roomInfo = function (result, createdOn) {
 
     if ($(".ui.sidebar.right").hasClass("visible")) {
         if ($("#rightbar_Title").html() === "Channel Details") {
-            var divToAppend = "<div>Created by <b>" + result.OwnerName + "</b> on " + createdOn + '<h5>Description</h5><span id="channelDetailsDescription">' + result.Description + "</span></div>";
+            var divToAppend = "<div>Created by <strong>" + result.OwnerName + "</strong> on " + createdOn + '<h5>Description</h5><span id="channelDetailsDescription">' + result.Description + "</span></div>";
 
             $("#aboutInfo").empty();
             $("#aboutInfo").append(divToAppend);
