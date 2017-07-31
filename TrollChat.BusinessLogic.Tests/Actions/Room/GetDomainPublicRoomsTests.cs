@@ -17,16 +17,23 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // prepare
             var roomId = Guid.NewGuid();
 
+            var owner = new DataAccess.Models.User
+            {
+                Name = "Owner"
+            };
+
             var roomsInDomain = new List<DataAccess.Models.Room>
             {
                 new DataAccess.Models.Room
                 {
                     Id = roomId,
-                    Name = "TestRoom"
+                    Name = "TestRoom",
+                    Owner = owner
                 },
                 new DataAccess.Models.Room
                 {
-                    Name = "TestRoom2"
+                    Name = "TestRoom2",
+                    Owner = owner
                 }
             };
 
@@ -44,6 +51,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal(2, result.Count);
             Assert.Equal("TestRoom", result[0].Name);
             Assert.Equal("TestRoom2", result[1].Name);
+            Assert.Equal("Owner", result[1].Owner.Name);
             mockedRoomRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()), Times.Once);
         }
 
