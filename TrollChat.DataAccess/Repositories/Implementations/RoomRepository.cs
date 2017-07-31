@@ -37,6 +37,16 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             return !(query.Count() > 0) ? Enumerable.Empty<User>().AsQueryable() : query;
         }
 
+        public int GetRoomUsersCount(Guid roomId)
+        {
+            var query = (from userroom in context.Set<UserRoom>()
+                         join room in context.Set<Room>() on userroom.Room.Id equals room.Id
+                         where room.Id == roomId
+                         select userroom).Count();
+
+            return query;
+        }
+
         public IQueryable<Room> GetRoomInformation(Guid roomId)
         {
             var query = from room in context.Set<Room>()

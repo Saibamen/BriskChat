@@ -40,6 +40,7 @@ namespace TrollChat.Web.Hubs
         private readonly IEditRoomDescription editRoomDescription;
         private readonly IEditRoomTopic editRoomTopic;
         private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
+        private readonly IGetRoomUsersCount getRoomUsersCount;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "MMMM d, yyyy";
@@ -65,7 +66,8 @@ namespace TrollChat.Web.Hubs
             IEditRoomName editRoomName,
             IEditRoomDescription editRoomDescription,
             IEditRoomTopic editRoomTopic,
-            IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId)
+            IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId,
+            IGetRoomUsersCount getRoomUsersCount)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -87,6 +89,7 @@ namespace TrollChat.Web.Hubs
             this.editRoomDescription = editRoomDescription;
             this.editRoomTopic = editRoomTopic;
             this.getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
+            this.getRoomUsersCount = getRoomUsersCount;
         }
 
         public override Task OnConnected()
@@ -206,7 +209,7 @@ namespace TrollChat.Web.Hubs
 
             await Groups.Add(Context.ConnectionId, roomId);
 
-            var roomUsersCount = getRoomUsers.Invoke(new Guid(roomId)).Count;
+            var roomUsersCount = getRoomUsersCount.Invoke(new Guid(roomId));
             Clients.Caller.updateRoomUsersCount(roomUsersCount);
 
             var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
