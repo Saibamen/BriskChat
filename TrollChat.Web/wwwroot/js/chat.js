@@ -515,8 +515,8 @@ myHub.client.loadDomainPublicRooms = function (result) {
 
         divToAppend += "<br>" + value.Description + "</div>";
 
-        divToAppend += '<div class="four wide column"></div>';
-        divToAppend += '<div class="four wide column mycheckmark"><i class="level down rotated big icon"></i></div>';
+        divToAppend += '<div class="six wide column"></div>';
+        divToAppend += '<div class="two wide column mycheckmark"><i class="level down rotated big blue icon"></i></div>';
         divToAppend += "</div>";
 
         $("#browseChannelsList").append(divToAppend);
@@ -606,7 +606,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><strong>' + value.Email + "</strong> ";
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '"><strong>' + value.Name + "</strong> ";
 
         if (value.IsOnline) {
             divToAppend += '<i class="circle icon green"></i>';
@@ -614,9 +614,9 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
             divToAppend += '<i class="circle thin icon"></i>';
         }
 
-        divToAppend += value.Name + "</div>";
-        divToAppend += '<div class="four wide column"></div>';
-        divToAppend += '<div class="four wide column mycheckmark"><i class="checkmark icon"></i></div>';
+        divToAppend += "</div>";
+        divToAppend += '<div class="six wide column"></div>';
+        divToAppend += '<div class="two wide column mycheckmark"><i class="level down rotated big blue icon"></i></div>';
         divToAppend += "</div>";
 
         $("#privateConversationsUserList").append(divToAppend);

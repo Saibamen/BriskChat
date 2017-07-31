@@ -339,7 +339,6 @@ namespace TrollChat.Web.Hubs
             var viewList = userList.Select(item => new UserViewModel
             {
                 Id = item.Id,
-                Email = item.Email,
                 Name = item.Name,
                 IsOnline = IsConnected(Context.ConnectionId, item.Id),
                 EmailHash = GetMd5Hash(item.Email)
@@ -375,7 +374,6 @@ namespace TrollChat.Web.Hubs
             {
                 Id = item.Id,
                 Name = item.Name,
-                Email = item.Email,
                 IsOnline = IsConnected(Context.ConnectionId, item.Id),
                 EmailHash = GetMd5Hash(item.Email)
             });

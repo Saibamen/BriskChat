@@ -8,8 +8,6 @@ namespace TrollChat.Web.Models.Room
 
         public string Name { get; set; }
 
-        public string Email { get; set; }
-
         public string EmailHash { get; set; }
 
         public bool IsOnline { get; set; }

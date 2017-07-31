@@ -6,7 +6,6 @@
 
     @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "createPrivateConversationForm" }))
     {
-        @Html.HiddenFor(x => x.SecondUserId, new { @class = "required" })
         <div class="ui form">
             <div class="fields">
                 <div class="fourteen wide field">
