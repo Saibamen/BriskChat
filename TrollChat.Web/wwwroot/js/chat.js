@@ -511,7 +511,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
             divToAppend += '  <small>JOINED</small>';
         }
 
-        divToAppend += "<br><i>Created by <strong>" + value.Owner.Name + "</strong> on </i>";
+        divToAppend += "<br><i>Created by <strong>" + value.Owner + "</strong> on " + value.CreatedOn + "</i>";
 
         divToAppend += "<br>" + value.Description + "</div>";
 
@@ -1105,8 +1105,8 @@ $("#closerightbar").click(function () {
     closeRightBarCallback();
 });
 
-// Escape key
 $(document).keydown(function (x) {
+    // Escape key
     if (x.keyCode === 27) {
         if ($(".ui.sidebar.right").hasClass("visible")) {
             printLog("Escape dla prawego sidebaru");

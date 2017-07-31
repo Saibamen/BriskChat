@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -41,7 +42,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
 
         private const string TimeStampRepresentation = "HH:mm";
-        private const string TimeStampRepresentationCreatedOn = "HH:mm dd-MM-yyyy";
+        private const string TimeStampRepresentationCreatedOn = "MMMM d, yyyy";
         private static readonly List<UserConnection> ConnectedClients = new List<UserConnection>();
         private const int MessagesToLoad = 20;
 
@@ -127,7 +128,7 @@ namespace TrollChat.Web.Hubs
                 UserName = item.UserRoom.User.Name,
                 UserId = item.UserRoom.User.Id,
                 Text = item.Text,
-                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture),
                 EmailHash = GetMd5Hash(item.UserRoom.User.Email)
             });
 
@@ -144,8 +145,24 @@ namespace TrollChat.Web.Hubs
         public void GetDomainPublicRooms()
         {
             var roomList = getDomainPublicRooms.Invoke(Context.DomainId());
+            var viewList = new List<BrowseRoomsViewModel>();
 
-            Clients.Caller.loadDomainPublicRooms(roomList);
+            foreach (var item in roomList)
+            {
+                var newItem = new BrowseRoomsViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    IsPublic = item.IsPublic,
+                    Owner = item.Owner.Name,
+                    Description = item.Description,
+                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture)
+                };
+
+                viewList.Add(newItem);
+            }
+
+            Clients.Caller.loadDomainPublicRooms(viewList);
         }
 
         public void GetPrivateConversations()
@@ -202,7 +219,7 @@ namespace TrollChat.Web.Hubs
                     UserName = item.UserRoom.User.Name,
                     UserId = item.UserRoom.User.Id,
                     Text = item.Text,
-                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation),
+                    CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture),
                     EmailHash = GetMd5Hash(item.UserRoom.User.Email)
                 });
 
@@ -210,7 +227,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var timestamp = DateTime.UtcNow;
-            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
@@ -226,7 +243,7 @@ namespace TrollChat.Web.Hubs
             await Groups.Remove(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow;
-            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
@@ -247,7 +264,7 @@ namespace TrollChat.Web.Hubs
             }
 
             var timestamp = DateTime.UtcNow;
-            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation);
+            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // Add to database
             var userRoomModel = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
@@ -338,9 +355,9 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            var roominformation = getRoomInformation.Invoke(new Guid(roomId));
-            var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roominformation);
-            var createdOn = informationR.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn);
+            var roomInformation = getRoomInformation.Invoke(new Guid(roomId));
+            var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roomInformation);
+            var createdOn = informationR.CreatedOn.ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture);
 
             Clients.Caller.RoomInfo(informationR, createdOn);
         }
