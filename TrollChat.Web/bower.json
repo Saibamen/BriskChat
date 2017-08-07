@@ -3,13 +3,14 @@
   "private": true,
   "dependencies": {
     "jquery": "3.2.1",
-    "semantic": "Semantic-UI#2.2.10",
+    "semantic": "2.2.12",
     "signalr": "v2.2.2",
     "Autolinker.js": "1.4.3"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",
     "jquery": "3.2.1",
-    "signalr": "v2.2.2"
+    "signalr": "v2.2.2",
+    "semantic": "2.2.12"
   }
 }
