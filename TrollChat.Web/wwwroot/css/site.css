@@ -26,9 +26,9 @@ html, body {
     height: 100%;
 }
 
-body > .grid {
-    height: 100%;
-}
+    body > .grid {
+        height: 100%;
+    }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input, select, textarea {
@@ -42,10 +42,10 @@ input, select, textarea {
     font-size: 20px;
 }
 
-.ui.inverted.menu.item {
-    color: #4A4A4A;
-    font-size: 24px;
-}
+    .ui.inverted.menu.item {
+        color: #4A4A4A;
+        font-size: 24px;
+    }
 
 .ui.secondary.pointing.menu {
     font-size: 17px;
@@ -93,7 +93,7 @@ input, select, textarea {
     width: 100px;
     display: inline-block;
     background-color: #42c299;
-    color: #fff ;
+    color: #fff;
     position: relative;
     line-height: 32px;
 }
@@ -175,6 +175,7 @@ input, select, textarea {
     text-align: center;
     background-color: #fff;
     border-radius: .25rem;
+    box-shadow: 0 1px 0 #000000;
     box-shadow: 0 1px 0 rgba(0,0,0,.25);
     border: 1px solid #E8E8E8;
 }
@@ -219,10 +220,10 @@ h1 {
     margin-bottom: 11px;
 }
 
-.button1:hover {
-    background-color: #4CAF50;
-    color: #fff;
-}
+    .button1:hover {
+        background-color: #4CAF50;
+        color: #fff;
+    }
 
 /* Validation */
 .text-danger {

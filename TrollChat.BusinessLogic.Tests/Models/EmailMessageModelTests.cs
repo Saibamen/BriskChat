@@ -9,7 +9,7 @@ namespace TrollChat.BusinessLogic.Tests.Models
         public void ValidData_ModelAreCorrect()
         {
             // prepare
-            const string @from = "from";
+            const string from = "from";
             const string recipient = "recipient";
             const string subject = "subject";
             const string message = "message";

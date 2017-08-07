@@ -14,7 +14,6 @@ using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Authorization;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Auth;
-using TrollChat.Web.Models.Common;
 
 namespace TrollChat.Web.Controllers
 {

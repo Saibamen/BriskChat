@@ -68,12 +68,12 @@ namespace TrollChat.Web
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
         {
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
-            var logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
+            var logLevelParsed = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
 
             // I'm gonna leave it as string array becase we might want to add some log modules later
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
 
-            loggerFactory.AddDebug((category, _logLevel) => !logOnlyThese.Any(category.Contains) && _logLevel >= logLevel);
+            loggerFactory.AddDebug((category, logLevel) => !logOnlyThese.Any(category.Contains) && logLevel >= logLevelParsed);
 
             if (env.IsDevelopment())
             {
