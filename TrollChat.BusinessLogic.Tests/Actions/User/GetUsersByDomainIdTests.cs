@@ -43,11 +43,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var users = action.Invoke(userId);
 
             // check
-            Assert.True(users.Any(y => y.Id == userId));
+            Assert.Contains(users, y => y.Id == userId);
             Assert.Equal(2, users.Count);
             Assert.Equal("TestUser", users[0].Name);
-            Assert.True(users.Any(y => y.Id == userId));
-            Assert.True(users.Any(y => y.Name == "TestUser"));
+            Assert.Contains(users, y => y.Id == userId);
+            Assert.Contains(users, y => y.Name == "TestUser");
             Assert.Equal(DateTime.MinValue, users[0].CreatedOn);
             Assert.Equal(DateTime.MinValue, users[0].ModifiedOn);
             Assert.Null(users[0].DeletedOn);
@@ -66,7 +66,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             // check
             Assert.NotNull(users);
-            Assert.Equal(0, users.Count);
+            Assert.Empty(users);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Once);
         }
 

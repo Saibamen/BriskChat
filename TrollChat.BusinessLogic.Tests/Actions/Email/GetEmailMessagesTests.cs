@@ -49,7 +49,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var list = action.Invoke(2);
 
             // assert
-            Assert.Equal(0, list.Count);
+            Assert.Empty(list);
             mockedEmailRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<EmailMessage, bool>>>()), Times.Once);
         }
     }

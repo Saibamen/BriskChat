@@ -51,8 +51,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // check
             Assert.Equal(domainId, domain.Id);
             Assert.Equal("Name", domain.Name);
-            Assert.True(domain.Users.Any(y => y.Id == userId));
-            Assert.True(domain.Users.Any(y => y.Name == "TestUser"));
+            Assert.Contains(domain.Users, y => y.Id == userId);
+            Assert.Contains(domain.Users, y => y.Name == "TestUser");
             Assert.Equal(DateTime.MinValue, domain.CreatedOn);
             Assert.Equal(DateTime.MinValue, domain.ModifiedOn);
             Assert.Null(domain.DeletedOn);
