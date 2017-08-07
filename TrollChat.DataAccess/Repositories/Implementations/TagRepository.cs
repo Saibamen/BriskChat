@@ -24,7 +24,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable FindUserRoomsBy(Expression<Func<Tag, bool>> predicate)
         {
-            var query = context.Set<Tag>().Include(b => b.UserRoom).Where(predicate).Where(x => x.DeletedOn == null);
+            var query = Context.Set<Tag>().Include(b => b.UserRoom).Where(predicate).Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<Tag>().AsQueryable() : query;
         }

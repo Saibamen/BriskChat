@@ -34,7 +34,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             {
                 Id = item.Id,
                 Name = item.Name,
-                Email = item.Email,
+                Email = item.Email
             }).ToList();
 
             return returnList;

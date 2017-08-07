@@ -5,16 +5,16 @@ namespace TrollChat.Web.Helpers
 {
     public class AlertHelper
     {
-        private readonly List<AlertModel> Alerts = new List<AlertModel>();
+        private readonly List<AlertModel> alerts = new List<AlertModel>();
 
         public List<AlertModel> GetAlerts()
         {
-            return Alerts;
+            return alerts;
         }
 
         public void Success(string message = "Action completed", string moreInfo = null)
         {
-            Alerts.Add(new AlertModel
+            alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -24,7 +24,7 @@ namespace TrollChat.Web.Helpers
 
         public void Info(string message, string moreInfo = null)
         {
-            Alerts.Add(new AlertModel
+            alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -34,7 +34,7 @@ namespace TrollChat.Web.Helpers
 
         public void Warning(string message = "Your data is invalid", string moreInfo = null)
         {
-            Alerts.Add(new AlertModel
+            alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -44,7 +44,7 @@ namespace TrollChat.Web.Helpers
 
         public void Danger(string message, string moreInfo = null)
         {
-            Alerts.Add(new AlertModel
+            alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,

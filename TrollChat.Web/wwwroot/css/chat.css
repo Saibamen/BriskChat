@@ -88,7 +88,6 @@ div {
 
  #team_name {
     font-size: 1.125rem;
-    line-height: 1.375rem;
     max-width: 9.12rem;
     margin-bottom: -2px;
     margin-top: .5625rem !important;
@@ -412,10 +411,7 @@ form {
 .search_form .search_input {
     display: inline-block;
     vertical-align: middle;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-top: 7px;
-    padding-bottom: 2px;
+    padding: 7px 2rem 2px;
     font-size: 15px;
     width: 100%;
     border-radius: .35rem;

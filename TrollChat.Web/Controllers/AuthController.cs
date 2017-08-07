@@ -25,11 +25,10 @@ namespace TrollChat.Web.Controllers
         private readonly IAddNewUser addNewUser;
         private readonly IEmailService emailService;
         private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
-        private readonly IGetUserByEmail getuserByEmail;
+        private readonly IGetUserByEmail getUserByEmail;
         private readonly IAddUserTokenToUser addUserTokenToUser;
         private readonly IGetUserByToken getUserByToken;
         private readonly IEditUserPassword editUserPassword;
-        private readonly IDeleteUserTokenyByTokenString deleteUserTokenByTokenString;
         private readonly IAddNewEmailMessage addNewEmailMessage;
         private readonly ICheckDomainExistsByName checkDomainExistsByName;
         private readonly IAddNewDomain addNewDomain;
@@ -42,7 +41,7 @@ namespace TrollChat.Web.Controllers
             IGetUserByEmail getUserByEmail,
             IAddUserTokenToUser addUserTokenToUser,
             IGetUserByToken getUserByToken,
-            IEditUserPassword editIUserPassword,
+            IEditUserPassword editUserPassword,
             IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
             IAddNewEmailMessage addNewEmailMessage,
             ICheckDomainExistsByName checkDomainExistsByName,
@@ -53,11 +52,10 @@ namespace TrollChat.Web.Controllers
             this.addNewUser = addNewUser;
             this.emailService = emailService;
             this.confirmUserEmailByToken = confirmUserEmailByToken;
-            this.getuserByEmail = getUserByEmail;
+            this.getUserByEmail = getUserByEmail;
             this.addUserTokenToUser = addUserTokenToUser;
             this.getUserByToken = getUserByToken;
-            this.editUserPassword = editIUserPassword;
-            this.deleteUserTokenByTokenString = deleteUserTokenyByTokenString;
+            this.editUserPassword = editUserPassword;
             this.addNewEmailMessage = addNewEmailMessage;
             this.checkDomainExistsByName = checkDomainExistsByName;
             this.addNewDomain = addNewDomain;
@@ -125,7 +123,7 @@ namespace TrollChat.Web.Controllers
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken },
                 Request.Scheme);
             var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailinfo);
+            var stringView = RenderViewToString("EmailTemplate", emailinfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
             addNewEmailMessage.Invoke(mappedMessage);
@@ -256,7 +254,7 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getuserByEmail.Invoke(model.Email, model.DomainName);
+            var user = getUserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -276,7 +274,7 @@ namespace TrollChat.Web.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token }, Request.Scheme);
             var emailInfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailInfo);
+            var stringView = RenderViewToString("EmailTemplate", emailInfo);
             var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
@@ -309,7 +307,7 @@ namespace TrollChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getuserByEmail.Invoke(model.Email, model.DomainName);
+            var user = getUserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -322,7 +320,7 @@ namespace TrollChat.Web.Controllers
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
                 Request.Scheme);
             var emailInfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
-            var stringView = RenderViewToString<EmailBodyModel>("EmailTemplate", emailInfo);
+            var stringView = RenderViewToString("EmailTemplate", emailInfo);
             var message = emailService.CreateMessage(model.Email, "Reset your password", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 

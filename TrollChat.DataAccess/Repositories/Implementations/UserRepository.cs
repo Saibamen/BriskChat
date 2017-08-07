@@ -16,7 +16,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public IQueryable<Room> GetUserRooms(Guid userId, bool isPrivateConversation)
         {
             var query =
-                context.Set<User>()
+                Context.Set<User>()
                 .Where(user => user.DeletedOn == null)
                 .Where(user => user.Id == userId)
                     .SelectMany(i => i.UserRooms)
@@ -31,9 +31,9 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<UserRoom> GetPrivateConversations(Guid userId)
         {
-            var query = from user in context.Set<User>()
-                        join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                        join room in context.Set<Room>() on useroom.Room.Id equals room.Id
+            var query = from user in Context.Set<User>()
+                        join useroom in Context.Set<UserRoom>() on user.Id equals useroom.User.Id
+                        join room in Context.Set<Room>() on useroom.Room.Id equals room.Id
                         where user.Id == userId
                         where room.IsPrivateConversation
                         select new UserRoom
@@ -48,16 +48,16 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId)
         {
-            var query1 = (from user in context.Set<User>()
-                          join useroom in context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                          join room in context.Set<Room>() on useroom.Room.Id equals room.Id
+            var query1 = (from user in Context.Set<User>()
+                          join useroom in Context.Set<UserRoom>() on user.Id equals useroom.User.Id
+                          join room in Context.Set<Room>() on useroom.Room.Id equals room.Id
                           where user.Id == userId
                           where room.IsPrivateConversation
                           select room).ToList();
 
-            var query2 = from room in context.Set<Room>()
-                         join useroom in context.Set<UserRoom>() on room.Id equals useroom.Room.Id
-                         join user in context.Set<User>() on useroom.User.Id equals user.Id
+            var query2 = from room in Context.Set<Room>()
+                         join useroom in Context.Set<UserRoom>() on room.Id equals useroom.Room.Id
+                         join user in Context.Set<User>() on useroom.User.Id equals user.Id
                          where query1.Contains(room)
                          where useroom.User.Id != userId
                          select new UserRoom

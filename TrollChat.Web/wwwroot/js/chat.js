@@ -129,7 +129,7 @@ $("#channelsCount").click(function () {
             },
             onHide: function () {
                 $(".ui.dimmer.modals").css("background-color", "");
-            },
+            }
         }).modal("show");
     });
 });
@@ -508,7 +508,7 @@ myHub.client.loadDomainPublicRooms = function (result) {
 
         // Mark joined channels
         if ($("#channelsMenu").find("a:contains(" + value.Name + ")").length) {
-            divToAppend += '  <small>JOINED</small>';
+            divToAppend += "  <small>JOINED</small>";
         }
 
         divToAppend += "<br><i>Created by <strong>" + value.Owner + "</strong> on " + value.CreatedOn + "</i>";
@@ -727,7 +727,7 @@ $("#createNewChannel").click(function () {
         },
         onHide: function () {
             $(".ui.dimmer.modals").css("background-color", "");
-        },
+        }
     }).modal("show");
 });
 
@@ -752,7 +752,7 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
             },
             onHide: function () {
                 $(".ui.dimmer.modals").css("background-color", "");
-            },
+            }
         }).modal("show");
     });
 });

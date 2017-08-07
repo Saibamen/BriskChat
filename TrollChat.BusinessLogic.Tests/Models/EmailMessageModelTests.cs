@@ -9,13 +9,13 @@ namespace TrollChat.BusinessLogic.Tests.Models
         public void ValidData_ModelAreCorrect()
         {
             // prepare
-            var from = "from";
-            var recipient = "recipient";
-            var subject = "subject";
-            var message = "message";
-            var failureCount = 5;
-            var failError = "failError";
-            var failErrorMessage = "failErrorMessage";
+            const string @from = "from";
+            const string recipient = "recipient";
+            const string subject = "subject";
+            const string message = "message";
+            const int failureCount = 5;
+            const string failError = "failError";
+            const string failErrorMessage = "failErrorMessage";
 
             // action
             var action = new EmailMessageModel
@@ -26,7 +26,7 @@ namespace TrollChat.BusinessLogic.Tests.Models
                 Message = message,
                 FailureCount = failureCount,
                 FailError = failError,
-                FailErrorMessage = failErrorMessage,
+                FailErrorMessage = failErrorMessage
             };
 
             // check

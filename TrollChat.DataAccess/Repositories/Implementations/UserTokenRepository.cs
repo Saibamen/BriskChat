@@ -18,12 +18,12 @@ namespace TrollChat.DataAccess.Repositories.Implementations
             entity.ModifiedOn = timeNow;
             entity.CreatedOn = timeNow;
             entity.SecretTokenTimeStamp = timeNow.AddHours(2);
-            context.Set<UserToken>().Add(entity);
+            Context.Set<UserToken>().Add(entity);
         }
 
         public override void Delete(UserToken entity)
         {
-            context.Set<UserToken>().Remove(entity);
+            Context.Set<UserToken>().Remove(entity);
         }
     }
 }

@@ -107,7 +107,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new EditRoomTopic(mockedRoomRepository.Object);
 
             // 101 characters
-            var string101 = "user left this channel user left this channel user left this channel user left this channel user lerr";
+            const string string101 = "user left this channel user left this channel user left this channel user left this channel user lerr";
             // action
             var room = action.Invoke(Guid.NewGuid(), string101);
 

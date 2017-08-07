@@ -16,16 +16,16 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable FindTagsBy(Expression<Func<Room, bool>> predicate)
         {
-            var query = context.Set<Room>().Include(b => b.Tags).Where(predicate).Where(x => x.DeletedOn == null);
+            var query = Context.Set<Room>().Include(b => b.Tags).Where(predicate).Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<Room>().AsQueryable() : query;
         }
 
         public IQueryable<User> GetRoomUsers(Guid roomId)
         {
-            var query = from user in context.Set<User>()
-                        join userroom in context.Set<UserRoom>() on user.Id equals userroom.User.Id
-                        join room in context.Set<Room>() on userroom.Room.Id equals room.Id
+            var query = from user in Context.Set<User>()
+                        join userroom in Context.Set<UserRoom>() on user.Id equals userroom.User.Id
+                        join room in Context.Set<Room>() on userroom.Room.Id equals room.Id
                         where room.Id == roomId
                         select new User
                         {
@@ -39,8 +39,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public int GetRoomUsersCount(Guid roomId)
         {
-            var query = (from userroom in context.Set<UserRoom>()
-                         join room in context.Set<Room>() on userroom.Room.Id equals room.Id
+            var query = (from userroom in Context.Set<UserRoom>()
+                         join room in Context.Set<Room>() on userroom.Room.Id equals room.Id
                          where room.Id == roomId
                          select userroom).Count();
 
@@ -49,8 +49,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Room> GetRoomInformation(Guid roomId)
         {
-            var query = from room in context.Set<Room>()
-                        join user in context.Set<User>() on room.Owner.Id equals user.Id
+            var query = from room in Context.Set<Room>()
+                        join user in Context.Set<User>() on room.Owner.Id equals user.Id
                         where room.Id == roomId
                         select new Room
                         {

@@ -9,8 +9,8 @@ namespace TrollChat.BusinessLogic.Tests.Models
         public void ValidData_ModelAreCorrect()
         {
             // prepare
-            var name = "name";
-            var description = "description";
+            const string name = "name";
+            const string description = "description";
 
             // action
             var action = new RoleModel

@@ -15,7 +15,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetLastRoomMessages(Guid roomId, int number)
         {
-            var query = (from message in context.Set<Message>()
+            var query = (from message in Context.Set<Message>()
                          where message.DeletedOn == null && message.UserRoom.Room.Id == roomId
                          orderby message.CreatedOn descending
                          select new Message
@@ -39,7 +39,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Message> GetRoomMessagesOffset(Guid roomId, DateTime lastMessageDate, int limit)
         {
-            var query = (from message in context.Set<Message>()
+            var query = (from message in Context.Set<Message>()
                          where message.DeletedOn == null && message.UserRoom.Room.Id == roomId && message.CreatedOn < lastMessageDate
                          orderby message.CreatedOn descending
                          select new Message

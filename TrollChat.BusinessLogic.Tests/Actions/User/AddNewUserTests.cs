@@ -86,7 +86,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             };
             var userFromDb = new DataAccess.Models.User
             {
-                Email = "test",
+                Email = "test"
             };
             var findByResult = new List<DataAccess.Models.User> { userFromDb };
 

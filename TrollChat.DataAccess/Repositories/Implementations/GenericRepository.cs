@@ -17,13 +17,13 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         private readonly DbSet<T> dbSet;
 
-        protected ITrollChatDbContext context;
+        protected ITrollChatDbContext Context;
 
-        protected GenericRepository(ITrollChatDbContext _context)
+        protected GenericRepository(ITrollChatDbContext context)
         {
-            context = _context;
+            Context = context;
 
-            dbSet = _context.Set<T>();
+            dbSet = context.Set<T>();
         }
 
         public virtual void Add(T entity)
@@ -42,7 +42,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = context.Set<T>().Where(predicate).Where(x => x.DeletedOn == null);
+            IQueryable<T> query = Context.Set<T>().Where(predicate).Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<T>().AsQueryable() : query;
         }
@@ -54,7 +54,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public IQueryable<T> Include(params Expression<Func<T, object>>[] includeExpressions)
         {
-            DbSet<T> dbSet = context.Set<T>();
+            DbSet<T> dbSet = Context.Set<T>();
 
             IQueryable<T> query = null;
 
@@ -73,12 +73,12 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
         public virtual void Edit(T entity)
         {
-            context.SetModified(entity);
+            Context.SetModified(entity);
         }
 
         public virtual void Save()
         {
-            context.SaveChanges();
+            Context.SaveChanges();
         }
     }
 }

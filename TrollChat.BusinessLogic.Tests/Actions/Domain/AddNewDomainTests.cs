@@ -74,7 +74,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             };
             var domainFromDb = new DataAccess.Models.Domain
             {
-                Name = "testdomain",
+                Name = "testdomain"
             };
             var findByResult = new List<DataAccess.Models.Domain> { domainFromDb };
 
