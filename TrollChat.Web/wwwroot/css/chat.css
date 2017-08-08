@@ -191,6 +191,7 @@ div {
 
 .item > .btn_unstyle.right {
     float: right !important;
+    cursor: pointer;
 }
 
 .item > i.left {
@@ -336,7 +337,7 @@ div {
     display: inline-block;
     position: relative;
     z-index: 1;
-    font-family: sans-serif !important;
+    cursor: pointer;
 }
 
 .channel_calls_container {

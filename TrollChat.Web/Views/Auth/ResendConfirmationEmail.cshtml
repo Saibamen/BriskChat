@@ -13,7 +13,7 @@
             @Html.HiddenFor(x => x.DomainName, ViewBag.DomainName as string)
             <div class="ui large form">
                 <div class="field">
-                    <label for="Email">Please enter the email address you provided when registering.</label>
+                    @Html.LabelFor(m => m.Email, "Please enter the email address you provided when registering.")
                     <br />
                     @Html.TextBoxFor(m => m.Email, new { placeholder = "Email", type = "email", required = "required", autofocus = "autofocus" })
                     <p>@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })</p>
