@@ -79,4 +79,7 @@
 .ui.basic.create-room.modal > .actions {
     border: none;
 }
- 
+
+#createNewChannelLabel {
+    margin-left: 10px;
+}

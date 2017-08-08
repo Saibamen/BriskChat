@@ -32,7 +32,6 @@ var roomNameInDatabase;
 var descriptionInDatabase;
 var themeInDatabase;
 var currentRoomId = 0;
-var loadedMessagesIteration = 1;
 
 var GravatarUrl = "https://www.gravatar.com/avatar/";
 var GravatarOptions = "d=retro";
@@ -113,12 +112,9 @@ $("#channelsCount").click(function () {
         return;
     }
 
-    printLog("Click na licznik kanałów");
-
     $("#browseChannelsForm")[0].reset();
 
     var domainRooms = myHub.server.getDomainPublicRooms();
-
     var thisModal = $(".ui.basic.browse-channels.modal");
 
     $.when(domainRooms).then(function () {
@@ -137,6 +133,8 @@ $("#channelsCount").click(function () {
 function changeRoom(newRoom) {
     var newRoomId;
 
+    console.log(newRoom);
+
     if ((newRoomId = newRoom.data("id")) && currentRoomId !== newRoomId) {
         // Leave current room
         loadingStart();
@@ -149,6 +147,16 @@ function changeRoom(newRoom) {
 
         $.when(joinRoom).then(function () {
             currentRoomId = newRoomId;
+
+            // FIXME: add new room and change newRoom var
+            printLog($("#channelsMenu").find("a:contains(" + newRoom.data("name") + ")").length);
+            if (newRoom.data("name") && !$("#channelsMenu").find("a:contains(" + newRoom.data("name") + ")").length) {
+                printLog("Add channel to sidebar from changeRoom()");
+                newRoom = addRoomToSidebar(newRoom.data("name"), newRoom.data("id"), newRoom.data("ispublic"));
+            }
+
+            console.log(newRoom);
+
             newRoom.addClass("active");
             $("#channel_title").html(newRoom.html());
 
@@ -156,7 +164,6 @@ function changeRoom(newRoom) {
 
             $.when(getRoomInformation).then(function () {
                 loadingStop();
-                loadedMessagesIteration = 1;
             });
         });
     }
@@ -419,7 +426,6 @@ $("#chat_messages").scroll(function () {
 
                 $(".ui.dimmer").removeClass("active");
                 loadingMessageOffset = false;
-                loadedMessagesIteration++;
             });
         }
     }
@@ -492,10 +498,8 @@ myHub.client.loadRooms = function (result) {
 myHub.client.loadDomainPublicRooms = function (result) {
     $("#browseChannelsList").empty();
 
-    console.log(result);
-
     $.each(result, function (index, value) {
-        var divToAppend = '<div class="row browse-room-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        var divToAppend = '<div class="row browse-room-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-ispublic="' + value.IsPublic + '">';
         divToAppend += '<div class="eight wide column">';
 
         if (value.IsPublic) {
@@ -522,6 +526,14 @@ myHub.client.loadDomainPublicRooms = function (result) {
         $("#browseChannelsList").append(divToAppend);
     });
 };
+
+$(".grid").on("click", ".browse-room-row", function (e) {
+    var item = $(e.currentTarget);
+
+    console.log(item.data("id"));
+    changeRoom(item);
+    $(".ui.basic.browse-channels.modal").modal("hide");
+});
 
 myHub.client.loadPrivateConversations = function (result) {
     $.each(result, function (index, value) {
@@ -579,7 +591,7 @@ myHub.client.parseOffsetMessages = function (result) {
     $(document).trigger("reloadPopups");
 };
 
-myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
+function addRoomToSidebar(channelName, roomId, isPublic) {
     var divToAppend = '<a class="item" data-id="' + roomId + '" data-ispublic="' + isPublic + '">';
 
     if (isPublic) {
@@ -591,6 +603,12 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
     divToAppend += channelName + "</a>";
     $("#channelsMenu").append(divToAppend);
     updateChannelsCount(1);
+
+    return $(divToAppend);
+}
+
+myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
+    addRoomToSidebar(channelName, roomId, isPublic);
     changeRoom($("#channelsMenu").children().last());
 };
 
@@ -708,7 +726,7 @@ window.onbeforeunload = function () {
     $.connection.hub.stop();
 };
 
-$("#createNewChannel").click(function () {
+$("#createNewChannel, #newChannel").click(function () {
     if (loading) {
         return;
     }
