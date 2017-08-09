@@ -1,7 +1,7 @@
 ﻿$(".ui.sidebar.left").sidebar();
 $(".ui.sidebar.right").sidebar();
 
-$("#directMessagesTitle, #channelsCount, #closerightbar").popup({
+$("#directMessagesTitle, #channelsCount, #closerightbar, #deleteRoomButton").popup({
     variation: "inverted"
 });
 
@@ -770,6 +770,40 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
     });
 });
 
+$("#inputtext").keyup(function() {
+    // TODO: Test form submit with text
+    var value = $(this).val();
+    var items = $(".private-conversation-row");
+    console.log(items);
+    
+    modalListSearch(value, items);
+    // FIXME: Hide duplicates
+});
+
+$("#findChannelName").keyup(function() {
+    // TODO: search only name!
+    var value = $(this).val();
+    var items = $(".browse-room-row");
+    console.log(items);
+    
+    modalListSearch(value, items);
+});
+
+function modalListSearch(value, items) {
+    if (!value.length) {
+        items.show();
+        return;
+    }
+    
+    printLog("Running modalListSearch()");
+    var exp = new RegExp(value, "i");
+
+    items.each(function() {
+        var isMatch = exp.test($(this).text());
+        $(this).toggle(isMatch);
+    });
+}
+
 $("#myCheckBox").click(function () {
     if ($(this).is(":checked")) {
         $("#createNewChannelHeader").html("Create a channel");
@@ -887,7 +921,7 @@ function channelSettings() {
                                             <div class="ui two column centered grid">\
                                                     <div class="ui form ">\
                                                         <div class="field">\
-                                                            <button class="negative ui button" id="deleteRoomButton" data-inverted="" data-tooltip="Irrevocable removal of the room" data-position="bottom center" onclick="deleteRoom();">Delete Room</button>\
+                                                            <button class="negative ui button" id="deleteRoomButton" data-tooltip="Irrevocable removal of the room" data-position="bottom center" onclick="deleteRoom();">Delete Room</button>\
                                                         </div>\
                                                     </div>\
                                                 </div>\
@@ -895,10 +929,6 @@ function channelSettings() {
                                     </div>\
                             </div>\
                         </div>';
-
-    $("#deleteRoomButton").popup({
-        variation: "inverted"
-    });
 
     var divToAppend2 = '<div class="bottom attached centered ui item" id="right_bar_save_cancel_buttons">\
                             <div class="ui buttons" tabindex="0"><button class="ui button" onclick="closeRightBarCallback();">Cancel</button>\
