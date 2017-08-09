@@ -133,8 +133,6 @@ $("#channelsCount").click(function () {
 function changeRoom(newRoom) {
     var newRoomId;
 
-    console.log(newRoom);
-
     if ((newRoomId = newRoom.data("id")) && currentRoomId !== newRoomId) {
         // Leave current room
         loadingStart();
@@ -148,14 +146,14 @@ function changeRoom(newRoom) {
         $.when(joinRoom).then(function () {
             currentRoomId = newRoomId;
 
-            // FIXME: add new room and change newRoom var
-            printLog($("#channelsMenu").find("a:contains(" + newRoom.data("name") + ")").length);
             if (newRoom.data("name") && !$("#channelsMenu").find("a:contains(" + newRoom.data("name") + ")").length) {
                 printLog("Add channel to sidebar from changeRoom()");
-                newRoom = addRoomToSidebar(newRoom.data("name"), newRoom.data("id"), newRoom.data("ispublic"));
+                addRoomToSidebar(newRoom.data("name"), newRoomId, newRoom.data("ispublic"));
+                newRoom = $("#channelsMenu").find("a[data-id='" + newRoomId + "']");
+            } else if (newRoom.is("div")) {
+                // If this is "a href" - skip this, because we change room from sidebar
+                newRoom = $("#channelsMenu").find("a[data-id='" + newRoomId + "']");
             }
-
-            console.log(newRoom);
 
             newRoom.addClass("active");
             $("#channel_title").html(newRoom.html());
@@ -530,7 +528,6 @@ myHub.client.loadDomainPublicRooms = function (result) {
 $(".grid").on("click", ".browse-room-row", function (e) {
     var item = $(e.currentTarget);
 
-    console.log(item.data("id"));
     changeRoom(item);
     $(".ui.basic.browse-channels.modal").modal("hide");
 });
@@ -603,8 +600,6 @@ function addRoomToSidebar(channelName, roomId, isPublic) {
     divToAppend += channelName + "</a>";
     $("#channelsMenu").append(divToAppend);
     updateChannelsCount(1);
-
-    return $(divToAppend);
 }
 
 myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
@@ -1003,7 +998,7 @@ myHub.client.broadcastDomainEditedRoomName = function (roomId, roomName) {
     // Don't search DOM if changed room is our active room
     if ($("#channelsMenu > a.item.active").data("id") !== roomId) {
         // Room name in sidebar
-        $("[data-id='" + roomId + "']").contents().last().replaceWith(roomName);
+        $("#channelsMenu").find("a[data-id='" + roomId + "']").contents().last().replaceWith(roomName);
     }
 };
 
