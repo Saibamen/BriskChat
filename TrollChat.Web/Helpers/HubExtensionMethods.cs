@@ -25,14 +25,14 @@ namespace TrollChat.Web.Helpers
         {
             var userIdentity = (ClaimsIdentity)hubContext.User.Identity;
 
-            return userIdentity.Claims.FirstOrDefault(x => x.Type == "DomainName").Value;
+            return userIdentity.Claims.FirstOrDefault(x => x.Type == Constants.ClaimTypesConstants.DomainName).Value;
         }
 
         public static Guid DomainId(this HubCallerContext hubContext)
         {
             var userIdentity = (ClaimsIdentity)hubContext.User.Identity;
 
-            return new Guid(userIdentity.Claims.FirstOrDefault(x => x.Type == "DomainId").Value);
+            return new Guid(userIdentity.Claims.FirstOrDefault(x => x.Type == Constants.ClaimTypesConstants.DomainId).Value);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +46,7 @@ namespace TrollChat.Web
 
             AutoMapperBuilder.Build();
 
-            services.Configure<EmailServiceCredentials>(Configuration.GetSection("EmailServiceCredentials"));
+            services.Configure<EmailServiceCredentials>(Configuration.GetSection(nameof(EmailServiceCredentials)));
 
             services.AddSignalR(options =>
             {
@@ -75,6 +76,8 @@ namespace TrollChat.Web
 
             loggerFactory.AddDebug((category, logLevel) => !logOnlyThese.Any(category.Contains) && logLevel >= logLevelParsed);
 
+            migrationHelper.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -92,7 +95,8 @@ namespace TrollChat.Web
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationScheme = "Cookies",
+                CookieName = CookieAuthenticationDefaults.AuthenticationScheme,
+                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
                 LoginPath = new PathString("/Auth/SignIn"),
                 AccessDeniedPath = new PathString("/Home/AccessDenied"),
                 AutomaticAuthenticate = true,
@@ -107,8 +111,6 @@ namespace TrollChat.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            migrationHelper.Migrate();
 
             var scheduler = ShedulerCreator.CreateScheduler(app);
             scheduler.Start().Wait();

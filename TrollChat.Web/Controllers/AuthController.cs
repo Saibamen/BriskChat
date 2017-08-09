@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
@@ -177,15 +178,14 @@ namespace TrollChat.Web.Controllers
                 new Claim(ClaimTypes.Name, access.Name),
                 new Claim(ClaimTypes.Sid, access.Id.ToString()),
                 new Claim(ClaimTypes.Role, Role.User),
-                // TODO: MOVE TO CONST STRING
-                new Claim("DomainName", access.Domain.Name),
-                new Claim("DomainId", access.Domain.Id.ToString())
+                new Claim(Constants.ClaimTypesConstants.DomainName, access.Domain.Name),
+                new Claim(Constants.ClaimTypesConstants.DomainId, access.Domain.Id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Claims");
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
-            await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+            await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrinciple);
 
             if (string.IsNullOrEmpty(returnUrl))
             {
@@ -199,7 +199,7 @@ namespace TrollChat.Web.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.Authentication.SignOutAsync("Cookies");
+            await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             Alert.Success("Logged out");
 
