@@ -1,5 +1,4 @@
-﻿$(".ui.sidebar.left").sidebar();
-$(".ui.sidebar.right").sidebar();
+﻿$(".ui.sidebar.left, .ui.sidebar.right").sidebar();
 
 $("#directMessagesTitle, #channelsCount, #closerightbar, #deleteRoomButton").popup({
     variation: "inverted"
@@ -44,6 +43,7 @@ function loadingStart() {
 
 function loadingStop() {
     loading = false;
+
     if ($(".ui.sidebar.right").hasClass("visible")) {
         $(".ui.main.container").css("cssText", "margin-left: 260px !important");
     } else {

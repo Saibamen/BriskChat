@@ -16,7 +16,6 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         }
 
         private readonly DbSet<T> dbSet;
-
         protected ITrollChatDbContext Context;
 
         protected GenericRepository(ITrollChatDbContext context)
@@ -29,6 +28,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public virtual void Add(T entity)
         {
             var timeNow = DateTime.UtcNow;
+
             entity.Id = new Guid();
             entity.ModifiedOn = timeNow;
             entity.CreatedOn = timeNow;

@@ -31,21 +31,15 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var room = new RoomModel
             {
-                Id = dbRoom.Id,
                 Name = dbRoom.Name,
                 Owner = new UserModel
                 {
-                    Id = dbRoom.Owner.Id,
-                    Name = dbRoom.Owner.Name,
-                    Email = dbRoom.Owner.Email
+                    Name = dbRoom.Owner.Name
                 },
                 Description = dbRoom.Description,
-                Customization = dbRoom.Customization,
                 Topic = dbRoom.Topic,
-                IsPublic = dbRoom.IsPublic,
-                IsPrivateConversation = dbRoom.IsPrivateConversation,
-                CreatedOn = dbRoom.CreatedOn,
-                ModifiedOn = dbRoom.ModifiedOn
+                Customization = dbRoom.Customization,
+                CreatedOn = dbRoom.CreatedOn
             };
 
             return room;

@@ -15,6 +15,7 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public override void Add(UserToken entity)
         {
             var timeNow = DateTime.UtcNow;
+
             entity.ModifiedOn = timeNow;
             entity.CreatedOn = timeNow;
             entity.SecretTokenTimeStamp = timeNow.AddHours(2);

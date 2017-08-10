@@ -31,7 +31,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetMessageById getMessageById;
         private readonly IEditMessageById editMessageById;
         private readonly IGetRoomUsers getRoomUsers;
-        private readonly IGetDomainPublicRooms getDomainPublicRooms;
+        private readonly IGetDomainPublicAndUserRooms getDomainPublicAndUserRooms;
         private readonly IGetRoomInformation getRoomInformation;
         private readonly IAddNewUserRoom addNewUserRoom;
         private readonly IGetLastMessagesByRoomId getLastMessagesByRoomId;
@@ -58,7 +58,7 @@ namespace TrollChat.Web.Hubs
             IGetMessageById getMessageById,
             IEditMessageById editMessageById,
             IGetRoomUsers getRoomUsers,
-            IGetDomainPublicRooms getDomainPublicRooms,
+            IGetDomainPublicAndUserRooms getDomainPublicAndUserRooms,
             IGetRoomInformation getRoomInformation,
             IAddNewUserRoom addNewUserRoom,
             IGetLastMessagesByRoomId getLastMessagesByRoomId,
@@ -80,7 +80,7 @@ namespace TrollChat.Web.Hubs
             this.getMessageById = getMessageById;
             this.editMessageById = editMessageById;
             this.getRoomUsers = getRoomUsers;
-            this.getDomainPublicRooms = getDomainPublicRooms;
+            this.getDomainPublicAndUserRooms = getDomainPublicAndUserRooms;
             this.getRoomInformation = getRoomInformation;
             this.addNewUserRoom = addNewUserRoom;
             this.getLastMessagesByRoomId = getLastMessagesByRoomId;
@@ -142,12 +142,16 @@ namespace TrollChat.Web.Hubs
         {
             var roomList = getUserRooms.Invoke(Context.UserId(), false);
 
-            Clients.Caller.loadRooms(roomList);
+            if (roomList != null)
+            {
+                Clients.Caller.loadRooms(roomList);
+            }
+            // FIXME: Auto add user to general channel
         }
 
         public void GetDomainPublicRooms()
         {
-            var roomList = getDomainPublicRooms.Invoke(Context.DomainId());
+            var roomList = getDomainPublicAndUserRooms.Invoke(Context.DomainId(), Context.UserId());
             var viewList = new List<BrowseRoomsViewModel>();
 
             foreach (var item in roomList)
@@ -366,7 +370,7 @@ namespace TrollChat.Web.Hubs
 
         public void GetRoomUsers(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId) || new Guid(roomId) == Guid.Empty)
+            if (string.IsNullOrEmpty(roomId))
             {
                 return;
             }

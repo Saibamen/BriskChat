@@ -7,25 +7,25 @@ using TrollChat.DataAccess.Repositories.Interfaces;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
-    public class GetDomainPublicRooms : IGetDomainPublicRooms
+    public class GetDomainPublicAndUserRooms : IGetDomainPublicAndUserRooms
     {
         private readonly IRoomRepository roomRepository;
 
-        public GetDomainPublicRooms(IRoomRepository roomRepository)
+        public GetDomainPublicAndUserRooms(IRoomRepository roomRepository)
         {
             this.roomRepository = roomRepository;
         }
 
-        public List<RoomModel> Invoke(Guid domainId)
+        public List<RoomModel> Invoke(Guid domainId, Guid userId)
         {
-            if (domainId == Guid.Empty)
+            if (domainId == Guid.Empty || userId == Guid.Empty)
             {
                 return null;
             }
 
-            var dbRooms = roomRepository.FindBy(x => x.Domain.Id == domainId && x.IsPublic).ToList();
+            var dbRooms = roomRepository.GetDomainPublicAndUserRooms(domainId, userId);
 
-            if (dbRooms == null || dbRooms.Count <= 0)
+            if (dbRooms == null)
             {
                 return null;
             }
@@ -40,7 +40,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 {
                     Name = item.Owner.Name
                 },
-                IsPrivateConversation = item.IsPrivateConversation,
                 CreatedOn = item.CreatedOn
             }).ToList();
 

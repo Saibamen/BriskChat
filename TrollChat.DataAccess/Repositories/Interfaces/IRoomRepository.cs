@@ -8,6 +8,8 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
     {
         IQueryable<User> GetRoomUsers(Guid roomId);
 
+        IQueryable<Room> GetDomainPublicAndUserRooms(Guid domainId, Guid userId);
+
         int GetRoomUsersCount(Guid roomId);
 
         IQueryable<Room> GetRoomInformation(Guid roomId);
