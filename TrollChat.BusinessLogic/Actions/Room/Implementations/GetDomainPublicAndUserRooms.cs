@@ -23,7 +23,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 return null;
             }
 
-            var dbRooms = roomRepository.GetDomainPublicAndUserRooms(domainId, userId);
+            var dbRooms = roomRepository.GetDomainPublicAndUserRooms(domainId, userId).ToList();
 
             if (dbRooms == null)
             {
@@ -41,7 +41,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                     Name = item.Owner.Name
                 },
                 CreatedOn = item.CreatedOn
-            }).ToList();
+            }).GroupBy(x => x.Id).Select(group => group.First()).ToList();
 
             return returnList;
         }
