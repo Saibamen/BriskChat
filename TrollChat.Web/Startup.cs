@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using StackExchange.Profiling;
+using StackExchange.Profiling.Storage;
 using TrollChat.BusinessLogic.Configuration.Interfaces;
 using TrollChat.DataAccess.Context;
 using TrollChat.BusinessLogic.Configuration.Implementations;
@@ -63,10 +66,15 @@ namespace TrollChat.Web
                         .Build();
                 });
             });
+
+            // MiniProfiler
+            services.AddMiniProfiler();
+            services.AddEntityFramework();
+            services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper, IMemoryCache cache)
         {
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
             var logLevelParsed = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
@@ -104,6 +112,20 @@ namespace TrollChat.Web
             });
 
             app.UseSignalR();
+
+            app.UseMiniProfiler(new MiniProfilerOptions
+            {
+                // Path to use for profiler URLs
+                RouteBasePath = "~/profiler",
+
+                // (Optional) Control which SQL formatter to use
+                // (default is no formatter)
+                SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter(),
+
+                // (Optional) Control storage
+                // (default is 30 minutes in MemoryCacheStorage)
+                Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60))
+            });
 
             app.UseMvc(routes =>
             {

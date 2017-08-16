@@ -41,10 +41,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedRoomRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()))
                 .Returns(roomsInDomain.AsQueryable());
 
-            var action = new GetDomainPublicRooms(mockedRoomRepository.Object);
+            var action = new GetDomainPublicAndUserRooms(mockedRoomRepository.Object);
 
             // action
-            var result = action.Invoke(Guid.NewGuid());
+            var result = action.Invoke(Guid.NewGuid(), Guid.NewGuid());
 
             // assert
             Assert.NotNull(result);
@@ -61,10 +61,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
 
-            var action = new GetDomainPublicRooms(mockedRoomRepository.Object);
+            var action = new GetDomainPublicAndUserRooms(mockedRoomRepository.Object);
 
             // action
-            var result = action.Invoke(Guid.NewGuid());
+            var result = action.Invoke(Guid.NewGuid(), Guid.NewGuid());
 
             // assert
             Assert.Null(result);
@@ -77,10 +77,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
 
-            var action = new GetDomainPublicRooms(mockedRoomRepository.Object);
+            var action = new GetDomainPublicAndUserRooms(mockedRoomRepository.Object);
 
             // action
-            var result = action.Invoke(new Guid());
+            var result = action.Invoke(new Guid(), new Guid());
 
             // assert
             Assert.Null(result);
