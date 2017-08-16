@@ -15,18 +15,14 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         public void Invoke_ValidData_ReturnsCorrectModel()
         {
             // prepare
-            var guid = Guid.NewGuid();
-
             var owner = new DataAccess.Models.User
             {
-                Name = "OwnerName",
-                Email = "test@test.com"
+                Name = "OwnerName"
             };
 
             var roomsFromDb = new List<DataAccess.Models.Room>
             {
                 new DataAccess.Models.Room {
-                    Id = guid,
                     Name = "TestRoom",
                     Owner = owner
                 }
@@ -37,14 +33,12 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var action = new GetRoomInformation(mockedRoomRepository.Object);
 
             // action
-            var result = action.Invoke(guid);
+            var result = action.Invoke(Guid.NewGuid());
 
             // check
             Assert.NotNull(result);
-            Assert.Equal(guid, result.Id);
             Assert.Equal("TestRoom", result.Name);
             Assert.Equal("OwnerName", result.Owner.Name);
-            Assert.Equal("test@test.com", result.Owner.Email);
             mockedRoomRepository.Verify(r => r.GetRoomInformation(It.IsAny<Guid>()), Times.Once);
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using Xunit;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Moq;
@@ -38,7 +37,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             };
 
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            mockedRoomRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()))
+            mockedRoomRepository.Setup(r => r.GetDomainPublicAndUserRooms(It.IsAny<Guid>(), It.IsAny<Guid>()))
                 .Returns(roomsInDomain.AsQueryable());
 
             var action = new GetDomainPublicAndUserRooms(mockedRoomRepository.Object);
@@ -52,7 +51,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal("TestRoom", result[0].Name);
             Assert.Equal("TestRoom2", result[1].Name);
             Assert.Equal("Owner", result[1].Owner.Name);
-            mockedRoomRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()), Times.Once);
+            mockedRoomRepository.Verify(r => r.GetDomainPublicAndUserRooms(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -67,8 +66,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var result = action.Invoke(Guid.NewGuid(), Guid.NewGuid());
 
             // assert
-            Assert.Null(result);
-            mockedRoomRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()), Times.Once);
+            Assert.Empty(result);
+            mockedRoomRepository.Verify(r => r.GetDomainPublicAndUserRooms(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Once);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
 
             // assert
             Assert.Null(result);
-            mockedRoomRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Room, bool>>>()), Times.Never);
+            mockedRoomRepository.Verify(r => r.GetDomainPublicAndUserRooms(It.IsAny<Guid>(), It.IsAny<Guid>()), Times.Never);
         }
     }
 }
