@@ -113,18 +113,16 @@ namespace TrollChat.Web
 
             app.UseSignalR();
 
-            app.UseMiniProfiler(new MiniProfilerOptions
+            app.UseMiniProfiler(options =>
             {
                 // Path to use for profiler URLs
-                RouteBasePath = "~/profiler",
+                options.RouteBasePath = "~/profiler";
 
-                // (Optional) Control which SQL formatter to use
-                // (default is no formatter)
-                SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter(),
+                // Control which SQL formatter to use
+                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
 
-                // (Optional) Control storage
-                // (default is 30 minutes in MemoryCacheStorage)
-                Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60))
+                // Control storage
+                options.Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60));
             });
 
             app.UseMvc(routes =>
