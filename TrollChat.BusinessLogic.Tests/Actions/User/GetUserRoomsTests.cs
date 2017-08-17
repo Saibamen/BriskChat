@@ -41,7 +41,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         }
 
         [Fact]
-        public void Invoke_EmptyRepository_ReturnsNull()
+        public void Invoke_EmptyRepository_ReturnsEmpty()
         {
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
@@ -52,7 +52,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var result = action.Invoke(Guid.NewGuid());
 
             // assert
-            Assert.Null(result);
+            Assert.Empty(result);
             mockedUserRepository.Verify(r => r.GetUserRooms(It.IsAny<Guid>(), false), Times.Once);
         }
 

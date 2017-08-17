@@ -74,10 +74,8 @@ namespace TrollChat.Web.Controllers
         [HttpPost("signin")]
         public IActionResult ChooseDomain(ChooseDomainViewModel model)
         {
-            if (!ModelState.IsValid || !checkDomainExistsByName.Invoke(model.DomainName))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("DomainName", "Domain not found");
-
                 return View(model);
             }
 
@@ -141,7 +139,7 @@ namespace TrollChat.Web.Controllers
         {
             if (string.IsNullOrEmpty(domainName) || !checkDomainExistsByName.Invoke(domainName))
             {
-                Alert.Warning("Choose existing domain");
+                Alert.Warning("Domain not found");
                 return RedirectToAction("ChooseDomain", "Auth");
             }
 

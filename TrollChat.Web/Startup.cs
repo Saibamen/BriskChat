@@ -68,8 +68,7 @@ namespace TrollChat.Web
             });
 
             // MiniProfiler
-            services.AddMiniProfiler();
-            services.AddEntityFramework();
+            services.AddMiniProfiler().AddEntityFramework();
             services.AddMemoryCache();
         }
 
