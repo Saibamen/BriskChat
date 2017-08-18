@@ -71,6 +71,7 @@ namespace TrollChat.DataAccess.Context
         public DbSet<UserRoomTag> UserRoomTags { get; set; }
         public DbSet<UserToken> UserTokens { get; set; }
         public DbSet<EmailMessage> EmailMessages { get; set; }
+        public DbSet<UserDomain> UserDomains { get; set; }
 
         #endregion DbSet
     }
