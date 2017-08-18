@@ -10,7 +10,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using StackExchange.Profiling;
 using StackExchange.Profiling.Storage;
 using TrollChat.BusinessLogic.Configuration.Interfaces;
 using TrollChat.DataAccess.Context;
@@ -89,6 +88,17 @@ namespace TrollChat.Web
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
+                app.UseMiniProfiler(options =>
+                {
+                    // Path to use for profiler URLs
+                    options.RouteBasePath = "~/profiler";
+
+                    // Control which SQL formatter to use
+                    options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+
+                    // Control storage
+                    options.Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60));
+                });
             }
             else
             {
@@ -111,18 +121,6 @@ namespace TrollChat.Web
             });
 
             app.UseSignalR();
-
-            app.UseMiniProfiler(options =>
-            {
-                // Path to use for profiler URLs
-                options.RouteBasePath = "~/profiler";
-
-                // Control which SQL formatter to use
-                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
-
-                // Control storage
-                options.Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60));
-            });
 
             app.UseMvc(routes =>
             {

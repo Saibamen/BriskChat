@@ -66,7 +66,7 @@ input, select, textarea {
 .cat_1 {
     list-style-type: none;
     color: #4A4A4A;
-    text-transform: lowercase;
+    text-transform: capitalize;
     font-size: 15px;
     font-family: sans-serif;
     font-weight: 700;
