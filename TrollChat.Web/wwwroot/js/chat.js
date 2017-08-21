@@ -310,6 +310,8 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
     var append = $(item).data("name");
     var id = $(item).data("id");
     var input = $("#inputtext");
+
+    $(item).attr("data-is-selected", "true");
     $(item).hide();
 
     $(input).attr("placeholder", "");
@@ -618,7 +620,7 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
     $("#privateConversationsUserList").empty();
 
     $.each(result, function (index, value) {
-        var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
+        var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-is-selected="false">';
         divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '"><strong>' + value.Name + "</strong> ";
 
         if (value.IsOnline) {
@@ -771,20 +773,18 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
 });
 
 $("#inputtext").keyup(function() {
-    // TODO: Test form submit with text
-    var value = $(this).val();
-    var items = $(".private-conversation-row");
-    console.log(items);
-    
-    modalListSearch(value, items);
-    // FIXME: Hide duplicates
+    searchPrivateModal($(this).val());
 });
 
+function searchPrivateModal(value) {
+    var items = $(".private-conversation-row[data-is-selected='false']");
+    
+    modalListSearch(value, items);
+}
+
 $("#findChannelName").keyup(function() {
-    // TODO: search only name!
     var value = $(this).val();
     var items = $(".browse-room-row");
-    console.log(items);
     
     modalListSearch(value, items);
 });
@@ -795,11 +795,10 @@ function modalListSearch(value, items) {
         return;
     }
     
-    printLog("Running modalListSearch()");
     var exp = new RegExp(value, "i");
 
     items.each(function() {
-        var isMatch = exp.test($(this).text());
+        var isMatch = exp.test($(this).data("name"));
         $(this).toggle(isMatch);
     });
 }
@@ -840,7 +839,7 @@ $("#createPrivateConversationForm").submit(function (e) {
 
     if (list.length > 0) {
         var searchedPriv = $("#privateConversationsMenu a:contains('" + users[0] + "')");
-        printLog(searchedPriv);
+        console.log(searchedPriv);
 
         if (searchedPriv.length) {
             changeRoom(searchedPriv);
@@ -1185,8 +1184,14 @@ $("#channel_details_toggle, #channel_members_toggle_count").click(function () {
 $(document).on("click", ".private-conversation-tag", function (e) {
     var userId = $(e.currentTarget).data("id");
 
-    $('.row.private-conversation-row[data-id="' + userId + '"]').show();
+    var row = $('.row.private-conversation-row[data-id="' + userId + '"]');
+    row.attr("data-is-selected", "false");
+    row.show();
+
     $(e.currentTarget).remove();
+
+    // Search again if we have text in #inputtext
+    searchPrivateModal($("#inputtext").val());
 
     // Disable submit when users input list are empty
     if (!$("#createPrivateConversationForm").find(".private-conversation-tag").length) {
