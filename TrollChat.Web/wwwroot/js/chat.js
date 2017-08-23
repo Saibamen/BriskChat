@@ -107,7 +107,6 @@ $.connection.hub.url = "http://localhost:52284/signalr";
 var myHub = $.connection.channelHub;
 
 $("#channelsCount").click(function () {
-    // TODO
     if (loading) {
         return;
     }
@@ -238,11 +237,8 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     // Escape key
-    // FIXME: move to message_edit_form?
     $("#message_edit_container").keydown(function (x) {
-        printLog("keydown dla #message_edit_container");
         if (x.keyCode === 27) {
-            printLog("Escape key dla #message_edit_container");
             document.removeEventListener("click", clickOutsideEditContainer, true);
             $(document).find("#message_edit_container").prev().show();
             $(document).find("#message_edit_container").remove();
@@ -250,16 +246,13 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     });
 
     $("#message_edit_form").keypress(function (x) {
-        printLog("keypress dla #message_edit_form");
         // Enter key
         if (x.which === 13) {
             if (!x.shiftKey) {
-                printLog("Enter key dla #message_edit_form");
                 if (oldMessageText !== $(".ql-editor").text().trim()) {
-                    printLog("Wiadomosci sie roznia");
-                    var editedMessage;
+                    var editedMessage = $(".ql-editor").text().trim();
 
-                    if (editedMessage === $(".ql-editor").text().trim()) {
+                    if (editedMessage) {
                         printLog("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
                     }
@@ -289,14 +282,11 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
         $(x.target).closest("#message_edit_container").remove();
     });
 
-    // TODO: Need more testing?
     function clickOutsideEditContainer(event) {
-        printLog("Click listener: clickOutsideEditContainer()");
         // Do only if #message_edit_container exists
         if ($(document).find("#message_edit_container").length) {
             // Check for x.target and parents
             if (!$(event.target).parents().addBack().is("#message_edit_container")) {
-                printLog("Kliknięto poza. Usuwam #MEC");
                 document.removeEventListener("click", clickOutsideEditContainer, true);
                 $(document).find("#message_edit_container").prev().show();
                 $(document).find("#message_edit_container").remove();
