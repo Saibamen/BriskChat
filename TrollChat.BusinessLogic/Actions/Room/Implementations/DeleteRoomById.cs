@@ -22,7 +22,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var roomToDelete = roomRepository.GetById(roomId);
 
-            if (roomToDelete == null)
+            // Add test for name
+            if (roomToDelete == null || roomToDelete.Name == "general")
             {
                 return false;
             }

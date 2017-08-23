@@ -113,7 +113,7 @@ $("#channelsCount").click(function () {
 
     $("#browseChannelsForm")[0].reset();
 
-    var domainRooms = myHub.server.getDomainPublicRooms();
+    var domainRooms = myHub.server.getDomainPublicAndUserRooms();
     var thisModal = $(".ui.basic.browse-channels.modal");
 
     $.when(domainRooms).then(function () {
@@ -485,7 +485,7 @@ myHub.client.loadRooms = function (result) {
     });
 };
 
-myHub.client.loadDomainPublicRooms = function (result) {
+myHub.client.loadDomainPublicAndUserRooms = function (result) {
     $("#browseChannelsList").empty();
 
     $.each(result, function (index, value) {
