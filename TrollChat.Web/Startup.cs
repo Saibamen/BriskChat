@@ -87,7 +87,6 @@ namespace TrollChat.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
                 app.UseMiniProfiler(options =>
                 {
                     // Path to use for profiler URLs
