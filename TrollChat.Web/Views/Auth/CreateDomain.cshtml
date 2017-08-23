@@ -2,6 +2,7 @@
     Layout = "_WebLayout";
     ViewData["Title"] = "Create Domain";
 }
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model TrollChat.Web.Models.Auth.CreateDomainViewModel
 
 <div class="ui two column grid">
@@ -31,7 +32,7 @@
                     <div class="field">
                         @Html.LabelFor(m => m.Password)
                         @Html.PasswordFor(m => m.Password, new { placeholder = "Password", required = "required" })
-                        <p>@Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})</p>
+                        <p>@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })</p>
                     </div>
                     <div class="field">
                         @Html.LabelFor(m => m.ConfirmPassword)

@@ -1,9 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
     Layout = "_MasterLayout";
 }
 
 @section CSS
-{
+    {
     <environment names="Development">
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" onerror="loadAssetsError(this)" />
     </environment>
@@ -13,10 +14,10 @@
 }
 
 @section Pre_Body
-{
+    {
     <div class="ui secondary pointing menu">
         <a class="ui logo icon image" href="/">
-            <img class="logo" src="~/images/troll.png" alt="Logo"/>
+            <img class="logo" src="~/images/troll.png" alt="Logo" />
         </a>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
             TrollChat
@@ -35,7 +36,7 @@
 }
 
 @section Post_Body
-{
+    {
     <div class="ui inverted vertical footer segment ">
         <div class="container">
             <ul>

@@ -1,9 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
     Layout = "_MasterLayout";
 }
 
 @section CSS
-{
+    {
     <environment names="Development">
         <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/modals.css" asp-append-version="true" />
@@ -15,7 +16,7 @@
 }
 
 @section HeaderScripts
-{
+    {
     <script type="text/javascript">
         var startTime = 0;
 
@@ -114,7 +115,7 @@
 }
 
 @section Pre_Body
-{
+    {
     <div id="client_container">
         @Html.Partial("_LeftSidebarPartial")
         @Html.Partial("_RightSidebarPartial")
@@ -207,13 +208,13 @@
 }
 
 @section Post_Body
-{
-    </div>
-    </div>
+    {
+</div>
+</div>
 }
 
 @section Scripts
-{
+    {
     <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     <script src="signalr/hubs" onerror="loadAssetsError(this)"></script>
     <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
