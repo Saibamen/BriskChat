@@ -526,7 +526,8 @@ $(".grid").on("click", ".browse-room-row", function (e) {
 
 myHub.client.loadPrivateConversations = function (result) {
     $.each(result, function (index, value) {
-        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
+        // TODO: Status icon
+        var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="lock icon left"></i>' + value.Name + "</a>";
 
         $("#privateConversationsMenu").append(divToAppend);
     });
@@ -816,24 +817,50 @@ $("#createChanelForm").submit(function (e) {
 $("#createPrivateConversationForm").submit(function (e) {
     e.preventDefault();
     var list = [];
-    var users = [];
+    var users;
+    console.log("begin #createPrivateConversationForm");
 
     $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
         list.push($(element).data("id"));
-        users.push($.trim($(element).text()));
+
+        if (index === 0) {
+            users = $.trim($(element).text());
+        } else {
+            users += ", " + $.trim($(element).text());
+        }
+
         printLog($.trim($(element).text()));
     });
 
-    printLog(users[0]);
+    printLog(users);
+    printLog(list);
     // TODO: search multiple users in one private conversation
 
     if (list.length > 0) {
-        var searchedPriv = $("#privateConversationsMenu a:contains('" + users[0] + "')");
-        console.log(searchedPriv);
+        var allPrivs = $("#privateConversationsMenu a");
+        var searchedPriv = {};
+        console.log("allPrivs:");
+        console.log(allPrivs);
+
+        allPrivs.each(function (i, val) {
+            console.log("bla");
+            console.log(i);
+            console.log(val);
+
+            if ($(val).text() === users) {
+                searchedPriv = $(val);
+                console.log("searched!!!");
+                console.log($(val).text());
+                console.log(searchedPriv);
+                return false;
+            }
+        });
 
         if (searchedPriv.length) {
+            printLog("change room");
             changeRoom(searchedPriv);
         } else {
+            printLog("Add new priv channel");
             loadingStart();
             myHub.server.createNewPrivateConversation(list);
         }
