@@ -13,6 +13,7 @@ using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.BusinessLogic.Models;
+using TrollChat.DataAccess.Models;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Message;
 using TrollChat.Web.Models.Room;
@@ -152,18 +153,24 @@ namespace TrollChat.Web.Hubs
             MiniProfiler.Start("GetRooms");
             var roomList = getUserRooms.Invoke(Context.UserId(), false);
 
-            if (roomList.Count > 0)
-            {
-                Clients.Caller.loadRooms(roomList);
-            }
-            else
+            if (roomList.Count <= 0)
             {
                 // TODO: Revisit here after domain refactoring
                 var generalRoom = getRoomByName.Invoke("general", Context.DomainId());
 
                 if (generalRoom == null)
                 {
-                    // TODO: Add general room here (or better after creating domain)
+                    RoomModel generalRoomModel = new RoomModel
+                    {
+                        Name = "general",
+                        IsPublic = true,
+                        IsPrivateConversation = false
+                    };
+
+                    var newGeneralRoomId = addNewRoom.Invoke(generalRoomModel, Context.UserId(), Context.DomainId());
+                    generalRoomModel.Id = newGeneralRoomId;
+
+                    roomList.Add(generalRoomModel);
                 }
                 else
                 {
@@ -176,10 +183,10 @@ namespace TrollChat.Web.Hubs
                     }
 
                     roomList.Add(generalRoom);
-
-                    Clients.Caller.loadRooms(roomList);
                 }
             }
+
+            Clients.Caller.loadRooms(roomList);
 
             MiniProfiler.Stop();
         }
