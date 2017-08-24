@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace TrollChat.Web.Helpers
@@ -7,7 +8,7 @@ namespace TrollChat.Web.Helpers
     {
         public static List<string> TransformCommaSeparatedStringToList(string input)
         {
-            return input.Split(',').ToList();
+            return input.Split(new[] { ", " }, StringSplitOptions.None).ToList();
         }
 
         public static string RemoveUserFromString(string userName, string userNames)
@@ -19,7 +20,7 @@ namespace TrollChat.Web.Helpers
             {
                 if (item != userName)
                 {
-                    tempString += item + ", ";
+                    tempString += item + ",";
                 }
             }
 

@@ -153,12 +153,11 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             DataAccess.Models.User userSaved = null;
 
             var getAllResults = new List<DataAccess.Models.UserToken> { userTokenFromDb };
-            var getSecondResult = new List<DataAccess.Models.UserToken>();
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             mockedUserTokenRepository.SetupSequence(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
                 .Returns(getAllResults.AsQueryable())
-                .Returns(getSecondResult.AsQueryable());
+                .Returns(new List<DataAccess.Models.UserToken>().AsQueryable());
 
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))

@@ -738,9 +738,9 @@ span.emoji-outer {
     height: auto;
     background: #fff;
     -webkit-user-select: auto;
-    -moz-user-select: auto;
-    -ms-user-select: auto;
-    user-select: auto;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
     font-family: sans-serif;
     width: 100%;
     border: 1px solid #D4D4D9;
@@ -953,9 +953,9 @@ span.emoji-outer {
     overflow: hidden;
     white-space: nowrap;
     -webkit-user-select: auto;
-    -moz-user-select: auto;
-    -ms-user-select: auto;
-    user-select: auto;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .channel_topic, .channel_topic_container {

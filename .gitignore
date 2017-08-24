@@ -261,7 +261,4 @@ __pycache__/
 *.pyc
 
 ## Our rules
-
 */*.Production.json
-*/wwwroot/css/*.min.css
-*/wwwroot/js/*.min.js

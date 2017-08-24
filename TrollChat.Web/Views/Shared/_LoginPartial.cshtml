@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
-@{
+﻿@{
     if (Context.Authentication.HttpContext.User.Identity.IsAuthenticated)
     {
         using (Html.BeginForm("Logout", "Auth", null, FormMethod.Post, true, new { id = "logoutForm" }))

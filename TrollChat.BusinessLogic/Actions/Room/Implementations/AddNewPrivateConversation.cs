@@ -33,8 +33,14 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 return null;
             }
 
-            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId).ToList();
+            var issuerUser = userRepository.GetById(issuerUserId);
 
+            if (issuerUser == null)
+            {
+                return null;
+            }
+
+            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId).ToList();
             var listRoom = privateConversationList.Select(x => x.Room).Distinct();
 
             // Check if private conversation already exists
@@ -57,13 +63,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 {
                     return null;
                 }
-            }
-
-            var issuerUser = userRepository.GetById(issuerUserId);
-
-            if (issuerUser == null)
-            {
-                return null;
             }
 
             // Create repository method for that?
