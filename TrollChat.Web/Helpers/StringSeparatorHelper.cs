@@ -20,7 +20,7 @@ namespace TrollChat.Web.Helpers
             {
                 if (item != userName)
                 {
-                    tempString += item + ",";
+                    tempString += item + ", ";
                 }
             }
 

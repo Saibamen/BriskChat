@@ -49,6 +49,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 var userRoomsList = privateConversationList.Where(x => x.Room == room);
                 var dict = new Dictionary<DataAccess.Models.UserRoom, bool>();
 
+                // FIXME: Bug when creating multiple users priv conversation room when there's priv conversation to one of selected user list
                 foreach (var connection in userRoomsList)
                 {
                     dict.Add(connection, false);

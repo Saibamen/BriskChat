@@ -41,6 +41,32 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         }
 
         [Fact]
+        public void Invoke_TryEditPrivateConversation_ReturnsNull()
+        {
+            // prepare
+            var guid = Guid.NewGuid();
+            var roomFromDb = new DataAccess.Models.Room
+            {
+                Id = guid,
+                Name = "OldName",
+                IsPrivateConversation = true
+            };
+
+            var mockedRoomRepository = new Mock<IRoomRepository>();
+            mockedRoomRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
+                .Returns(roomFromDb);
+            var action = new EditRoomName(mockedRoomRepository.Object);
+
+            // action
+            var room = action.Invoke(guid, "test");
+
+            // check
+            Assert.False(room);
+            mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+        }
+
+        [Fact]
         public void Invoke_InvalidData_EmptyRepository()
         {
             // prepare

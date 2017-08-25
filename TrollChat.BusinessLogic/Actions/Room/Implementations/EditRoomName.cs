@@ -22,17 +22,16 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             var roomToEdit = roomRepository.GetById(roomId);
 
-            switch (roomToEdit)
+            if (roomToEdit == null || roomToEdit.IsPrivateConversation)
             {
-                default:
-                    roomToEdit.Name = roomName;
-                    roomRepository.Edit(roomToEdit);
-                    roomRepository.Save();
-                    return true;
-
-                case null:
-                    return false;
+                return false;
             }
+
+            roomToEdit.Name = roomName;
+            roomRepository.Edit(roomToEdit);
+            roomRepository.Save();
+
+            return true;
         }
     }
 }

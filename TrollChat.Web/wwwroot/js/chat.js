@@ -891,6 +891,7 @@ function channelSettings() {
 
     $("#rightbar_Title").html("Channel Settings");
 
+    // TODO: Remove "Room Name" option if room is private conversation
     var divToAppend = '<div class="item">\
                             <div class="ui styled accordion">\
                                     <div class="accordion">\
@@ -1030,6 +1031,7 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
     // Active room name in sidebar
     $("#channelsMenu > a.item.active").contents().last().replaceWith(roomNameInDatabase);
     // Room name in #msg_input
+    // TODO: Remove current username if this is priv conv.
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
     if ($(".ui.sidebar.right").hasClass("visible")) {
@@ -1266,5 +1268,6 @@ myHub.client.roomInfo = function (result, createdOn) {
     }
 
     $("#channel_topic_text").html(topicInDatabase);
+    // TODO: Remove last username == current username if this is priv conv.
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 };
