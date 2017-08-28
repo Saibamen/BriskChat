@@ -1270,7 +1270,7 @@ myHub.client.roomInfo = function (result, createdOn) {
                 });
             } else {
                 $("#infoName").val(roomNameInDatabase);
-                
+
                 $("#roomName").prev().fadeIn("fast", function() {
                     $(this).show();
                 });
@@ -1286,12 +1286,15 @@ myHub.client.roomInfo = function (result, createdOn) {
         nameArray = roomNameInDatabase.split(", ");
         inputPlaceholder = roomNameInDatabase;
 
-        // TODO: Need to use .each? Need testing
         // Remove current userName
-        if (nameArray[nameArray.length - 1] === globalUserName) {
-            nameArray.splice(nameArray.length - 1, 1);
-            inputPlaceholder = nameArray;
-        }
+        $(nameArray).each(function(index, element) {
+            if (element === globalUserName) {
+                nameArray.splice(index, 1);
+                inputPlaceholder = nameArray;
+
+                return false;
+            }
+        });
     } else {
         inputPlaceholder = roomNameInDatabase;
     }
