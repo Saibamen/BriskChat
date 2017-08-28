@@ -83,7 +83,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                             Description = room.Description,
                             Topic = room.Topic,
                             Customization = room.Customization,
-                            CreatedOn = room.CreatedOn
+                            CreatedOn = room.CreatedOn,
+                            IsPrivateConversation = room.IsPrivateConversation
                         };
 
             return !(query.Count() > 0) ? Enumerable.Empty<Room>().AsQueryable() : query;

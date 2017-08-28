@@ -39,7 +39,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 Description = dbRoom.Description,
                 Topic = dbRoom.Topic,
                 Customization = dbRoom.Customization,
-                CreatedOn = dbRoom.CreatedOn
+                CreatedOn = dbRoom.CreatedOn,
+                IsPrivateConversation = dbRoom.IsPrivateConversation
             };
 
             return room;

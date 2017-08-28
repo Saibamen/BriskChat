@@ -31,6 +31,7 @@ var roomNameInDatabase;
 var descriptionInDatabase;
 var themeInDatabase;
 var currentRoomId = 0;
+var isCurrentRoomPrivateConversation;
 
 var GravatarUrl = "https://www.gravatar.com/avatar/";
 var GravatarOptions = "d=retro";
@@ -828,14 +829,12 @@ $("#createPrivateConversationForm").submit(function (e) {
         } else {
             users += ", " + $.trim($(element).text());
         }
-
-        printLog($.trim($(element).text()));
     });
 
     printLog(users);
     printLog(list);
-    // TODO: search multiple users in one private conversation
 
+    // TODO: search multiple users in one private conversation
     if (list.length > 0) {
         var allPrivs = $("#privateConversationsMenu a");
         var searchedPriv = {};
@@ -918,7 +917,7 @@ function channelSettings() {
                                             </div>\
                                         </div>\
                                         <div class="title"><i class="wpforms icon"></i>Description</div>\
-                                        <div class="content" id="Description">\
+                                        <div class="content" id="roomDescription">\
                                             <div class="ui form">\
                                                 <div class="field">\
                                                 <input type="text" id="infoDescription">\
@@ -1031,7 +1030,6 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
     // Active room name in sidebar
     $("#channelsMenu > a.item.active").contents().last().replaceWith(roomNameInDatabase);
     // Room name in #msg_input
-    // TODO: Remove current username if this is priv conv.
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
     if ($(".ui.sidebar.right").hasClass("visible")) {
@@ -1250,6 +1248,7 @@ myHub.client.roomInfo = function (result, createdOn) {
     topicInDatabase = result.Topic;
     roomNameInDatabase = result.Name;
     descriptionInDatabase = result.Description;
+    isCurrentRoomPrivateConversation = result.IsPrivateConversation;
 
     changeTheme(themeInDatabase);
 
@@ -1262,12 +1261,40 @@ myHub.client.roomInfo = function (result, createdOn) {
         } else {
             $("#selecttheme").val(themeInDatabase);
             $("#infoTopic").val(result.Topic);
-            $("#infoName").val(roomNameInDatabase);
             $("#infoDescription").val(result.Description);
+
+            if (isCurrentRoomPrivateConversation) {
+                $("#roomName").prev().fadeOut("fast", function() {
+                    $("#roomName").removeClass("active");
+                    $(this).removeClass("active");
+                });
+            } else {
+                $("#infoName").val(roomNameInDatabase);
+                
+                $("#roomName").prev().fadeIn("fast", function() {
+                    $(this).show();
+                });
+            }
         }
     }
 
     $("#channel_topic_text").html(topicInDatabase);
-    // TODO: Remove last username == current username if this is priv conv.
-    $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
+
+    var inputPlaceholder;
+
+    if (isCurrentRoomPrivateConversation) {
+        nameArray = roomNameInDatabase.split(", ");
+        inputPlaceholder = roomNameInDatabase;
+
+        // TODO: Need to use .each? Need testing
+        // Remove current userName
+        if (nameArray[nameArray.length - 1] === globalUserName) {
+            nameArray.splice(nameArray.length - 1, 1);
+            inputPlaceholder = nameArray;
+        }
+    } else {
+        inputPlaceholder = roomNameInDatabase;
+    }
+
+    $("#msg_input").attr("placeholder", "Message " + inputPlaceholder);
 };
