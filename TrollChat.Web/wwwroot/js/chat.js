@@ -602,7 +602,8 @@ myHub.client.channelAddedAction = function (channelName, roomId, isPublic) {
 };
 
 myHub.client.privateConversationAddedAction = function (value) {
-    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="icon left">#</i>' + value.Name + "</a>";
+    // TODO: Status icon
+    var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="lock icon left"></i>' + value.Name + "</a>";
 
     $("#privateConversationsMenu").append(divToAppend);
     changeRoom($("#privateConversationsMenu").children().last());
@@ -817,27 +818,24 @@ $("#createChanelForm").submit(function (e) {
 
 $("#createPrivateConversationForm").submit(function (e) {
     e.preventDefault();
-    var list = [];
-    var users;
+    var usersIdList = [];
+    var usersNameList = [];
     console.log("begin #createPrivateConversationForm");
 
-    $("#createPrivateConversationForm").find(".private-conversation-tag").each(function (index, element) {
-        list.push($(element).data("id"));
+    var conversationTags = $("#createPrivateConversationForm").find(".private-conversation-tag");
 
-        if (index === 0) {
-            users = $.trim($(element).text());
-        } else {
-            users += ", " + $.trim($(element).text());
-        }
+    conversationTags.each(function (index, element) {
+        usersIdList.push($(element).data("id"));
+        usersNameList.push($.trim($(element).text()));
     });
 
-    printLog(users);
-    printLog(list);
+    printLog(usersNameList);
 
     // TODO: search multiple users in one private conversation
-    if (list.length > 0) {
+    if (usersIdList.length > 0) {
         var allPrivs = $("#privateConversationsMenu a");
         var searchedPriv = {};
+        var selectedRoomUsersList = [];
         console.log("allPrivs:");
         console.log(allPrivs);
 
@@ -846,22 +844,45 @@ $("#createPrivateConversationForm").submit(function (e) {
             console.log(i);
             console.log(val);
 
-            if ($(val).text() === users) {
+            selectedRoomUsersList = $(val).text().split(", ");
+            console.log(selectedRoomUsersList);
+
+            // Search only on equal size
+            if (selectedRoomUsersList.length !== usersNameList.length) {
+                console.log("Moving to next private channel.")
+
+                return true;
+            }
+
+            var searched = false;
+
+            $(usersNameList).each(function(userNameIndex, userNameElement) {
+                searched = false;
+
+                $(selectedRoomUsersList).each(function(selectedRoomIndex, selectedRoomElement) {
+                    if (selectedRoomElement === userNameElement) {
+                        searched = true;
+
+                        // This is ok?
+                        return false;
+                    }
+                });
+            });
+
+            if (searched) {
                 searchedPriv = $(val);
-                console.log("searched!!!");
-                console.log($(val).text());
-                console.log(searchedPriv);
+
                 return false;
             }
         });
 
         if (searchedPriv.length) {
-            printLog("change room");
+            printLog("Change room");
             changeRoom(searchedPriv);
         } else {
             printLog("Add new priv channel");
             loadingStart();
-            myHub.server.createNewPrivateConversation(list);
+            myHub.server.createNewPrivateConversation(usersIdList);
         }
 
         $(".ui.basic.create-private-conversation.modal").modal("hide");
@@ -890,7 +911,6 @@ function channelSettings() {
 
     $("#rightbar_Title").html("Channel Settings");
 
-    // TODO: Remove "Room Name" option if room is private conversation
     var divToAppend = '<div class="item">\
                             <div class="ui styled accordion">\
                                     <div class="accordion">\
