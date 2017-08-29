@@ -679,8 +679,13 @@ $.connection.hub.start()
                                 var message = $("#msg_input").val().trim();
 
                                 if (message) {
-                                    printLog("Wysyłam: " + message + " do pokoju " + currentRoomId);
-                                    myHub.server.sendMessage(currentRoomId, message);
+                                    if (message === "zerg") {
+                                        printLog("You Must Construct Additional Pylons!");
+                                        new ZergRush(100);
+                                    } else {
+                                        printLog("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                                        myHub.server.sendMessage(currentRoomId, message);
+                                    }
                                 }
 
                                 e.preventDefault();

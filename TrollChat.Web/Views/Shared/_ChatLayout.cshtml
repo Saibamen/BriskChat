@@ -220,9 +220,11 @@
     <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
 
     <environment names="Development">
+        <script src="~/js/ZergRush.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
         <script src="~/js/chat.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/js/ZergRush.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
         <script src="~/js/chat.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
 }

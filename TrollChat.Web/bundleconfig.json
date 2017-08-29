@@ -28,5 +28,11 @@
     "inputFiles": [
       "wwwroot/js/chat.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/ZergRush.min.js",
+    "inputFiles": [
+      "wwwroot/js/ZergRush.js"
+    ]
   }
 ]
