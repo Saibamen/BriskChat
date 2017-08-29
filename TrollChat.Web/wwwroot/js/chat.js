@@ -817,10 +817,10 @@ $("#createChanelForm").submit(function (e) {
 });
 
 $("#createPrivateConversationForm").submit(function (e) {
+    console.log("Begin submit #createPrivateConversationForm");
     e.preventDefault();
     var usersIdList = [];
     var usersNameList = [];
-    console.log("begin #createPrivateConversationForm");
 
     var conversationTags = $("#createPrivateConversationForm").find(".private-conversation-tag");
 
@@ -829,47 +829,32 @@ $("#createPrivateConversationForm").submit(function (e) {
         usersNameList.push($.trim($(element).text()));
     });
 
-    printLog(usersNameList);
-
-    // TODO: search multiple users in one private conversation
     if (usersIdList.length > 0) {
         var allPrivs = $("#privateConversationsMenu a");
         var searchedPriv = {};
         var selectedRoomUsersList = [];
-        console.log("allPrivs:");
-        console.log(allPrivs);
 
         allPrivs.each(function (i, val) {
-            console.log("bla");
-            console.log(i);
-            console.log(val);
-
             selectedRoomUsersList = $(val).text().split(", ");
-            console.log(selectedRoomUsersList);
 
             // Search only on equal size
             if (selectedRoomUsersList.length !== usersNameList.length) {
-                console.log("Moving to next private channel.")
-
                 return true;
             }
 
-            var searched = false;
+            var matchingNames = 0;
 
             $(usersNameList).each(function(userNameIndex, userNameElement) {
-                searched = false;
-
                 $(selectedRoomUsersList).each(function(selectedRoomIndex, selectedRoomElement) {
                     if (selectedRoomElement === userNameElement) {
-                        searched = true;
+                        matchingNames += 1;
 
-                        // This is ok?
                         return false;
                     }
                 });
             });
 
-            if (searched) {
+            if (matchingNames === usersNameList.length) {
                 searchedPriv = $(val);
 
                 return false;
@@ -880,7 +865,7 @@ $("#createPrivateConversationForm").submit(function (e) {
             printLog("Change room");
             changeRoom(searchedPriv);
         } else {
-            printLog("Add new priv channel");
+            printLog("Add new private conversation channel");
             loadingStart();
             myHub.server.createNewPrivateConversation(usersIdList);
         }

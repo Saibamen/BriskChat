@@ -459,7 +459,7 @@ namespace TrollChat.Web.Hubs
         public void CreateNewPrivateConversation(List<Guid> model)
         {
             MiniProfiler.Start("CreateNewPrivateConversation");
-            // If list has duplicates abort!
+            // If list has duplicates - abort!
             if (model.Count <= 0 || model.Distinct().Count() != model.Count)
             {
                 MiniProfiler.Stop();
