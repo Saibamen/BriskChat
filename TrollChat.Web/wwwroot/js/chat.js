@@ -34,6 +34,8 @@ var themeInDatabase;
 var currentRoomId = 0;
 var isCurrentRoomPrivateConversation;
 
+var clippyShow = false;
+
 var GravatarUrl = "https://www.gravatar.com/avatar/";
 var GravatarOptions = "d=retro";
 
@@ -682,6 +684,26 @@ $.connection.hub.start()
                                     if (message === "zerg") {
                                         printLog("You Must Construct Additional Pylons!");
                                         new ZergRush(100);
+                                    } else if (message === "clippy") {
+                                        if (!clippyShow) {
+                                            printLog("Best Word users friend");
+                                            clippyShow = true;
+                                            clippy.load("Clippy", function(agent) {
+                                                agent.show();
+                                                agent.play("Greeting");
+                                                agent.speak("Hi! Remember me?");
+
+                                                setInterval(function() {
+                                                    agent.animate();
+                                                }, 20000);
+                                            });
+                                        } else {
+                                            $(".clippy").hide("slow", function () {
+                                                $(".clippy").remove();
+                                                $(".clippy-balloon").remove();
+                                            });
+                                            clippyShow = false;
+                                        }
                                     } else {
                                         printLog("Wysyłam: " + message + " do pokoju " + currentRoomId);
                                         myHub.server.sendMessage(currentRoomId, message);

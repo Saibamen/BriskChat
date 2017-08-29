@@ -8,10 +8,12 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/modals.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/clippy.css" asp-append-version="true" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
         <link rel="stylesheet" href="~/css/modals.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/clippy.min.css" asp-append-version="true" />
     </environment>
 }
 
@@ -221,10 +223,12 @@
 
     <environment names="Development">
         <script src="~/js/ZergRush.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/clippy.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
         <script src="~/js/chat.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="~/js/ZergRush.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/clippy.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
         <script src="~/js/chat.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
     </environment>
 }
