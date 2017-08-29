@@ -16,7 +16,8 @@ $(document).on("reloadPopups", function () {
 
 var Autolinker = new Autolinker({
     stripPrefix: false,
-    stripTrailingSlash: false
+    stripTrailingSlash: false,
+    phone: false
 });
 
 // Globals
@@ -817,7 +818,7 @@ $("#createChanelForm").submit(function (e) {
 });
 
 $("#createPrivateConversationForm").submit(function (e) {
-    console.log("Begin submit #createPrivateConversationForm");
+    printLog("Begin submit #createPrivateConversationForm");
     e.preventDefault();
     var usersIdList = [];
     var usersNameList = [];
