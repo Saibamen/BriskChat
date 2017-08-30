@@ -257,7 +257,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
                     var editedMessage = $(".ql-editor").text().trim();
 
                     if (editedMessage) {
-                        printLog("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                        printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
                     }
                 }
@@ -276,7 +276,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
             var editedMessage = $(".ql-editor").text().trim();
 
             if (editedMessage) {
-                printLog("Edytuję: " + editedMessage + " do pokoju " + currentRoomId);
+                printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                 myHub.server.editMessage(currentRoomId, messageId, editedMessage);
             }
         }
@@ -456,7 +456,7 @@ myHub.client.broadcastMessage = function (userName, userId, messageId, messageTe
 myHub.client.deleteMessage = function (messageId) {
     var message = $(".ts-message[data-id='" + messageId + "']");
 
-    printLog("Klient usuwa wiadomosc o ID: " + message.data("id"));
+    printLog("Deleting message with ID: " + message.data("id"));
 
     message.hide("slow", function () {
         message.remove();
@@ -705,7 +705,7 @@ $.connection.hub.start()
                                             clippyShow = false;
                                         }
                                     } else {
-                                        printLog("Wysyłam: " + message + " do pokoju " + currentRoomId);
+                                        printLog("Sending: " + message + " to room " + currentRoomId);
                                         myHub.server.sendMessage(currentRoomId, message);
                                     }
                                 }
@@ -1201,7 +1201,6 @@ $(document).keydown(function (x) {
     // Escape key
     if (x.keyCode === 27) {
         if ($(".ui.sidebar.right").hasClass("visible")) {
-            printLog("Escape dla prawego sidebaru");
             closeRightBarCallback();
         }
 
