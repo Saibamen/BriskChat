@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
@@ -48,6 +49,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             {
                 var userRoomsList = privateConversationList.Where(x => x.Room == room);
                 var dict = new Dictionary<DataAccess.Models.UserRoom, bool>();
+                var searchedCound = 0;
 
                 // FIXME: Bug when creating multiple users priv conversation room when there's priv conversation to one of selected user list
                 foreach (var connection in userRoomsList)
@@ -56,8 +58,16 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
                     if (users.Any(x => x.Equals(connection.User.Id)))
                     {
+                        searchedCound += 1;
+                        Debug.WriteLine("######### Znaleziono istniające połączenie #########");
+                        Debug.WriteLine(connection.User.Name);
                         dict[connection] = true;
                     }
+                }
+
+                if (searchedCound == users.Count)
+                {
+                    Debug.WriteLine("######### Jest tyle samo znalezień co userów do których chce sie podpiąć #########");
                 }
 
                 if (dict.All(x => x.Value))

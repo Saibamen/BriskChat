@@ -273,7 +273,7 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     $(".ts-message").on("click", "#commit_edit", function (x) {
         // Send to server when text is changed
         var editedMessage = $(".ql-editor").text().trim();
-        
+
         if (oldMessageText !== editedMessage) {
             if (editedMessage) {
                 printLog("Editing: " + editedMessage + " to room " + currentRoomId);
@@ -883,7 +883,7 @@ $("#createPrivateConversationForm").submit(function (e) {
             });
 
             if (matchingNames === usersNameList.length) {
-                searchedPriv = $(val);
+                //searchedPriv = $(val);
 
                 return false;
             }
