@@ -253,9 +253,9 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
         // Enter key
         if (x.which === 13) {
             if (!x.shiftKey) {
-                if (oldMessageText !== $(".ql-editor").text().trim()) {
-                    var editedMessage = $(".ql-editor").text().trim();
+                var editedMessage = $(".ql-editor").text().trim();
 
+                if (oldMessageText !== editedMessage) {
                     if (editedMessage) {
                         printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
@@ -272,9 +272,9 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     // Save
     $(".ts-message").on("click", "#commit_edit", function (x) {
         // Send to server when text is changed
-        if (oldMessageText !== $(".ql-editor").text().trim()) {
-            var editedMessage = $(".ql-editor").text().trim();
-
+        var editedMessage = $(".ql-editor").text().trim();
+        
+        if (oldMessageText !== editedMessage) {
             if (editedMessage) {
                 printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                 myHub.server.editMessage(currentRoomId, messageId, editedMessage);
