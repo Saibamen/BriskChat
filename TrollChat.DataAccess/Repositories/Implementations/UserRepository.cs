@@ -32,13 +32,13 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public IQueryable<UserRoom> GetPrivateConversations(Guid userId)
         {
             var query = from user in Context.Set<User>()
-                        join useroom in Context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                        join room in Context.Set<Room>() on useroom.Room.Id equals room.Id
+                        join userroom in Context.Set<UserRoom>() on user.Id equals userroom.User.Id
+                        join room in Context.Set<Room>() on userroom.Room.Id equals room.Id
                         where user.Id == userId
                         where room.IsPrivateConversation
                         select new UserRoom
                         {
-                            Id = useroom.Id,
+                            Id = userroom.Id,
                             User = user,
                             Room = room
                         };
@@ -49,8 +49,8 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         public IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId)
         {
             var query1 = (from user in Context.Set<User>()
-                          join useroom in Context.Set<UserRoom>() on user.Id equals useroom.User.Id
-                          join room in Context.Set<Room>() on useroom.Room.Id equals room.Id
+                          join userroom in Context.Set<UserRoom>() on user.Id equals userroom.User.Id
+                          join room in Context.Set<Room>() on userroom.Room.Id equals room.Id
                           where user.Id == userId
                           where room.IsPrivateConversation
                           select room).ToList();
@@ -68,6 +68,22 @@ namespace TrollChat.DataAccess.Repositories.Implementations
                          };
 
             return query2.Count() > 0 ? query2 : Enumerable.Empty<UserRoom>().AsQueryable();
+        }
+
+        public IQueryable<User> GetUsersNotConnectedToRoom(Guid roomId)
+        {
+            var query = from user in Context.Set<User>()
+                        join userroom in Context.Set<UserRoom>() on user.Id equals userroom.User.Id into ur
+                        where user.UserRooms.All(x => x.Room.Id != roomId)
+                        from useroom in ur.DefaultIfEmpty()
+                        select new User
+                        {
+                            Id = user.Id,
+                            Name = user.Name,
+                            Email = user.Email
+                        };
+
+            return query.Count() > 0 ? query : Enumerable.Empty<User>().AsQueryable();
         }
     }
 }

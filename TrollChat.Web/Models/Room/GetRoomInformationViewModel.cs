@@ -17,5 +17,7 @@ namespace TrollChat.Web.Models.Room
         public DateTime CreatedOn { get; set; }
 
         public bool IsPrivateConversation { get; set; }
+
+        public bool IsPublic { get; set; }
     }
 }

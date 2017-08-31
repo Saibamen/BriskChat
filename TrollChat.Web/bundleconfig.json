@@ -34,5 +34,11 @@
     "inputFiles": [
       "wwwroot/js/ZergRush.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/js/clippy.min.js",
+    "inputFiles": [
+      "wwwroot/js/clippy.js"
+    ]
   }
 ]

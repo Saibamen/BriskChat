@@ -295,6 +295,10 @@ div {
     white-space: nowrap;
 }
 
+#inviteButton {
+    margin-bottom: 10px;
+}
+
 .channel_title .channel_name button {
     color: inherit;
 }

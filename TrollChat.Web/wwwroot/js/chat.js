@@ -634,6 +634,29 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
     });
 };
 
+myHub.client.notInvitedUsersLoadedAction = function (result) {
+    $("#inviteUsersList").empty();
+    console.log(result);
+
+    $.each(result, function (index, value) {
+        var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-is-selected="false">';
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '"><strong>' + value.Name + "</strong> ";
+
+        if (value.IsOnline) {
+            divToAppend += '<i class="circle icon green"></i>';
+        } else {
+            divToAppend += '<i class="circle thin icon"></i>';
+        }
+
+        divToAppend += "</div>";
+        divToAppend += '<div class="six wide column"></div>';
+        divToAppend += '<div class="two wide column mycheckmark"><i class="level down rotated big blue icon"></i></div>';
+        divToAppend += "</div>";
+
+        $("#inviteUsersList").append(divToAppend);
+    });
+};
+
 myHub.client.setDomainInformation = function (domainName, userName, userId) {
     globalDomainName = domainName;
     globalUserName = userName;
@@ -752,9 +775,8 @@ $("#createNewChannel, #newChannel").click(function () {
     $("#createChanelForm")[0].reset();
 
     var item = $("input[name*='IsPublic']")[1];
-    item.value = false;
-
     var thisModal = $(".ui.basic.create-room.modal");
+    item.value = false;
 
     $(thisModal).modal({
         closable: false,
@@ -777,7 +799,6 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
     $("#createPrivateConversationForm").find(".private-conversation-tag").remove();
 
     var domainUsers = myHub.server.getUsersFromDomain();
-
     var thisModal = $(".ui.basic.create-private-conversation.modal");
 
     $.when(domainUsers).then(function () {
@@ -792,6 +813,33 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
         }).modal("show");
     });
 });
+
+function inviteUsers() {
+    if (loading) {
+        return;
+    }
+
+    console.log("inviteButton click");
+
+    $("#inviteUsersForm")[0].reset();
+    // Remove all added tags
+    $("#inviteUsersForm").find(".invite-user-tag").remove();
+
+    var notInvitedUsers = myHub.server.getNotInvitedUsers(currentRoomId);
+    var thisModal = $(".ui.basic.invite-users.modal");
+
+    $.when(notInvitedUsers).then(function () {
+        $(thisModal).modal({
+            closable: false,
+            onShow: function () {
+                $(".ui.dimmer.modals").css("background-color", "#fff");
+            },
+            onHide: function () {
+                $(".ui.dimmer.modals").css("background-color", "");
+            }
+        }).modal("show");
+    });
+};
 
 $("#inputtext").keyup(function() {
     searchPrivateModal($(this).val());
@@ -922,6 +970,7 @@ function serializeForm(form) {
 function channelSettings() {
     $("#Rightbar").html("");
 
+    // TODO: Implement deleting room
     $("#rightbar_Title").html("Channel Settings");
 
     var divToAppend = '<div class="item">\
@@ -1015,9 +1064,12 @@ function channelDetails() {
                                 "</div>" +
                             "</div>");
 
-    $(".ui.styled.accordion").accordion();
     myHub.server.getRoomUsers(currentRoomId);
-    myHub.server.getRoomInformation(currentRoomId);
+    var getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
+
+    $.when(getRoomInformation).then(function () {
+        $(".ui.styled.accordion").accordion();
+    });
 }
 
 myHub.client.broadcastEditedRoomTopic = function (value) {
@@ -1290,6 +1342,15 @@ myHub.client.roomInfo = function (result, createdOn) {
 
             $("#aboutInfo").empty();
             $("#aboutInfo").append(divToAppend);
+
+            // Add invite button to non public rooms
+            if (!result.IsPublic && !result.IsPrivateConversation) {
+                var inviteButton =  '<div class="ui two column centered grid">\
+                    <button class="primary ui button" id="inviteButton" onclick="inviteUsers();">Invite users</button>\
+                    </div>';
+                
+                $(".ui.styled.accordion").append(inviteButton);
+            }
         } else {
             $("#selecttheme").val(themeInDatabase);
             $("#infoTopic").val(result.Topic);

@@ -60,7 +60,7 @@ clippy.Agent.prototype = {
             el.hide();
             this.pause();
             if (callback) callback();
-        })
+        });
     },
 
 
@@ -109,7 +109,7 @@ clippy.Agent.prototype = {
         if (this._isIdleAnimation() && this._idleDfd && this._idleDfd.state() === 'pending') {
             this._idleDfd.done($.proxy(function () {
                 this._playInternal(animation, callback);
-            }, this))
+            }, this));
         }
 
         this._animator.showAnimation(animation, callback);
@@ -138,7 +138,7 @@ clippy.Agent.prototype = {
                     if (completed) return;
                     // exit after timeout
                     this._animator.exitAnimation();
-                }, this), timeout)
+                }, this), timeout);
             }
 
             this._playInternal(animation, callback);
@@ -409,7 +409,7 @@ clippy.Agent.prototype = {
         return {
             top:mouseY - o.top,
             left:mouseX - o.left
-        }
+        };
 
     },
 
@@ -903,8 +903,8 @@ clippy.load._loadSounds = function (name, path) {
     dfd = clippy.load._sounds[name] = $.Deferred();
 
     var audio = document.createElement('audio');
-    var canPlayMp3 = !!audio.canPlayType && "" != audio.canPlayType('audio/mpeg');
-    var canPlayOgg = !!audio.canPlayType && "" != audio.canPlayType('audio/ogg; codecs="vorbis"');
+    var canPlayMp3 = !!audio.canPlayType && "" !== audio.canPlayType('audio/mpeg');
+    var canPlayOgg = !!audio.canPlayType && "" !== audio.canPlayType('audio/ogg; codecs="vorbis"');
 
     if (!canPlayMp3 && !canPlayOgg) {
         dfd.resolve({});
@@ -914,7 +914,7 @@ clippy.load._loadSounds = function (name, path) {
         clippy.load._loadScript(src);
     }
 
-    return dfd.promise()
+    return dfd.promise();
 };
 
 

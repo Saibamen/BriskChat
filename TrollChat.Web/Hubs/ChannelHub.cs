@@ -43,6 +43,7 @@ namespace TrollChat.Web.Hubs
         private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
         private readonly IGetRoomUsersCount getRoomUsersCount;
         private readonly IGetRoomByName getRoomByName;
+        private readonly IGetNotInvitedUsers getNotInvitedUsers;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "MMMM d, yyyy";
@@ -70,7 +71,8 @@ namespace TrollChat.Web.Hubs
             IEditRoomTopic editRoomTopic,
             IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId,
             IGetRoomUsersCount getRoomUsersCount,
-            IGetRoomByName getRoomByName)
+            IGetRoomByName getRoomByName,
+            IGetNotInvitedUsers getNotInvitedUsers)
         {
             this.addNewRoom = addNewRoom;
             this.addNewMessage = addNewMessage;
@@ -94,6 +96,7 @@ namespace TrollChat.Web.Hubs
             this.getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
             this.getRoomUsersCount = getRoomUsersCount;
             this.getRoomByName = getRoomByName;
+            this.getNotInvitedUsers = getNotInvitedUsers;
         }
 
         public override Task OnConnected()
@@ -411,6 +414,28 @@ namespace TrollChat.Web.Hubs
                 });
 
                 Clients.Caller.privateConversationsUsersLoadedAction(viewList);
+            }
+
+            MiniProfiler.Stop();
+        }
+
+        public void GetNotInvitedUsers(string roomId)
+        {
+            MiniProfiler.Start("GetNotInvitedUsers");
+            var userList = getNotInvitedUsers.Invoke(Context.DomainId(), new Guid(roomId));
+            userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
+
+            if (userList.Count > 0)
+            {
+                var viewList = userList.Select(item => new UserViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    IsOnline = IsConnected(Context.ConnectionId, item.Id),
+                    EmailHash = GetMd5Hash(item.Email)
+                });
+
+                Clients.Caller.notInvitedUsersLoadedAction(viewList);
             }
 
             MiniProfiler.Stop();

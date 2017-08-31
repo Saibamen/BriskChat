@@ -1,6 +1,7 @@
 ﻿.ui.basic.create-private-conversation.modal,
 .ui.basic.create-room.modal,
-.ui.basic.browse-channels.modal {
+.ui.basic.browse-channels.modal,
+.ui.basic.invite-users.modal {
     color: #000;
 }
 
@@ -46,7 +47,8 @@
  *  Now only Create Private Conversation Modal
  */
 
-.private-conversation-tag {
+.private-conversation-tag,
+.invite-user-tag {
     margin-right: 2px;
     background: #2D9EE0;
     color: #fff;

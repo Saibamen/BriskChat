@@ -6,10 +6,12 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
 {
     public interface IUserRepository : IGenericRepository<User>, IRepository
     {
-        IQueryable<Room> GetUserRooms(Guid id, bool isPrivateConversation);
+        IQueryable<Room> GetUserRooms(Guid userId, bool isPrivateConversation);
 
-        IQueryable<UserRoom> GetPrivateConversations(Guid id);
+        IQueryable<UserRoom> GetPrivateConversations(Guid userId);
 
-        IQueryable<UserRoom> GetPrivateConversationsTargets(Guid id);
+        IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId);
+
+        IQueryable<User> GetUsersNotConnectedToRoom(Guid roomId);
     }
 }

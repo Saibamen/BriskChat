@@ -25,4 +25,12 @@ namespace TrollChat.Web.Controllers
             return View();
         }
     }
+
+    public class InviteUsersViewComponent : ViewComponent
+    {
+        public IViewComponentResult Invoke()
+        {
+            return View();
+        }
+    }
 }
