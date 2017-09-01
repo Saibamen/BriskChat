@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
@@ -20,18 +21,12 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
             this.userRoomRepository = userRoomRepository;
         }
 
-        public bool Invoke(Guid roomId, Guid userId)
+        public bool Invoke(Guid roomId, List<Guid> users, bool invite = false)
         {
-            if (roomId == Guid.Empty || userId == Guid.Empty ||
+            if (roomId == Guid.Empty || users.Count <= 0 || users.Any(x => x == Guid.Empty) ||
                 // Check for existing userRoom
-                userRoomRepository.FindBy(x => x.Room.Id == roomId && x.User.Id == userId).Count() > 0)
-            {
-                return false;
-            }
-
-            var user = userRepository.GetById(userId);
-
-            if (user == null)
+                // TODO: Remove user Id from list?
+                userRoomRepository.FindBy(x => x.Room.Id == roomId && users.Any(y => y == x.User.Id)).Count() > 0)
             {
                 return false;
             }
@@ -39,14 +34,25 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
             var room = roomRepository.GetById(roomId);
 
             // TODO: Implement inviting to private rooms
-            if (room == null || !room.IsPublic)
+            if (room == null || !room.IsPublic && !invite)
             {
                 return false;
             }
 
-            var userRoom = new DataAccess.Models.UserRoom { User = user, Room = room };
+            foreach (var user in users)
+            {
+                var userFromDb = userRepository.GetById(user);
 
-            userRoomRepository.Add(userRoom);
+                if (userFromDb == null)
+                {
+                    return false;
+                }
+
+                var userRoomToAdd = new DataAccess.Models.UserRoom { User = userFromDb, Room = room };
+
+                userRoomRepository.Add(userRoomToAdd);
+            }
+
             userRoomRepository.Save();
 
             return true;

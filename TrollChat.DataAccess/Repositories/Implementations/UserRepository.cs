@@ -69,21 +69,5 @@ namespace TrollChat.DataAccess.Repositories.Implementations
 
             return query2.Count() > 0 ? query2 : Enumerable.Empty<UserRoom>().AsQueryable();
         }
-
-        public IQueryable<User> GetUsersNotConnectedToRoom(Guid roomId)
-        {
-            var query = from user in Context.Set<User>()
-                        join userroom in Context.Set<UserRoom>() on user.Id equals userroom.User.Id into ur
-                        where user.UserRooms.All(x => x.Room.Id != roomId)
-                        from useroom in ur.DefaultIfEmpty()
-                        select new User
-                        {
-                            Id = user.Id,
-                            Name = user.Name,
-                            Email = user.Email
-                        };
-
-            return query.Count() > 0 ? query : Enumerable.Empty<User>().AsQueryable();
-        }
     }
 }

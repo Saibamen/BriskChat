@@ -303,7 +303,7 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
     var item = e.currentTarget;
     var append = $(item).data("name");
     var id = $(item).data("id");
-    var input = $("#inputtext");
+    var input = $("#private_inputtext");
 
     $(item).attr("data-is-selected", "true");
     $(item).hide();
@@ -313,6 +313,22 @@ $(".grid").on("click", ".private-conversation-row", function (e) {
     $("#createPrivateConversationForm").find(":submit").removeClass("disabled").addClass("positive");
 
     $(input).before('<span class="private-conversation-tag" data-id="' + id + '">' + append + ' <i class="remove icon"></i></span>');
+});
+
+$(".grid").on("click", ".invite-users-row", function (e) {
+    var item = e.currentTarget;
+    var append = $(item).data("name");
+    var id = $(item).data("id");
+    var input = $("#invite_inputtext");
+
+    $(item).attr("data-is-selected", "true");
+    $(item).hide();
+
+    $(input).attr("placeholder", "");
+
+    $("#inviteUsersForm").find(":submit").removeClass("disabled").addClass("positive");
+
+    $(input).before('<span class="invite-users-tag" data-id="' + id + '">' + append + ' <i class="remove icon"></i></span>');
 });
 
 // This deletes the message
@@ -612,12 +628,17 @@ myHub.client.privateConversationAddedAction = function (value) {
     changeRoom($("#privateConversationsMenu").children().last());
 };
 
+myHub.client.inviteUsersAddedAction = function () {
+    printLog("inviteUsersAddedAction");
+    loadingStop();
+};
+
 myHub.client.privateConversationsUsersLoadedAction = function (result) {
     $("#privateConversationsUserList").empty();
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-is-selected="false">';
-        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '"><strong>' + value.Name + "</strong> ";
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '" alt="avatar"><strong>' + value.Name + "</strong> ";
 
         if (value.IsOnline) {
             divToAppend += '<i class="circle icon green"></i>';
@@ -636,11 +657,10 @@ myHub.client.privateConversationsUsersLoadedAction = function (result) {
 
 myHub.client.notInvitedUsersLoadedAction = function (result) {
     $("#inviteUsersList").empty();
-    console.log(result);
 
     $.each(result, function (index, value) {
-        var divToAppend = '<div class="row private-conversation-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-is-selected="false">';
-        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '"><strong>' + value.Name + "</strong> ";
+        var divToAppend = '<div class="row invite-users-row" data-id="' + value.Id + '" data-name="' + value.Name + '" data-is-selected="false">';
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '" alt="avatar"><strong>' + value.Name + "</strong> ";
 
         if (value.IsOnline) {
             divToAppend += '<i class="circle icon green"></i>';
@@ -819,11 +839,9 @@ function inviteUsers() {
         return;
     }
 
-    console.log("inviteButton click");
-
     $("#inviteUsersForm")[0].reset();
     // Remove all added tags
-    $("#inviteUsersForm").find(".invite-user-tag").remove();
+    $("#inviteUsersForm").find(".invite-users-tag").remove();
 
     var notInvitedUsers = myHub.server.getNotInvitedUsers(currentRoomId);
     var thisModal = $(".ui.basic.invite-users.modal");
@@ -841,12 +859,22 @@ function inviteUsers() {
     });
 };
 
-$("#inputtext").keyup(function() {
+$("#private_inputtext").keyup(function() {
     searchPrivateModal($(this).val());
 });
 
 function searchPrivateModal(value) {
     var items = $(".private-conversation-row[data-is-selected='false']");
+    
+    modalListSearch(value, items);
+}
+
+$("#invite_inputtext").keyup(function() {
+    searchInviteModal($(this).val());
+});
+
+function searchInviteModal(value) {
+    var items = $(".invite-users-row[data-is-selected='false']");
     
     modalListSearch(value, items);
 }
@@ -931,6 +959,7 @@ $("#createPrivateConversationForm").submit(function (e) {
             });
 
             if (matchingNames === usersNameList.length) {
+                // TODO: Uncomment if bug with adding priv conv in backend is fixed
                 //searchedPriv = $(val);
 
                 return false;
@@ -948,6 +977,24 @@ $("#createPrivateConversationForm").submit(function (e) {
 
         $(".ui.basic.create-private-conversation.modal").modal("hide");
     }
+});
+
+$("#inviteUsersForm").submit(function (e) {
+    printLog("Begin submit #inviteUsersForm");
+    e.preventDefault();
+    var usersIdList = [];
+
+    var conversationTags = $("#inviteUsersForm").find(".invite-users-tag");
+
+    conversationTags.each(function (index, element) {
+        usersIdList.push($(element).data("id"));
+    });
+
+    loadingStart();
+    printLog("Inviting new users");
+    myHub.server.inviteUsersToPrivateRoom(currentRoomId, usersIdList);
+
+    $(".ui.basic.invite-users.modal").modal("hide");
 });
 
 function updateChannelsCount(diff) {
@@ -1291,13 +1338,33 @@ $(document).on("click", ".private-conversation-tag", function (e) {
 
     $(e.currentTarget).remove();
 
-    // Search again if we have text in #inputtext
-    searchPrivateModal($("#inputtext").val());
+    // Search again if we have text in #private_inputtext
+    searchPrivateModal($("#private_inputtext").val());
 
     // Disable submit when users input list are empty
     if (!$("#createPrivateConversationForm").find(".private-conversation-tag").length) {
         $("#createPrivateConversationForm").find(":submit").addClass("disabled").removeClass("positive");
-        $("#inputtext").attr("placeholder", "Find or start a conversation");
+        $("#private_inputtext").attr("placeholder", "Find or start a conversation");
+    }
+});
+
+// Click on added users in input when inviting to private room
+$(document).on("click", ".invite-users-tag", function (e) {
+    var userId = $(e.currentTarget).data("id");
+
+    var row = $('.row.invite-users-row[data-id="' + userId + '"]');
+    row.attr("data-is-selected", "false");
+    row.show();
+
+    $(e.currentTarget).remove();
+
+    // Search again if we have text in #invite_inputtext
+    searchInviteModal($("#invite_inputtext").val());
+
+    // Disable submit when users input list are empty
+    if (!$("#inviteUsersForm").find(".invite-users-tag").length) {
+        $("#inviteUsersForm").find(":submit").addClass("disabled").removeClass("positive");
+        $("#invite_inputtext").attr("placeholder", "Search by name");
     }
 });
 
@@ -1308,7 +1375,7 @@ myHub.client.usersInRoom = function (result) {
 
     $.each(result, function (index, value) {
         var divToAppend = '<div class="row MembersInRoom-row" data-id="' + value.Id + '" data-name="' + value.Name + '">';
-        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '">' + value.Name;
+        divToAppend += '<div class="eight wide column"><img class="gravatarMembersList" src="' + GravatarUrl + value.EmailHash + "?s=20&" + GravatarOptions + '" alt="avatar">' + value.Name;
 
         if (globalUserName === value.Name) {
             divToAppend += "(you)";
@@ -1345,11 +1412,13 @@ myHub.client.roomInfo = function (result, createdOn) {
 
             // Add invite button to non public rooms
             if (!result.IsPublic && !result.IsPrivateConversation) {
-                var inviteButton =  '<div class="ui two column centered grid">\
+                var inviteButton = '<div class="ui two column centered grid" id="inviteButtonContainer">\
                     <button class="primary ui button" id="inviteButton" onclick="inviteUsers();">Invite users</button>\
                     </div>';
                 
                 $(".ui.styled.accordion").append(inviteButton);
+            } else {
+                $("#inviteButtonContainer").remove();
             }
         } else {
             $("#selecttheme").val(themeInDatabase);

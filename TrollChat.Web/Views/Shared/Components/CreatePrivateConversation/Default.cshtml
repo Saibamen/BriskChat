@@ -9,8 +9,8 @@
         <div class="ui form">
             <div class="fields">
                 <div class="fourteen wide field">
-                    <div class="inputholder" id="inputholder">
-                        @Html.TextBoxFor(m => m.Name, new { id = "inputtext", placeholder = "Find or start a conversation", autocomplete = "off" })
+                    <div class="inputholder" id="private_inputholder">
+                        @Html.TextBoxFor(m => m.Name, new { id = "private_inputtext", placeholder = "Find or start a conversation", autocomplete = "off", @class = "inputtext" })
                     </div>
                 </div>
                 <div class="two wide field">

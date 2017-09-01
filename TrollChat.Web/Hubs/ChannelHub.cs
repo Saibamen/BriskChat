@@ -175,7 +175,7 @@ namespace TrollChat.Web.Hubs
                 }
                 else
                 {
-                    var newUserRoom = addNewUserRoom.Invoke(generalRoom.Id, Context.UserId());
+                    var newUserRoom = addNewUserRoom.Invoke(generalRoom.Id, new List<Guid> { Context.UserId() });
 
                     if (!newUserRoom)
                     {
@@ -248,7 +248,7 @@ namespace TrollChat.Web.Hubs
 
             if (userRoom == null)
             {
-                var newUserRoom = addNewUserRoom.Invoke(new Guid(roomId), Context.UserId());
+                var newUserRoom = addNewUserRoom.Invoke(new Guid(roomId), new List<Guid> { Context.UserId() });
 
                 if (!newUserRoom)
                 {
@@ -481,17 +481,17 @@ namespace TrollChat.Web.Hubs
             MiniProfiler.Stop();
         }
 
-        public void CreateNewPrivateConversation(List<Guid> model)
+        public void CreateNewPrivateConversation(List<Guid> users)
         {
             MiniProfiler.Start("CreateNewPrivateConversation");
             // If list has duplicates - abort!
-            if (model.Count <= 0 || model.Distinct().Count() != model.Count)
+            if (users.Count <= 0 || users.Distinct().Count() != users.Count)
             {
                 MiniProfiler.Stop();
                 return;
             }
 
-            var room = addNewPrivateConversation.Invoke(Context.UserId(), model);
+            var room = addNewPrivateConversation.Invoke(Context.UserId(), users);
 
             if (room == null)
             {
@@ -501,6 +501,28 @@ namespace TrollChat.Web.Hubs
 
             var tempName = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), room.Name);
             Clients.Caller.privateConversationAddedAction(new PrivateConversationViewModel { Id = room.Id, Name = tempName });
+            MiniProfiler.Stop();
+        }
+
+        public void InviteUsersToPrivateRoom(string roomId, List<Guid> users)
+        {
+            MiniProfiler.Start("InviteUsersToPrivateRoom");
+            // If list has duplicates - abort!
+            if (users.Count <= 0 || users.Distinct().Count() != users.Count)
+            {
+                MiniProfiler.Stop();
+                return;
+            }
+
+            var added = addNewUserRoom.Invoke(new Guid(roomId), users, true);
+
+            if (!added)
+            {
+                MiniProfiler.Stop();
+                return;
+            }
+
+            Clients.Caller.inviteUsersAddedAction();
             MiniProfiler.Stop();
         }
 

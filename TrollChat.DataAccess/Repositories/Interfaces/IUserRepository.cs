@@ -11,7 +11,5 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
         IQueryable<UserRoom> GetPrivateConversations(Guid userId);
 
         IQueryable<UserRoom> GetPrivateConversationsTargets(Guid userId);
-
-        IQueryable<User> GetUsersNotConnectedToRoom(Guid roomId);
     }
 }
