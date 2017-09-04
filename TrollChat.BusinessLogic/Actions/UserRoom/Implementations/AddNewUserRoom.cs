@@ -25,7 +25,6 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
         {
             if (roomId == Guid.Empty || users.Count <= 0 || users.Any(x => x == Guid.Empty) ||
                 // Check for existing userRoom
-                // TODO: Remove user Id from list?
                 userRoomRepository.FindBy(x => x.Room.Id == roomId && users.Any(y => y == x.User.Id)).Count() > 0)
             {
                 return false;
@@ -33,7 +32,6 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
 
             var room = roomRepository.GetById(roomId);
 
-            // TODO: Implement inviting to private rooms
             if (room == null || !room.IsPublic && !invite)
             {
                 return false;

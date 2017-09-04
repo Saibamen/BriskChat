@@ -485,7 +485,7 @@ namespace TrollChat.Web.Hubs
         {
             MiniProfiler.Start("CreateNewPrivateConversation");
             // If list has duplicates - abort!
-            if (users.Count <= 0 || users.Distinct().Count() != users.Count)
+            if (users.Count <= 0 || users.Count > 8 || users.Distinct().Count() != users.Count)
             {
                 MiniProfiler.Stop();
                 return;
