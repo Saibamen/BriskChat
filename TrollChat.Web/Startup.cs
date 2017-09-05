@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -67,12 +66,23 @@ namespace TrollChat.Web
             });
 
             // MiniProfiler
-            services.AddMiniProfiler().AddEntityFramework();
+            services.AddMiniProfiler(options =>
+            {
+                // (Optional) Path to use for profiler URLs, default is /mini-profiler-resources
+                options.RouteBasePath = "/profiler";
+
+                // (Optional) Control which SQL formatter to use, InlineFormatter is the default
+                options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
+
+                // (Optional) Control storage
+                // (default is 30 minutes in MemoryCacheStorage)
+                ((MemoryCacheStorage)options.Storage).CacheDuration = TimeSpan.FromMinutes(30);
+            }).AddEntityFramework();
             services.AddMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper, IMemoryCache cache)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IMigrationHelper migrationHelper)
         {
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
             var logLevelParsed = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
@@ -87,17 +97,7 @@ namespace TrollChat.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseMiniProfiler(options =>
-                {
-                    // Path to use for profiler URLs
-                    options.RouteBasePath = "~/profiler";
-
-                    // Control which SQL formatter to use
-                    options.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
-
-                    // Control storage
-                    options.Storage = new MemoryCacheStorage(cache, TimeSpan.FromMinutes(60));
-                });
+                app.UseMiniProfiler();
             }
             else
             {

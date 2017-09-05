@@ -125,13 +125,13 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("GetPreviousMessages");
+            MiniProfiler.Current.Step("GetPreviousMessages");
 
             var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), new Guid(lastMessageId), MessagesToLoad);
 
             if (messagesFromDb == null || messagesFromDb.Count <= 0)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -146,12 +146,12 @@ namespace TrollChat.Web.Hubs
             });
 
             Clients.Caller.parseOffsetMessages(viewList);
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetRooms()
         {
-            MiniProfiler.Start("GetRooms");
+            MiniProfiler.Current.Step("GetRooms");
             var roomList = getUserRooms.Invoke(Context.UserId(), false);
 
             if (roomList.Count <= 0)
@@ -179,7 +179,7 @@ namespace TrollChat.Web.Hubs
 
                     if (!newUserRoom)
                     {
-                        MiniProfiler.Stop();
+                        MiniProfiler.Current.Stop();
                         return;
                     }
 
@@ -189,12 +189,12 @@ namespace TrollChat.Web.Hubs
 
             Clients.Caller.loadRooms(roomList);
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetDomainPublicAndUserRooms()
         {
-            MiniProfiler.Start("GetDomainPublicAndUserRooms");
+            MiniProfiler.Current.Step("GetDomainPublicAndUserRooms");
             var roomList = getDomainPublicAndUserRooms.Invoke(Context.DomainId(), Context.UserId());
 
             if (roomList.Count > 0)
@@ -212,12 +212,12 @@ namespace TrollChat.Web.Hubs
                 Clients.Caller.loadDomainPublicAndUserRooms(viewList);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetPrivateConversations()
         {
-            MiniProfiler.Start("GetPrivateConversations");
+            MiniProfiler.Current.Step("GetPrivateConversations");
             var roomList = getUserPrivateConversations.Invoke(Context.UserId());
 
             if (roomList != null)
@@ -231,7 +231,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Caller.loadPrivateConversations(viewList);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public async Task JoinRoom(string roomId)
@@ -241,7 +241,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("JoinRoom");
+            MiniProfiler.Current.Step("JoinRoom");
 
             // Check if user has access to room (have userRoom in DB) and add if not (only on public rooms)
             var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
@@ -252,7 +252,7 @@ namespace TrollChat.Web.Hubs
 
                 if (!newUserRoom)
                 {
-                    MiniProfiler.Stop();
+                    MiniProfiler.Current.Stop();
                     return;
                 }
             }
@@ -284,7 +284,7 @@ namespace TrollChat.Web.Hubs
 
             // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public async Task LeaveRoom(string roomId)
@@ -294,7 +294,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("LeaveRoom");
+            MiniProfiler.Current.Step("LeaveRoom");
 
             await Groups.Remove(Context.ConnectionId, roomId);
 
@@ -303,7 +303,7 @@ namespace TrollChat.Web.Hubs
 
             // DEBUG
             Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void SendMessage(string roomId, string message)
@@ -320,7 +320,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("SendMessage");
+            MiniProfiler.Current.Step("SendMessage");
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
@@ -330,7 +330,7 @@ namespace TrollChat.Web.Hubs
 
             if (userRoomModel == null)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -348,7 +348,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastMessage(Context.UserName(), Context.UserId(), dbMessageId, message, chatTime, GetMd5Hash(messageModel.UserRoom.User.Email));
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void CreateNewChannel(CreateNewRoomViewModel model)
@@ -358,7 +358,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("CreateNewChannel");
+            MiniProfiler.Current.Step("CreateNewChannel");
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
             var room = addNewRoom.Invoke(roomModel, Context.UserId(), Context.DomainId());
@@ -368,7 +368,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public static bool IsConnected(string connectionid, Guid userid)
@@ -399,7 +399,7 @@ namespace TrollChat.Web.Hubs
 
         public void GetUsersFromDomain()
         {
-            MiniProfiler.Start("GetUsersFromDomain");
+            MiniProfiler.Current.Step("GetUsersFromDomain");
             var userList = getUsersByDomainId.Invoke(Context.DomainId());
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
@@ -416,12 +416,12 @@ namespace TrollChat.Web.Hubs
                 Clients.Caller.privateConversationsUsersLoadedAction(viewList);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetNotInvitedUsers(string roomId)
         {
-            MiniProfiler.Start("GetNotInvitedUsers");
+            MiniProfiler.Current.Step("GetNotInvitedUsers");
             var userList = getNotInvitedUsers.Invoke(Context.DomainId(), new Guid(roomId));
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
@@ -438,7 +438,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Caller.notInvitedUsersLoadedAction(viewList);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetRoomInformation(string roomId)
@@ -448,14 +448,14 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("GetRoomInformation");
+            MiniProfiler.Current.Step("GetRoomInformation");
 
             var roomInformation = getRoomInformation.Invoke(new Guid(roomId));
             var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roomInformation);
             var createdOn = informationR.CreatedOn.ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture);
 
             Clients.Caller.RoomInfo(informationR, createdOn);
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void GetRoomUsers(string roomId)
@@ -465,7 +465,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("GetRoomUsers");
+            MiniProfiler.Current.Step("GetRoomUsers");
 
             var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
 
@@ -478,16 +478,16 @@ namespace TrollChat.Web.Hubs
             });
 
             Clients.Caller.UsersInRoom(userList);
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void CreateNewPrivateConversation(List<Guid> users)
         {
-            MiniProfiler.Start("CreateNewPrivateConversation");
+            MiniProfiler.Current.Step("CreateNewPrivateConversation");
             // If list has duplicates - abort!
             if (users.Count <= 0 || users.Count > 8 || users.Distinct().Count() != users.Count)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -495,22 +495,22 @@ namespace TrollChat.Web.Hubs
 
             if (room == null)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
             var tempName = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), room.Name);
             Clients.Caller.privateConversationAddedAction(new PrivateConversationViewModel { Id = room.Id, Name = tempName });
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void InviteUsersToPrivateRoom(string roomId, List<Guid> users)
         {
-            MiniProfiler.Start("InviteUsersToPrivateRoom");
+            MiniProfiler.Current.Step("InviteUsersToPrivateRoom");
             // If list has duplicates - abort!
             if (users.Count <= 0 || users.Distinct().Count() != users.Count)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -518,12 +518,12 @@ namespace TrollChat.Web.Hubs
 
             if (!added)
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
             Clients.Caller.inviteUsersAddedAction();
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void EditMessage(string roomId, string messageId, string messageText)
@@ -540,13 +540,13 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("EditMessage");
+            MiniProfiler.Current.Step("EditMessage");
 
             var messageFromDb = getMessageById.Invoke(new Guid(messageId));
 
             if (messageFromDb == null || messageFromDb.UserRoom.User.Id != Context.UserId())
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -557,7 +557,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastEditedMessage(messageId, messageText);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void EditRoomCustomization(string roomId, int roomCustomization)
@@ -567,7 +567,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("EditRoomCustomization");
+            MiniProfiler.Current.Step("EditRoomCustomization");
 
             var edited = editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
 
@@ -576,7 +576,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastEditedRoomCustomization(roomCustomization);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void EditRoomName(string roomId, string roomName)
@@ -586,7 +586,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("EditRoomName");
+            MiniProfiler.Current.Step("EditRoomName");
 
             var edited = editRoomName.Invoke(new Guid(roomId), roomName);
 
@@ -596,7 +596,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastEditedActiveRoomName(roomName);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void EditRoomDescription(string roomId, string roomDescription)
@@ -606,7 +606,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("EditRoomDescription");
+            MiniProfiler.Current.Step("EditRoomDescription");
 
             var edited = editRoomDescription.Invoke(new Guid(roomId), roomDescription);
 
@@ -615,7 +615,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastEditedRoomDescription(roomDescription);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void EditRoomTopic(string roomId, string roomTopic)
@@ -625,7 +625,7 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("EditRoomTopic");
+            MiniProfiler.Current.Step("EditRoomTopic");
 
             var edited = editRoomTopic.Invoke(new Guid(roomId), roomTopic);
 
@@ -634,7 +634,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).broadcastEditedRoomTopic(roomTopic);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
 
         public void DeleteMessage(string roomId, string messageId)
@@ -644,13 +644,13 @@ namespace TrollChat.Web.Hubs
                 return;
             }
 
-            MiniProfiler.Start("DeleteMessage");
+            MiniProfiler.Current.Step("DeleteMessage");
 
             var message = getMessageById.Invoke(new Guid(messageId));
 
             if (message == null || message.UserRoom.User.Id != Context.UserId())
             {
-                MiniProfiler.Stop();
+                MiniProfiler.Current.Stop();
                 return;
             }
 
@@ -661,7 +661,7 @@ namespace TrollChat.Web.Hubs
                 Clients.Group(roomId).deleteMessage(messageId);
             }
 
-            MiniProfiler.Stop();
+            MiniProfiler.Current.Stop();
         }
     }
 }
