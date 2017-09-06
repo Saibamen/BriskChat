@@ -8,11 +8,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.BusinessLogic.Actions.Email.Interfaces;
+using TrollChat.BusinessLogic.Actions.Role.Interfaces;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
+using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
 using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.Web.Authorization;
+using TrollChat.Web.Constants;
 using TrollChat.Web.Helpers;
 using TrollChat.Web.Models.Auth;
 
@@ -33,6 +36,8 @@ namespace TrollChat.Web.Controllers
         private readonly ICheckDomainExistsByName checkDomainExistsByName;
         private readonly IAddNewDomain addNewDomain;
         private readonly ISetDomainOwner setDomainOwner;
+        private readonly IAddUserToDomain addUserToDomain;
+        private readonly IGetRoleByName getRoleByName;
 
         public AuthController(IAuthenticateUser authenticateUser,
             IAddNewUser addNewUser,
@@ -46,7 +51,9 @@ namespace TrollChat.Web.Controllers
             IAddNewEmailMessage addNewEmailMessage,
             ICheckDomainExistsByName checkDomainExistsByName,
             IAddNewDomain addNewDomain,
-            ISetDomainOwner setDomainOwner)
+            ISetDomainOwner setDomainOwner,
+            IAddUserToDomain addUserToDomain,
+            IGetRoleByName getRoleByName)
         {
             this.authenticateUser = authenticateUser;
             this.addNewUser = addNewUser;
@@ -60,6 +67,8 @@ namespace TrollChat.Web.Controllers
             this.checkDomainExistsByName = checkDomainExistsByName;
             this.addNewDomain = addNewDomain;
             this.setDomainOwner = setDomainOwner;
+            this.addUserToDomain = addUserToDomain;
+            this.getRoleByName = getRoleByName;
         }
 
         [AllowAnonymous]
@@ -127,6 +136,10 @@ namespace TrollChat.Web.Controllers
             addNewEmailMessage.Invoke(mappedMessage);
 
             setDomainOwner.Invoke(userAddAction.Id, domain);
+
+            // Add user to UserDomains table
+            var role = getRoleByName.Invoke(RoleNamesConstants.Owner);
+            addUserToDomain.Invoke(userAddAction.Id, domain, role.Id);
 
             Alert.Success("Confirmation email has been sent to your email address");
 

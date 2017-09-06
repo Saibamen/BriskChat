@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
+using TrollChat.BusinessLogic.Actions.Role.Interfaces;
+using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
 using TrollChat.BusinessLogic.Configuration.Interfaces;
 
 namespace TrollChat.BusinessLogic.Configuration.Implementations
@@ -13,29 +17,100 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
         private readonly IAddNewDomain addNewDomain;
         private readonly IGetDomainByName getDomainByName;
         private readonly ISetDomainOwner setDomainOwner;
+        private readonly IAddNewRole addNewRole;
+        private readonly IGetRoleByName getRoleByName;
+        private readonly IAddUserToDomain addUserToDomain;
 
         public DbContextSeeder(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
             IAddNewDomain addNewDomain,
             IGetDomainByName getDomainByName,
-            ISetDomainOwner setDomainOwner)
+            ISetDomainOwner setDomainOwner,
+            IAddNewRole addNewRole,
+            IGetRoleByName getRoleByName,
+            IAddUserToDomain addUserToDomain)
         {
             this.addNewUser = addNewUser;
             this.addNewDomain = addNewDomain;
             this.confirmUserEmailByToken = confirmUserEmailByToken;
             this.getDomainByName = getDomainByName;
             this.setDomainOwner = setDomainOwner;
+            this.addNewRole = addNewRole;
+            this.getRoleByName = getRoleByName;
+            this.addUserToDomain = addUserToDomain;
         }
 
         public void Seed()
         {
+            var rolesIsSeeded = SeedRoles(addNewRole);
             SeedDomains(addNewDomain);
             SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName, setDomainOwner);
         }
 
-        private readonly string[] users = { "owner", "user", "user1" };
+        private readonly List<RoleModel> roles = new List<RoleModel>
+        {
+            new RoleModel
+            {
+                Name = "Owner",
+                Description = "Creator of Domain or Room."
+            },
+            new RoleModel
+            {
+                Name = "Admin",
+                Description = "Administrator"
+            },
+            new RoleModel
+            {
+                Name = "User",
+                Description = "User"
+            },
+        };
 
+        private readonly string[] users = { "owner", "user", "user1" };
         private readonly string[] domains = { "jan", "roland" };
+
+        public bool SeedRoles(IAddNewRole addNewRole)
+        {
+            var rolesInDb = 0;
+
+            foreach (var role in roles)
+            {
+                var roleInDb = getRoleByName.Invoke(role.Name);
+
+                if (roleInDb == null || roleInDb.Id == Guid.Empty)
+                {
+                    var roleId = addNewRole.Invoke(role);
+
+                    if (roleId == Guid.Empty)
+                    {
+                        continue;
+                    }
+
+                    role.Id = roleId;
+                    rolesInDb++;
+                }
+                else
+                {
+                    role.Id = roleInDb.Id;
+                    rolesInDb++;
+                }
+            }
+
+            return roles.Count == rolesInDb;
+        }
+
+        public void SeedDomains(IAddNewDomain addNewDomain)
+        {
+            foreach (var domain in domains)
+            {
+                var model = new DomainModel
+                {
+                    Name = domain
+                };
+
+                addNewDomain.Invoke(model);
+            }
+        }
 
         public void SeedUsers(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
@@ -53,33 +128,28 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
                     Domain = domain
                 };
 
-                var dbuser = addNewUser.Invoke(model);
+                var dbUser = addNewUser.Invoke(model);
 
-                if (dbuser != null)
+                if (dbUser == null)
                 {
-                    var token = dbuser.Tokens.FirstOrDefault().SecretToken;
-                    confirmUserEmailByToken.Invoke(token);
-
-                    if (user == "owner")
-                    {
-                        setDomainOwner.Invoke(dbuser.Id, domain.Id);
-                        var domain2 = getDomainByName.Invoke("roland");
-                        setDomainOwner.Invoke(dbuser.Id, domain2.Id);
-                    }
+                    continue;
                 }
-            }
-        }
 
-        public void SeedDomains(IAddNewDomain addNewDomain)
-        {
-            foreach (var domain in domains)
-            {
-                var model = new DomainModel
+                var token = dbUser.Tokens.FirstOrDefault().SecretToken;
+                confirmUserEmailByToken.Invoke(token);
+
+                var role = roles.Find(x => x.Name == "User");
+
+                if (user != "owner")
                 {
-                    Name = domain
-                };
+                    setDomainOwner.Invoke(dbUser.Id, domain.Id);
+                    var domain2 = getDomainByName.Invoke("roland");
+                    setDomainOwner.Invoke(dbUser.Id, domain2.Id);
 
-                addNewDomain.Invoke(model);
+                    role = roles.Find(x => x.Name == "Owner");
+                }
+
+                addUserToDomain.Invoke(dbUser.Id, domain.Id, role.Id);
             }
         }
     }

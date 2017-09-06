@@ -86,9 +86,10 @@ function addActionsToMessages() {
 $(window).resize(function () {
     // #chat_messages
     var chatAdditionalHeight = 117;
+    var messages = $(".ui.message");
 
-    if ($(".ui.message").length) {
-        if (!$(".ui.message").hasClass("hidden")) {
+    if (messages.length) {
+        if (!messages.hasClass("hidden")) {
             chatAdditionalHeight += 51;
         }
     }
@@ -180,18 +181,18 @@ $(".menu").on("click", ".menu > a.item", function (e) {
 });
 
 function addEditContainer(id, oldMessageText, messageIcon) {
-    var divToAppend = '<div class="ts-message message highlight" id="message_edit_container">\
+    return '<div class="ts-message message highlight" id="message_edit_container">\
             <div class="message_gutter">\
                 <div class="message_icon">\
-                    '+ messageIcon + '\
+                    ' + messageIcon + '\
                 </div>\
             </div>\
-            <form id="message_edit_form" data-id="'+ id + '">\
+            <form id="message_edit_form" data-id="' + id + '">\
                 <button class="btn_unstyle emo_menu" aria-label="Emoji menu" type="button">\
                     <i class="meh icon"></i>\
                 </button>\
                 <div id="msg_text" class="message_input ql-container focus">\
-                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>'+ oldMessageText + '</p></div>\
+                    <div class="ql-editor" role="textbox" tabindex="0" aria-multiline="true" aria-haspopup="true" spellcheck="true" contenteditable="true"><p>' + oldMessageText + '</p></div>\
                     <div class="ql-clipboard" tabindex="-1" aria-hidden="true" role="presentation" spellcheck="true" contenteditable="true"></div>\
                 </div>\
                 <a id="cancel_edit" role="button" class="ui button mini">Cancel</a>\
@@ -199,8 +200,6 @@ function addEditContainer(id, oldMessageText, messageIcon) {
                 <span id="message_editing_info" class="mini" style="display: none;">Finish editing this message first! Or press <strong>escape</strong> if youve changed your mind.</span>\
             </form>\
         </div>';
-
-    return divToAppend;
 }
 
 // Editing message
@@ -220,10 +219,11 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
 
     // Focus on textbox
-    $(".ql-editor").focus();
+    var ql_editor = $(".ql-editor");
+    ql_editor.focus();
 
     var range = document.createRange();
-    range.selectNodeContents($(".ql-editor").get(0));
+    range.selectNodeContents(ql_editor.get(0));
     range.collapse(false);
     var sel = window.getSelection();
     sel.removeAllRanges();
@@ -442,9 +442,7 @@ $("#chat_messages").scroll(function () {
 });
 
 function getMessageHtml(userName, userId, messageId, messageText, timestamp, emailHash) {
-    var messageHtml = '<div class="ts-message target" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(' + GravatarUrl + emailHash + '?s=36&' + GravatarOptions + ')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
-
-    return messageHtml;
+    return '<div class="ts-message target" data-id="' + messageId + '"><div class="message_gutter"><div class="message_icon"><a href="/team/malgosia" target="/team/malgosia" class="member_image" data-member-id="' + userId + '" style="background-image: url(' + GravatarUrl + emailHash + '?s=36&' + GravatarOptions + ')" aria-hidden="true" tabindex="-1"> </a></div></div><div class="message_content"><div class="message_content_header"><a href="#" class="message_sender">' + userName + '</a><a href="#" class="timestamp">' + timestamp + '</a></div><span class="message_body">' + Autolinker.link(parseEmoticons(messageText));
 }
 
 myHub.client.broadcastMessage = function (userName, userId, messageId, messageText, timestamp, emailHash) {
@@ -460,11 +458,12 @@ myHub.client.broadcastMessage = function (userName, userId, messageId, messageTe
         messageHtml += "</span></div></div>";
     }
 
-    $("#chat_messages").append(messageHtml);
+    var chat_messages = $("#chat_messages");
+    chat_messages.append(messageHtml);
 
     // Scroll #chat_messages
-    $("#chat_messages").clearQueue();
-    $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+    chat_messages.clearQueue();
+    chat_messages.animate({ scrollTop: chat_messages[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
 };
@@ -572,9 +571,10 @@ myHub.client.parseLastMessages = function (result) {
     });
 
     // Scroll #chat_messages
+    var chat_messages = $("#chat_messages");
     $(".ui.main.container").css("display", "block");
-    $("#chat_messages").clearQueue();
-    $("#chat_messages").animate({ scrollTop: $("#chat_messages")[0].scrollHeight }, "slow");
+    chat_messages.clearQueue();
+    chat_messages.animate({ scrollTop: chat_messages[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
 };
@@ -624,8 +624,9 @@ myHub.client.privateConversationAddedAction = function (value) {
     // TODO: Status icon
     var divToAppend = '<a class="item" data-id="' + value.Id + '"><i class="lock icon left"></i>' + value.Name + "</a>";
 
-    $("#privateConversationsMenu").append(divToAppend);
-    changeRoom($("#privateConversationsMenu").children().last());
+    var menu = $("#privateConversationsMenu");
+    menu.append(divToAppend);
+    changeRoom(menu.children().last());
 };
 
 myHub.client.inviteUsersAddedAction = function () {
@@ -697,7 +698,7 @@ myHub.client.updateRoomUsersCount = function (roomUsersCount) {
  */
 $.connection.hub.start()
     .done(function () {
-        printLog("Connected to Hub. Getting rooms");
+        printLog("Connected to Hub. Connection ID: "+ $.connection.hub.id +". Getting rooms");
         // Getting rooms
         var getRooms = myHub.server.getRooms();
         var getPrivateConversations = myHub.server.getPrivateConversations();
@@ -814,9 +815,10 @@ $("#createNewPrivateConversation, #directMessagesTitle").click(function () {
         return;
     }
 
-    $("#createPrivateConversationForm")[0].reset();
+    var form = $("#createPrivateConversationForm");
+    form[0].reset();
     // Remove all added tags
-    $("#createPrivateConversationForm").find(".private-conversation-tag").remove();
+    form.find(".private-conversation-tag").remove();
 
     var domainUsers = myHub.server.getUsersFromDomain();
     var thisModal = $(".ui.basic.create-private-conversation.modal");
@@ -839,9 +841,10 @@ function inviteUsers() {
         return;
     }
 
-    $("#inviteUsersForm")[0].reset();
+    var form = $("#inviteUsersForm");
+    form[0].reset();
     // Remove all added tags
-    $("#inviteUsersForm").find(".invite-users-tag").remove();
+    form.find(".invite-users-tag").remove();
 
     var notInvitedUsers = myHub.server.getNotInvitedUsers(currentRoomId);
     var thisModal = $(".ui.basic.invite-users.modal");
@@ -998,9 +1001,10 @@ $("#inviteUsersForm").submit(function (e) {
 });
 
 function updateChannelsCount(diff) {
-    var number = $("#channelsCount").text().match(/\d+/);
+    var counter = $("#channelsCount");
+    var number = counter.text().match(/\d+/);
     number = parseInt(number) + diff;
-    $("#channelsCount").text("CHANNELS (" + number + ")");
+    counter.text("CHANNELS (" + number + ")");
 }
 
 function serializeForm(form) {
@@ -1015,7 +1019,8 @@ function serializeForm(form) {
 }
 
 function channelSettings() {
-    $("#Rightbar").html("");
+    var rightbar = $("#Rightbar");
+    rightbar.html("");
 
     // TODO: Implement deleting room
     $("#rightbar_Title").html("Channel Settings");
@@ -1082,7 +1087,7 @@ function channelSettings() {
                             </div>\
                         </div>';
 
-    $("#Rightbar").append(divToAppend);
+    rightbar.append(divToAppend);
 
     var getRoomInformation = myHub.server.getRoomInformation(currentRoomId);
 
@@ -1093,14 +1098,16 @@ function channelSettings() {
 }
 
 function channelDetails() {
-    $("#Rightbar").html("");
+    var rightbar = $("#Rightbar");
+    rightbar.html("");
 
+    // todo use this?
     if ($("#right_bar_save_cancel_buttons").length) {
         $("#right_bar_save_cancel_buttons").remove();
     }
 
     $("#rightbar_Title").html("Channel Details");
-    $("#Rightbar").append('<div class="ui styled accordion">' +
+    rightbar.append('<div class="ui styled accordion">' +
                                 '<div class="active content">' +
                                     '<div class="accordion">' +
                                         '<div class="title"><i class="dropdown icon"></i><i class="info icon"></i>About</div>' +
@@ -1160,7 +1167,7 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
     // Room name in header
     $("#channel_title").contents().last().replaceWith(roomNameInDatabase);
     // Active room name in sidebar
-    $("#channelsMenu > a.item.active").contents().last().replaceWith(roomNameInDatabase);
+    $("#channelsMenu").find("> a.item.active").contents().last().replaceWith(roomNameInDatabase);
     // Room name in #msg_input
     $("#msg_input").attr("placeholder", "Message " + roomNameInDatabase);
 
@@ -1173,10 +1180,11 @@ myHub.client.broadcastEditedActiveRoomName = function (value) {
 
 // For all clients connected to Domain
 myHub.client.broadcastDomainEditedRoomName = function (roomId, roomName) {
+    var channelsMenu = $("#channelsMenu");
     // Don't search DOM if changed room is our active room
-    if ($("#channelsMenu > a.item.active").data("id") !== roomId) {
+    if (channelsMenu.find("> a.item.active").data("id") !== roomId) {
         // Room name in sidebar
-        $("#channelsMenu").find("a[data-id='" + roomId + "']").contents().last().replaceWith(roomName);
+        channelsMenu.find("a[data-id='" + roomId + "']").contents().last().replaceWith(roomName);
     }
 };
 
@@ -1338,13 +1346,15 @@ $(document).on("click", ".private-conversation-tag", function (e) {
 
     $(e.currentTarget).remove();
 
+    var input = $("#private_inputtext");
+    var form = $("#createPrivateConversationForm");
     // Search again if we have text in #private_inputtext
-    searchPrivateModal($("#private_inputtext").val());
+    searchPrivateModal(input.val());
 
     // Disable submit when users input list are empty
-    if (!$("#createPrivateConversationForm").find(".private-conversation-tag").length) {
-        $("#createPrivateConversationForm").find(":submit").addClass("disabled").removeClass("positive");
-        $("#private_inputtext").attr("placeholder", "Find or start a conversation");
+    if (!form.find(".private-conversation-tag").length) {
+        form.find(":submit").addClass("disabled").removeClass("positive");
+        input.attr("placeholder", "Find or start a conversation");
     }
 });
 
@@ -1358,13 +1368,15 @@ $(document).on("click", ".invite-users-tag", function (e) {
 
     $(e.currentTarget).remove();
 
+    var input = $("#invite_inputtext");
+    var form = $("#inviteUsersForm");
     // Search again if we have text in #invite_inputtext
-    searchInviteModal($("#invite_inputtext").val());
+    searchInviteModal(input.val());
 
     // Disable submit when users input list are empty
-    if (!$("#inviteUsersForm").find(".invite-users-tag").length) {
-        $("#inviteUsersForm").find(":submit").addClass("disabled").removeClass("positive");
-        $("#invite_inputtext").attr("placeholder", "Search by name");
+    if (!form.find(".invite-users-tag").length) {
+        form.find(":submit").addClass("disabled").removeClass("positive");
+        input.attr("placeholder", "Search by name");
     }
 });
 
@@ -1407,8 +1419,7 @@ myHub.client.roomInfo = function (result, createdOn) {
         if ($("#rightbar_Title").html() === "Channel Details") {
             var divToAppend = "<div>Created by <strong>" + result.OwnerName + "</strong> on " + createdOn + '<h5>Description</h5><span id="channelDetailsDescription">' + result.Description + "</span></div>";
 
-            $("#aboutInfo").empty();
-            $("#aboutInfo").append(divToAppend);
+            $("#aboutInfo").empty().append(divToAppend);
 
             // Add invite button to non public rooms
             if (!result.IsPublic && !result.IsPrivateConversation) {
@@ -1445,7 +1456,7 @@ myHub.client.roomInfo = function (result, createdOn) {
     var inputPlaceholder;
 
     if (isCurrentRoomPrivateConversation) {
-        nameArray = roomNameInDatabase.split(", ");
+        var nameArray = roomNameInDatabase.split(", ");
         inputPlaceholder = roomNameInDatabase;
 
         // Remove current userName
