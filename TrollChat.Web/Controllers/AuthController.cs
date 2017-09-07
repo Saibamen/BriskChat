@@ -137,8 +137,8 @@ namespace TrollChat.Web.Controllers
 
             setDomainOwner.Invoke(userAddAction.Id, domain);
 
-            // Add user to UserDomains table
             var role = getRoleByName.Invoke(RoleNamesConstants.Owner);
+            // Add user to UserDomains table
             addUserToDomain.Invoke(userAddAction.Id, domain, role.Id);
 
             Alert.Success("Confirmation email has been sent to your email address");
@@ -153,6 +153,7 @@ namespace TrollChat.Web.Controllers
             if (string.IsNullOrEmpty(domainName) || !checkDomainExistsByName.Invoke(domainName))
             {
                 Alert.Warning("Domain not found");
+
                 return RedirectToAction("ChooseDomain", "Auth");
             }
 
@@ -238,6 +239,7 @@ namespace TrollChat.Web.Controllers
             }
 
             Alert.Success("Email confirmed");
+
             return RedirectToAction("ChooseDomain", "Auth");
         }
 
@@ -245,13 +247,14 @@ namespace TrollChat.Web.Controllers
         [HttpGet("{domainName}/resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(string domainName)
         {
-            if (!checkDomainExistsByName.Invoke(domainName))
+            if (checkDomainExistsByName.Invoke(domainName))
             {
-                Alert.Warning("Choose existing domain");
-                return RedirectToAction("ChooseDomain", "Auth");
+                return View();
             }
 
-            return View();
+            Alert.Warning("Choose existing domain");
+
+            return RedirectToAction("ChooseDomain", "Auth");
         }
 
         [AllowAnonymous]
@@ -298,13 +301,14 @@ namespace TrollChat.Web.Controllers
         [HttpGet("{domainName}/resetpassword")]
         public IActionResult ResetPasswordInitiation(string domainName)
         {
-            if (!checkDomainExistsByName.Invoke(domainName))
+            if (checkDomainExistsByName.Invoke(domainName))
             {
-                Alert.Warning("Choose existing domain");
-                return RedirectToAction("ChooseDomain", "Auth");
+                return View();
             }
 
-            return View();
+            Alert.Warning("Choose existing domain");
+
+            return RedirectToAction("ChooseDomain", "Auth");
         }
 
         [AllowAnonymous]

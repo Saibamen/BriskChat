@@ -962,8 +962,8 @@ $("#createPrivateConversationForm").submit(function (e) {
             });
 
             if (matchingNames === usersNameList.length) {
-                // TODO: Uncomment if bug with adding priv conv in backend is fixed
-                //searchedPriv = $(val);
+                // TODO: Bug with adding priv conv in backend :(
+                searchedPriv = $(val);
 
                 return false;
             }
