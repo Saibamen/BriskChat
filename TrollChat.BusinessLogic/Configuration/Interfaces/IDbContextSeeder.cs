@@ -4,6 +4,6 @@ namespace TrollChat.BusinessLogic.Configuration.Interfaces
 {
     public interface IDbContextSeeder : IAction
     {
-        void Seed();
+        bool Seed();
     }
 }

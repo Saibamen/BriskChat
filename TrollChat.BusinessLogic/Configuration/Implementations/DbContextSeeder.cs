@@ -40,11 +40,19 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
             this.addUserToDomain = addUserToDomain;
         }
 
-        public void Seed()
+        public bool Seed()
         {
             var rolesIsSeeded = SeedRoles(addNewRole);
+
+            if (!rolesIsSeeded)
+            {
+                return false;
+            }
+
             SeedDomains(addNewDomain);
             SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName, setDomainOwner);
+
+            return true;
         }
 
         private readonly List<RoleModel> roles = new List<RoleModel>

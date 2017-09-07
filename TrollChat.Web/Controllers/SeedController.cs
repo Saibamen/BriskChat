@@ -18,8 +18,9 @@ namespace TrollChat.Web.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            dbContextSeeder.Seed();
-            return Json("Database seeded");
+            var isSeeded = dbContextSeeder.Seed();
+
+            return Json(isSeeded ? "Database seeded" : "Some errors when seeding database :(");
         }
     }
 }
