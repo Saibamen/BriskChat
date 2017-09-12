@@ -1,0 +1,35 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model TrollChat.Web.Models.Room.CreateNewPrivateConversationViewModel
+
+<div class="ui basic invite-users modal">
+    <h1>Invite others to </h1>
+
+    @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "inviteUsersForm" }))
+    {
+        <div class="ui form">
+            <div class="fields">
+                <div class="fourteen wide field">
+                    <div class="inputholder" id="invite_inputholder">
+                        @Html.TextBoxFor(m => m.Name, new { id = "invite_inputtext", placeholder = "Search by name", autocomplete = "off", @class = "inputtext" })
+                    </div>
+                </div>
+                <div class="two wide field">
+                    <button class="ui button disabled" form="inviteUsersForm" type="submit">
+                        Invite
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <br />
+    <div class="ui grid scrolling content" id="inviteUsersList">
+    </div>
+    <br />
+    <div class="actions" style="text-align: right">
+        <button class="ui cancel button">
+            <i class="remove icon"></i>
+            Cancel
+        </button>
+    </div>
+</div>

@@ -1,0 +1,242 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "_MasterLayout";
+}
+
+@section CSS
+    {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/modals.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/clippy.css" asp-append-version="true" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/chat.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/modals.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/clippy.min.css" asp-append-version="true" />
+    </environment>
+}
+
+@section HeaderScripts
+    {
+    <script type="text/javascript">
+        var startTime = 0;
+
+        function getCallerLine(stack) {
+            // We want our caller's frame. It's index into |stack| depends on the
+            // browser and browser version, so we need to search for the second frame:
+            var frameRe = /:(\d+):(?:\d+)[^\d]*$/;
+            var frame;
+
+            do {
+                frame = stack.shift();
+            } while (!frameRe.exec(frame) && stack.length);
+
+            return frameRe.exec(stack.shift())[1];
+        }
+
+        function printLog(message, time) {
+            var e = new Error();
+
+            // See https://stackoverflow.com/a/27074218/470749
+            if (!e.stack) {
+                try {
+                    // IE requires the Error to actually be thrown or else the
+                    // Error's 'stack' property is undefined.
+                    throw e;
+                } catch (e) {
+                    if (!e.stack) {
+                        //return 0; // IE < 10, likely
+                    }
+                }
+            }
+
+            /*
+             *  1st index is for Firefox, 2nd for Chrome, Edge, IE, Opera
+             */
+            var callerIndexNumber = 1;
+
+            if (e.stack.toString().match(/@@/) == null) {
+                callerIndexNumber = 2;
+            }
+
+            var stack = e.stack.toString().split(/\r\n|\n/);
+
+            var fileName;
+            var callerFunction;
+
+            if (stack[callerIndexNumber]) {
+                var regexJsExtension = /\.js/;
+                var isJsFile = stack[callerIndexNumber].match(regexJsExtension);
+
+                if (isJsFile) {
+                    // Get JavaScript filename
+                    fileName = stack[callerIndexNumber].substring(stack[callerIndexNumber].lastIndexOf("/") + 1, stack[callerIndexNumber].indexOf(".js") + 3);
+                } else {
+                    // tempFileName: ex. User:91:13
+                    var tempFileName = stack[callerIndexNumber].substring(stack[callerIndexNumber].lastIndexOf("/") + 1);
+                    var firstDigit = tempFileName.match(/\d/);
+
+                    // Remove line and column name. Will be added later with getCallerLine()
+                    fileName = tempFileName.substring(0, tempFileName.indexOf(firstDigit) - 1);
+                }
+
+                // Ex. @@ or loadingStop@@
+                if (callerIndexNumber === 1) {
+                    // Firefox
+                    callerFunction = stack[callerIndexNumber].substring(0, stack[callerIndexNumber].indexOf("@@") + 1);
+                } else {
+                    // Chrome, Edge, IE, Opera
+                    callerFunction = stack[callerIndexNumber].substring(stack[callerIndexNumber].indexOf("   at ") + 6, stack[callerIndexNumber].indexOf(" (")) + "@@";
+
+                    // Don't display anon or empty functions
+                    if (callerFunction.match(/anonymous/i) || callerFunction.match(/at @@/)) {
+                        callerFunction = "@@";
+                    }
+                }
+            }
+
+            // Together: loadingStop@chat.js:54
+            var callerString = callerFunction + fileName + ":" + getCallerLine(stack);
+
+            if (!time) {
+                time = new Date();
+            }
+
+            // Add leading zeros to miliseconds
+            var timeString = time.toLocaleTimeString() + "." + ("00" + time.getMilliseconds()).slice(-3);
+
+            console.log(timeString + "  [" + callerString + "]  " + message);
+        }
+
+        (function () {
+            startTime = new Date();
+            printLog("DOM ready", startTime);
+        })();
+    </script>
+}
+
+@section Pre_Body
+    {
+    <div id="client_container">
+        @Html.Partial("_LeftSidebarPartial")
+        @Html.Partial("_RightSidebarPartial")
+
+        <div class="ui active dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+
+        <div class="ui main container" style="display:none;">
+            @if (TempData.ContainsKey("alertMessages"))
+            {
+                @Html.Partial("_AlertsPartial")
+            }
+
+            <header id="chat_header">
+                <div class="channel_header">
+                    <div class="messages_header">
+                        <div class="channel_title">
+                            <div id="channel_name_container" class="channel_name_container">
+                                <span id="channel_name" class="channel_name">
+                                    <button type="button" id="channel_title" class="btn_unstyle"></button>
+                                </span>
+                            </div>
+
+                            <div id="channel_header_info" class="channel_header_info">
+                                <div class="channel_header_info_item">
+                                    <button type="button" id="channel_members_toggle_count" data-content="View member list" data-position="bottom center" class="btn_unstyle ts_tip">
+                                        <i class="users icon"></i>
+                                        <span id="channel_members_toggle_count_count">0</span>
+                                    </button>
+                                </div>
+                                <div class="channel_header_info_item channel_topic_container">
+                                    <span id="topic_inline_edit" class="channel_topic inline_edit">
+                                        <span id="channel_topic_text" class="inline_edit_input" data-placeholder="Add a topic in Channel Settings"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="channel_title_info">
+                            <button type="button" id="channel_settings_toggle" aria-label="Show Channel Settings" data-content="Show Channel Settings" data-position="bottom center" class="btn_unstyle channel_header_icon ts_tip" data-oldest-ts="1487271313.000028">
+                                <i class="setting icon"></i>
+                            </button>
+                            <button type="button" id="channel_details_toggle" aria-label="Show Channel Details" data-content="Show Channel Details" data-position="bottom center" class="channel_header_icon btn_unstyle ts_tip">
+                                <i class="list layout icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex_header">
+                        <div id="search_container">
+                            <form role="search" method="get" action="/search" id="header_search_form" class="search_form no_bottom_margin">
+                                <div class="icon_search_wrapper"><i class="search icon icon_search"></i></div>
+                                <div class="search_input_wrapper">
+                                    <input type="text" id="search_terms" name="q" class="search_input" placeholder="Search" autocomplete="off" maxlength="250" aria-label="Search">
+                                </div>
+                                <div class="search_clear_icon_wrapper"><button type="button" id="search_clear" class="btn_unstyle search_clear_icon" aria-label="Clear search field"><i class="remove circle outline icon ts_icon_times_circle"></i></button></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="client_body">
+                <div id="col_messages">
+                    <div id="chat_input">
+                        <form id="msg_form" data-qa="message_form">
+                            <textarea id="msg_input" aria-label="Message input" data-qa="message_input"></textarea>
+
+                            <button type="button" id="primary_file_button" data-js="primary_file_button" class="btn_unstyle" aria-label="File menu">
+                                <i class="plus icon"></i>
+                            </button>
+
+                            <input type="file" id="file_upload" class="offscreen" multiple="multiple" aria-hidden="true" data-qa="file_upload" tabindex="-1">
+
+                            <button type="button" id="main_emo_menu" class="btn_unstyle emo_menu" aria-label="Emoji menu">
+                                <i class="meh icon"></i>
+                            </button>
+
+                            <div id="msg_input_message"><span></span></div>
+                        </form>
+                    </div>
+
+                    <div id="messages_container">
+                        <div id="chat_messages" tabindex="-1">
+                        </div>
+                    </div>
+                </div>
+            </div>
+}
+
+@section Post_Body
+    {
+</div>
+</div>
+}
+
+@section Scripts
+    {
+    <script src="~/lib/signalr/jquery.signalR.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    <script src="signalr/hubs" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/Autolinker.js/dist/Autolinker.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+
+    <environment names="Development">
+        <script src="~/js/ZergRush.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/clippy.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/chat.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/ZergRush.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/clippy.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+        <script src="~/js/chat.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    </environment>
+}
+
+@await Component.InvokeAsync("CreateRoom")
+@await Component.InvokeAsync("CreatePrivateConversation")
+@await Component.InvokeAsync("BrowseRooms")
+@await Component.InvokeAsync("InviteUsers")
+@Html.Partial("_DeleteModalPartial")
+
+@RenderBody()

@@ -1,0 +1,10 @@
+stages:
+    - build
+
+before_script:
+    - 'dotnet restore TrollChat.sln'
+
+build:
+    stage: build
+    script:
+        - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe "TrollChat.sln"

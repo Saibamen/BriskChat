@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+
+<div class="ui basic browse-channels modal">
+
+    <div class="ui grid" style="margin-bottom: 0.89em;">
+        <div class="eight wide column"><h1>Browse channels</h1></div>
+        <div class="eight wide column"><button id="newChannel" class="ui positive button right floated">New channel</button></div>
+    </div>
+
+    @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "browseChannelsForm" }))
+    {
+        <div class="ui form">
+            <div class="fields">
+                <div class="sixteen wide field">
+                    <div class="ui left icon input">
+                        @Html.TextBox("findChannelName", null, new { placeholder = "Search channels", autocomplete = "off" })
+                        <i class="search icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <strong>Channels you can join</strong>
+    <br /><br /><br />
+    <div class="ui grid scrolling content" id="browseChannelsList">
+    </div>
+
+    <br />
+    <div class="actions">
+        <button class="ui cancel button">
+            <i class="remove icon"></i>
+            Cancel
+        </button>
+    </div>
+</div>

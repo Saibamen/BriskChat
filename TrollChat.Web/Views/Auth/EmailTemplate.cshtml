@@ -1,0 +1,31 @@
+﻿@model TrollChat.Web.Models.Common.EmailBodyModel
+@{
+    Layout = "";
+}
+
+<body>
+    <div>
+        <div>
+            <div class="topic">
+                <div class="pages">
+                    <h1>
+                        T͇̟̺r̼̮͉̘̘͕͜o̭̗̙̻͝l͈͙ͅl̡͖̘ C͍̥h̝a͍t
+                        ̩̰̱
+                    </h1><h5>
+                        C͚̬̹͍o̸m̫͚͎̻ͅm̮̟͔ͅͅu̦̳͔ń̹̜̰̩̜i̛̱c͝a̝̬̬t̷͍̬ò̬̲̮̤̟̙ŗ̹̻̙̦̜͙̞ ̫̮̙f̟̼o̧͔̤̦̼̣͙̜r ̼T͔͇̰͙̺r͖̘̟͕̬̫̲o̖͕̫̭̖͈̟l̜̖͇͍̞̟̝l̥̜̬̲̺͉̀s̢̰̩̺̠̥̙
+                    </h5><br />
+                </div>
+                <div class="mywrapper">
+                    <img class="image" src="http://archer.gamebanana.com/img/ico/sprays/4e68599f1e1ec.png" alt="Logo">
+                    <h4>@Model.TopicFirst<br />@Model.TopicSecond </h4>
+                    <div>
+                        <a class="button1" href="@Model.ButtonValue">@Model.ButtonText</a>
+                    </div>
+                    <h6>
+                        @Model.AdditionalNotesFirst<br />@Model.AdditionalNotesSecond
+                    </h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

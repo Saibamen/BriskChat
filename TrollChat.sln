@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.10
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.Web", "TrollChat.Web\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B514D9D6-3633-42C9-873A-780F5508BA50} = {B514D9D6-3633-42C9-873A-780F5508BA50}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.BusinessLogic.Tests", "TrollChat.BusinessLogic.Tests\TrollChat.BusinessLogic.Tests.csproj", "{DFD35241-AC96-4C32-86E5-7E8E8693209B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.DataAccess", "TrollChat.DataAccess\TrollChat.DataAccess.csproj", "{B514D9D6-3633-42C9-873A-780F5508BA50}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.BusinessLogic", "TrollChat.BusinessLogic\TrollChat.BusinessLogic.csproj", "{ECEBB164-257D-40E8-8E0C-F1E35769582A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF9B4770-3E09-4B00-8A08-BB140109F314}"
+	ProjectSection(SolutionItems) = preProject
+		NuGet.xml = NuGet.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{338B825B-2625-4436-BBCB-639CA72E33EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{338B825B-2625-4436-BBCB-639CA72E33EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{338B825B-2625-4436-BBCB-639CA72E33EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{338B825B-2625-4436-BBCB-639CA72E33EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFD35241-AC96-4C32-86E5-7E8E8693209B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B514D9D6-3633-42C9-873A-780F5508BA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B514D9D6-3633-42C9-873A-780F5508BA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B514D9D6-3633-42C9-873A-780F5508BA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B514D9D6-3633-42C9-873A-780F5508BA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECEBB164-257D-40E8-8E0C-F1E35769582A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

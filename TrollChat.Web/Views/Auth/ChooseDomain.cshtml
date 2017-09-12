@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "_WebLayout";
+    ViewData["Title"] = "Sign in";
+}
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model TrollChat.Web.Models.Auth.ChooseDomainViewModel
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column webressetbox">
+        <h2 class="ui teal header">Choose your TrollChat domain</h2>
+        <br />
+        @using (Html.BeginForm("ChooseDomain", "Auth", FormMethod.Post))
+        {
+            <div class="ui large form">
+                <div class="field">
+                    <div class="ui left icon input">
+                        @Html.TextBoxFor(m => m.DomainName, new { placeholder = "Domain name", required = "required", autofocus = "autofocus" })
+                        <i class="world icon"></i>
+                    </div>
+                    <p>@Html.ValidationMessageFor(m => m.DomainName, "", new { @class = "text-danger" })</p>
+                </div>
+                <div class="field">
+                    <button class="orginalbutton big" type="submit" id="btnLogin">Login -></button>
+                </div>
+            </div>
+        }
+    </div>
+</div>

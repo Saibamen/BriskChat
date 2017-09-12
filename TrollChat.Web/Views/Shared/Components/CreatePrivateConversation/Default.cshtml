@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model TrollChat.Web.Models.Room.CreateNewPrivateConversationViewModel
+
+<div class="ui basic create-private-conversation modal">
+    <h1>Direct Messages</h1>
+
+    @using (Html.BeginForm(FormMethod.Post, false, new { @class = "ui large form", id = "createPrivateConversationForm" }))
+    {
+        <div class="ui form">
+            <div class="fields">
+                <div class="fourteen wide field">
+                    <div class="inputholder" id="private_inputholder">
+                        @Html.TextBoxFor(m => m.Name, new { id = "private_inputtext", placeholder = "Find or start a conversation", autocomplete = "off", @class = "inputtext" })
+                    </div>
+                </div>
+                <div class="two wide field">
+                    <button class="ui button disabled" form="createPrivateConversationForm" type="submit">
+                        Go
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <br />
+    <div class="ui grid scrolling content" id="privateConversationsUserList">
+    </div>
+    <br />
+    <div class="actions" style="text-align: right">
+        <button class="ui cancel button">
+            <i class="remove icon"></i>
+            Cancel
+        </button>
+    </div>
+</div>

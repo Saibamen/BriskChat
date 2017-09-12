@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    Layout = "_MasterLayout";
+}
+
+@section CSS
+    {
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" onerror="loadAssetsError(this)" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" onerror="loadAssetsError(this)" />
+    </environment>
+}
+
+@section Pre_Body
+    {
+    <div class="ui secondary pointing menu">
+        <a class="ui logo icon image" href="/">
+            <img class="logo" src="~/images/troll.png" alt="Logo" />
+        </a>
+        <a asp-area="" asp-controller="Home" asp-action="Index" class="ui item">
+            TrollChat
+        </a>
+        <div class="right menu">
+            <a asp-area="" asp-controller="Auth" asp-action="CreateDomain" class="ui item">Create new Domain</a>
+        </div>
+        @await Html.PartialAsync("_LoginPartial")
+    </div>
+    <div class="body-content">
+        @if (TempData.ContainsKey("alertMessages"))
+        {
+            @Html.Partial("_AlertsPartial")
+        }
+    </div>
+}
+
+@section Post_Body
+    {
+    <div class="ui inverted vertical footer segment ">
+        <div class="container">
+            <ul>
+                <li class="cat_2">
+                    Trollchat
+                    <i class="icon heart"></i>
+                </li>
+                <li class="cat_1">
+                    <i class="icon mail "></i>
+                    <a asp-area="" asp-controller="home" asp-action="about" class="ui item cat_1">About</a>
+                </li>
+                <li class="cat_1">
+                    <i class="info icon"></i>
+                    <a asp-area="" asp-controller="home" asp-action="contact" class="ui item cat_1">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+
+@RenderBody()

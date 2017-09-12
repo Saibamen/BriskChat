@@ -1,0 +1,44 @@
+[
+  {
+    "outputFileName": "wwwroot/css/chat.min.css",
+    "inputFiles": [
+      "wwwroot/css/chat.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/modals.min.css",
+    "inputFiles": [
+      "wwwroot/css/modals.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/site.min.css",
+    "inputFiles": [
+      "wwwroot/css/site.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/alert.min.js",
+    "inputFiles": [
+      "wwwroot/js/alert.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/chat.min.js",
+    "inputFiles": [
+      "wwwroot/js/chat.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/ZergRush.min.js",
+    "inputFiles": [
+      "wwwroot/js/ZergRush.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/clippy.min.js",
+    "inputFiles": [
+      "wwwroot/js/clippy.js"
+    ]
+  }
+]

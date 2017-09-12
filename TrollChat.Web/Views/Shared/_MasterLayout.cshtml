@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TrollChat</title>
+
+    <script type="text/javascript">
+        function loadAssetsError(sth) {
+            var url = sth.href || sth.src;
+            throw new URIError("The file " + url + " is not accessible.");
+        }
+    </script>
+    @RenderSection("HeaderScripts", required: false)
+
+    <link rel="stylesheet" href="~/lib/semantic/dist/semantic.min.css" asp-append-version="true" onerror="loadAssetsError(this)" />
+    @RenderSection("CSS", required: false)
+</head>
+
+<body>
+    @RenderSection("Pre_Body", required: false)
+    @RenderBody()
+    @RenderSection("Post_Body", required: false)
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    <script src="~/lib/semantic/dist/semantic.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+
+    <environment names="Development">
+        <!-- Potrzebne do alertów - wyświetlane prawie wszędzie -->
+        <script src="~/js/alert.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/alert.min.js" asp-append-version="true" onerror="loadAssetsError(this)"></script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+    <mini-profiler position="@RenderPosition.Right" />
+</body>
+</html>
