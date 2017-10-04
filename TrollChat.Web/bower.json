@@ -5,12 +5,13 @@
     "jquery": "3.2.1",
     "semantic": "2.2.13",
     "signalr": "v2.2.2",
-    "Autolinker.js": "1.4.3"
+    "Autolinker.js": "1.4.4"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",
     "jquery": "3.2.1",
     "signalr": "v2.2.2",
-    "semantic": "2.2.13"
+    "semantic": "2.2.13",
+    "Autolinker.js": "1.4.4"
   }
 }
