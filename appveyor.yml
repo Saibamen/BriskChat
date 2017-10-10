@@ -5,7 +5,6 @@ environment:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 before_build:
-  - cmd: nuget sources add -Name aspnetcore-dev.dotnet.myget.org_MY -Source https://dotnet.myget.org/F/aspnetcore-dev/api/v3/index.json
   - cmd: nuget sources add -Name api.nuget.org_MY -Source https://api.nuget.org/v3/index.json
   - cmd: nuget restore
   - cmd: dotnet restore
