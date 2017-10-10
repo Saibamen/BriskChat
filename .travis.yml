@@ -4,11 +4,7 @@ sudo: false
 language: csharp
 solution: TrollChat.sln
 
-mono:
-  - 3.8.0
-  - 3.10.0
-  - 3.12.0
-  - latest
+
 
 dotnet: 1.0.3
 
@@ -18,7 +14,6 @@ before_script:
   - dotnet restore
 
 script:
-  - ./build.sh
   #- dotnet build **/project.json -c Release
-  - dotnet build TrollChat.sln
+  - dotnet build TrollChat.sln -c Release
   - dotnet test ./TrollChat.BusinessLogic.Tests -c Release --no-build
