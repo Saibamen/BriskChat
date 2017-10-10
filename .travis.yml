@@ -15,5 +15,7 @@ before_script:
 
 script:
   #- dotnet build **/project.json -c Release
+  - dotnet build ./TrollChat.BusinessLogic -c Release
+  - dotnet build /TrollChat.BusinessLogic -c Release
   - dotnet build TrollChat.sln -c Release
   - dotnet test ./TrollChat.BusinessLogic.Tests -c Release # --no-build
