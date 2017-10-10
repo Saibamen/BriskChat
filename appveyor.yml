@@ -7,3 +7,4 @@ environment:
 before_build:
   - cmd: nuget restore
   - cmd: dotnet restore
+  - cmd: dotnet test
