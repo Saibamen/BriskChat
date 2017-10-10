@@ -14,6 +14,7 @@ dotnet: 1.0.0-preview2-003131
 global_env: ASPNETCORE_ENVIRONMENT=Staging
 
 before_script:
+  - nuget restore
   - dotnet restore
 
 script:
