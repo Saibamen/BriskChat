@@ -18,6 +18,11 @@ global_env: DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 before_script:
   - dotnet restore
+  - dotnet restore TrollChat.sln
+  - dotnet restore ./TrollChat.DataAccess
+  - dotnet restore ./TrollChat.BusinessLogic
+  - dotnet restore ./TrollChat.Web
+  - dotnet restore ./TrollChat.BusinessLogic.Tests
 
 script:
   - dotnet build TrollChat.sln
