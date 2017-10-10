@@ -19,8 +19,8 @@ before_script:
 
 script:
   - dotnet build ./TrollChat.DataAccess -c Release
-  - dotnet build ./TrollChat.BusinessLogic
-  - dotnet build ./TrollChat.Web
-  - dotnet build ./TrollChat.BusinessLogic.Tests
-  - dotnet build TrollChat.sln
+  - dotnet build ./TrollChat.BusinessLogic -c Release
+  - dotnet build ./TrollChat.Web -c Release
+  - dotnet build ./TrollChat.BusinessLogic.Tests -c Release
+  - dotnet build TrollChat.sln -c Release
   - dotnet test ./TrollChat.BusinessLogic.Tests -c Release # --no-build
