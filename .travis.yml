@@ -18,6 +18,7 @@ before_script:
   - dotnet restore
 
 script:
+  - ./build.sh
   #- dotnet build **/project.json -c Release
   - dotnet build TrollChat.sln
   - dotnet test ./TrollChat.BusinessLogic.Tests -c Release --no-build
