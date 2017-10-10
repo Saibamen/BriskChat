@@ -16,6 +16,7 @@ global_env: ASPNETCORE_ENVIRONMENT=Staging
 
 before_script:
   - sudo apt-get update
+  - sudo apt-get upgrade
   - sudo apt-get install dotnet-dev-1.1.0
   - dotnet restore
 
