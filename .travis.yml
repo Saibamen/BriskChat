@@ -18,5 +18,5 @@ before_script:
   - dotnet restore
 
 script:
-  - dotnet build **/project.json -c Release
+  #- dotnet build **/project.json -c Release
   - dotnet test ./TrollChat.BusinessLogic.Tests -c Release --no-build
