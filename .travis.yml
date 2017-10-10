@@ -10,12 +10,11 @@ mono:
   - 3.12.0
   - latest
 
-dotnet: 1.0.0-preview2-003131
+dotnet: 1.0.3
 
 global_env: ASPNETCORE_ENVIRONMENT=Staging
 
 before_script:
-  - nuget restore
   - dotnet restore
 
 script:
