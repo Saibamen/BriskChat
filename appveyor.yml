@@ -7,4 +7,5 @@ environment:
 before_build:
   - cmd: nuget restore
   - cmd: dotnet restore
-  - cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+  - cmd: dotnet build -c Release
+  - cmd: dotnet test ./TrollChat.BusinessLogic.Tests -c Release --no-build
