@@ -10,7 +10,7 @@ mono:
   - 3.12.0
   - latest
 
-dotnet: 1.0.3
+dotnet: 1.1.1
 
 global_env: ASPNETCORE_ENVIRONMENT=Staging
 
