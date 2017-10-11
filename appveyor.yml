@@ -7,12 +7,10 @@ dotnet_csproj:
   package_version: '{version}'
 
 before_build:
-  - cmd: >-
-    dotnet --info
+  - cmd: dotnet --info
+  - cmd: nuget restore
+  - cmd: dotnet restore
 
-    nuget restore
-
-    dotnet restore
 build:
   verbosity: quiet
 
