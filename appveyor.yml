@@ -8,7 +8,7 @@ dotnet_csproj:
 
 before_build:
   - cmd: dotnet --info
-  - cmd: cd USERPROFILE
+  - cmd: 'cd %USERPROFILE%'
   - cmd: dir
   - cmd: cd .nuget
   - cmd: nuget restore
