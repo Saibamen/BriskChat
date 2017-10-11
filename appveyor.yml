@@ -10,4 +10,4 @@ before_build:
   - cmd: dotnet restore
 
 #after_build:
-  #- cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+  - cmd: dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
