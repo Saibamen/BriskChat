@@ -1,13 +1,24 @@
+version: 1.0.{build}
 image: Visual Studio 2017
-
-environment:
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
 
 before_build:
   - cmd: dotnet --info
   - cmd: nuget restore
   - cmd: dotnet restore
 
-#after_build:
+build:
+  verbosity: quiet
+
+test_script:
   #- cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+  - cmd: '%USERPROFILE%/.nuget/packages/opencover/4.6.519/tools/OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test ./TrollChat.BusinessLogic.Tests --no-build" -oldstyle -output:"coverage.xml"'
+
+after_test:
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - pip install codecov
+  - codecov -f "coverage.xml"
