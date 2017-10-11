@@ -7,11 +7,13 @@ dotnet_csproj:
   package_version: '{version}'
 
 before_build:
+  - cmd: nuget restore
   - cmd: dotnet --info
+  - cmd: c:\users\appveyor\.nuget\packages
+  - cmd: dir
   - cmd: 'cd %USERPROFILE%'
   - cmd: dir
   - cmd: cd .nuget
-  - cmd: nuget restore
   #- cmd: dotnet restore
 
 build:
