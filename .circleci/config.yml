@@ -15,5 +15,7 @@ jobs:
       - run: dotnet --info
       #- run: nuget restore
       - run: dotnet restore
-      - run: dotnet build
-      - run: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+      - run: dotnet ./TrollChat.DataAccess
+      - run: dotnet ./TrollChat.BusinessLogic
+      #- run: dotnet build
+      - run: dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
