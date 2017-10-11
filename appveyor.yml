@@ -9,7 +9,7 @@ dotnet_csproj:
 before_build:
   - cmd: nuget restore
   - cmd: dotnet --info
-  - cmd: c:\users\appveyor\.nuget\packages
+  - cmd: cd c:\users\appveyor\.nuget\packages
   - cmd: dir
   - cmd: 'cd %USERPROFILE%'
   - cmd: dir
