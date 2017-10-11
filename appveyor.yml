@@ -8,6 +8,9 @@ dotnet_csproj:
 
 before_build:
   - cmd: dotnet --info
+  - cmd: cd $env:USERPROFILE
+  - cmd: dir
+  - cmd: cd .nuget
   - cmd: nuget restore
   #- cmd: dotnet restore
 
