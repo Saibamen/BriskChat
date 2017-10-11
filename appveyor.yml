@@ -16,7 +16,7 @@ build:
 
 test_script:
   #- cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
-  - cmd: .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test ./TrollChat.BusinessLogic.Tests --no-build" -output:"coverage.xml"
+  - cmd: packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:"C:/Program Files/dotnet/dotnet.exe" -targetargs:"test ./TrollChat.BusinessLogic.Tests --no-build" -output:"coverage.xml"
 
 after_test:
   - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
