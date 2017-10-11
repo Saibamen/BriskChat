@@ -5,18 +5,20 @@ dotnet_csproj:
   file: '**\*.csproj'
   version: '{version}'
   package_version: '{version}'
+
 before_build:
-- cmd: >-
-    dotnet --info
+  - cmd: dotnet --info
+  - cmd: nuget restore
+  - cmd: dotnet restore
 
-    nuget restore
-
-    dotnet restore
 build:
   verbosity: quiet
-before_test:
-- cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
-test:
-  assemblies:
-    only:
-    - ./TrollChat.BusinessLogic.Tests
+
+test_script:
+  #- cmd: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+  - cmd: '%USERPROFILE%/.nuget/packages/opencover/4.6.519/tools/OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test ./TrollChat.BusinessLogic.Tests --no-build" -output:"coverage.xml"'
+
+after_test:
+  - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+  - pip install codecov
+  - codecov -f "coverage.xml"
