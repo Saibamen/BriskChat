@@ -59,7 +59,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                     if (users.Any(x => x.Equals(connection.User.Id)))
                     {
                         searchedCount += 1;
-                        Debug.WriteLine("######### Znaleziono istniające połączenie #########");
+                        Debug.WriteLine("######### Znaleziono istniejące połączenie #########");
                         Debug.WriteLine(connection.User.Name);
                         dict[connection] = true;
                     }

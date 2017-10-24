@@ -6,6 +6,12 @@
     ]
   },
   {
+    "outputFileName": "wwwroot/css/clippy.min.css",
+    "inputFiles": [
+      "wwwroot/css/clippy.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/modals.min.css",
     "inputFiles": [
       "wwwroot/css/modals.css"

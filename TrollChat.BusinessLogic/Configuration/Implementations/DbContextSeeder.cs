@@ -71,7 +71,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
             {
                 Name = "User",
                 Description = "User"
-            },
+            }
         };
 
         private readonly string[] users = { "owner", "user", "user1" };
