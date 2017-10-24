@@ -10,7 +10,6 @@
     padding: 8px;
     border: 1px solid black;
     border-radius: 5px;
-
 }
 
 .clippy-content {
@@ -29,18 +28,17 @@
 
 .clippy-top-left .clippy-tip {
     top: 100%;
-    margin-top: 0px;
+    margin-top: 0;
     left: 100%;
     margin-left: -50px;
 }
 
 .clippy-top-right .clippy-tip {
     top: 100%;
-    margin-top: 0px;
+    margin-top: 0;
     left: 0;
     margin-left: 50px;
     background-position: -10px 0;
-
 }
 
 .clippy-bottom-right .clippy-tip {
@@ -56,5 +54,5 @@
     margin-top: -16px;
     left: 100%;
     margin-left: -50px;
-    background-position: 0px -16px;
+    background-position: 0 -16px;
 }
