@@ -3,6 +3,8 @@ version: 2
 jobs:
   build:
     working_directory: /temp
+    #cache_directories:
+      #- ~/.nuget
     docker:
       - image: microsoft/dotnet:sdk
 
@@ -17,5 +19,6 @@ jobs:
       - run: dotnet restore
       - run: dotnet build ./TrollChat.DataAccess
       - run: dotnet build ./TrollChat.BusinessLogic
+      - run: dotnet build ./TrollChat.BusinessLogic.Tests
       #- run: dotnet build
       - run: dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
