@@ -8,12 +8,12 @@ notifications:
   email:
     on_failure: change # default: always
 
-mono: # none
+mono:
   #- 3.8.0
   - 3.10.0
   - 3.12.0
-  #- latest
-  - none
+  - latest
+  #- none
 
 # .NET Core SDK version
 dotnet: 2.0.0
@@ -29,4 +29,5 @@ script:
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
+  - dotnet test --no-build
   - dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
