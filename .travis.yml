@@ -29,7 +29,7 @@ script:
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
-  #- dotnet build ./TrollChat.Web
+  - dotnet build ./TrollChat.Web
   - dotnet test --no-build
   - dotnet test
   - dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
