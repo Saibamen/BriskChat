@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.10
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.Web", "TrollChat.Web\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.Web", "TrollChat.Web\TrollChat.Web.csproj", "{338B825B-2625-4436-BBCB-639CA72E33EA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B514D9D6-3633-42C9-873A-780F5508BA50} = {B514D9D6-3633-42C9-873A-780F5508BA50}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrollChat.BusinessLogic.Tests", "TrollChat.BusinessLogic.Tests\TrollChat.BusinessLogic.Tests.csproj", "{DFD35241-AC96-4C32-86E5-7E8E8693209B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.BusinessLogic.Tests", "TrollChat.BusinessLogic.Tests\TrollChat.BusinessLogic.Tests.csproj", "{DFD35241-AC96-4C32-86E5-7E8E8693209B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrollChat.DataAccess", "TrollChat.DataAccess\TrollChat.DataAccess.csproj", "{B514D9D6-3633-42C9-873A-780F5508BA50}"
 EndProject
