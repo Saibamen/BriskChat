@@ -11,7 +11,6 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="MailKit" Version="1.18.1.1" />
-    <PackageReference Include="Microsoft.Net.Compilers" Version="2.4.0" />
     <PackageReference Include="Quartz" Version="3.0.0-alpha3" />
   </ItemGroup>
 
