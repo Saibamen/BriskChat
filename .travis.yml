@@ -29,5 +29,4 @@ script:
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
-  - dotnet build TrollChat.sln
   - dotnet test ./TrollChat.BusinessLogic.Tests --no-build
