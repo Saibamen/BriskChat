@@ -18,18 +18,14 @@ mono:
 # .NET Core SDK version
 dotnet: 2.0.0
 
-global_env: DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-global_env: DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 before_script:
-  - nuget restore
   - dotnet restore
 
 script:
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
-  - dotnet build ./TrollChat.Web
   - dotnet test --no-build
   - dotnet test
   - dotnet test ./TrollChat.BusinessLogic.Tests #--no-build
+  - dotnet test ./TrollChat.BusinessLogic.Tests/TrollChat.BusinessLogic.Tests.csproj #--no-build
