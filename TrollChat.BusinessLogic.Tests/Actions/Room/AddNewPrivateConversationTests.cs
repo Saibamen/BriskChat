@@ -5,6 +5,7 @@ using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
@@ -68,9 +69,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(issuerId, users);
@@ -80,8 +82,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Once);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
             Assert.NotNull(result);
             Assert.True(result.IsPrivateConversation);
             Assert.False(result.IsPublic);
@@ -142,9 +143,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(issuerId, users);
@@ -154,8 +156,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Once);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
             Assert.NotNull(result);
             Assert.True(result.IsPrivateConversation);
             Assert.False(result.IsPublic);
@@ -179,9 +181,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(issuerId, users);
@@ -191,8 +194,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
 
@@ -209,9 +212,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(issuerId, users);
@@ -221,8 +225,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
 
@@ -234,9 +238,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid(), new List<Guid>());
@@ -246,8 +251,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
 
@@ -261,9 +266,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid, new List<Guid> { guid });
@@ -273,8 +279,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
 
@@ -286,9 +292,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid(), new List<Guid> { Guid.NewGuid() });
@@ -298,8 +305,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
 
@@ -311,9 +318,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
             var action = new AddNewPrivateConversation(mockedRoomRepository.Object, mockedUserRepository.Object,
-                mockedUserRoomRepository.Object, mockedDomainRepository.Object);
+                mockedUserRoomRepository.Object, mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid(), new List<Guid> { Guid.NewGuid(), new Guid() });
@@ -323,8 +331,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Never);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
-            mockedUserRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Null(result);
         }
     }

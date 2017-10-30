@@ -4,6 +4,7 @@ using TrollChat.BusinessLogic.Actions.Message.Implementations;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Message
 {
@@ -23,15 +24,16 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             var mockedMessageRepository = new Mock<IMessageRepository>();
             mockedMessageRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Message>()))
                 .Callback<DataAccess.Models.Message>(u => messageSaved = u);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewMessage(mockedMessageRepository.Object);
+            var action = new AddNewMessage(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             action.Invoke(messageData);
 
             // assert
             mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Once());
-            mockedMessageRepository.Verify(r => r.Save(), Times.Exactly(1));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(1));
             Assert.Equal("Testmessage", messageSaved.Text);
         }
 
@@ -44,15 +46,16 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             };
 
             var mockedMessageRepository = new Mock<IMessageRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewMessage(mockedMessageRepository.Object);
+            var action = new AddNewMessage(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(messageData);
 
             // assert
             mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Never);
-            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             Assert.Equal(Guid.Empty, result);
         }
 
@@ -62,8 +65,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             // prepare
             var messageToAdd = new MessageModel();
             var mockedMessageRepository = new Mock<IMessageRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewMessage(mockedMessageRepository.Object);
+            var action = new AddNewMessage(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(messageToAdd);
@@ -71,7 +75,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             // assert
             Assert.Equal(Guid.Empty, result);
             mockedMessageRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Message>()), Times.Never);
-            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

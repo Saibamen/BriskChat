@@ -5,6 +5,7 @@ using System.Linq;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
@@ -14,16 +15,18 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
         private readonly IDomainRepository domainRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddNewPrivateConversation(IRoomRepository roomRepository,
             IUserRepository userRepository,
             IUserRoomRepository userRoomRepository,
-            IDomainRepository domainRepository)
+            IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
             this.domainRepository = domainRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
@@ -100,7 +103,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             };
 
             roomRepository.Add(newRoom);
-            roomRepository.Save();
+            _unitOfWork.Save();
+
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
             userRoomRepository.Add(userRoom);
@@ -111,8 +115,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 userRoomRepository.Add(userRoom2);
             }
 
-            userRoomRepository.Save();
-
+            _unitOfWork.Save();
+            
             var returnRoom = AutoMapper.Mapper.Map<RoomModel>(newRoom);
 
             return returnRoom;

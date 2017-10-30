@@ -4,6 +4,7 @@ using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 {
@@ -29,8 +30,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             mockedUserTokenRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()))
                 .Callback<DataAccess.Models.UserToken>(u => tokensaved = u);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
+            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object, mockedHasher.Object);
 
             action.Invoke(Guid.NewGuid());
 
@@ -39,7 +41,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -67,8 +69,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             mockedUserTokenRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(userTokenFromDatabase);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedHasher.Object);
+            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object, mockedHasher.Object);
 
             action.Invoke(Guid.NewGuid());
 
@@ -77,7 +80,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
 
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
         }
 
         [Fact]
@@ -86,8 +89,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object);
+            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(Guid.NewGuid());
@@ -97,7 +101,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -106,8 +110,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object);
+            var action = new AddUserTokenToUser(mockedUserTokenRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(new Guid());
@@ -117,7 +122,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

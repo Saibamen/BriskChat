@@ -1,16 +1,19 @@
 ﻿using System;
 using TrollChat.BusinessLogic.Actions.Room.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 {
     public class DeleteRoomById : IDeleteRoomById
     {
         private readonly IRoomRepository roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteRoomById(IRoomRepository roomRepository)
+        public DeleteRoomById(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid roomId)
@@ -29,7 +32,8 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             }
 
             roomRepository.Delete(roomToDelete);
-            roomRepository.Save();
+            _unitOfWork.Save();
+
 
             return true;
         }

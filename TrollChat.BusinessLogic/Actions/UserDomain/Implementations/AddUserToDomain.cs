@@ -1,6 +1,7 @@
 ﻿using System;
 using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.UserDomain.Implementations
 {
@@ -10,16 +11,18 @@ namespace TrollChat.BusinessLogic.Actions.UserDomain.Implementations
         private readonly IUserRepository userRepository;
         private readonly IDomainRepository domainRepository;
         private readonly IRoleRepository roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddUserToDomain(IUserDomainRepository userDomainRepository,
             IUserRepository userRepository,
             IDomainRepository domainRepository,
-            IRoleRepository roleRepository)
+            IRoleRepository roleRepository, IUnitOfWork unitOfWork)
         {
             this.userDomainRepository = userDomainRepository;
             this.userRepository = userRepository;
             this.domainRepository = domainRepository;
             this.roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid userId, Guid domainId, Guid roleId)
@@ -58,7 +61,7 @@ namespace TrollChat.BusinessLogic.Actions.UserDomain.Implementations
             };
 
             userDomainRepository.Add(userDomain);
-            userDomainRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

@@ -1,16 +1,19 @@
 ﻿using System;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class DeleteDomainById : IDeleteDomainById
     {
         private readonly IDomainRepository domainRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DeleteDomainById(IDomainRepository domainRepository)
+        public DeleteDomainById(IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
             this.domainRepository = domainRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid domainId)
@@ -28,7 +31,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
             }
 
             domainRepository.Delete(domainToDelete);
-            domainRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

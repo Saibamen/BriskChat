@@ -16,8 +16,6 @@ namespace TrollChat.DataAccess.Repositories.Interfaces
 
         T GetById(Guid id);
 
-        void Save();
-
         void Edit(T entity);
     }
 }

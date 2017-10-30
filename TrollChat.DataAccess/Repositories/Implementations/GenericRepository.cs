@@ -75,10 +75,5 @@ namespace TrollChat.DataAccess.Repositories.Implementations
         {
             Context.SetModified(entity);
         }
-
-        public virtual void Save()
-        {
-            Context.SaveChanges();
-        }
     }
 }

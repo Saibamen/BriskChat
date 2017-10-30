@@ -2,6 +2,7 @@
 using System;
 using TrollChat.BusinessLogic.Actions.Message.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 using Xunit;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Message
@@ -20,8 +21,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
 
             var mockedMessageRepository = new Mock<IMessageRepository>();
             mockedMessageRepository.Setup(r => r.GetById(guid)).Returns(messageFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteMessageById(mockedMessageRepository.Object);
+            var action = new DeleteMessageById(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid);
@@ -29,7 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             // assert
             Assert.True(result);
             mockedMessageRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Message>()), Times.Once());
-            mockedMessageRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -37,8 +39,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteMessageById(mockedMessageRepository.Object);
+            var action = new DeleteMessageById(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
@@ -46,7 +49,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             // assert
             Assert.False(result);
             mockedMessageRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Message>()), Times.Never);
-            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
         }
 
@@ -55,8 +58,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteMessageById(mockedMessageRepository.Object);
+            var action = new DeleteMessageById(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid());
@@ -64,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Message
             // assert
             Assert.False(result);
             mockedMessageRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Message>()), Times.Never);
-            mockedMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }

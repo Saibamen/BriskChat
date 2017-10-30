@@ -3,6 +3,7 @@ using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
@@ -26,7 +27,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
                 .Returns(roomFromDb);
             mockedRoomRepository.Setup(r => r.Edit(It.IsAny<DataAccess.Models.Room>()))
                 .Callback<DataAccess.Models.Room>(u => roomSaved = u);
-            var action = new EditRoomCustomization(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomCustomization(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(guid, 3);
@@ -37,7 +40,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal(3, roomSaved.Customization);
             Assert.Null(roomSaved.DeletedOn);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
         }
 
         [Fact]
@@ -45,7 +48,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomCustomization(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomCustomization(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(Guid.NewGuid(), 3);
@@ -53,7 +58,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -61,7 +66,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomCustomization(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomCustomization(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(new Guid(), 3);
@@ -69,7 +76,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -87,7 +94,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
                 .Returns(roomFromDb);
             mockedRoomRepository.Setup(r => r.Edit(It.IsAny<DataAccess.Models.Room>()))
                 .Callback<DataAccess.Models.Room>(u => roomSaved = u);
-            var action = new EditRoomCustomization(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomCustomization(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(Guid.NewGuid(), 0);
@@ -96,7 +105,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.True(room);
             Assert.Equal(0, roomSaved.Customization);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
         }
 
         [Fact]
@@ -104,7 +113,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomCustomization(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomCustomization(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(Guid.NewGuid(), -2);
@@ -112,7 +123,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

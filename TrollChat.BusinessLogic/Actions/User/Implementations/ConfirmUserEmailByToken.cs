@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
@@ -10,11 +11,12 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
     {
         private readonly IUserRepository userRepository;
         private readonly IUserTokenRepository userTokenRepository;
-
-        public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(string guid)
@@ -36,10 +38,12 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);
-            userRepository.Save();
+            _unitOfWork.Save();
+
 
             userTokenRepository.Delete(userToken);
-            userTokenRepository.Save();
+            _unitOfWork.Save();
+
 
             return true;
         }

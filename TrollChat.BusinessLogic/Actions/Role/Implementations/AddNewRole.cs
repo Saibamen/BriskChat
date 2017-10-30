@@ -2,16 +2,19 @@
 using TrollChat.BusinessLogic.Actions.Role.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.Role.Implementations
 {
     public class AddNewRole : IAddNewRole
     {
         private readonly IRoleRepository roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddNewRole(IRoleRepository roleRepository)
+        public AddNewRole(IRoleRepository roleRepository, IUnitOfWork unitOfWork)
         {
             this.roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public Guid Invoke(RoleModel model)
@@ -24,7 +27,8 @@ namespace TrollChat.BusinessLogic.Actions.Role.Implementations
             var dbRole = AutoMapper.Mapper.Map<DataAccess.Models.Role>(model);
 
             roleRepository.Add(dbRole);
-            roleRepository.Save();
+            _unitOfWork.Save();
+
 
             return dbRole.Id;
         }

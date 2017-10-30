@@ -3,16 +3,19 @@ using System.Linq;
 using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
 using TrollChat.BusinessLogic.Models;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class AddNewDomain : IAddNewDomain
     {
         private readonly IDomainRepository domainRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddNewDomain(IDomainRepository domainRepository)
+        public AddNewDomain(IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
             this.domainRepository = domainRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public Guid Invoke(DomainModel domain, Guid? userId = null)
@@ -24,7 +27,7 @@ namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
 
             var newDomain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
             domainRepository.Add(newDomain);
-            domainRepository.Save();
+            _unitOfWork.Save();
 
             return newDomain.Id;
         }

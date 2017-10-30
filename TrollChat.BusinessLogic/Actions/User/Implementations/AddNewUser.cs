@@ -3,6 +3,7 @@ using TrollChat.BusinessLogic.Actions.User.Interfaces;
 using TrollChat.BusinessLogic.Helpers.Implementations;
 using TrollChat.BusinessLogic.Helpers.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.User.Implementations
 {
@@ -11,13 +12,14 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
         private readonly IUserRepository userRepository;
         private readonly IUserTokenRepository userTokenRepository;
         private readonly IHasher hasher;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddNewUser(IUserRepository userRepository,
-            IUserTokenRepository userTokenRepository,
-            IHasher hasher = null)
+            IUserTokenRepository userTokenRepository, IUnitOfWork unitOfWork, IHasher hasher = null)
         {
             this.userRepository = userRepository;
             this.userTokenRepository = userTokenRepository;
+            _unitOfWork = unitOfWork;
             this.hasher = hasher ?? new Hasher();
         }
 
@@ -42,7 +44,7 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             };
 
             userTokenRepository.Add(newUserToken);
-            userRepository.Save();
+            _unitOfWork.Save();
 
             return newUser;
         }

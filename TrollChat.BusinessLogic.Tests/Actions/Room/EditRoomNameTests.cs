@@ -3,6 +3,7 @@ using Moq;
 using TrollChat.BusinessLogic.Actions.Room.Implementations;
 using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Tests.Actions.Room
 {
@@ -26,7 +27,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
                 .Returns(roomFromDb);
             mockedRoomRepository.Setup(r => r.Edit(It.IsAny<DataAccess.Models.Room>()))
                 .Callback<DataAccess.Models.Room>(u => roomSaved = u);
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(guid, "New Room Name");
@@ -37,7 +40,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal("New Room Name", roomSaved.Name);
             Assert.Null(roomSaved.DeletedOn);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
         }
 
         [Fact]
@@ -55,7 +58,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedRoomRepository = new Mock<IRoomRepository>();
             mockedRoomRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
                 .Returns(roomFromDb);
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(guid, "test");
@@ -63,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -71,7 +76,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(Guid.NewGuid(), "test");
@@ -79,7 +86,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -87,7 +94,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(new Guid(), "test");
@@ -95,7 +104,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -103,7 +112,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var room = action.Invoke(Guid.NewGuid(), "");
@@ -111,7 +122,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -119,7 +130,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
-            var action = new EditRoomName(mockedRoomRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // 101 characters
             const string string101 = "user left this channel user left this channel user left this channel user left this channel user lerr";
@@ -129,7 +142,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // check
             Assert.False(room);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

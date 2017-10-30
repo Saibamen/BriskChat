@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using TrollChat.DataAccess.Repositories.Interfaces;
+using TrollChat.DataAccess.UnitOfWork;
 
 namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
 {
@@ -11,14 +12,16 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
         private readonly IRoomRepository roomRepository;
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddNewUserRoom(IRoomRepository roomRepository,
             IUserRepository userRepository,
-            IUserRoomRepository userRoomRepository)
+            IUserRoomRepository userRoomRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid roomId, List<Guid> users, bool invite = false)
@@ -51,7 +54,7 @@ namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
                 userRoomRepository.Add(userRoomToAdd);
             }
 
-            userRoomRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }
