@@ -4,8 +4,8 @@
   "dependencies": {
     "jquery": "3.2.1",
     "semantic": "2.2.13",
-    "signalr": "v2.2.2",
-    "Autolinker.js": "1.4.4"
+    "Autolinker.js": "1.4.4",
+    "signalr": "v2.2.2"
   },
   "resolutions": {
     "jquery-validation": "1.16.0",
