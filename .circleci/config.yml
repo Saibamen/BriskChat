@@ -21,4 +21,5 @@ jobs:
       - run: dotnet build ./TrollChat.BusinessLogic
       - run: dotnet build ./TrollChat.BusinessLogic.Tests
       #- run: dotnet build
+      - run: dotnet test ./TrollChat.BusinessLogic.Tests
       - run: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
