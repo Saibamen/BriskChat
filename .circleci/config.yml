@@ -14,8 +14,8 @@ jobs:
       - checkout
       - run: dotnet --info
       - run: dotnet restore
+      - run: dotnet build -v diag
       - run: dotnet build ./TrollChat.DataAccess
       - run: dotnet build ./TrollChat.BusinessLogic
       - run: dotnet build ./TrollChat.BusinessLogic.Tests
-      - run: dotnet build -v diag
       - run: dotnet test ./TrollChat.BusinessLogic.Tests
