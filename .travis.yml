@@ -22,6 +22,9 @@ before_script:
   - dotnet restore
 
 script:
+  - dotnet build
+  - dotnet test
+  - dotnet test --no-build
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
