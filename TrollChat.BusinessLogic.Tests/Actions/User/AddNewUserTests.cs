@@ -25,6 +25,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 Password = "plain",
                 Name = "Ryszard"
             };
+
             DataAccess.Models.User userSaved = null;
             DataAccess.Models.UserToken userTokenSaved = null;
 
