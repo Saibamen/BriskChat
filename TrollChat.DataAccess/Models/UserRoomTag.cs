@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TrollChat.DataAccess.Models
+namespace BriskChat.DataAccess.Models
 {
     public class UserRoomTag : BaseEntity
     {

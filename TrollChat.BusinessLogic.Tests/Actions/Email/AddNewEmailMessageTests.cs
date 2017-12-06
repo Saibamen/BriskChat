@@ -1,12 +1,12 @@
-﻿using Moq;
-using TrollChat.BusinessLogic.Actions.Email.Implementations;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.BusinessLogic.Actions.Email.Implementations;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Email
+namespace BriskChat.BusinessLogic.Tests.Actions.Email
 {
     [Collection("mapper")]
     public class AddNewEmailMessageTests

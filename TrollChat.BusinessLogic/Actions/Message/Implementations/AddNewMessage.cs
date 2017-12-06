@@ -1,10 +1,10 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Implementations
+namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class AddNewMessage : IAddNewMessage
     {

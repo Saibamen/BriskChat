@@ -1,7 +1,7 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.UserDomain.Interfaces
+namespace BriskChat.BusinessLogic.Actions.UserDomain.Interfaces
 {
     public interface IAddUserToDomain : IAction
     {

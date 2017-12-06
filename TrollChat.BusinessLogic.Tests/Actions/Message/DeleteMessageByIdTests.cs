@@ -1,11 +1,11 @@
-﻿using Moq;
-using System;
-using TrollChat.BusinessLogic.Actions.Message.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+﻿using System;
+using BriskChat.BusinessLogic.Actions.Message.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Message
+namespace BriskChat.BusinessLogic.Tests.Actions.Message
 {
     public class DeleteMessageByIdTests
     {

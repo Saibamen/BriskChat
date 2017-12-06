@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using BriskChat.DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Linq;
-using TrollChat.DataAccess.Models;
 
-namespace TrollChat.DataAccess.Context
+namespace BriskChat.DataAccess.Context
 {
     public class TrollChatDbContext : DbContext, ITrollChatDbContext
     {

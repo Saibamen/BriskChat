@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.Domain.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
+namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class AddNewDomain : IAddNewDomain
     {

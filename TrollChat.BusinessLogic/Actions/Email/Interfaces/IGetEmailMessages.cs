@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using TrollChat.BusinessLogic.Actions.Base;
-using TrollChat.DataAccess.Models;
+using BriskChat.BusinessLogic.Actions.Base;
+using BriskChat.DataAccess.Models;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Email.Interfaces
 {
     public interface IGetEmailMessages : IAction
     {

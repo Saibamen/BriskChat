@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrollChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.UserRoom.Interfaces
+namespace BriskChat.BusinessLogic.Actions.UserRoom.Interfaces
 {
     public interface IAddNewUserRoom : IAction
     {

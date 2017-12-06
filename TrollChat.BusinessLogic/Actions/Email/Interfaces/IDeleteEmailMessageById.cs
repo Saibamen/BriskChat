@@ -1,7 +1,7 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Email.Interfaces
 {
     public interface IDeleteEmailMessageById : IAction
     {

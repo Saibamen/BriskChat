@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Actions.Base;
 using MimeKit;
-using TrollChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Helpers.Interfaces
+namespace BriskChat.BusinessLogic.Helpers.Interfaces
 {
     public interface IEmailService : IAction
     {

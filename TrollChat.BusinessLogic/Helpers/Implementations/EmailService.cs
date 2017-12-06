@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using TrollChat.BusinessLogic.Configuration.Implementations;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
 using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Configuration.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace TrollChat.BusinessLogic.Helpers.Implementations
+namespace BriskChat.BusinessLogic.Helpers.Implementations
 {
     public class EmailService : IEmailService
     {

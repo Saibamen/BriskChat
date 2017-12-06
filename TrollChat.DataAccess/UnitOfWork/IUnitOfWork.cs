@@ -1,6 +1,6 @@
-﻿using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.DataAccess.UnitOfWork
+namespace BriskChat.DataAccess.UnitOfWork
 {
     public interface IUnitOfWork : IRepository
     {

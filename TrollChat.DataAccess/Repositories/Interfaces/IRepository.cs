@@ -1,4 +1,4 @@
-﻿namespace TrollChat.DataAccess.Repositories.Interfaces
+﻿namespace BriskChat.DataAccess.Repositories.Interfaces
 {
     public interface IRepository
     {

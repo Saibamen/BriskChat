@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TrollChat.Web.Models.Auth
+namespace BriskChat.Web.Models.Auth
 {
     public class ResetPasswordViewModel
     {

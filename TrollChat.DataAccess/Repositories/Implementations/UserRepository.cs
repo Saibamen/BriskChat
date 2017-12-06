@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using TrollChat.DataAccess.Context;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.Context;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.DataAccess.Repositories.Implementations
+namespace BriskChat.DataAccess.Repositories.Implementations
 {
     public class UserRepository : GenericRepository<User>, IUserRepository
     {

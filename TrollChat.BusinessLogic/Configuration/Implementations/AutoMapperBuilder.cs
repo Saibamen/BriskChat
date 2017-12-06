@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using AutoMapper;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Models;
 using MimeKit;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
 
-namespace TrollChat.BusinessLogic.Configuration.Implementations
+namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public static class AutoMapperBuilder
     {

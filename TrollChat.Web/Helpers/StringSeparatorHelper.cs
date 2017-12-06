@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public static class StringSeparatorHelper
     {

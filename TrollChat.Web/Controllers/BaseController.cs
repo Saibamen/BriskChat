@@ -1,13 +1,13 @@
 ﻿using System.IO;
+using BriskChat.Web.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using TrollChat.Web.Helpers;
 
-namespace TrollChat.Web.Controllers
+namespace BriskChat.Web.Controllers
 {
     [Authorize]
     public class BaseController : Controller

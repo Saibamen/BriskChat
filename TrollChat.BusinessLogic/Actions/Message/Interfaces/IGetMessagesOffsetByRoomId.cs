@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrollChat.BusinessLogic.Actions.Base;
-using TrollChat.BusinessLogic.Models;
+using BriskChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Models;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Message.Interfaces
 {
     public interface IGetMessagesOffsetByRoomId : IAction
     {

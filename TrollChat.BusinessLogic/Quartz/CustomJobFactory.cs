@@ -2,7 +2,7 @@
 using Quartz;
 using Quartz.Spi;
 
-namespace TrollChat.BusinessLogic.Quartz
+namespace BriskChat.BusinessLogic.Quartz
 {
     public class CustomJobFactory : IJobFactory
     {

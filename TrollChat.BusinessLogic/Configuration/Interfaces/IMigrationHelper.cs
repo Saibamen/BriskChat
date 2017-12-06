@@ -1,6 +1,6 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Configuration.Interfaces
+namespace BriskChat.BusinessLogic.Configuration.Interfaces
 {
     public interface IMigrationHelper : IAction
     {

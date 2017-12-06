@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
-namespace TrollChat.DataAccess.Context
+namespace BriskChat.DataAccess.Context
 {
     public interface ITrollChatDbContext : IRepository
     {

@@ -1,6 +1,6 @@
-﻿using TrollChat.DataAccess.Context;
+﻿using BriskChat.DataAccess.Context;
 
-namespace TrollChat.DataAccess.UnitOfWork
+namespace BriskChat.DataAccess.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

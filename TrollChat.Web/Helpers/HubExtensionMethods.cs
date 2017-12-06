@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.SignalR.Hubs;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public static class HubExtensionMethods
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TrollChat.Web.Models.Common;
+using BriskChat.Web.Models.Common;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public class AlertHelper
     {

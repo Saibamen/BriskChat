@@ -1,9 +1,9 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Implementations
+namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class DeleteEmailMessageById : IDeleteEmailMessageById
     {

@@ -1,7 +1,7 @@
-﻿using TrollChat.BusinessLogic.Helpers.Implementations;
+﻿using BriskChat.BusinessLogic.Helpers.Implementations;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Helpers
+namespace BriskChat.BusinessLogic.Tests.Helpers
 {
     public class HasherTests
     {

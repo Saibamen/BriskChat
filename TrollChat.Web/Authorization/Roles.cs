@@ -1,4 +1,4 @@
-﻿namespace TrollChat.Web.Authorization
+﻿namespace BriskChat.Web.Authorization
 {
     public static class Role
     {

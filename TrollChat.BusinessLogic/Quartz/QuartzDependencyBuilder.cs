@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers;
+using Microsoft.Extensions.DependencyInjection;
 using Quartz.Spi;
-using TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers;
 
-namespace TrollChat.BusinessLogic.Quartz
+namespace BriskChat.BusinessLogic.Quartz
 {
     public static class QuartzDependencyRegister
     {

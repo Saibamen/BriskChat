@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using TrollChat.DataAccess.Models;
+using BriskChat.DataAccess.Models;
 
-namespace TrollChat.DataAccess.Repositories.Interfaces
+namespace BriskChat.DataAccess.Repositories.Interfaces
 {
     public interface IRoomRepository : IGenericRepository<Room>, IRepository
     {

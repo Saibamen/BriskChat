@@ -1,11 +1,11 @@
 ﻿using System;
+using BriskChat.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using TrollChat.DataAccess.Context;
 
-namespace TrollChat.DataAccess.Migrations
+namespace BriskChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
     [Migration("20170517132801_RoleInUserRoom")]

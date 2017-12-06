@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TrollChat.DataAccess.Migrations
+namespace BriskChat.DataAccess.Migrations
 {
     public partial class UserDomain : Migration
     {

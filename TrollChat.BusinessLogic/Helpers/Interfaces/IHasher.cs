@@ -1,6 +1,6 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Helpers.Interfaces
+namespace BriskChat.BusinessLogic.Helpers.Interfaces
 {
     public interface IHasher : IAction
     {

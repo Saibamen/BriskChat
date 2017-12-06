@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BriskChat.BusinessLogic.Actions.Room.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Room.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Room
+namespace BriskChat.BusinessLogic.Tests.Actions.Room
 {
     [Collection("mapper")]
     public class GetRoomUsersTests

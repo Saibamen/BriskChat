@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Implementations
+namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class GetMessagesOffsetByRoomId : IGetMessagesOffsetByRoomId
     {

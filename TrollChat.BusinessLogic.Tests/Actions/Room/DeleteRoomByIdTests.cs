@@ -1,11 +1,11 @@
-﻿using Moq;
-using System;
-using TrollChat.BusinessLogic.Actions.Room.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+﻿using System;
+using BriskChat.BusinessLogic.Actions.Room.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Room
+namespace BriskChat.BusinessLogic.Tests.Actions.Room
 {
     public class DeleteRoomByIdTests
     {

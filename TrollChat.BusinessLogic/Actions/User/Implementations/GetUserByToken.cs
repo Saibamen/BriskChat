@@ -1,10 +1,10 @@
 ﻿using System.Linq;
+using BriskChat.BusinessLogic.Actions.User.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementations
+namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserByToken : IGetUserByToken
     {

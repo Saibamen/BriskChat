@@ -1,4 +1,4 @@
-﻿namespace TrollChat.BusinessLogic.Actions.Base
+﻿namespace BriskChat.BusinessLogic.Actions.Base
 {
     public interface IAction
     {

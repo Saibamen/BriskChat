@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TrollChat.BusinessLogic.Models
+namespace BriskChat.BusinessLogic.Models
 {
     public class UserModel : BaseModel
     {
