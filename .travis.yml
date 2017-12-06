@@ -16,7 +16,7 @@ mono:
   #- none
 
 # .NET Core SDK version
-dotnet: 2.0.0
+dotnet: 2.0.3
 
 before_script:
   - dotnet restore
@@ -27,4 +27,3 @@ script:
   - dotnet build ./TrollChat.BusinessLogic.Tests
   - dotnet test ./TrollChat.BusinessLogic.Tests
   - dotnet test
-  - travis_wait dotnet build -v detailed /bl
