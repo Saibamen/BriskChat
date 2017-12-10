@@ -25,7 +25,7 @@ script:
   - dotnet build ./TrollChat.DataAccess
   - dotnet build ./TrollChat.BusinessLogic
   - dotnet build ./TrollChat.BusinessLogic.Tests
-  - dotnet build
+  - dotnet build ./TrollChat.Web
   # Cannot test .Net Core 1.1 on Linux...
   #- dotnet test ./TrollChat.BusinessLogic.Tests
   #- dotnet test
