@@ -20,4 +20,4 @@ jobs:
       - run: dotnet build ./TrollChat.Web
       # Cannot test .Net Core 1.1 on Linux...
       #- run: dotnet test ./TrollChat.BusinessLogic.Tests
-      - run: dotnet publish
+      - run: dotnet publish -c Release
