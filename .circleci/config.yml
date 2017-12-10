@@ -16,5 +16,8 @@ jobs:
       - run: dotnet restore
       - run: dotnet build ./TrollChat.DataAccess
       - run: dotnet build ./TrollChat.BusinessLogic
+      - run: dotnet build
       - run: dotnet build ./TrollChat.BusinessLogic.Tests
-      - run: dotnet test ./TrollChat.BusinessLogic.Tests
+      # Cannot test .Net Core 1.1 on Linux...
+      #- run: dotnet test ./TrollChat.BusinessLogic.Tests
+      - run: dotnet publish
