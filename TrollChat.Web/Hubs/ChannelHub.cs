@@ -283,7 +283,7 @@ namespace BriskChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
@@ -302,7 +302,7 @@ namespace BriskChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 

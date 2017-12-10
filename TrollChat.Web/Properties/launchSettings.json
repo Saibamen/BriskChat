@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TrollChat.Web": {
+    "BriskChat.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

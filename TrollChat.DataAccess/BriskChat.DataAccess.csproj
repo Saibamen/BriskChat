@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <Authors>Adam Stachowicz</Authors>
+    <PackageProjectUrl>https://github.com/Saibamen/BriskChat</PackageProjectUrl>
+    <Copyright>2017</Copyright>
+    <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
   </PropertyGroup>
 
   <ItemGroup>

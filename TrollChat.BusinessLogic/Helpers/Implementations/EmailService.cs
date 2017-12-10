@@ -30,7 +30,7 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
         public MimeMessage CreateMessage(string emailAddress, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("TrollChat", settings.Value.Login));
+            emailMessage.From.Add(new MailboxAddress("BriskChat", settings.Value.Login));
             emailMessage.To.Add(new MailboxAddress("", emailAddress));
             emailMessage.Subject = subject;
 

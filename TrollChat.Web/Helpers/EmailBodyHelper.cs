@@ -12,7 +12,7 @@ namespace BriskChat.Web.Helpers
                 TopicSecond = "Only we have to check if the email is yours.",
                 ButtonValue = callbackUrl,
                 ButtonText = "Confirm email",
-                AdditionalNotesFirst = "If you did not create a TrollChat account,",
+                AdditionalNotesFirst = "If you did not create a BriskChat account,",
                 AdditionalNotesSecond = "remove this email and everything will return to normal."
             };
 
