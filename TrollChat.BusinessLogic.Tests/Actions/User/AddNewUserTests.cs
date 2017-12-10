@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     [Collection("mapper")]
     public class AddNewUserTests
@@ -25,6 +25,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 Password = "plain",
                 Name = "Ryszard"
             };
+
             DataAccess.Models.User userSaved = null;
             DataAccess.Models.UserToken userTokenSaved = null;
 

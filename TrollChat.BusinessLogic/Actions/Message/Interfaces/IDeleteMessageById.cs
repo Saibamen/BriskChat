@@ -1,7 +1,7 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Message.Interfaces
 {
     public interface IDeleteMessageById : IAction
     {

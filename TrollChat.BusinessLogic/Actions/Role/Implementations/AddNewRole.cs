@@ -1,10 +1,10 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Role.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.Role.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Role.Implementations
+namespace BriskChat.BusinessLogic.Actions.Role.Implementations
 {
     public class AddNewRole : IAddNewRole
     {

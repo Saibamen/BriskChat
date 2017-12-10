@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers;
+using Microsoft.AspNetCore.Builder;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
-using TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers;
 
-namespace TrollChat.BusinessLogic.Quartz
+namespace BriskChat.BusinessLogic.Quartz
 {
     public static class ShedulerCreator
     {

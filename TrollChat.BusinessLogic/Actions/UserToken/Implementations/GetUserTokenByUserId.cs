@@ -1,11 +1,11 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
 using System.Linq;
 using AutoMapper;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserToken.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
+namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class GetUserTokenByUserId : IGetUserTokenByUserId
     {

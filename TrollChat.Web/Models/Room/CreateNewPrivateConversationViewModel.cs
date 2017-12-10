@@ -1,4 +1,4 @@
-﻿namespace TrollChat.Web.Models.Room
+﻿namespace BriskChat.Web.Models.Room
 {
     public class CreateNewPrivateConversationViewModel
     {

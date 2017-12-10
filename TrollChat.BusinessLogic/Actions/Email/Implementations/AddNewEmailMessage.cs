@@ -1,10 +1,10 @@
-﻿using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+﻿using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Implementations
+namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class AddNewEmailMessage : IAddNewEmailMessage
     {

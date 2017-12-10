@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TrollChat.DataAccess.Models
+namespace BriskChat.DataAccess.Models
 {
     public class User : BaseEntity
     {

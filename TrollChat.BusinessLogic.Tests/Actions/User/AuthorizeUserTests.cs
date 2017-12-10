@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using Moq;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using Xunit;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
+using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using Moq;
+using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     public class AuthenitcateUserTests
     {

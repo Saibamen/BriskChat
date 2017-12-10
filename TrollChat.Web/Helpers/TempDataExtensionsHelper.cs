@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public static class TempDataExtensionsHelper
     {

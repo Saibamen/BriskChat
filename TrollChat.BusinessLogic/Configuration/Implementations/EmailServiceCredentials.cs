@@ -1,4 +1,4 @@
-﻿namespace TrollChat.BusinessLogic.Configuration.Implementations
+﻿namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class EmailServiceCredentials
     {

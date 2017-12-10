@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace TrollChat.BusinessLogic.Configuration.Implementations
+namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class DependencyBuilder<T>
     {

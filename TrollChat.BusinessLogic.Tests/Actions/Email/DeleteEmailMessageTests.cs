@@ -1,12 +1,12 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.Email.Implementations;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Email.Implementations;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Email
+namespace BriskChat.BusinessLogic.Tests.Actions.Email
 {
     public class DeleteEmailMessageTests
     {

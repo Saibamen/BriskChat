@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Implementations
+namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class GetEmailMessages : IGetEmailMessages
     {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrollChat.BusinessLogic.Models;
-using Xunit;
-using Moq;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using System.Linq.Expressions;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Domain.Implementations;
-using TrollChat.DataAccess.UnitOfWork;
+using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.Domain.Implementations;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
+using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Domain
+namespace BriskChat.BusinessLogic.Tests.Actions.Domain
 {
     [Collection("mapper")]
     public class AddNewDomainTests

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Security.Cryptography;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
 
-namespace TrollChat.BusinessLogic.Helpers.Implementations
+namespace BriskChat.BusinessLogic.Helpers.Implementations
 {
     public class Hasher : IHasher
     {

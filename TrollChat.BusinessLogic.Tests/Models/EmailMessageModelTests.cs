@@ -1,7 +1,7 @@
-﻿using TrollChat.BusinessLogic.Models;
+﻿using BriskChat.BusinessLogic.Models;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Models
+namespace BriskChat.BusinessLogic.Tests.Models
 {
     public class EmailMessageModelTests
     {

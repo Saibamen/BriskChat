@@ -1,11 +1,11 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.UserToken.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
+namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
 {
     public class DeleteUserTokenByIdTests
     {

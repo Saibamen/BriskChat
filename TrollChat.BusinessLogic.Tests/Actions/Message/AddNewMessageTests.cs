@@ -1,12 +1,12 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.Message.Implementations;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Message.Implementations;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Message
+namespace BriskChat.BusinessLogic.Tests.Actions.Message
 {
     [Collection("mapper")]
     public class AddNewMessageTests

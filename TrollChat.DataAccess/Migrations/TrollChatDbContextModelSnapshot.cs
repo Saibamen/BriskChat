@@ -1,11 +1,10 @@
 ﻿using System;
+using BriskChat.DataAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using TrollChat.DataAccess.Context;
 
-namespace TrollChat.DataAccess.Migrations
+namespace BriskChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
     partial class TrollChatDbContextModelSnapshot : ModelSnapshot

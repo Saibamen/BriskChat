@@ -1,25 +1,25 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Actions.Domain.Interfaces;
+using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.BusinessLogic.Actions.Role.Interfaces;
+using BriskChat.BusinessLogic.Actions.User.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserDomain.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserToken.Interfaces;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.Web.Authorization;
+using BriskChat.Web.Constants;
+using BriskChat.Web.Helpers;
+using BriskChat.Web.Models.Auth;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
-using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.BusinessLogic.Actions.Role.Interfaces;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
-using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.Web.Authorization;
-using TrollChat.Web.Constants;
-using TrollChat.Web.Helpers;
-using TrollChat.Web.Models.Auth;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace TrollChat.Web.Controllers
+namespace BriskChat.Web.Controllers
 {
     [Route("auth")]
     public class AuthController : BaseController
@@ -190,8 +190,8 @@ namespace TrollChat.Web.Controllers
                 new Claim(ClaimTypes.Name, access.Name),
                 new Claim(ClaimTypes.Sid, access.Id.ToString()),
                 new Claim(ClaimTypes.Role, Role.User),
-                new Claim(Constants.ClaimTypesConstants.DomainName, access.Domain.Name),
-                new Claim(Constants.ClaimTypesConstants.DomainId, access.Domain.Id.ToString())
+                new Claim(ClaimTypesConstants.DomainName, access.Domain.Name),
+                new Claim(ClaimTypesConstants.DomainId, access.Domain.Id.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, "Claims");

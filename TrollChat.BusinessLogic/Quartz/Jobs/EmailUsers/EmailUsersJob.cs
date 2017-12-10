@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.BusinessLogic.Helpers.Extensions;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
 using Quartz;
-using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.BusinessLogic.Helpers.Extensions;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
 
-namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
+namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
 {
     [DisallowConcurrentExecution]
     public class EmailUsersJob : IJob

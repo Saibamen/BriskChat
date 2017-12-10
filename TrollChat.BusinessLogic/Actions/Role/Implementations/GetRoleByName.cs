@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using TrollChat.BusinessLogic.Actions.Role.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Role.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Role.Implementations
+namespace BriskChat.BusinessLogic.Actions.Role.Implementations
 {
     public class GetRoleByName : IGetRoleByName
     {

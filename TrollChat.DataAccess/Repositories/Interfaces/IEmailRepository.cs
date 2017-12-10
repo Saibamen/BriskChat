@@ -1,6 +1,6 @@
-﻿using TrollChat.DataAccess.Models;
+﻿using BriskChat.DataAccess.Models;
 
-namespace TrollChat.DataAccess.Repositories.Interfaces
+namespace BriskChat.DataAccess.Repositories.Interfaces
 {
     public interface IEmailRepository : IGenericRepository<EmailMessage>, IRepository
     {

@@ -3,8 +3,6 @@ version: 2
 jobs:
   build:
     working_directory: /temp
-    #cache_directories:
-      #- ~/.nuget
     docker:
       - image: microsoft/dotnet:sdk
 
@@ -15,10 +13,11 @@ jobs:
     steps:
       - checkout
       - run: dotnet --info
-      #- run: nuget restore
       - run: dotnet restore
       - run: dotnet build ./TrollChat.DataAccess
       - run: dotnet build ./TrollChat.BusinessLogic
       - run: dotnet build ./TrollChat.BusinessLogic.Tests
-      #- run: dotnet build
-      - run: dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+      - run: dotnet build ./TrollChat.Web
+      # Cannot test .Net Core 1.1 on Linux...
+      #- run: dotnet test ./TrollChat.BusinessLogic.Tests
+      - run: dotnet publish ./TrollChat.Web -c Release

@@ -1,6 +1,6 @@
 ﻿using Quartz;
 
-namespace TrollChat.BusinessLogic.Quartz.Jobs.EmailUsers
+namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
 {
     public class EmailUsersJobConfig
     {

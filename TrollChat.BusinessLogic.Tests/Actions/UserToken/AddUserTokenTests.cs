@@ -1,12 +1,12 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.UserToken.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
-using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
-using TrollChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
+namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
 {
     public class AddUserTokenTests
     {

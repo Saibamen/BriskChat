@@ -1,8 +1,8 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.BusinessLogic.Actions.Base;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TrollChat.BusinessLogic.Configuration.Implementations
+namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public static class DependencyRegister
     {

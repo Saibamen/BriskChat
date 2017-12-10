@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.UserRoom.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.UserRoom.Implementations
+namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
 {
     public class AddNewUserRoom : IAddNewUserRoom
     {

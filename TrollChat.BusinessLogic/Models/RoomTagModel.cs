@@ -1,4 +1,4 @@
-﻿namespace TrollChat.BusinessLogic.Models
+﻿namespace BriskChat.BusinessLogic.Models
 {
     public class RoomTagModel : BaseModel
     {

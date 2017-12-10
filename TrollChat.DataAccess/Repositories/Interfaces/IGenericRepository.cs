@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace TrollChat.DataAccess.Repositories.Interfaces
+namespace BriskChat.DataAccess.Repositories.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

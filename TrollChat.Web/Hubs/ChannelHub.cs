@@ -5,18 +5,18 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.BusinessLogic.Actions.User.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserRoom.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.Web.Helpers;
+using BriskChat.Web.Models.Message;
+using BriskChat.Web.Models.Room;
 using Microsoft.AspNetCore.SignalR;
 using StackExchange.Profiling;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.BusinessLogic.Actions.UserRoom.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.Web.Helpers;
-using TrollChat.Web.Models.Message;
-using TrollChat.Web.Models.Room;
 
-namespace TrollChat.Web.Hubs
+namespace BriskChat.Web.Hubs
 {
     [Authorize(Roles = "User")]
     public class ChannelHub : Hub
@@ -283,7 +283,7 @@ namespace TrollChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
@@ -302,7 +302,7 @@ namespace TrollChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("TrollChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
+            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 

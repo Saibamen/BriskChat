@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BriskChat.BusinessLogic.Actions.Message.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Message.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Message
+namespace BriskChat.BusinessLogic.Tests.Actions.Message
 {
     [Collection("mapper")]
     public class GetLastMessageByRoomIdTests

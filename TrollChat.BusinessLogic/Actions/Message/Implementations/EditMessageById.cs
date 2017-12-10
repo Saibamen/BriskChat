@@ -1,9 +1,9 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Implementations
+namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class EditMessageById : IEditMessageById
     {

@@ -1,9 +1,9 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using TrollChat.DataAccess.UnitOfWork;
+using BriskChat.BusinessLogic.Actions.UserDomain.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.UserDomain.Implementations
+namespace BriskChat.BusinessLogic.Actions.UserDomain.Implementations
 {
     public class AddUserToDomain : IAddUserToDomain
     {
