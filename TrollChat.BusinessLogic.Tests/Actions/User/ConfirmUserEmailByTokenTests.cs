@@ -52,7 +52,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             Assert.NotNull(userSaved.EmailConfirmedOn);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -178,7 +178,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             Assert.NotNull(userSaved.EmailConfirmedOn);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]

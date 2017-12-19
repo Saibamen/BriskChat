@@ -12,6 +12,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
         private readonly IUserRepository userRepository;
         private readonly IUserTokenRepository userTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
+
         public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             this.userTokenRepository = userTokenRepository;
@@ -38,12 +39,9 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);
-            _unitOfWork.Save();
-
 
             userTokenRepository.Delete(userToken);
             _unitOfWork.Save();
-
 
             return true;
         }

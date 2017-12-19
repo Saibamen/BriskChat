@@ -34,7 +34,6 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
             roomRepository.Delete(roomToDelete);
             _unitOfWork.Save();
 
-
             return true;
         }
     }

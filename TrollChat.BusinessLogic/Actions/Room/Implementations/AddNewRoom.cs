@@ -55,7 +55,6 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
             newRoom.Domain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
 
             roomRepository.Add(newRoom);
-            _unitOfWork.Save();
 
             var userRoom = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
 
