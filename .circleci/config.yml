@@ -15,6 +15,6 @@ jobs:
       - run: dotnet --info
       - run: dotnet restore
       - run: dotnet build
-      # Cannot test .Net Core 1.1 on Linux...
-      - run: dotnet test ./TrollChat.BusinessLogic.Tests
+      # TODO: See Travis CI configuration and port to CircleCI
+      #- run: dotnet test ./TrollChat.BusinessLogic.Tests
       - run: dotnet publish -c Release
