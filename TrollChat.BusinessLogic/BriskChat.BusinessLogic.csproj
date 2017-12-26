@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TrollChat.DataAccess\BriskChat.DataAccess.csproj" />
+    <ProjectReference Include="../TrollChat.DataAccess/BriskChat.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
