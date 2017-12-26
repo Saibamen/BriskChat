@@ -42,7 +42,6 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
             if (token != null)
             {
                 userTokenRepository.Delete(token);
-                _unitOfWork.Save();
             }
 
             var userToken = new DataAccess.Models.UserToken

@@ -103,8 +103,6 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
             };
 
             roomRepository.Add(newRoom);
-            _unitOfWork.Save();
-
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
             userRoomRepository.Add(userRoom);
@@ -114,10 +112,9 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 var userRoom2 = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
                 userRoomRepository.Add(userRoom2);
             }
-
-            _unitOfWork.Save();
             
             var returnRoom = AutoMapper.Mapper.Map<RoomModel>(newRoom);
+            _unitOfWork.Save();
 
             return returnRoom;
         }

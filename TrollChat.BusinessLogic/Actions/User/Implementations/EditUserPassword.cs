@@ -49,7 +49,6 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                     }
 
                     userTokenRepository.Delete(tokenToDelete);
-                    _unitOfWork.Save();
 
                     userRepository.Edit(userToEdit);
                     _unitOfWork.Save();

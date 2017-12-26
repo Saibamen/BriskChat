@@ -80,7 +80,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
 
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once);
             mockedUserTokenRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]

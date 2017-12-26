@@ -74,7 +74,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal("Test", roomSaved.Owner.Name);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Once());
             mockedUserRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserRoom>()), Times.Once());
-            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]

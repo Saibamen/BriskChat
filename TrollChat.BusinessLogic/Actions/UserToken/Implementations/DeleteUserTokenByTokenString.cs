@@ -33,7 +33,6 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
             userTokenRepository.Delete(userToken);
             _unitOfWork.Save();
 
-
             return true;
         }
     }

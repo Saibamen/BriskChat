@@ -82,7 +82,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserRepository.Verify(r => r.GetAll(), Times.Once);
             mockedDomainRepository.Verify(r => r.GetDomainByUserId(It.IsAny<Guid>()), Times.Once);
-            mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(2));
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
             Assert.NotNull(result);
             Assert.True(result.IsPrivateConversation);
             Assert.False(result.IsPublic);
