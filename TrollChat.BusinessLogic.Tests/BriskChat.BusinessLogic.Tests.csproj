@@ -2,15 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-
+    <RuntimeFrameworkVersion>1.1.2</RuntimeFrameworkVersion>
     <IsPackable>false</IsPackable>
-
     <Authors>Adam Stachowicz</Authors>
-
     <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
-
     <Copyright>2017</Copyright>
-
     <PackageProjectUrl>https://github.com/Saibamen/BriskChat</PackageProjectUrl>
   </PropertyGroup>
 
@@ -24,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TrollChat.BusinessLogic\BriskChat.BusinessLogic.csproj" />
-    <ProjectReference Include="..\TrollChat.DataAccess\BriskChat.DataAccess.csproj" />
+    <ProjectReference Include="../TrollChat.BusinessLogic/BriskChat.BusinessLogic.csproj" />
+    <ProjectReference Include="../TrollChat.DataAccess/BriskChat.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>
