@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.Domain.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Domain.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Domain
+namespace BriskChat.BusinessLogic.Tests.Actions.Domain
 {
     public class CheckDomainExistByNameTests
     {

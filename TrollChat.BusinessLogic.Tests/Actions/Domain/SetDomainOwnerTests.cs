@@ -1,10 +1,11 @@
 ﻿using System;
-using Xunit;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Domain.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Domain.Implementations;
+using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Domain
+namespace BriskChat.BusinessLogic.Tests.Actions.Domain
 {
     public class SetDomainOwnerTests
     {
@@ -35,8 +36,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
 
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.GetById(userId)).Returns(userFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object);
+            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(userId, domainId);
@@ -48,7 +50,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
-            mockedDomainRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -57,8 +59,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // prepare
             var mockedDomainRepository = new Mock<IDomainRepository>();
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object);
+            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid(), Guid.NewGuid());
@@ -68,7 +71,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedDomainRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
-            mockedDomainRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -85,8 +88,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
 
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.GetById(userId)).Returns(userFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object);
+            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(userId, Guid.NewGuid());
@@ -96,7 +100,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
-            mockedDomainRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -105,8 +109,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // prepare
             var mockedDomainRepository = new Mock<IDomainRepository>();
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object);
+            var action = new SetDomainOwner(mockedDomainRepository.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid(), new Guid());
@@ -116,7 +121,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedDomainRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
-            mockedDomainRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace TrollChat.Web.Controllers
+namespace BriskChat.Web.Controllers
 {
     public class HomeController : BaseController
     {

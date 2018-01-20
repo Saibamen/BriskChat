@@ -1,10 +1,11 @@
 ﻿using System;
-using Xunit;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Domain.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Domain.Implementations;
+using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Domain
+namespace BriskChat.BusinessLogic.Tests.Actions.Domain
 {
     public class DeleteDomainByIdTests
     {
@@ -21,8 +22,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
 
             var mockedDomainRepository = new Mock<IDomainRepository>();
             mockedDomainRepository.Setup(r => r.GetById(guid)).Returns(domainFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteDomainById(mockedDomainRepository.Object);
+            var action = new DeleteDomainById(mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid);
@@ -30,7 +32,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             // assert
             Assert.True(result);
             mockedDomainRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
-            mockedDomainRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -38,8 +40,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
         {
             // prepare
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteDomainById(mockedDomainRepository.Object);
+            var action = new DeleteDomainById(mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
@@ -48,7 +51,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             Assert.False(result);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedDomainRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
-            mockedDomainRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -56,8 +59,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
         {
             // prepare
             var mockedDomainRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteDomainById(mockedDomainRepository.Object);
+            var action = new DeleteDomainById(mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid());
@@ -66,7 +70,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Domain
             Assert.False(result);
             mockedDomainRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedDomainRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Domain>()), Times.Never);
-            mockedDomainRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

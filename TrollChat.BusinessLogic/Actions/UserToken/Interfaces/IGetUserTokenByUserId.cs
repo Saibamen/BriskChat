@@ -1,8 +1,8 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
+namespace BriskChat.BusinessLogic.Actions.UserToken.Interfaces
 {
     public interface IGetUserTokenByUserId : IRepository
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrollChat.Web.Models.Message
+namespace BriskChat.Web.Models.Message
 {
     public class MessageViewModel
     {

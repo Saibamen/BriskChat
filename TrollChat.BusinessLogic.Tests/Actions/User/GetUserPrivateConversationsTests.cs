@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     [Collection("mapper")]
     public class GetUserPrivateConversationsTests

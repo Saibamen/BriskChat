@@ -1,10 +1,11 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     public class DeleteUserByIdTests
     {
@@ -20,8 +21,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
 
             var mockedUserRepository = new Mock<IUserRepository>();
             mockedUserRepository.Setup(r => r.GetById(guid)).Returns(userFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteUserById(mockedUserRepository.Object);
+            var action = new DeleteUserById(mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid);
@@ -29,7 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.True(result);
             mockedUserRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -37,8 +39,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteUserById(mockedUserRepository.Object);
+            var action = new DeleteUserById(mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
@@ -46,7 +49,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.False(result);
             mockedUserRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.User>()), Times.Never);
-            mockedUserRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
         }
 
@@ -55,8 +58,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
         {
             // prepare
             var mockedUserRepository = new Mock<IUserRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteUserById(mockedUserRepository.Object);
+            var action = new DeleteUserById(mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid());
@@ -64,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.False(result);
             mockedUserRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.User>()), Times.Never);
-            mockedUserRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedUserRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }

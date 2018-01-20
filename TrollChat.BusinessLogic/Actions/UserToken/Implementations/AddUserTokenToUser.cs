@@ -1,23 +1,25 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.UserToken.Interfaces;
-using TrollChat.BusinessLogic.Helpers.Implementations;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserToken.Interfaces;
+using BriskChat.BusinessLogic.Helpers.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
+namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class AddUserTokenToUser : IAddUserTokenToUser
     {
         private readonly IUserTokenRepository userTokenRepository;
         private readonly IUserRepository userRepository;
         private readonly IHasher hasher;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddUserTokenToUser(IUserTokenRepository userTokenRepository,
-            IUserRepository userRepository,
-            IHasher hasher = null)
+            IUserRepository userRepository, IUnitOfWork unitOfWork, IHasher hasher = null)
         {
             this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
+            _unitOfWork = unitOfWork;
             this.hasher = hasher ?? new Hasher();
         }
 
@@ -40,7 +42,6 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             if (token != null)
             {
                 userTokenRepository.Delete(token);
-                userTokenRepository.Save();
             }
 
             var userToken = new DataAccess.Models.UserToken
@@ -50,7 +51,7 @@ namespace TrollChat.BusinessLogic.Actions.UserToken.Implementations
             };
 
             userTokenRepository.Add(userToken);
-            userTokenRepository.Save();
+            _unitOfWork.Save();
 
             return userToken.SecretToken;
         }

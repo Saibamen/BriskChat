@@ -1,7 +1,7 @@
-﻿using TrollChat.DataAccess.Context;
-using TrollChat.BusinessLogic.Configuration.Interfaces;
+﻿using BriskChat.BusinessLogic.Configuration.Interfaces;
+using BriskChat.DataAccess.Context;
 
-namespace TrollChat.BusinessLogic.Configuration.Implementations
+namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class MigrationHelper : IMigrationHelper
     {

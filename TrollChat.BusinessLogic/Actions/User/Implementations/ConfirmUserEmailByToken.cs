@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Linq;
+using BriskChat.BusinessLogic.Actions.User.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.User.Implementations
+namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class ConfirmUserEmailByToken : IConfirmUserEmailByToken
     {
         private readonly IUserRepository userRepository;
         private readonly IUserTokenRepository userTokenRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository)
+        public ConfirmUserEmailByToken(IUserTokenRepository userTokenRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             this.userTokenRepository = userTokenRepository;
             this.userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(string guid)
@@ -36,10 +39,9 @@ namespace TrollChat.BusinessLogic.Actions.User.Implementations
             userToken.User.EmailConfirmedOn = DateTime.UtcNow;
 
             userRepository.Edit(userToken.User);
-            userRepository.Save();
 
             userTokenRepository.Delete(userToken);
-            userTokenRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

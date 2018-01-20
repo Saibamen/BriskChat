@@ -1,16 +1,19 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementations
+namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class EditRoomName : IEditRoomName
     {
         private readonly IRoomRepository roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EditRoomName(IRoomRepository roomRepository)
+        public EditRoomName(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid roomId, string roomName)
@@ -29,7 +32,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
 
             roomToEdit.Name = roomName;
             roomRepository.Edit(roomToEdit);
-            roomRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

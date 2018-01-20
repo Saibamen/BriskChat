@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using TrollChat.BusinessLogic.Actions.Base;
-using TrollChat.BusinessLogic.Models;
+using BriskChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Models;
 
-namespace TrollChat.BusinessLogic.Actions.User.Interfaces
+namespace BriskChat.BusinessLogic.Actions.User.Interfaces
 {
     public interface IGetUserRooms : IAction
     {

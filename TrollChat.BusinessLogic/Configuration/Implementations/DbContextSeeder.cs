@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.User.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
-using TrollChat.BusinessLogic.Actions.Role.Interfaces;
-using TrollChat.BusinessLogic.Actions.UserDomain.Interfaces;
-using TrollChat.BusinessLogic.Configuration.Interfaces;
+using BriskChat.BusinessLogic.Actions.Domain.Interfaces;
+using BriskChat.BusinessLogic.Actions.Role.Interfaces;
+using BriskChat.BusinessLogic.Actions.User.Interfaces;
+using BriskChat.BusinessLogic.Actions.UserDomain.Interfaces;
+using BriskChat.BusinessLogic.Configuration.Interfaces;
+using BriskChat.BusinessLogic.Models;
 
-namespace TrollChat.BusinessLogic.Configuration.Implementations
+namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class DbContextSeeder : IDbContextSeeder
     {
@@ -71,7 +71,7 @@ namespace TrollChat.BusinessLogic.Configuration.Implementations
             {
                 Name = "User",
                 Description = "User"
-            },
+            }
         };
 
         private readonly string[] users = { "owner", "user", "user1" };

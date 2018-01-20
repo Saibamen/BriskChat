@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <RuntimeFrameworkVersion>1.1.2</RuntimeFrameworkVersion>
+    <Authors>Adam Stachowicz</Authors>
+    <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
+    <Copyright>2017</Copyright>
+    <PackageProjectUrl>https://github.com/Saibamen/BriskChat</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="MailKit" Version="1.22.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.2" />
+    <PackageReference Include="Quartz" Version="3.0.0-alpha3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../TrollChat.DataAccess/BriskChat.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

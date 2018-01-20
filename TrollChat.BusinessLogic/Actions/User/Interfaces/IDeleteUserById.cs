@@ -1,7 +1,7 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.User.Interfaces
+namespace BriskChat.BusinessLogic.Actions.User.Interfaces
 {
     public interface IDeleteUserById : IAction
     {

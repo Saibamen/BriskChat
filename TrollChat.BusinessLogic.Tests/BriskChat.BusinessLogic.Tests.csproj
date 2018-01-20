@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <RuntimeFrameworkVersion>1.1.2</RuntimeFrameworkVersion>
+    <IsPackable>false</IsPackable>
+    <Authors>Adam Stachowicz</Authors>
+    <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
+    <Copyright>2017</Copyright>
+    <PackageProjectUrl>https://github.com/Saibamen/BriskChat</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="OpenCover" Version="4.6.519" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.analyzers" Version="0.8.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../TrollChat.BusinessLogic/BriskChat.BusinessLogic.csproj" />
+    <ProjectReference Include="../TrollChat.DataAccess/BriskChat.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

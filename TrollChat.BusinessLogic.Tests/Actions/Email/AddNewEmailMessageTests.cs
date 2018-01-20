@@ -1,11 +1,12 @@
-﻿using Moq;
-using TrollChat.BusinessLogic.Actions.Email.Implementations;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.BusinessLogic.Actions.Email.Implementations;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Email
+namespace BriskChat.BusinessLogic.Tests.Actions.Email
 {
     [Collection("mapper")]
     public class AddNewEmailMessageTests
@@ -26,7 +27,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             var mockedEmailMessageRepository = new Mock<IEmailRepository>();
             mockedEmailMessageRepository.Setup(r => r.Add(It.IsAny<EmailMessage>()))
                 .Callback<EmailMessage>(u => emailMessageFromDb = u);
-            var action = new AddNewEmailMessage(mockedEmailMessageRepository.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new AddNewEmailMessage(mockedEmailMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(emailMessage);
@@ -40,7 +43,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             Assert.Equal(0, emailMessageFromDb.FailureCount);
 
             mockedEmailMessageRepository.Verify(r => r.Add(It.IsAny<EmailMessage>()), Times.Once);
-            mockedEmailMessageRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
         }
 
         [Fact]
@@ -49,8 +52,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             // prepare
             var emailMessageToAdd = new EmailMessageModel();
             var mockedEmailMessageRepository = new Mock<IEmailRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewEmailMessage(mockedEmailMessageRepository.Object);
+            var action = new AddNewEmailMessage(mockedEmailMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(emailMessageToAdd);
@@ -58,7 +62,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             // assert
             Assert.False(result);
             mockedEmailMessageRepository.Verify(r => r.Add(It.IsAny<EmailMessage>()), Times.Never);
-            mockedEmailMessageRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

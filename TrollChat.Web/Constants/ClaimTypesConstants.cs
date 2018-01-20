@@ -1,4 +1,4 @@
-﻿namespace TrollChat.Web.Constants
+﻿namespace BriskChat.Web.Constants
 {
     public static class ClaimTypesConstants
     {

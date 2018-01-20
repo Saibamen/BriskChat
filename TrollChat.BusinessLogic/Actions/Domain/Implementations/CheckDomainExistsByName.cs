@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using TrollChat.BusinessLogic.Actions.Domain.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Domain.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Domain.Implementations
+namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class CheckDomainExistsByName : ICheckDomainExistsByName
     {

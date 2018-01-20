@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using TrollChat.BusinessLogic.Configuration.Implementations;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
 using System.Threading.Tasks;
+using BriskChat.BusinessLogic.Configuration.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace TrollChat.BusinessLogic.Helpers.Implementations
+namespace BriskChat.BusinessLogic.Helpers.Implementations
 {
     public class EmailService : IEmailService
     {
@@ -30,7 +30,7 @@ namespace TrollChat.BusinessLogic.Helpers.Implementations
         public MimeMessage CreateMessage(string emailAddress, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("TrollChat", settings.Value.Login));
+            emailMessage.From.Add(new MailboxAddress("BriskChat", settings.Value.Login));
             emailMessage.To.Add(new MailboxAddress("", emailAddress));
             emailMessage.Subject = subject;
 

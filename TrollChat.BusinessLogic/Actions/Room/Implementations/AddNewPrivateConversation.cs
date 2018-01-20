@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementations
+namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class AddNewPrivateConversation : IAddNewPrivateConversation
     {
@@ -14,16 +15,18 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
         private readonly IDomainRepository domainRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddNewPrivateConversation(IRoomRepository roomRepository,
             IUserRepository userRepository,
             IUserRoomRepository userRoomRepository,
-            IDomainRepository domainRepository)
+            IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
             this.domainRepository = domainRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
@@ -59,7 +62,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                     if (users.Any(x => x.Equals(connection.User.Id)))
                     {
                         searchedCount += 1;
-                        Debug.WriteLine("######### Znaleziono istniające połączenie #########");
+                        Debug.WriteLine("######### Znaleziono istniejące połączenie #########");
                         Debug.WriteLine(connection.User.Name);
                         dict[connection] = true;
                     }
@@ -100,7 +103,6 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             };
 
             roomRepository.Add(newRoom);
-            roomRepository.Save();
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
             userRoomRepository.Add(userRoom);
@@ -110,10 +112,9 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 var userRoom2 = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
                 userRoomRepository.Add(userRoom2);
             }
-
-            userRoomRepository.Save();
-
+            
             var returnRoom = AutoMapper.Mapper.Map<RoomModel>(newRoom);
+            _unitOfWork.Save();
 
             return returnRoom;
         }

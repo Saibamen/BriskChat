@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementations
+namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class GetDomainPublicAndUserRooms : IGetDomainPublicAndUserRooms
     {

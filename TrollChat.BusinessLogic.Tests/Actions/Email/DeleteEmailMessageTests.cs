@@ -1,11 +1,12 @@
 ﻿using System;
+using BriskChat.BusinessLogic.Actions.Email.Implementations;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Email.Implementations;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Email
+namespace BriskChat.BusinessLogic.Tests.Actions.Email
 {
     public class DeleteEmailMessageTests
     {
@@ -21,8 +22,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
 
             var mockedEmailRepository = new Mock<IEmailRepository>();
             mockedEmailRepository.Setup(r => r.GetById(guid)).Returns(messageFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
+            var action = new DeleteEmailMessageById(mockedEmailRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid);
@@ -30,7 +32,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             // assert
             Assert.True(result);
             mockedEmailRepository.Verify(r => r.Delete(It.IsAny<EmailMessage>()), Times.Once());
-            mockedEmailRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -38,8 +40,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         {
             // prepare
             var mockedEmailRepository = new Mock<IEmailRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
+            var action = new DeleteEmailMessageById(mockedEmailRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
@@ -48,7 +51,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             Assert.False(result);
             mockedEmailRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once());
             mockedEmailRepository.Verify(r => r.Delete(It.IsAny<EmailMessage>()), Times.Never);
-            mockedEmailRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -56,8 +59,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
         {
             // prepare
             var mockedEmailRepository = new Mock<IEmailRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteEmailMessageById(mockedEmailRepository.Object);
+            var action = new DeleteEmailMessageById(mockedEmailRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid());
@@ -66,7 +70,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Email
             Assert.False(result);
             mockedEmailRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedEmailRepository.Verify(r => r.Delete(It.IsAny<EmailMessage>()), Times.Never);
-            mockedEmailRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

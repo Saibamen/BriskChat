@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BriskChat.BusinessLogic.Actions.Room.Implementations;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 using Moq;
-using TrollChat.BusinessLogic.Actions.Room.Implementations;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Room
+namespace BriskChat.BusinessLogic.Tests.Actions.Room
 {
     [Collection("mapper")]
     public class AddNewRoomTests
@@ -53,8 +54,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRoomRepository = new Mock<IDomainRepository>();
             mockedDomainRoomRepository.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(domain);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(roomData, Guid.NewGuid(), Guid.NewGuid());
@@ -71,7 +73,8 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             Assert.Equal("Test Domain", roomSaved.Domain.Name);
             Assert.Equal("Test", roomSaved.Owner.Name);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Once());
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once());
+            mockedUserRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.UserRoom>()), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -83,8 +86,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedUserRepo = new Mock<IUserRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRoomRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
@@ -94,7 +98,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -106,8 +110,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedUserRepo = new Mock<IUserRepository>();
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRoomRepository = new Mock<IDomainRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
@@ -117,7 +122,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -135,8 +140,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             var mockedUserRoomRepository = new Mock<IUserRoomRepository>();
             var mockedDomainRoomRepository = new Mock<IDomainRepository>();
             mockedDomainRoomRepository.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(domain);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object);
+            var action = new AddNewRoom(mockedRoomRepository.Object, mockedUserRepo.Object, mockedUserRoomRepository.Object, mockedDomainRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(roomToAdd, Guid.NewGuid(), Guid.NewGuid());
@@ -146,7 +152,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             mockedDomainRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUserRepo.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedRoomRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.UserToken.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.UserToken.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.UserToken
+namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
 {
     [Collection("mapper")]
     public class GetUserTokenByUserIdTests

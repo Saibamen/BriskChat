@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public static class TempDataExtensionsHelper
     {
@@ -12,8 +12,7 @@ namespace TrollChat.Web.Helpers
 
         public static T Get<T>(this ITempDataDictionary tempData, string key) where T : class
         {
-            object obj;
-            tempData.TryGetValue(key, out obj);
+            tempData.TryGetValue(key, out var obj);
 
             return obj == null ? null : JsonConvert.DeserializeObject<T>((string)obj);
         }

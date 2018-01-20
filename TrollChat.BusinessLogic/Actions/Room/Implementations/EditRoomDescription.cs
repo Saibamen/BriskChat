@@ -1,16 +1,19 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementations
+namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class EditRoomDescription : IEditRoomDescription
     {
         private readonly IRoomRepository roomRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EditRoomDescription(IRoomRepository roomRepository)
+        public EditRoomDescription(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid roomId, string roomDescription)
@@ -27,7 +30,7 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
                 default:
                     roomToEdit.Description = roomDescription;
                     roomRepository.Edit(roomToEdit);
-                    roomRepository.Save();
+                    _unitOfWork.Save();
                     return true;
 
                 case null:

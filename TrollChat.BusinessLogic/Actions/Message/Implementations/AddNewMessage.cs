@@ -1,17 +1,20 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Implementations
+namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class AddNewMessage : IAddNewMessage
     {
         private readonly IMessageRepository messageRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddNewMessage(IMessageRepository messageRepository)
+        public AddNewMessage(IMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
             this.messageRepository = messageRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public Guid Invoke(MessageModel message)
@@ -24,7 +27,7 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             var dbMessage = AutoMapper.Mapper.Map<DataAccess.Models.Message>(message);
 
             messageRepository.Add(dbMessage);
-            messageRepository.Save();
+            _unitOfWork.Save();
 
             return dbMessage.Id;
         }

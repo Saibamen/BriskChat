@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.UserRoom.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
-using TrollChat.BusinessLogic.Actions.UserRoom.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.UserRoom
+namespace BriskChat.BusinessLogic.Tests.Actions.UserRoom
 {
     [Collection("mapper")]
     public class GetUserRoomByIdsTests

@@ -1,6 +1,6 @@
-﻿using TrollChat.Web.Models.Common;
+﻿using BriskChat.Web.Models.Common;
 
-namespace TrollChat.Web.Helpers
+namespace BriskChat.Web.Helpers
 {
     public class EmailBodyHelper : EmailBodyModel
     {
@@ -12,7 +12,7 @@ namespace TrollChat.Web.Helpers
                 TopicSecond = "Only we have to check if the email is yours.",
                 ButtonValue = callbackUrl,
                 ButtonText = "Confirm email",
-                AdditionalNotesFirst = "If you did not create a TrollChat account,",
+                AdditionalNotesFirst = "If you did not create a BriskChat account,",
                 AdditionalNotesSecond = "remove this email and everything will return to normal."
             };
 

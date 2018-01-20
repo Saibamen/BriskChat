@@ -1,13 +1,14 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     public class ConfirmUserEmailByTokenTests
     {
@@ -39,7 +40,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
                     .Callback<DataAccess.Models.User>(u => userSaved = u);
-            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke("1");
@@ -49,8 +52,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.NotNull(userSaved.EmailConfirmedOn);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserRepo.Verify(r => r.Save(), Times.Once);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -82,7 +84,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
                 .Callback<DataAccess.Models.User>(u => userSaved = u);
-            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke("1");
@@ -92,8 +96,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.Null(userSaved);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserRepo.Verify(r => r.Save(), Times.Never);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -120,8 +123,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedUserTokenRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()))
                 .Returns(getAllResults.AsQueryable());
             var mockedUserRepo = new Mock<IUserRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             action.Invoke("123");
@@ -129,7 +133,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // assert
             Assert.Equal(userFromDb.EmailConfirmedOn, dateNow);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
-            mockedUserRepo.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -162,7 +166,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedUserRepo = new Mock<IUserRepository>();
             mockedUserRepo.Setup(r => r.Edit(It.IsAny<DataAccess.Models.User>()))
                 .Callback<DataAccess.Models.User>(u => userSaved = u);
-            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             action.Invoke("1");
@@ -172,7 +178,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.NotNull(userSaved.EmailConfirmedOn);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserRepo.Verify(r => r.Save(), Times.Once);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -181,7 +187,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             // prepare
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             var mockedUserRepo = new Mock<IUserRepository>();
-            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
+
+            var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke("");
@@ -190,8 +198,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             Assert.False(actionResult);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never());
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never());
-            mockedUserRepo.Verify(r => r.Save(), Times.Never);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

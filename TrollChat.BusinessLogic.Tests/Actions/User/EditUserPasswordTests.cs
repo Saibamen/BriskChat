@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
-using Moq;
-using TrollChat.BusinessLogic.Helpers.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
-using Xunit;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.User.Implementations;
+using System.Linq.Expressions;
+using BriskChat.BusinessLogic.Actions.User.Implementations;
+using BriskChat.BusinessLogic.Helpers.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
+using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.User
+namespace BriskChat.BusinessLogic.Tests.Actions.User
 {
     public class EditUserPasswordTests
     {
@@ -46,8 +47,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedHasher = new Mock<IHasher>();
             mockedHasher.Setup(h => h.GenerateRandomSalt()).Returns("salt-generated");
             mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedHasher.Object);
+            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedUnitOfWork.Object, mockedHasher.Object);
 
             // action
             var actionResult = action.Invoke(Guid.NewGuid(), "plain");
@@ -63,10 +65,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedHasher.Verify(r => r.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             mockedUserRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Once());
-            mockedUserRepository.Verify(r => r.Save(), Times.Once());
 
             mockedUserTokenRepo.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Once());
-            mockedUserTokenRepo.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -90,8 +91,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             var mockedHasher = new Mock<IHasher>();
             mockedHasher.Setup(h => h.GenerateRandomSalt()).Returns("salt-generated");
             mockedHasher.Setup(h => h.CreatePasswordHash("plain", "salt-generated")).Returns("plain-hashed");
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedHasher.Object);
+            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedUnitOfWork.Object, mockedHasher.Object);
 
             // action
             var actionResult = action.Invoke(Guid.NewGuid(), "plain");
@@ -104,10 +106,10 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
             mockedHasher.Verify(r => r.CreatePasswordHash(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
 
             mockedUserRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
-            mockedUserRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
 
             mockedUserTokenRepo.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserTokenRepo.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -122,20 +124,21 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 .Returns(userFromDb);
 
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new EditUserPassword(mockedUserTokenRepository.Object, mockedUserRepo.Object);
+            var action = new EditUserPassword(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(guid, "");
 
             // assert
             Assert.False(actionResult);
-            mockedUserRepo.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedUserRepo.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
 
             mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Never);
             mockedUserTokenRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserTokenRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
         [Fact]
@@ -156,20 +159,21 @@ namespace TrollChat.BusinessLogic.Tests.Actions.User
                 .Returns(userFromDb);
 
             var mockedUserTokenRepo = new Mock<IUserTokenRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object);
+            var action = new EditUserPassword(mockedUserTokenRepo.Object, mockedUserRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var actionResult = action.Invoke(guid, "123");
 
             // assert
             Assert.False(actionResult);
-            mockedUserRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedUserRepository.Verify(r => r.Edit(It.IsAny<DataAccess.Models.User>()), Times.Never);
 
             mockedUserTokenRepo.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Once);
             mockedUserTokenRepo.Verify(r => r.Delete(It.IsAny<DataAccess.Models.UserToken>()), Times.Never);
-            mockedUserTokenRepo.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
     }
 }

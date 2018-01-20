@@ -1,6 +1,6 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.UserToken.Interfaces
+namespace BriskChat.BusinessLogic.Actions.UserToken.Interfaces
 {
     public interface IDeleteUserTokenyByTokenString : IAction
     {

@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
-using TrollChat.BusinessLogic.Actions.Room.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Room.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Room.Implementations
+namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class AddNewRoom : IAddNewRoom
     {
@@ -12,16 +13,18 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
         private readonly IUserRepository userRepository;
         private readonly IUserRoomRepository userRoomRepository;
         private readonly IDomainRepository domainRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public AddNewRoom(IRoomRepository roomRepository,
             IUserRepository userRepository,
             IUserRoomRepository userRoomRepository,
-            IDomainRepository domainRepository)
+            IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
             this.roomRepository = roomRepository;
             this.userRepository = userRepository;
             this.userRoomRepository = userRoomRepository;
             this.domainRepository = domainRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public Guid Invoke(RoomModel room, Guid userId, Guid domainId)
@@ -52,12 +55,11 @@ namespace TrollChat.BusinessLogic.Actions.Room.Implementations
             newRoom.Domain = AutoMapper.Mapper.Map<DataAccess.Models.Domain>(domain);
 
             roomRepository.Add(newRoom);
-            roomRepository.Save();
 
             var userRoom = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
 
             userRoomRepository.Add(userRoom);
-            userRoomRepository.Save();
+            _unitOfWork.Save();
 
             return newRoom.Id;
         }

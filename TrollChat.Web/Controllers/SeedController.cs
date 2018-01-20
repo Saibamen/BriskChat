@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BriskChat.BusinessLogic.Configuration.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TrollChat.BusinessLogic.Configuration.Interfaces;
 
-namespace TrollChat.Web.Controllers
+namespace BriskChat.Web.Controllers
 {
     [Route("[controller]")]
     public class SeedController : Controller

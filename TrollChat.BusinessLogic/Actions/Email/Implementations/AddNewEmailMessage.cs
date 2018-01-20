@@ -1,17 +1,20 @@
-﻿using TrollChat.BusinessLogic.Actions.Email.Interfaces;
-using TrollChat.BusinessLogic.Models;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using BriskChat.BusinessLogic.Actions.Email.Interfaces;
+using BriskChat.BusinessLogic.Models;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Email.Implementations
+namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class AddNewEmailMessage : IAddNewEmailMessage
     {
         private readonly IEmailRepository emailRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AddNewEmailMessage(IEmailRepository emailRepository)
+        public AddNewEmailMessage(IEmailRepository emailRepository, IUnitOfWork unitOfWork)
         {
             this.emailRepository = emailRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(EmailMessageModel email)
@@ -24,7 +27,7 @@ namespace TrollChat.BusinessLogic.Actions.Email.Implementations
             var dbMessage = AutoMapper.Mapper.Map<EmailMessage>(email);
 
             emailRepository.Add(dbMessage);
-            emailRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

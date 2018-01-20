@@ -1,4 +1,4 @@
-﻿namespace TrollChat.Web.Models.Common
+﻿namespace BriskChat.Web.Models.Common
 {
     public class EmailBodyModel
     {

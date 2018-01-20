@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Linq;
+using BriskChat.BusinessLogic.Configuration.Implementations;
+using BriskChat.BusinessLogic.Configuration.Interfaces;
+using BriskChat.BusinessLogic.Quartz;
+using BriskChat.DataAccess.Context;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,12 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StackExchange.Profiling.Storage;
-using TrollChat.BusinessLogic.Configuration.Interfaces;
-using TrollChat.DataAccess.Context;
-using TrollChat.BusinessLogic.Configuration.Implementations;
-using TrollChat.BusinessLogic.Quartz;
 
-namespace TrollChat.Web
+namespace BriskChat.Web
 {
     public class Startup
     {

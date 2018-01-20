@@ -1,16 +1,19 @@
 ﻿using System;
-using TrollChat.BusinessLogic.Actions.Message.Interfaces;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Message.Interfaces;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
 
-namespace TrollChat.BusinessLogic.Actions.Message.Implementations
+namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class EditMessageById : IEditMessageById
     {
         private readonly IMessageRepository messageRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EditMessageById(IMessageRepository messageRepository)
+        public EditMessageById(IMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
             this.messageRepository = messageRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public bool Invoke(Guid messageId, string messageText)
@@ -30,7 +33,7 @@ namespace TrollChat.BusinessLogic.Actions.Message.Implementations
             messageToEdit.Text = messageText;
 
             messageRepository.Edit(messageToEdit);
-            messageRepository.Save();
+            _unitOfWork.Save();
 
             return true;
         }

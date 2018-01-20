@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
-namespace TrollChat.Web
+namespace BriskChat.Web
 {
     public class Program
     {

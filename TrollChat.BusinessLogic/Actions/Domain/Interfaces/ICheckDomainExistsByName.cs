@@ -1,6 +1,6 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
+﻿using BriskChat.BusinessLogic.Actions.Base;
 
-namespace TrollChat.BusinessLogic.Actions.Domain.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Domain.Interfaces
 {
     public interface ICheckDomainExistsByName : IAction
     {

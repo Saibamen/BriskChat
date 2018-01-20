@@ -2,51 +2,36 @@ dist: trusty
 sudo: required
 
 language: csharp
-solution: TrollChat.sln
+solution: BriskChat.sln
 
 notifications:
   email:
     on_failure: change # default: always
 
+# Fix for tests from https://codeblog.jonskeet.uk/2017/08/15/using-net-core-2-0-sdk-on-travis/
 addons:
-    apt:
-        packages:
-          - libunwind8
+  apt:
+    sources:
+    - sourceline: 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main'
+      key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
+    packages:
+    - dotnet-hostfxr-1.0.1
+    - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
-mono: # none
+mono:
   #- 3.8.0
   - 3.10.0
   - 3.12.0
-  #- latest
+  - latest
+  #- none
 
-dotnet: 2.0.0
-
-global_env: DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-global_env: DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-env:
-    global:
-        # Replace framework with core when you want to build a .NET Core project, not a .NET Framework project.
-        - "TRAVIS_MSBUILD_MODE=core"
-        # If using travis-msbuild as submodule, replace the TRAVIS_MSBUILD path!
-        - "TRAVIS_MSBUILD=."
-        - "TRAVIS_MSBUILD_BIN=$TRAVIS_MSBUILD/bin"
-        # Replace the following path with the path to a copy of the .NET Framework you're depending on, f.e. a pre-built copy of the Mono Framework API.
-        - "TRAVIS_MSBUILD_FRAMEWORK=$TRAVIS_MSBUILD/lib-dotnet"
-        - "PATH=$PATH:$TRAVIS_MSBUILD_BIN"
+# .NET Core SDK version
+dotnet: 2.1.3
 
 before_script:
-  - nuget restore
-  - nuget restore TrollChat.sln
   - dotnet restore
-  - dotnet restore TrollChat.sln
 
 script:
-  - xbuild /p:Configuration=Debug TrollChat.sln
-  - msbuild /version
-  - msbuild TrollChat.sln
-  - dotnet build TrollChat.sln
-  - dotnet build ./TrollChat.DataAccess
-  - dotnet build ./TrollChat.BusinessLogic
-  - dotnet build ./TrollChat.BusinessLogic.Tests
-  - dotnet test ./TrollChat.BusinessLogic.Tests --no-build
+  - dotnet build
+  - dotnet test ./TrollChat.BusinessLogic.Tests
+  - dotnet publish -c Release

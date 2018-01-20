@@ -1,14 +1,14 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using TrollChat.BusinessLogic.Actions.Email.Implementations;
-using TrollChat.DataAccess.Models;
-using TrollChat.DataAccess.Repositories.Interfaces;
+using BriskChat.BusinessLogic.Actions.Email.Implementations;
+using BriskChat.DataAccess.Models;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Email
+namespace BriskChat.BusinessLogic.Tests.Actions.Email
 {
     public class GetEmailMessagesTests
     {

@@ -1,10 +1,11 @@
-﻿using Moq;
-using System;
-using TrollChat.BusinessLogic.Actions.Room.Implementations;
-using TrollChat.DataAccess.Repositories.Interfaces;
+﻿using System;
+using BriskChat.BusinessLogic.Actions.Room.Implementations;
+using BriskChat.DataAccess.Repositories.Interfaces;
+using BriskChat.DataAccess.UnitOfWork;
+using Moq;
 using Xunit;
 
-namespace TrollChat.BusinessLogic.Tests.Actions.Room
+namespace BriskChat.BusinessLogic.Tests.Actions.Room
 {
     public class DeleteRoomByIdTests
     {
@@ -20,8 +21,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
 
             var mockedRoomRepository = new Mock<IRoomRepository>();
             mockedRoomRepository.Setup(r => r.GetById(guid)).Returns(roomFromDb);
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteRoomById(mockedRoomRepository.Object);
+            var action = new DeleteRoomById(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(guid);
@@ -29,7 +31,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // assert
             Assert.True(result);
             mockedRoomRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Once());
-            mockedRoomRepository.Verify(r => r.Save(), Times.Once());
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
         [Fact]
@@ -37,8 +39,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteRoomById(mockedRoomRepository.Object);
+            var action = new DeleteRoomById(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(Guid.NewGuid());
@@ -46,7 +49,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // assert
             Assert.False(result);
             mockedRoomRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
         }
 
@@ -55,8 +58,9 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
+            var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new DeleteRoomById(mockedRoomRepository.Object);
+            var action = new DeleteRoomById(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
             var result = action.Invoke(new Guid());
@@ -64,7 +68,7 @@ namespace TrollChat.BusinessLogic.Tests.Actions.Room
             // assert
             Assert.False(result);
             mockedRoomRepository.Verify(r => r.Delete(It.IsAny<DataAccess.Models.Room>()), Times.Never);
-            mockedRoomRepository.Verify(r => r.Save(), Times.Never);
+            mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
         }
     }

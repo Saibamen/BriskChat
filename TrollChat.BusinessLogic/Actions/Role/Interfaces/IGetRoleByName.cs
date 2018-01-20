@@ -1,7 +1,7 @@
-﻿using TrollChat.BusinessLogic.Actions.Base;
-using TrollChat.BusinessLogic.Models;
+﻿using BriskChat.BusinessLogic.Actions.Base;
+using BriskChat.BusinessLogic.Models;
 
-namespace TrollChat.BusinessLogic.Actions.Role.Interfaces
+namespace BriskChat.BusinessLogic.Actions.Role.Interfaces
 {
     public interface IGetRoleByName : IAction
     {
