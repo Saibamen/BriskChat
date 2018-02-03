@@ -4,12 +4,13 @@
   "dependencies": {
     "jquery": "3.3.1",
     "signalr": "v2.2.2",
-    "semantic": "2.2.13",
+    "semantic": "2.2.14",
     "Autolinker.js": "1.6.0"
   },
   "resolutions": {
     "jquery": "3.3.1",
     "jquery-validation": "1.16.0",
-    "Autolinker.js": "1.6.0"
+    "Autolinker.js": "1.6.0",
+    "semantic": "2.2.14"
   }
 }
