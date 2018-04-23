@@ -11,6 +11,7 @@ notifications:
 # Fix for tests from https://github.com/travis-ci/travis-ci/issues/8866
 addons:
   apt:
+    packages:
     - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
 mono:
