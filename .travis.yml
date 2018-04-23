@@ -8,14 +8,9 @@ notifications:
   email:
     on_failure: change # default: always
 
-# Fix for tests from https://codeblog.jonskeet.uk/2017/08/15/using-net-core-2-0-sdk-on-travis/
+# Fix for tests from https://github.com/travis-ci/travis-ci/issues/8866
 addons:
   apt:
-    sources:
-    - sourceline: 'deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main'
-      key_url: 'https://packages.microsoft.com/keys/microsoft.asc'
-    packages:
-    - dotnet-hostfxr-1.0.1
     - dotnet-sharedframework-microsoft.netcore.app-1.1.2
 
 mono:
