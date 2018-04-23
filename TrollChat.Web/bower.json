@@ -2,14 +2,15 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "jquery": "3.2.1",
+    "jquery": "3.3.1",
     "signalr": "v2.2.2",
-    "semantic": "2.2.13",
-    "Autolinker.js": "1.6.0"
+    "semantic": "2.3.1",
+    "Autolinker.js": "1.6.2"
   },
   "resolutions": {
-    "jquery": "3.2.1",
+    "jquery": "3.3.1",
     "jquery-validation": "1.16.0",
-    "Autolinker.js": "1.6.0"
+    "Autolinker.js": "1.6.2",
+    "semantic": "2.3.1"
   }
 }
