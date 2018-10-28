@@ -22,7 +22,7 @@ mono:
   #- none
 
 # .NET Core SDK version
-dotnet: 2.1.105
+dotnet: 2.1.403
 
 before_script:
   - dotnet restore
