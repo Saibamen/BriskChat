@@ -1,6 +1,86 @@
 ## RELEASE NOTES
 
-### Version 2.3.1 - Mar 19, 2018
+### Version 2.4.1 - Oct 13, 2018
+
+**Note**
+> If you are using the `semantic-ui-less` package with versions of LESS before 3.5 some `calc` values will not be computed correctly due to changes in variable interpolation. It is recommended that you upgrade to at least 3.5 to continue using new versions of SUI. For more information see [#6512](https://github.com/Semantic-Org/Semantic-UI/issues/6512)
+
+**Build**
+- **LESS** - SUI now supports less versions greater than `3.5.0` **Thanks @sciyoshi** [#6512](https://github.com/Semantic-Org/Semantic-UI/issues/6512)
+- **Gulp** - Migrated deprecated `gulp-util` to `replace-ext` **Thanks @stevelacy** [#6322](https://github.com/Semantic-Org/Semantic-UI/issues/6322)
+- **Gulp** - Updated all gulp dependencies to most recent released versions with modifications to tasks as necessary.
+
+**Bug Fixes**
+- **Dropdown** - `clearable` dropdown now works with dropdown that arent `on:click`, like `hover` or `manual` triggers. [#6594](https://github.com/Semantic-Org/Semantic-UI/issues/6594)
+- **Modal** - Fixed `fullscreen modal` having incorrect left offset with flex modals [#6587](https://github.com/Semantic-Org/Semantic-UI/issues/6587)
+- **Embed** - Embed will now correctly remove DOM metadata on `destroy`
+- **Grid** - Fix issue with `very relaxed vertically divided grid` having wrong margins on dividers
+
+### Version 2.4.0 - Sep 17, 2018
+
+> `2.4.0` includes a new component `placeholder`. To use this component in your existing SUI site, be sure to add `@placeholder: 'default';` to your `theme.config`. You can see an example in `theme.config.example`
+
+**New Components**
+- **Placeholder** - Added `ui placeholder` that can be used to show where content will soon appear.
+
+**New UI Type**
+- **Segment** - Added new `ui placeholder segment` used to reserve space for UI when content is missing or empty.
+
+**Major Enhancements**
+- **Dropdown** - Added `clearable` dropdowns. When `clearable: true` is specified an (X) will appear to clear dropdown selection [#2072](https://github.com/Semantic-Org/Semantic-UI/issues/2072)
+- **Modal/Dimmer** - Modals and dimmers now include a new setting `useFlex` which defaults to `auto`. Modals and dimmers will automatically revert to using non-flex layouts when there may be layout issues with using flexbox. Modals will fall back to JS position when `detachable: false` is used or with IE11/Edge (Absolutely positioned elements inside flex containers in IE behave differently).
+
+**Critical Bugs**
+- **Modal** - Fixed issue where `scrolling modal` would not allow for scrolling with touch devices. [#6449](https://github.com/Semantic-Org/Semantic-UI/issues/6449)
+- **Label** - Fixed issue where `basic label` were appearing incorrectly **Thanks @lasley / @ColinFrick** [#6582](https://github.com/Semantic-Org/Semantic-UI/issues/6582) [#6440](https://github.com/Semantic-Org/Semantic-UI/issues/6440)
+- **Menu/Dropdown** - Fixed `left menu` inside `ui menu` would display horizontally as `flex` [#6359](https://github.com/Semantic-Org/Semantic-UI/issues/6359)
+
+**Bugs**
+- **Dimmer** - Dimmer now sets `variation` at runtime, to support run-time swapping between `top aligned` and `middle aligned` using `.dimmer('setting', 'variation', 'top aligned')`
+- **Dropdown** - Fixed issue where `onChange` when used with `action: hide` would be missing the third param `$item` [#6555](https://github.com/Semantic-Org/Semantic-UI/issues/6555)
+- **Flag** - Add `uk` alias for `united kingdom` **Thanks @PhilipGarnero** [#6531](https://github.com/Semantic-Org/Semantic-UI/issues/6531)
+- **Icon** - Fixes missing `disk outline icon` alias [#6556](https://github.com/Semantic-Org/Semantic-UI/issues/6556)
+- **List** - Fixed issue where list `content` would not take up 100% width when used alongside `img` or `icon`
+- **Menu/Dropdown** - Fixes dropdown item margin not obeyed inside `labeled icon menu` [#6557](https://github.com/Semantic-Org/Semantic-UI/issues/6557)
+- **Modal** - Fixes `@mobileTopAlignedMargin` theming variable was not implemented
+- **Modal** - Modal now will remove `blurring` after undimming, to prevent issues with `position: fixed` [#6520](https://github.com/Semantic-Org/Semantic-UI/issues/6520)
+
+**Minor Changes**
+- **Dropdown** - `inline dropdown` `close icon` default right margin default spacing slightly modified.
+
+
+### Version 2.3.3 - July 8th, 2018
+
+**Bug Fixes**
+- **Search** - Passing in `cache: false` will now affect default settings for `apiSettings` when using a remote endpoint. Previously you would also have to pass in `apiSettings: { cache: false}` as well
+- **CSS** - Update LESS syntax to be compatible with LESS 3.0 **Thanks @sciyoshi** [#6447](https://github.com/Semantic-Org/Semantic-UI/pull/6447)
+- **Icon** - Several icon names have been deprecated due to incompatibility with `transition in` and `transition out` used in animations.
+
+* `linkedin in` is now `linkedin alternate`
+* `zoom in` is now `zoom-in`
+* `zoom out` is now `zoom-out`
+* `sign in` is now `sign-in`
+* `sign out` is now `sign-out`
+* `log out` is now `logout`
+* `in cart` is now `in-cart`
+
+### Version 2.3.2 - June 18, 2018
+
+**Enhancements**
+- **Modal** - Modal and Dimmer now prevent background page from scrolling on mobile or where touch events are present
+- **Button** - Add `inverted` and `inverted basic` variations for `primary` and `secondary` buttons  **Thanks @hammy2899** [#6242](https://github.com/Semantic-Org/Semantic-UI/issues/6242)
+
+**Theming**
+- **Global** - Add `hover` `down` `active` and `focus` variables for `@invertedPrimaryColor` and `@invertedSecondaryColor`
+
+**Bugs**
+- **Dropdown** Fixed bug that could cause dropdown to recursively trigger network requests specifically when using `apiSettings` with a url that returns valid response but with no results when clicking directly on the `dropdown icon`. **Thanks @vpeti** [#5231](https://github.com/Semantic-Org/Semantic-UI/issues/5231) [#5809](https://github.com/Semantic-Org/Semantic-UI/issues/5809)
+- **Statistics** - Fix issue where grouped statistics would have excess bottom margin if they are `:last-child`
+- **Label** - Fix `basic label` does not use `@basicBackground` variables **Thanks @levithomson**
+- **Modal** - Modal will not refocus a field if field is already focused **Thanks @nikolaybobrovskiy** [#6301](https://github.com/Semantic-Org/Semantic-UI/issues/6301)
+- **Icon** - Fix `wechat icon` not displaying due to typo **Thanks @alex-karo** [#6429](https://github.com/Semantic-Org/Semantic-UI/issues/6429)
+
+### Version 2.3.1 - Mar 18, 2018
 
 > **A Special Message about Flex Modals**
 > There will be an update shortly to resolve issues related to flex modals when using multiple modals and `detachable: false`, in order to not hold up this release, we've decided to move forward without a fix.
@@ -8,25 +88,25 @@
 > A general solution will most likely require branching code for IE11 which will disable flex (as IE11 doesnt correctly implement the latest spec for [absolute positioned flex containers](https://developers.google.com/web/updates/2016/06/absolute-positioned-children)).
 
 **Critical Bugs**
-- **Dropdown** - Fixed issue in `2.3.0` that could cause multiselect dropdowns initialized by converting `<select>` to not add initial selected options. #6123
-- **Search** - Fixes using category search with `fullTextSearch: 'exact'` **@Thanks @prudho** returning duplicate results #6223 #6221
-- **Icon** - Fixes `centered` and `bordered` icons appearing incorrectly with FA5 **Thanks @w96k** #6192
-- **Icons** - Fixes missing aliases/incorrect icons from Font Awesome 5 port in `2.3.0` **Thanks hammy2899** #6181 #6175 #6176 #6174 #6175
-- **Icons** - Fixed issue where `link icon` were appearing incorrectly due to changes in icons #6180
+- **Dropdown** - Fixed issue in `2.3.0` that could cause multiselect dropdowns initialized by converting `<select>` to not add initial selected options. [#6123](https://github.com/Semantic-Org/Semantic-UI/issues/6123)
+- **Search** - Fixes using category search with `fullTextSearch: 'exact'` **@Thanks @prudho** returning duplicate results [#6223](https://github.com/Semantic-Org/Semantic-UI/issues/6223) [#6221](https://github.com/Semantic-Org/Semantic-UI/issues/6221)
+- **Icon** - Fixes `centered` and `bordered` icons appearing incorrectly with FA5 **Thanks @w96k** [#6192](https://github.com/Semantic-Org/Semantic-UI/issues/6192)
+- **Icons** - Fixes missing aliases/incorrect icons from Font Awesome 5 port in `2.3.0` **Thanks hammy2899** [#6181](https://github.com/Semantic-Org/Semantic-UI/issues/6181) [#6175](https://github.com/Semantic-Org/Semantic-UI/issues/6175) [#6176](https://github.com/Semantic-Org/Semantic-UI/issues/6176) [#6174](https://github.com/Semantic-Org/Semantic-UI/issues/6174) [#6175](https://github.com/Semantic-Org/Semantic-UI/issues/6175)
+- **Icons** - Fixed issue where `link icon` were appearing incorrectly due to changes in icons [#6180](https://github.com/Semantic-Org/Semantic-UI/issues/6180)
 
 **Enhancements**
-- **Search** - Adds disabled variation **Thanks @prudho** #6225
-- **Form Validation** - Form can now return their validation prompt dynamically based on their current value. **Thanks @xDaizu** #6016 #3864
+- **Search** - Adds disabled variation **Thanks @prudho** [#6225](https://github.com/Semantic-Org/Semantic-UI/issues/6225)
+- **Form Validation** - Form can now return their validation prompt dynamically based on their current value. **Thanks @xDaizu** [#6016](https://github.com/Semantic-Org/Semantic-UI/issues/6016) [#3864](https://github.com/Semantic-Org/Semantic-UI/issues/3864)
 
 **Bugs**
-- **Dropdown** - Fixed `onChange` missing `text` from callback when dropdown is set to `action: 'select'` #4183 #4510
-- **Icons** - Fixes some icons that were incorrectly named. **Thanks hammy2899** #6181
+- **Dropdown** - Fixed `onChange` missing `text` from callback when dropdown is set to `action: 'select'` **Thanks @martinduparc**  [#4183](https://github.com/Semantic-Org/Semantic-UI/issues/4183) [#4510](https://github.com/Semantic-Org/Semantic-UI/issues/4510)
+- **Icons** - Fixes some icons that were incorrectly named. **Thanks hammy2899** [#6181](https://github.com/Semantic-Org/Semantic-UI/issues/6181)
 - **Icons** - Added ability to choose whether solid, outline and brand icons should be included in your theme via the `@importSolidIcons`, `importRegularIcons` and `@importBrandIcons` variables **Thanks hammy2899**
-- **Icons** - Increased specifity on `fitted icon` to fix compatibility with other components #6125
+- **Icons** - Increased specifity on `fitted icon` to fix compatibility with other components [#6125](https://github.com/Semantic-Org/Semantic-UI/issues/6125)
 - **Visibility** - Fixed bug that could cause `onScreen` callback to not occur properly for elements that are taller than screen.
-- **Menu** - Fixes `disabled item` showing hover style for `secondary menu` **Thanks @tcmal** #6268
-- **CSS Variables** - Added use of `@normal` for normal font weight for all non-default themes included in repo. #6227
-- **Image** - Fixes margin being applied twice to `ui images` #6224
+- **Menu** - Fixes `disabled item` showing hover style for `secondary menu` **Thanks @tcmal** [#6268](https://github.com/Semantic-Org/Semantic-UI/issues/6268)
+- **CSS Variables** - Added use of `@normal` for normal font weight for all non-default themes included in repo. [#6227](https://github.com/Semantic-Org/Semantic-UI/issues/6227)
+- **Image** - Fixes margin being applied twice to `ui images` [#6224](https://github.com/Semantic-Org/Semantic-UI/issues/6224)
 - **Reveal** - Fix `whitespace: nowrap;` applying to content inside `slide reveal` and `move reveal`
 
 **Docs**
