@@ -19,7 +19,7 @@ namespace BriskChat.DataAccess.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\mssqllocaldb;Initial Catalog=TrollChat;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Integrated Security=True;MultipleActiveResultSets=true;");
             }
         }
 
