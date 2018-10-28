@@ -79,8 +79,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
-        public void Invoke_EmptyString_ReturnsTrue()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyString_ReturnsTrue(string roomTopic)
         {
             var roomFromDb = new DataAccess.Models.Room
             {
@@ -99,11 +101,11 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             var action = new EditRoomTopic(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
-            var room = action.Invoke(Guid.NewGuid(), "");
+            var room = action.Invoke(Guid.NewGuid(), roomTopic);
 
             // check
             Assert.True(room);
-            Assert.Equal("", roomSaved.Topic);
+            Assert.Equal(roomTopic, roomSaved.Topic);
             mockedRoomRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
             mockedUnitOfWork.Verify(r => r.Save(), Times.Once);
         }

@@ -17,7 +17,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 
         public UserModel Invoke(string token)
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 return null;
             }

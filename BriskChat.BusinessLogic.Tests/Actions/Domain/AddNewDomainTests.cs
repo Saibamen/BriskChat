@@ -25,18 +25,18 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Domain
 
             DataAccess.Models.Domain domainSaved = null;
 
-            var mockedDomainrepository = new Mock<IDomainRepository>();
-            mockedDomainrepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Domain>()))
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+            mockedDomainRepository.Setup(r => r.Add(It.IsAny<DataAccess.Models.Domain>()))
                 .Callback<DataAccess.Models.Domain>(u => domainSaved = u);
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
 
-            var action = new AddNewDomain(mockedDomainrepository.Object, mockedUnitOfWork.Object);
+            var action = new AddNewDomain(mockedDomainRepository.Object, mockedUnitOfWork.Object);
 
             // action
             action.Invoke(domainData, Guid.NewGuid());
 
             // assert
-            mockedDomainrepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
+            mockedDomainRepository.Verify(r => r.Add(It.IsAny<DataAccess.Models.Domain>()), Times.Once());
             mockedUnitOfWork.Verify(r => r.Save(), Times.Exactly(1));
             Assert.Equal("testdomain", domainSaved.Name);
         }

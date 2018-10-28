@@ -18,7 +18,7 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 
         public bool Invoke(string token)
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 return false;
             }

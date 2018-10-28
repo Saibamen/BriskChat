@@ -58,15 +58,17 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             mockedUserTokenRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.UserToken, bool>>>()), Times.Once);
         }
 
-        [Fact]
-        public void Invoke_InvalidData_EmptyToken()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_InvalidData_EmptyToken(string token)
         {
             // prepare
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             var action = new GetUserByToken(mockedUserTokenRepository.Object);
 
             // action
-            var user = action.Invoke("");
+            var user = action.Invoke(token);
 
             // check
             Assert.Null(user);

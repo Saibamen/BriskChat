@@ -81,8 +81,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
             mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
-        public void Invoke_EmptyString_ReturnsNull()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyString_ReturnsNull(string messageText)
         {
             // prepare
             var mockedMessageRepository = new Mock<IMessageRepository>();
@@ -91,7 +93,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
             var action = new EditMessageById(mockedMessageRepository.Object, mockedUnitOfWork.Object);
 
             // action
-            var message = action.Invoke(Guid.NewGuid(), "");
+            var message = action.Invoke(Guid.NewGuid(), messageText);
 
             // check
             Assert.False(message);

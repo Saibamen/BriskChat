@@ -181,8 +181,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             mockedUnitOfWork.Verify(r => r.Save(), Times.Once());
         }
 
-        [Fact]
-        public void Invoke_EmptyString_SaveNorEditCalled()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyString_SaveNorEditCalled(string guid)
         {
             // prepare
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
@@ -192,7 +194,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             var action = new ConfirmUserEmailByToken(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
-            var actionResult = action.Invoke("");
+            var actionResult = action.Invoke(guid);
 
             // assert
             Assert.False(actionResult);

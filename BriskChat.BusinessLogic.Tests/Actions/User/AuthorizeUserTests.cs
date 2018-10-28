@@ -157,5 +157,41 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
             mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
         }
+
+        [Theory]
+        [InlineData("", "", "")]
+        [InlineData("d", "", "")]
+        [InlineData("", "d", "")]
+        [InlineData("", "", "d")]
+        [InlineData("d", "d", "")]
+        [InlineData("", "d", "d")]
+        [InlineData("d", "", "d")]
+        [InlineData(" ", " ", " ")]
+        [InlineData("d", " ", " ")]
+        [InlineData(" ", "d", " ")]
+        [InlineData(" ", " ", "d")]
+        [InlineData("d", "d", " ")]
+        [InlineData(" ", "d", "d")]
+        [InlineData("d", " ", "d")]
+        public void Invoke_EmptyParameters_ReturnsNull(string email, string password, string domainName)
+        {
+            // prepare
+            var findByResult = new List<DataAccess.Models.User>();
+            var mockedUserRepository = new Mock<IUserRepository>();
+            mockedUserRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()))
+                .Returns(findByResult.AsQueryable);
+
+            var mockedDomainRepository = new Mock<IDomainRepository>();
+
+            var action = new AuthenticateUser(mockedUserRepository.Object, mockedDomainRepository.Object);
+
+            // action
+            var user = action.Invoke(email, password, domainName);
+
+            // check
+            Assert.Null(user);
+            mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Never);
+            mockedUserRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.User, bool>>>()), Times.Never);
+        }
     }
 }

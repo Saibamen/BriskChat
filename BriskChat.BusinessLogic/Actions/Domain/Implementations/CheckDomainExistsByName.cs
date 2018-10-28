@@ -15,7 +15,7 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 
         public bool Invoke(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return false;
             }

@@ -25,12 +25,12 @@ namespace BriskChat.BusinessLogic.Models
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password) || string.IsNullOrEmpty(Name))
+            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password) || string.IsNullOrWhiteSpace(Name))
             {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(Email.Trim()) && !string.IsNullOrEmpty(Name.Trim());
+            return !string.IsNullOrWhiteSpace(Email.Trim()) && !string.IsNullOrWhiteSpace(Password.Trim()) && !string.IsNullOrWhiteSpace(Name.Trim());
         }
     }
 }

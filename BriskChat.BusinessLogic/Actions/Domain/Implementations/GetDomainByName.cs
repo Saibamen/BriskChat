@@ -16,7 +16,7 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 
         public DomainModel Invoke(string name)
         {
-            if (string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }

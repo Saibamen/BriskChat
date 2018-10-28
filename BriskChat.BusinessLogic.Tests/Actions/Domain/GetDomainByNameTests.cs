@@ -60,15 +60,17 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Domain
             mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
         }
 
-        [Fact]
-        public void Invoke_EmptyId_ReturnsNull()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyId_ReturnsNull(string name)
         {
             // prepare
             var mockedDomainRepository = new Mock<IDomainRepository>();
             var action = new GetDomainByName(mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("");
+            var user = action.Invoke(name);
 
             // check
             Assert.Null(user);

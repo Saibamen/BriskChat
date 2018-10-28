@@ -95,8 +95,14 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             mockedDomainRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Domain, bool>>>()), Times.Once);
         }
 
-        [Fact]
-        public void Invoke_InvalidData_EmptyString()
+        [Theory]
+        [InlineData("", "")]
+        [InlineData("d", "")]
+        [InlineData("", "d")]
+        [InlineData(" ", " ")]
+        [InlineData("d", " ")]
+        [InlineData(" ", "d")]
+        public void Invoke_InvalidData_EmptyString(string email, string domainName)
         {
             // prepare
             var findByResult = new List<DataAccess.Models.User>();
@@ -107,7 +113,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             var action = new GetUserByEmail(mockedUserRepository.Object, mockedDomainRepository.Object);
 
             // action
-            var user = action.Invoke("", "");
+            var user = action.Invoke(email, domainName);
 
             // check
             Assert.Null(user);

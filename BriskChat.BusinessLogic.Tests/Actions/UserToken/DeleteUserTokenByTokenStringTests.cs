@@ -57,8 +57,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
             mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
-        public void Invoke_EmptyString_DeleteNorSaveAreCalled()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyString_DeleteNorSaveAreCalled(string token)
         {
             var mockedUserTokenRepository = new Mock<IUserTokenRepository>();
             var mockedUnitOfWork = new Mock<IUnitOfWork>();
@@ -66,7 +68,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.UserToken
             var action = new DeleteUserTokenByTokenString(mockedUserTokenRepository.Object, mockedUnitOfWork.Object);
 
             // action
-            var actionResult = action.Invoke("");
+            var actionResult = action.Invoke(token);
 
             // assert
             Assert.False(actionResult);

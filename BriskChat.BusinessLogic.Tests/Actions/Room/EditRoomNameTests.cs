@@ -107,8 +107,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
-        public void Invoke_EmptyString_ReturnsNull()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyString_ReturnsNull(string roomName)
         {
             // prepare
             var mockedRoomRepository = new Mock<IRoomRepository>();
@@ -117,7 +119,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Room
             var action = new EditRoomName(mockedRoomRepository.Object, mockedUnitOfWork.Object);
 
             // action
-            var room = action.Invoke(Guid.NewGuid(), "");
+            var room = action.Invoke(Guid.NewGuid(), roomName);
 
             // check
             Assert.False(room);

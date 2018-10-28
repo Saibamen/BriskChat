@@ -18,7 +18,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 
         public bool Invoke(Guid messageId, string messageText)
         {
-            if (messageId == Guid.Empty || string.IsNullOrEmpty(messageText))
+            if (messageId == Guid.Empty || string.IsNullOrWhiteSpace(messageText))
             {
                 return false;
             }

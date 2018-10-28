@@ -18,7 +18,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 
         public bool Invoke(Guid roomId, string roomName)
         {
-            if (roomId == Guid.Empty || string.IsNullOrEmpty(roomName) || roomName.Length > 100)
+            if (roomId == Guid.Empty || string.IsNullOrWhiteSpace(roomName) || roomName.Length > 100)
             {
                 return false;
             }

@@ -18,7 +18,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 
         public UserModel Invoke(string email, string domainName)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(domainName))
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(domainName))
             {
                 return null;
             }
