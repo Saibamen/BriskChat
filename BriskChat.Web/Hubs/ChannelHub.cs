@@ -120,7 +120,7 @@ namespace BriskChat.Web.Hubs
 
         public void GetPreviousMessages(string roomId, string lastMessageId)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(lastMessageId))
+            if (string.IsNullOrWhiteSpace(roomId) || string.IsNullOrWhiteSpace(lastMessageId))
             {
                 return;
             }
@@ -236,7 +236,7 @@ namespace BriskChat.Web.Hubs
 
         public async Task JoinRoom(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrWhiteSpace(roomId))
             {
                 return;
             }
@@ -289,7 +289,7 @@ namespace BriskChat.Web.Hubs
 
         public async Task LeaveRoom(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrWhiteSpace(roomId))
             {
                 return;
             }
@@ -308,14 +308,14 @@ namespace BriskChat.Web.Hubs
 
         public void SendMessage(string roomId, string message)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(message))
+            if (string.IsNullOrWhiteSpace(roomId) || string.IsNullOrWhiteSpace(message))
             {
                 return;
             }
 
             message = message.Trim();
 
-            if (string.IsNullOrEmpty(message))
+            if (string.IsNullOrWhiteSpace(message))
             {
                 return;
             }
@@ -353,7 +353,7 @@ namespace BriskChat.Web.Hubs
 
         public void CreateNewChannel(CreateNewRoomViewModel model)
         {
-            if (string.IsNullOrEmpty(model.Name))
+            if (string.IsNullOrWhiteSpace(model.Name))
             {
                 return;
             }
@@ -378,7 +378,7 @@ namespace BriskChat.Web.Hubs
 
         public static string GetMd5Hash(string email)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
                 return null;
             }
@@ -443,7 +443,7 @@ namespace BriskChat.Web.Hubs
 
         public void GetRoomInformation(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrWhiteSpace(roomId))
             {
                 return;
             }
@@ -460,7 +460,7 @@ namespace BriskChat.Web.Hubs
 
         public void GetRoomUsers(string roomId)
         {
-            if (string.IsNullOrEmpty(roomId))
+            if (string.IsNullOrWhiteSpace(roomId))
             {
                 return;
             }
@@ -528,14 +528,14 @@ namespace BriskChat.Web.Hubs
 
         public void EditMessage(string roomId, string messageId, string messageText)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId) || string.IsNullOrEmpty(messageText))
+            if (string.IsNullOrWhiteSpace(roomId) || string.IsNullOrWhiteSpace(messageId) || string.IsNullOrWhiteSpace(messageText))
             {
                 return;
             }
 
             messageText = messageText.Trim();
 
-            if (string.IsNullOrEmpty(messageText))
+            if (string.IsNullOrWhiteSpace(messageText))
             {
                 return;
             }
@@ -562,7 +562,7 @@ namespace BriskChat.Web.Hubs
 
         public void EditRoomCustomization(string roomId, int roomCustomization)
         {
-            if (string.IsNullOrEmpty(roomId) || roomCustomization < 0)
+            if (string.IsNullOrWhiteSpace(roomId) || roomCustomization < 0)
             {
                 return;
             }
@@ -581,7 +581,7 @@ namespace BriskChat.Web.Hubs
 
         public void EditRoomName(string roomId, string roomName)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(roomName) || roomName.Length > 100)
+            if (string.IsNullOrWhiteSpace(roomId) || string.IsNullOrWhiteSpace(roomName) || roomName.Length > 100)
             {
                 return;
             }
@@ -601,7 +601,7 @@ namespace BriskChat.Web.Hubs
 
         public void EditRoomDescription(string roomId, string roomDescription)
         {
-            if (string.IsNullOrEmpty(roomId) || roomDescription.Length > 100)
+            if (string.IsNullOrWhiteSpace(roomId) || roomDescription.Length > 100)
             {
                 return;
             }
@@ -620,7 +620,7 @@ namespace BriskChat.Web.Hubs
 
         public void EditRoomTopic(string roomId, string roomTopic)
         {
-            if (string.IsNullOrEmpty(roomId) || roomTopic.Length > 100)
+            if (string.IsNullOrWhiteSpace(roomId) || roomTopic.Length > 100)
             {
                 return;
             }
@@ -639,7 +639,7 @@ namespace BriskChat.Web.Hubs
 
         public void DeleteMessage(string roomId, string messageId)
         {
-            if (string.IsNullOrEmpty(roomId) || string.IsNullOrEmpty(messageId))
+            if (string.IsNullOrWhiteSpace(roomId) || string.IsNullOrWhiteSpace(messageId))
             {
                 return;
             }

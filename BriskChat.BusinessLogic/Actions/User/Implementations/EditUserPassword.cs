@@ -27,7 +27,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 
         public bool Invoke(Guid id, string plainPassword)
         {
-            if (id == Guid.Empty || string.IsNullOrEmpty(plainPassword))
+            if (id == Guid.Empty || string.IsNullOrWhiteSpace(plainPassword))
             {
                 return false;
             }

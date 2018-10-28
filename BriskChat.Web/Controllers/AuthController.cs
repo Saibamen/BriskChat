@@ -150,7 +150,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("{domainName}/login")]
         public IActionResult Login(string returnUrl, string domainName)
         {
-            if (string.IsNullOrEmpty(domainName) || !checkDomainExistsByName.Invoke(domainName))
+            if (string.IsNullOrWhiteSpace(domainName) || !checkDomainExistsByName.Invoke(domainName))
             {
                 Alert.Warning("Domain not found");
 
@@ -199,7 +199,7 @@ namespace BriskChat.Web.Controllers
 
             await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrinciple);
 
-            if (string.IsNullOrEmpty(returnUrl))
+            if (string.IsNullOrWhiteSpace(returnUrl))
             {
                 return RedirectToAction("Index", "User");
             }
@@ -222,7 +222,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("confirmemail")]
         public IActionResult ConfirmEmail(string token)
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 Alert.Danger("Invalid token");
 
@@ -348,7 +348,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("resetpasswordbytoken/{token}")]
         public IActionResult ResetPasswordByToken(string token)
         {
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrWhiteSpace(token))
             {
                 Alert.Danger("Invalid token");
 

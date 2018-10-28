@@ -22,7 +22,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 
         public bool Invoke(string guid)
         {
-            if (string.IsNullOrEmpty(guid))
+            if (string.IsNullOrWhiteSpace(guid))
             {
                 return false;
             }

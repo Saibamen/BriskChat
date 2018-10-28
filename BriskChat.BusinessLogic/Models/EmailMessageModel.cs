@@ -18,12 +18,12 @@
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(From) || string.IsNullOrEmpty(Recipient) || string.IsNullOrEmpty(Message) || string.IsNullOrEmpty(Subject))
+            if (string.IsNullOrWhiteSpace(From) || string.IsNullOrWhiteSpace(Recipient) || string.IsNullOrWhiteSpace(Message) || string.IsNullOrWhiteSpace(Subject))
             {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(From.Trim()) && !string.IsNullOrEmpty(Recipient.Trim()) && !string.IsNullOrEmpty(Message.Trim()) && !string.IsNullOrEmpty(Subject.Trim());
+            return !string.IsNullOrWhiteSpace(From.Trim()) && !string.IsNullOrWhiteSpace(Recipient.Trim()) && !string.IsNullOrWhiteSpace(Message.Trim()) && !string.IsNullOrWhiteSpace(Subject.Trim());
         }
     }
 }

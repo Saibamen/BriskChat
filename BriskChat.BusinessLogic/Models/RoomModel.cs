@@ -28,12 +28,12 @@ namespace BriskChat.BusinessLogic.Models
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(Name) || Name.Length > 100 || !string.IsNullOrEmpty(Description) && Description.Length > 100 || !string.IsNullOrEmpty(Topic) && Topic.Length > 100)
+            if (string.IsNullOrWhiteSpace(Name) || Name.Length > 100 || !string.IsNullOrWhiteSpace(Description) && Description.Length > 100 || !string.IsNullOrWhiteSpace(Topic) && Topic.Length > 100)
             {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(Name.Trim());
+            return !string.IsNullOrWhiteSpace(Name.Trim());
         }
     }
 }

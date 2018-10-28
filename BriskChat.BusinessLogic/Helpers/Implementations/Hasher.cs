@@ -12,7 +12,7 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
 
         public string CreatePasswordHash(string plaintext, string salt)
         {
-            if (string.IsNullOrEmpty(plaintext) || string.IsNullOrEmpty(salt))
+            if (string.IsNullOrWhiteSpace(plaintext) || string.IsNullOrWhiteSpace(salt))
             {
                 return null;
             }

@@ -14,7 +14,7 @@
                     @alert.Message
                 </div>
 
-                @if (!string.IsNullOrEmpty(alert.MoreInfo))
+                @if (!string.IsNullOrWhiteSpace(alert.MoreInfo))
                 {
                     @alert.MoreInfo
                 }

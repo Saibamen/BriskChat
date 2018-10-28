@@ -14,12 +14,12 @@ namespace BriskChat.BusinessLogic.Models
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(Text) || UserRoom == null)
+            if (string.IsNullOrWhiteSpace(Text) || UserRoom == null)
             {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(Text.Trim());
+            return !string.IsNullOrWhiteSpace(Text.Trim());
         }
     }
 }

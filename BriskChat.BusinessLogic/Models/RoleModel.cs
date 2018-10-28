@@ -8,12 +8,12 @@
 
         public override bool IsValid()
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Description))
+            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Description))
             {
                 return false;
             }
 
-            return !string.IsNullOrEmpty(Name.Trim()) && !string.IsNullOrEmpty(Description.Trim());
+            return !string.IsNullOrWhiteSpace(Name.Trim()) && !string.IsNullOrWhiteSpace(Description.Trim());
         }
     }
 }

@@ -112,8 +112,10 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             mockedUnitOfWork.Verify(r => r.Save(), Times.Never);
         }
 
-        [Fact]
-        public void Invoke_EmptyPassword_SaveNorEditAreCalled()
+        [Theory]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void Invoke_EmptyPassword_SaveNorEditAreCalled(string password)
         {
             // prepare
             var guid = new Guid();
@@ -129,7 +131,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
             var action = new EditUserPassword(mockedUserTokenRepository.Object, mockedUserRepo.Object, mockedUnitOfWork.Object);
 
             // action
-            var actionResult = action.Invoke(guid, "");
+            var actionResult = action.Invoke(guid, password);
 
             // assert
             Assert.False(actionResult);
