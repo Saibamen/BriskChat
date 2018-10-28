@@ -2,9 +2,9 @@ stages:
     - build
 
 before_script:
-    - 'dotnet restore TrollChat.sln'
+    - 'dotnet restore BriskChat.sln'
 
 build:
     stage: build
     script:
-        - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe "TrollChat.sln"
+        - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe "BriskChat.sln"

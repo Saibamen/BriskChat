@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../TrollChat.BusinessLogic/BriskChat.BusinessLogic.csproj" />
-    <ProjectReference Include="../TrollChat.DataAccess/BriskChat.DataAccess.csproj" />
+    <ProjectReference Include="../BriskChat.BusinessLogic/BriskChat.BusinessLogic.csproj" />
+    <ProjectReference Include="../BriskChat.DataAccess/BriskChat.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

@@ -29,5 +29,5 @@ before_script:
 
 script:
   - dotnet build
-  - dotnet test ./TrollChat.BusinessLogic.Tests
+  - dotnet test ./BriskChat.BusinessLogic.Tests
   - dotnet publish -c Release

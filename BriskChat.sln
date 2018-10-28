@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.DataAccess", "TrollChat.DataAccess/BriskChat.DataAccess.csproj", "{B97C2E74-5595-472F-9653-2FA7DC79FA2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.DataAccess", "BriskChat.DataAccess/BriskChat.DataAccess.csproj", "{B97C2E74-5595-472F-9653-2FA7DC79FA2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.BusinessLogic.Tests", "TrollChat.BusinessLogic.Tests/BriskChat.BusinessLogic.Tests.csproj", "{0F2A9DEF-FB7C-4E40-B97C-AC2E545E5506}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.BusinessLogic.Tests", "BriskChat.BusinessLogic.Tests/BriskChat.BusinessLogic.Tests.csproj", "{0F2A9DEF-FB7C-4E40-B97C-AC2E545E5506}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.BusinessLogic", "TrollChat.BusinessLogic/BriskChat.BusinessLogic.csproj", "{0341087B-93E3-4E89-9A6B-B0E237E69C04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.BusinessLogic", "BriskChat.BusinessLogic/BriskChat.BusinessLogic.csproj", "{0341087B-93E3-4E89-9A6B-B0E237E69C04}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B97C2E74-5595-472F-9653-2FA7DC79FA2F} = {B97C2E74-5595-472F-9653-2FA7DC79FA2F}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.Web", "TrollChat.Web/BriskChat.Web.csproj", "{E0B8D7C2-B454-4825-9075-A037F88E317E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BriskChat.Web", "BriskChat.Web/BriskChat.Web.csproj", "{E0B8D7C2-B454-4825-9075-A037F88E317E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

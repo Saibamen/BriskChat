@@ -8,16 +8,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BriskChat.DataAccess.Migrations
 {
     [DbContext(typeof(TrollChatDbContext))]
-    [Migration("20170818084130_UserDomain")]
-    partial class UserDomain
+    [Migration("20170426130551_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.2")
+                .HasAnnotation("ProductVersion", "1.1.1")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Domain", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -36,12 +36,15 @@ namespace BriskChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .HasName("Email");
+
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Domains");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.EmailMessage", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.EmailMessage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -74,7 +77,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("EmailMessages");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -97,7 +100,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Role", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -121,7 +124,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Room", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -161,7 +164,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("Rooms");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.RoomTag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.RoomTag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -185,7 +188,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("RoomTags");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Tag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Tag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -209,6 +212,9 @@ namespace BriskChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .HasName("Email");
+
                     b.HasIndex("RoomId");
 
                     b.HasIndex("UserRoomId");
@@ -216,7 +222,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.User", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -256,35 +262,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserDomain", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreatedOn");
-
-                    b.Property<DateTime?>("DeletedOn");
-
-                    b.Property<Guid>("DomainId");
-
-                    b.Property<DateTime>("ModifiedOn");
-
-                    b.Property<Guid>("RoleId");
-
-                    b.Property<Guid>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DomainId");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserDomains");
-                });
-
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserRoom", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -299,8 +277,6 @@ namespace BriskChat.DataAccess.Migrations
 
                     b.Property<DateTime>("ModifiedOn");
 
-                    b.Property<Guid?>("RoleId");
-
                     b.Property<Guid>("RoomId");
 
                     b.Property<Guid>("UserId");
@@ -309,8 +285,6 @@ namespace BriskChat.DataAccess.Migrations
 
                     b.HasIndex("LastMessageId");
 
-                    b.HasIndex("RoleId");
-
                     b.HasIndex("RoomId");
 
                     b.HasIndex("UserId");
@@ -318,7 +292,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("UserRooms");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoomTag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserRoomTag", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -342,7 +316,7 @@ namespace BriskChat.DataAccess.Migrations
                     b.ToTable("UserRoomTags");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserToken", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserToken", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
@@ -363,115 +337,99 @@ namespace BriskChat.DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("SecretToken")
+                        .HasName("SecretToken");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Domain", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Domain", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
+                    b.HasOne("BriskChat.DataAccess.Models.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Message", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Message", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "UserRoom")
+                    b.HasOne("BriskChat.DataAccess.Models.UserRoom", "UserRoom")
                         .WithMany("Messages")
                         .HasForeignKey("UserRoomId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Room", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Room", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
+                    b.HasOne("BriskChat.DataAccess.Models.Domain", "Domain")
                         .WithMany("Rooms")
                         .HasForeignKey("DomainId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.User", "Owner")
+                    b.HasOne("BriskChat.DataAccess.Models.User", "Owner")
                         .WithMany("Rooms")
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.RoomTag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.RoomTag", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Room", "Room")
+                    b.HasOne("BriskChat.DataAccess.Models.Room", "Room")
                         .WithMany()
                         .HasForeignKey("RoomId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.Tag", "Tag")
+                    b.HasOne("BriskChat.DataAccess.Models.Tag", "Tag")
                         .WithMany("Room")
                         .HasForeignKey("TagId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.Tag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.Tag", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Room")
+                    b.HasOne("BriskChat.DataAccess.Models.Room")
                         .WithMany("Tags")
                         .HasForeignKey("RoomId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.UserRoom")
+                    b.HasOne("BriskChat.DataAccess.Models.UserRoom")
                         .WithMany("Tags")
                         .HasForeignKey("UserRoomId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.User", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.User", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
+                    b.HasOne("BriskChat.DataAccess.Models.Domain", "Domain")
                         .WithMany("Users")
                         .HasForeignKey("DomainId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserDomain", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserRoom", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Domain", "Domain")
-                        .WithMany()
-                        .HasForeignKey("DomainId");
-
-                    b.HasOne("TrollChat.DataAccess.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("TrollChat.DataAccess.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoom", b =>
-                {
-                    b.HasOne("TrollChat.DataAccess.Models.Message", "LastMessage")
+                    b.HasOne("BriskChat.DataAccess.Models.Message", "LastMessage")
                         .WithMany()
                         .HasForeignKey("LastMessageId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.Role", "Role")
+                    b.HasOne("BriskChat.DataAccess.Models.Room", "Room")
                         .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("TrollChat.DataAccess.Models.Room", "Room")
-                        .WithMany("UserRooms")
                         .HasForeignKey("RoomId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.User", "User")
+                    b.HasOne("BriskChat.DataAccess.Models.User", "User")
                         .WithMany("UserRooms")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserRoomTag", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserRoomTag", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.Tag", "Tag")
+                    b.HasOne("BriskChat.DataAccess.Models.Tag", "Tag")
                         .WithMany("UserRoom")
                         .HasForeignKey("TagId");
 
-                    b.HasOne("TrollChat.DataAccess.Models.UserRoom", "UserRoom")
+                    b.HasOne("BriskChat.DataAccess.Models.UserRoom", "UserRoom")
                         .WithMany()
                         .HasForeignKey("UserRoomId");
                 });
 
-            modelBuilder.Entity("TrollChat.DataAccess.Models.UserToken", b =>
+            modelBuilder.Entity("BriskChat.DataAccess.Models.UserToken", b =>
                 {
-                    b.HasOne("TrollChat.DataAccess.Models.User", "User")
+                    b.HasOne("BriskChat.DataAccess.Models.User", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId");
                 });
