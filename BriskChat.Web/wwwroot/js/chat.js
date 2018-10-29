@@ -219,11 +219,11 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
     message.after(addEditContainer(messageId, oldMessageText, message.find(".message_icon").html()));
 
     // Focus on textbox
-    var ql_editor = $(".ql-editor");
-    ql_editor.focus();
+    var qlEditor = $(".ql-editor");
+    qlEditor.focus();
 
     var range = document.createRange();
-    range.selectNodeContents(ql_editor.get(0));
+    range.selectNodeContents(qlEditor.get(0));
     range.collapse(false);
     var sel = window.getSelection();
     sel.removeAllRanges();
@@ -257,7 +257,6 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
                 if (oldMessageText !== editedMessage) {
                     if (editedMessage) {
-                        printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                         myHub.server.editMessage(currentRoomId, messageId, editedMessage);
                     }
                 }
@@ -276,7 +275,6 @@ $("#chat_messages").on("click", ".ts-message .btn_msg_action[data-action='edit']
 
         if (oldMessageText !== editedMessage) {
             if (editedMessage) {
-                printLog("Editing: " + editedMessage + " to room " + currentRoomId);
                 myHub.server.editMessage(currentRoomId, messageId, editedMessage);
             }
         }
@@ -470,8 +468,6 @@ myHub.client.broadcastMessage = function (userName, userId, messageId, messageTe
 
 myHub.client.deleteMessage = function (messageId) {
     var message = $(".ts-message[data-id='" + messageId + "']");
-
-    printLog("Deleting message with ID: " + message.data("id"));
 
     message.hide("slow", function () {
         message.remove();
@@ -749,7 +745,6 @@ $.connection.hub.start()
                                             clippyShow = false;
                                         }
                                     } else {
-                                        printLog("Sending: " + message + " to room " + currentRoomId);
                                         myHub.server.sendMessage(currentRoomId, message);
                                     }
                                 }
@@ -1101,7 +1096,7 @@ function channelDetails() {
     var rightbar = $("#Rightbar");
     rightbar.html("");
 
-    // todo use this?
+    // TODO: use this?
     if ($("#right_bar_save_cancel_buttons").length) {
         $("#right_bar_save_cancel_buttons").remove();
     }
