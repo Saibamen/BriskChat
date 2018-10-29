@@ -17,14 +17,19 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public IQueryable FindRoomsBy(Expression<Func<Tag, bool>> predicate)
         {
-            var query = Include(x => x.Room).Where(predicate).AsQueryable().Where(x => x.DeletedOn == null);
+            var query = Include(x => x.Room)
+                .Where(predicate)
+                .Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<Tag>().AsQueryable() : query;
         }
 
         public IQueryable FindUserRoomsBy(Expression<Func<Tag, bool>> predicate)
         {
-            var query = Context.Set<Tag>().Include(b => b.UserRoom).Where(predicate).Where(x => x.DeletedOn == null);
+            var query = Context.Set<Tag>()
+                .Include(b => b.UserRoom)
+                .Where(predicate)
+                .Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<Tag>().AsQueryable() : query;
         }

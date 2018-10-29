@@ -15,8 +15,7 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public IQueryable<Room> GetUserRooms(Guid userId, bool isPrivateConversation)
         {
-            var query =
-                Context.Set<User>()
+            var query = Context.Set<User>()
                 .Where(user => user.DeletedOn == null)
                 .Where(user => user.Id == userId)
                     .SelectMany(i => i.UserRooms)

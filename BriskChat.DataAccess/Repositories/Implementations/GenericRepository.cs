@@ -42,7 +42,9 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = Context.Set<T>().Where(predicate).Where(x => x.DeletedOn == null);
+            IQueryable<T> query = Context.Set<T>()
+                .Where(predicate)
+                .Where(x => x.DeletedOn == null);
 
             return !(query.Count() > 0) ? Enumerable.Empty<T>().AsQueryable() : query;
         }

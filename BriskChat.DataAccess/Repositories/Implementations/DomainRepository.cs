@@ -16,7 +16,10 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public Domain GetDomainByUserId(Guid userGuid)
         {
-            var query = Context.Set<User>().Include(x => x.Domain).FirstOrDefault(x => x.Id == userGuid).Domain;
+            var query = Context.Set<User>()
+                .Include(x => x.Domain)
+                .FirstOrDefault(x => x.Id == userGuid)
+                .Domain;
 
             return query;
         }

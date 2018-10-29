@@ -4,16 +4,17 @@ using AutoMapper;
 using BriskChat.BusinessLogic.Actions.UserRoom.Interfaces;
 using BriskChat.BusinessLogic.Models;
 using BriskChat.DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
 {
     public class GetUserRoomByIds : IGetUserRoomByIds
     {
-        private readonly IUserRoomRepository userRoomRepository;
+        private readonly IUserRoomRepository _userRoomRepository;
 
         public GetUserRoomByIds(IUserRoomRepository userRoomRepository)
         {
-            this.userRoomRepository = userRoomRepository;
+            _userRoomRepository = userRoomRepository;
         }
 
         public UserRoomModel Invoke(Guid roomId, Guid userId)
@@ -23,7 +24,10 @@ namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
                 return null;
             }
 
-            var userRoom = userRoomRepository.FindBy(x => x.Room.Id == roomId && x.User.Id == userId).FirstOrDefault();
+            var userRoom = _userRoomRepository
+                .FindBy(x => x.Room.Id == roomId && x.User.Id == userId)
+                .Include(x => x.User)
+                .FirstOrDefault();
 
             if (userRoom == null)
             {
