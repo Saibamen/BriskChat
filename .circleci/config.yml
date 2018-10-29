@@ -16,5 +16,5 @@ jobs:
       - run: dotnet restore
       - run: dotnet build
       # TODO: See Travis CI configuration and port to CircleCI
-      #- run: dotnet test ./TrollChat.BusinessLogic.Tests
+      #- run: dotnet test ./BriskChat.BusinessLogic.Tests
       - run: dotnet publish -c Release

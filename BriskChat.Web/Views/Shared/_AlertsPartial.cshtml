@@ -1,0 +1,24 @@
+﻿@using BriskChat.Web.Helpers
+@using BriskChat.Web.Models.Common
+@{
+    var alertMessages = TempData.Get<List<AlertModel>>("alertMessages");
+
+    if (alertMessages.Count > 0)
+    {
+        foreach (var alert in alertMessages)
+        {
+            <div class="ui @alert.Type.ToString().ToLower() message">
+                <i class="close icon"></i>
+
+                <div class="header">
+                    @alert.Message
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(alert.MoreInfo))
+                {
+                    @alert.MoreInfo
+                }
+            </div>
+        }
+    }
+}

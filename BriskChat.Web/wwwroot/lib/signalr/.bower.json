@@ -1,0 +1,32 @@
+{
+  "name": "signalr",
+  "version": "2.3.0",
+  "homepage": "http://www.asp.net/signalr",
+  "authors": [
+    "Microsoft"
+  ],
+  "description": "Microsoft ASP.NET SignalR JavaScript Client",
+  "main": "./jquery.signalR.js",
+  "keywords": [
+    "signalr",
+    "microsoft",
+    "asp.net",
+    "javascript",
+    "jquery",
+    "realtime"
+  ],
+  "license": "http://www.microsoft.com/web/webpi/eula/signalr_client_enu.htm",
+  "dependencies": {
+    "jquery": ">=1.6.4"
+  },
+  "_release": "2.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.3.0",
+    "commit": "75d397581cb7c7cac3c8731746107e11f94098af"
+  },
+  "_source": "https://github.com/SignalR/bower-signalr.git",
+  "_target": "v2.3.0",
+  "_originalSource": "signalr",
+  "_direct": true
+}
