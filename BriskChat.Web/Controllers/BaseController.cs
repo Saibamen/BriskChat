@@ -28,15 +28,14 @@ namespace BriskChat.Web.Controllers
         {
             ViewData.Model = model;
 
-            using (StringWriter sw = new StringWriter())
+            using (var sw = new StringWriter())
             {
                 var engine = HttpContext.RequestServices.GetService(typeof(ICompositeViewEngine)) as ICompositeViewEngine;
 
                 if (engine != null)
                 {
-                    ViewEngineResult viewResult =
-                        engine.FindView(ControllerContext, viewName, true);
-                    ViewContext viewContext =
+                    var viewResult = engine.FindView(ControllerContext, viewName, true);
+                    var viewContext =
                         new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw, new HtmlHelperOptions());
 
                     viewResult.View.RenderAsync(viewContext);

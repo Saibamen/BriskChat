@@ -9,11 +9,11 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class GetRoomUsers : IGetRoomUsers
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public GetRoomUsers(IRoomRepository roomRepository)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
         }
 
         public List<UserModel> Invoke(Guid roomId)
@@ -23,7 +23,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return null;
             }
 
-            var dbRoom = roomRepository.GetRoomUsers(roomId);
+            var dbRoom = _roomRepository.GetRoomUsers(roomId);
 
             if (dbRoom == null || dbRoom.Count() <= 0)
             {

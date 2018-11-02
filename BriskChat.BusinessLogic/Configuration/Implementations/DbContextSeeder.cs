@@ -12,14 +12,14 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class DbContextSeeder : IDbContextSeeder
     {
-        private readonly IAddNewUser addNewUser;
-        private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
-        private readonly IAddNewDomain addNewDomain;
-        private readonly IGetDomainByName getDomainByName;
-        private readonly ISetDomainOwner setDomainOwner;
-        private readonly IAddNewRole addNewRole;
-        private readonly IGetRoleByName getRoleByName;
-        private readonly IAddUserToDomain addUserToDomain;
+        private readonly IAddNewUser _addNewUser;
+        private readonly IConfirmUserEmailByToken _confirmUserEmailByToken;
+        private readonly IAddNewDomain _addNewDomain;
+        private readonly IGetDomainByName _getDomainByName;
+        private readonly ISetDomainOwner _setDomainOwner;
+        private readonly IAddNewRole _addNewRole;
+        private readonly IGetRoleByName _getRoleByName;
+        private readonly IAddUserToDomain _addUserToDomain;
 
         public DbContextSeeder(IAddNewUser addNewUser,
             IConfirmUserEmailByToken confirmUserEmailByToken,
@@ -30,32 +30,32 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
             IGetRoleByName getRoleByName,
             IAddUserToDomain addUserToDomain)
         {
-            this.addNewUser = addNewUser;
-            this.addNewDomain = addNewDomain;
-            this.confirmUserEmailByToken = confirmUserEmailByToken;
-            this.getDomainByName = getDomainByName;
-            this.setDomainOwner = setDomainOwner;
-            this.addNewRole = addNewRole;
-            this.getRoleByName = getRoleByName;
-            this.addUserToDomain = addUserToDomain;
+            _addNewUser = addNewUser;
+            _addNewDomain = addNewDomain;
+            _confirmUserEmailByToken = confirmUserEmailByToken;
+            _getDomainByName = getDomainByName;
+            _setDomainOwner = setDomainOwner;
+            _addNewRole = addNewRole;
+            _getRoleByName = getRoleByName;
+            _addUserToDomain = addUserToDomain;
         }
 
         public bool Seed()
         {
-            var rolesIsSeeded = SeedRoles(addNewRole);
+            var rolesIsSeeded = SeedRoles(_addNewRole);
 
             if (!rolesIsSeeded)
             {
                 return false;
             }
 
-            SeedDomains(addNewDomain);
-            SeedUsers(addNewUser, confirmUserEmailByToken, getDomainByName, setDomainOwner);
+            SeedDomains(_addNewDomain);
+            SeedUsers(_addNewUser, _confirmUserEmailByToken, _getDomainByName, _setDomainOwner);
 
             return true;
         }
 
-        private readonly List<RoleModel> roles = new List<RoleModel>
+        private readonly List<RoleModel> _roles = new List<RoleModel>
         {
             new RoleModel
             {
@@ -74,16 +74,16 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
             }
         };
 
-        private readonly string[] users = { "owner", "user", "user1" };
-        private readonly string[] domains = { "jan", "roland" };
+        private readonly string[] _users = { "owner", "user", "user1" };
+        private readonly string[] _domains = { "jan", "roland" };
 
         public bool SeedRoles(IAddNewRole addNewRole)
         {
             var rolesInDb = 0;
 
-            foreach (var role in roles)
+            foreach (var role in _roles)
             {
-                var roleInDb = getRoleByName.Invoke(role.Name);
+                var roleInDb = _getRoleByName.Invoke(role.Name);
 
                 if (roleInDb == null || roleInDb.Id == Guid.Empty)
                 {
@@ -104,12 +104,12 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
                 }
             }
 
-            return roles.Count == rolesInDb;
+            return _roles.Count == rolesInDb;
         }
 
         public void SeedDomains(IAddNewDomain addNewDomain)
         {
-            foreach (var domain in domains)
+            foreach (var domain in _domains)
             {
                 var model = new DomainModel
                 {
@@ -125,7 +125,7 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
             IGetDomainByName getDomainByName,
             ISetDomainOwner setDomainOwner)
         {
-            foreach (var user in users)
+            foreach (var user in _users)
             {
                 var domain = getDomainByName.Invoke("jan");
                 var model = new UserModel
@@ -146,7 +146,7 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
                 var token = dbUser.Tokens.FirstOrDefault().SecretToken;
                 confirmUserEmailByToken.Invoke(token);
 
-                var role = roles.Find(x => x.Name == "User");
+                var role = _roles.Find(x => x.Name == "User");
 
                 if (user != "owner")
                 {
@@ -154,10 +154,10 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
                     var domain2 = getDomainByName.Invoke("roland");
                     setDomainOwner.Invoke(dbUser.Id, domain2.Id);
 
-                    role = roles.Find(x => x.Name == "Owner");
+                    role = _roles.Find(x => x.Name == "Owner");
                 }
 
-                addUserToDomain.Invoke(dbUser.Id, domain.Id, role.Id);
+                _addUserToDomain.Invoke(dbUser.Id, domain.Id, role.Id);
             }
         }
     }

@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class DeleteRoomById : IDeleteRoomById
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteRoomById(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,7 +23,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return false;
             }
 
-            var roomToDelete = roomRepository.GetById(roomId);
+            var roomToDelete = _roomRepository.GetById(roomId);
 
             // Add test for name
             if (roomToDelete == null || roomToDelete.Name == "general")
@@ -31,7 +31,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return false;
             }
 
-            roomRepository.Delete(roomToDelete);
+            _roomRepository.Delete(roomToDelete);
             _unitOfWork.Save();
 
             return true;

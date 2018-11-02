@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class EditRoomCustomization : IEditRoomCustomization
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EditRoomCustomization(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,13 +23,13 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return false;
             }
 
-            var roomToEdit = roomRepository.GetById(roomId);
+            var roomToEdit = _roomRepository.GetById(roomId);
 
             switch (roomToEdit)
             {
                 default:
                     roomToEdit.Customization = roomCustomization;
-                    roomRepository.Edit(roomToEdit);
+                    _roomRepository.Edit(roomToEdit);
                     _unitOfWork.Save();
                     return true;
 

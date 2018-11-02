@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class DeleteUserTokenById : IDeleteUserTokenById
     {
-        private readonly IUserTokenRepository userTokenRepository;
+        private readonly IUserTokenRepository _userTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteUserTokenById(IUserTokenRepository userTokenRepository, IUnitOfWork unitOfWork)
         {
-            this.userTokenRepository = userTokenRepository;
+            _userTokenRepository = userTokenRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,16 +23,16 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
                 return false;
             }
 
-            var userToken = userTokenRepository.GetById(userTokenId);
+            var userToken = _userTokenRepository.GetById(userTokenId);
 
             if (userToken == null)
             {
                 return false;
             }
 
-            userTokenRepository.Delete(userToken);
+            _userTokenRepository.Delete(userToken);
             _unitOfWork.Save();
-            
+
             return true;
         }
     }

@@ -9,11 +9,11 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetNotInvitedUsers : IGetNotInvitedUsers
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
         public GetNotInvitedUsers(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         public List<UserModel> Invoke(Guid domainId, Guid roomId)
@@ -23,7 +23,9 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var result = userRepository.FindBy(x => x.Domain.Id == domainId).Where(x => x.UserRooms.All(y => y.Room.Id != roomId));
+            var result = _userRepository
+                .FindBy(x => x.Domain.Id == domainId)
+                .Where(x => x.UserRooms.All(y => y.Room.Id != roomId));
 
             var userList = new List<UserModel>();
 

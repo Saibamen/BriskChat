@@ -7,11 +7,11 @@ namespace BriskChat.BusinessLogic.Actions.Role.Implementations
 {
     public class GetRoleByName : IGetRoleByName
     {
-        private readonly IRoleRepository roleRepository;
+        private readonly IRoleRepository _roleRepository;
 
         public GetRoleByName(IRoleRepository roleRepository)
         {
-            this.roleRepository = roleRepository;
+            _roleRepository = roleRepository;
         }
 
         public RoleModel Invoke(string name)
@@ -21,13 +21,15 @@ namespace BriskChat.BusinessLogic.Actions.Role.Implementations
                 return null;
             }
 
-            var result = roleRepository.FindBy(x => x.Name == name)
+            var result = _roleRepository
+                .FindBy(x => x.Name == name)
                 .Select(x => new
                 {
                     x.Id,
                     x.Name,
                     x.Description
-                }).FirstOrDefault();
+                })
+                .FirstOrDefault();
 
             if (result == null)
             {

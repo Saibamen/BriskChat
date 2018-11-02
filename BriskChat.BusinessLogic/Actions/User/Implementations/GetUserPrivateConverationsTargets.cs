@@ -9,11 +9,11 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserPrivateConversationsTargets : IGetUserPrivateConversationsTargets
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
         public GetUserPrivateConversationsTargets(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         public List<UserRoomModel> Invoke(Guid userId)
@@ -23,7 +23,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var dbUserRooms = userRepository.GetPrivateConversationsTargets(userId);
+            var dbUserRooms = _userRepository.GetPrivateConversationsTargets(userId);
 
             if (dbUserRooms == null || dbUserRooms.Count() <= 0)
             {

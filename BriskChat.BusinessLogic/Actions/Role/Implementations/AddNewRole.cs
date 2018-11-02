@@ -8,12 +8,12 @@ namespace BriskChat.BusinessLogic.Actions.Role.Implementations
 {
     public class AddNewRole : IAddNewRole
     {
-        private readonly IRoleRepository roleRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddNewRole(IRoleRepository roleRepository, IUnitOfWork unitOfWork)
         {
-            this.roleRepository = roleRepository;
+            _roleRepository = roleRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -26,7 +26,7 @@ namespace BriskChat.BusinessLogic.Actions.Role.Implementations
 
             var dbRole = AutoMapper.Mapper.Map<DataAccess.Models.Role>(model);
 
-            roleRepository.Add(dbRole);
+            _roleRepository.Add(dbRole);
             _unitOfWork.Save();
 
 

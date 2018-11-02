@@ -8,11 +8,11 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class GetRoomInformation : IGetRoomInformation
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public GetRoomInformation(IRoomRepository roomRepository)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
         }
 
         public RoomModel Invoke(Guid roomId)
@@ -22,7 +22,9 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return null;
             }
 
-            var dbRoom = roomRepository.GetRoomInformation(roomId).FirstOrDefault();
+            var dbRoom = _roomRepository
+                .GetRoomInformation(roomId)
+                .FirstOrDefault();
 
             if (dbRoom == null)
             {

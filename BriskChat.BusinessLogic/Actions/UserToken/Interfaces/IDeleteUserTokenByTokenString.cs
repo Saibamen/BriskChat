@@ -2,7 +2,7 @@
 
 namespace BriskChat.BusinessLogic.Actions.UserToken.Interfaces
 {
-    public interface IDeleteUserTokenyByTokenString : IAction
+    public interface IDeleteUserTokenByTokenString : IAction
     {
         bool Invoke(string token);
     }

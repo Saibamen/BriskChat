@@ -11,10 +11,10 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class AddNewPrivateConversation : IAddNewPrivateConversation
     {
-        private readonly IRoomRepository roomRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUserRoomRepository userRoomRepository;
-        private readonly IDomainRepository domainRepository;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserRoomRepository _userRoomRepository;
+        private readonly IDomainRepository _domainRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddNewPrivateConversation(IRoomRepository roomRepository,
@@ -22,29 +22,30 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
             IUserRoomRepository userRoomRepository,
             IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
-            this.roomRepository = roomRepository;
-            this.userRepository = userRepository;
-            this.userRoomRepository = userRoomRepository;
-            this.domainRepository = domainRepository;
+            _roomRepository = roomRepository;
+            _userRepository = userRepository;
+            _userRoomRepository = userRoomRepository;
+            _domainRepository = domainRepository;
             _unitOfWork = unitOfWork;
         }
 
         public RoomModel Invoke(Guid issuerUserId, List<Guid> users)
         {
             // Check if users wants to create a conversation with himself
-            if (issuerUserId == Guid.Empty || users.Count <= 0 || users.Count > 8 || users.Any(x => x.Equals(issuerUserId) || x.Equals(Guid.Empty)) || users.Distinct().Count() != users.Count)
+            if (issuerUserId == Guid.Empty || users.Count <= 0 || users.Count > 8
+                || users.Any(x => x.Equals(issuerUserId)|| x.Equals(Guid.Empty)) || users.Distinct().Count() != users.Count)
             {
                 return null;
             }
 
-            var issuerUser = userRepository.GetById(issuerUserId);
+            var issuerUser = _userRepository.GetById(issuerUserId);
 
             if (issuerUser == null)
             {
                 return null;
             }
 
-            var privateConversationList = userRepository.GetPrivateConversationsTargets(issuerUserId).ToList();
+            var privateConversationList = _userRepository.GetPrivateConversationsTargets(issuerUserId).ToList();
             var listRoom = privateConversationList.Select(x => x.Room).Distinct();
 
             // Check if private conversation already exists
@@ -59,13 +60,13 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 {
                     dict.Add(connection, false);
 
-                    if (users.Any(x => x.Equals(connection.User.Id)))
-                    {
-                        searchedCount += 1;
-                        Debug.WriteLine("######### Znaleziono istniejące połączenie #########");
-                        Debug.WriteLine(connection.User.Name);
-                        dict[connection] = true;
-                    }
+                    if (!users.Any(x => x.Equals(connection.User.Id)))
+                        continue;
+
+                    searchedCount += 1;
+                    Debug.WriteLine("######### Znaleziono istniejące połączenie #########");
+                    Debug.WriteLine(connection.User.Name);
+                    dict[connection] = true;
                 }
 
                 if (searchedCount == users.Count)
@@ -80,7 +81,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
             }
 
             // Create repository method for that?
-            var userList = userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
+            var userList = _userRepository.GetAll().Where(x => users.Contains(x.Id)).ToList();
 
             var roomName = "";
 
@@ -91,7 +92,7 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 
             roomName += issuerUser.Name;
 
-            var userDomain = domainRepository.GetDomainByUserId(issuerUser.Id);
+            var userDomain = _domainRepository.GetDomainByUserId(issuerUser.Id);
 
             var newRoom = new DataAccess.Models.Room
             {
@@ -102,17 +103,17 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 IsPublic = false
             };
 
-            roomRepository.Add(newRoom);
+            _roomRepository.Add(newRoom);
 
             var userRoom = new DataAccess.Models.UserRoom { User = issuerUser, Room = newRoom };
-            userRoomRepository.Add(userRoom);
+            _userRoomRepository.Add(userRoom);
 
             foreach (var user in userList)
             {
                 var userRoom2 = new DataAccess.Models.UserRoom { User = user, Room = newRoom };
-                userRoomRepository.Add(userRoom2);
+                _userRoomRepository.Add(userRoom2);
             }
-            
+
             var returnRoom = AutoMapper.Mapper.Map<RoomModel>(newRoom);
             _unitOfWork.Save();
 

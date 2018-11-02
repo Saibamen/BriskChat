@@ -7,10 +7,10 @@ namespace BriskChat.BusinessLogic.Actions.UserDomain.Implementations
 {
     public class AddUserToDomain : IAddUserToDomain
     {
-        private readonly IUserDomainRepository userDomainRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IDomainRepository domainRepository;
-        private readonly IRoleRepository roleRepository;
+        private readonly IUserDomainRepository _userDomainRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IDomainRepository _domainRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddUserToDomain(IUserDomainRepository userDomainRepository,
@@ -18,10 +18,10 @@ namespace BriskChat.BusinessLogic.Actions.UserDomain.Implementations
             IDomainRepository domainRepository,
             IRoleRepository roleRepository, IUnitOfWork unitOfWork)
         {
-            this.userDomainRepository = userDomainRepository;
-            this.userRepository = userRepository;
-            this.domainRepository = domainRepository;
-            this.roleRepository = roleRepository;
+            _userDomainRepository = userDomainRepository;
+            _userRepository = userRepository;
+            _domainRepository = domainRepository;
+            _roleRepository = roleRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -32,21 +32,21 @@ namespace BriskChat.BusinessLogic.Actions.UserDomain.Implementations
                 return false;
             }
 
-            var user = userRepository.GetById(userId);
+            var user = _userRepository.GetById(userId);
 
             if (user == null)
             {
                 return false;
             }
 
-            var domain = domainRepository.GetById(domainId);
+            var domain = _domainRepository.GetById(domainId);
 
             if (domain == null)
             {
                 return false;
             }
 
-            var role = roleRepository.GetById(roleId);
+            var role = _roleRepository.GetById(roleId);
 
             if (role == null)
             {
@@ -60,7 +60,7 @@ namespace BriskChat.BusinessLogic.Actions.UserDomain.Implementations
                 Role = role
             };
 
-            userDomainRepository.Add(userDomain);
+            _userDomainRepository.Add(userDomain);
             _unitOfWork.Save();
 
             return true;

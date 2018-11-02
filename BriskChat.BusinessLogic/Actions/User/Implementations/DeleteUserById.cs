@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class DeleteUserById : IDeleteUserById
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteUserById(IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,14 +23,14 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return false;
             }
 
-            var userToDelete = userRepository.GetById(userId);
+            var userToDelete = _userRepository.GetById(userId);
 
             if (userToDelete == null)
             {
                 return false;
             }
 
-            userRepository.Delete(userToDelete);
+            _userRepository.Delete(userToDelete);
             _unitOfWork.Save();
 
             return true;

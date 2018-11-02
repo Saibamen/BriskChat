@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class EditRoomDescription : IEditRoomDescription
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EditRoomDescription(IRoomRepository roomRepository, IUnitOfWork unitOfWork)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,13 +23,13 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return false;
             }
 
-            var roomToEdit = roomRepository.GetById(roomId);
+            var roomToEdit = _roomRepository.GetById(roomId);
 
             switch (roomToEdit)
             {
                 default:
                     roomToEdit.Description = roomDescription;
-                    roomRepository.Edit(roomToEdit);
+                    _roomRepository.Edit(roomToEdit);
                     _unitOfWork.Save();
                     return true;
 

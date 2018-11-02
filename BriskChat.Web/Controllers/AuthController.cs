@@ -24,20 +24,20 @@ namespace BriskChat.Web.Controllers
     [Route("auth")]
     public class AuthController : BaseController
     {
-        private readonly IAuthenticateUser authenticateUser;
-        private readonly IAddNewUser addNewUser;
-        private readonly IEmailService emailService;
-        private readonly IConfirmUserEmailByToken confirmUserEmailByToken;
-        private readonly IGetUserByEmail getUserByEmail;
-        private readonly IAddUserTokenToUser addUserTokenToUser;
-        private readonly IGetUserByToken getUserByToken;
-        private readonly IEditUserPassword editUserPassword;
-        private readonly IAddNewEmailMessage addNewEmailMessage;
-        private readonly ICheckDomainExistsByName checkDomainExistsByName;
-        private readonly IAddNewDomain addNewDomain;
-        private readonly ISetDomainOwner setDomainOwner;
-        private readonly IAddUserToDomain addUserToDomain;
-        private readonly IGetRoleByName getRoleByName;
+        private readonly IAuthenticateUser _authenticateUser;
+        private readonly IAddNewUser _addNewUser;
+        private readonly IEmailService _emailService;
+        private readonly IConfirmUserEmailByToken _confirmUserEmailByToken;
+        private readonly IGetUserByEmail _getUserByEmail;
+        private readonly IAddUserTokenToUser _addUserTokenToUser;
+        private readonly IGetUserByToken _getUserByToken;
+        private readonly IEditUserPassword _editUserPassword;
+        private readonly IAddNewEmailMessage _addNewEmailMessage;
+        private readonly ICheckDomainExistsByName _checkDomainExistsByName;
+        private readonly IAddNewDomain _addNewDomain;
+        private readonly ISetDomainOwner _setDomainOwner;
+        private readonly IAddUserToDomain _addUserToDomain;
+        private readonly IGetRoleByName _getRoleByName;
 
         public AuthController(IAuthenticateUser authenticateUser,
             IAddNewUser addNewUser,
@@ -47,7 +47,7 @@ namespace BriskChat.Web.Controllers
             IAddUserTokenToUser addUserTokenToUser,
             IGetUserByToken getUserByToken,
             IEditUserPassword editUserPassword,
-            IDeleteUserTokenyByTokenString deleteUserTokenyByTokenString,
+            IDeleteUserTokenByTokenString deleteUserTokenByTokenString,
             IAddNewEmailMessage addNewEmailMessage,
             ICheckDomainExistsByName checkDomainExistsByName,
             IAddNewDomain addNewDomain,
@@ -55,20 +55,20 @@ namespace BriskChat.Web.Controllers
             IAddUserToDomain addUserToDomain,
             IGetRoleByName getRoleByName)
         {
-            this.authenticateUser = authenticateUser;
-            this.addNewUser = addNewUser;
-            this.emailService = emailService;
-            this.confirmUserEmailByToken = confirmUserEmailByToken;
-            this.getUserByEmail = getUserByEmail;
-            this.addUserTokenToUser = addUserTokenToUser;
-            this.getUserByToken = getUserByToken;
-            this.editUserPassword = editUserPassword;
-            this.addNewEmailMessage = addNewEmailMessage;
-            this.checkDomainExistsByName = checkDomainExistsByName;
-            this.addNewDomain = addNewDomain;
-            this.setDomainOwner = setDomainOwner;
-            this.addUserToDomain = addUserToDomain;
-            this.getRoleByName = getRoleByName;
+            _authenticateUser = authenticateUser;
+            _addNewUser = addNewUser;
+            _emailService = emailService;
+            _confirmUserEmailByToken = confirmUserEmailByToken;
+            _getUserByEmail = getUserByEmail;
+            _addUserTokenToUser = addUserTokenToUser;
+            _getUserByToken = getUserByToken;
+            _editUserPassword = editUserPassword;
+            _addNewEmailMessage = addNewEmailMessage;
+            _checkDomainExistsByName = checkDomainExistsByName;
+            _addNewDomain = addNewDomain;
+            _setDomainOwner = setDomainOwner;
+            _addUserToDomain = addUserToDomain;
+            _getRoleByName = getRoleByName;
         }
 
         [AllowAnonymous]
@@ -108,7 +108,7 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var domain = addNewDomain.Invoke(new DomainModel { Name = model.DomainName });
+            var domain = _addNewDomain.Invoke(new DomainModel { Name = model.DomainName });
 
             if (domain == Guid.Empty)
             {
@@ -118,7 +118,7 @@ namespace BriskChat.Web.Controllers
             }
 
             var userModel = new UserModel { Email = model.Email, Password = model.Password, Name = model.Name, Domain = new DomainModel { Id = domain } };
-            var userAddAction = addNewUser.Invoke(userModel);
+            var userAddAction = _addNewUser.Invoke(userModel);
 
             if (userAddAction == null)
             {
@@ -129,17 +129,17 @@ namespace BriskChat.Web.Controllers
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token = userAddAction.Tokens.FirstOrDefault().SecretToken },
                 Request.Scheme);
-            var emailinfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
-            var stringView = RenderViewToString("EmailTemplate", emailinfo);
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var emailInfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
+            var stringView = RenderViewToString("EmailTemplate", emailInfo);
+            var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
-            addNewEmailMessage.Invoke(mappedMessage);
+            _addNewEmailMessage.Invoke(mappedMessage);
 
-            setDomainOwner.Invoke(userAddAction.Id, domain);
+            _setDomainOwner.Invoke(userAddAction.Id, domain);
 
-            var role = getRoleByName.Invoke(RoleNamesConstants.Owner);
+            var role = _getRoleByName.Invoke(RoleNamesConstants.Owner);
             // Add user to UserDomains table
-            addUserToDomain.Invoke(userAddAction.Id, domain, role.Id);
+            _addUserToDomain.Invoke(userAddAction.Id, domain, role.Id);
 
             Alert.Success("Confirmation email has been sent to your email address");
 
@@ -150,7 +150,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("{domainName}/login")]
         public IActionResult Login(string returnUrl, string domainName)
         {
-            if (string.IsNullOrWhiteSpace(domainName) || !checkDomainExistsByName.Invoke(domainName))
+            if (string.IsNullOrWhiteSpace(domainName) || !_checkDomainExistsByName.Invoke(domainName))
             {
                 Alert.Warning("Domain not found");
 
@@ -175,7 +175,7 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var access = authenticateUser.Invoke(model.Email, model.Password, model.DomainName);
+            var access = _authenticateUser.Invoke(model.Email, model.Password, model.DomainName);
 
             if (access == null)
             {
@@ -229,7 +229,7 @@ namespace BriskChat.Web.Controllers
                 return View("Error");
             }
 
-            var confirmAction = confirmUserEmailByToken.Invoke(token);
+            var confirmAction = _confirmUserEmailByToken.Invoke(token);
 
             if (!confirmAction)
             {
@@ -247,7 +247,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("{domainName}/resendconfirmationemail")]
         public IActionResult ResendConfirmationEmail(string domainName)
         {
-            if (checkDomainExistsByName.Invoke(domainName))
+            if (_checkDomainExistsByName.Invoke(domainName))
             {
                 return View();
             }
@@ -267,7 +267,7 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getUserByEmail.Invoke(model.Email, model.DomainName);
+            var user = _getUserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -283,15 +283,15 @@ namespace BriskChat.Web.Controllers
                 return RedirectToAction("Login");
             }
 
-            var token = addUserTokenToUser.Invoke(user.Id);
+            var token = _addUserTokenToUser.Invoke(user.Id);
 
             var callbackUrl = Url.Action("ConfirmEmail", "Auth", new { token }, Request.Scheme);
             var emailInfo = new EmailBodyHelper().GetRegisterEmailBodyModel(callbackUrl);
             var stringView = RenderViewToString("EmailTemplate", emailInfo);
-            var message = emailService.CreateMessage(model.Email, "Confirm your account", stringView);
+            var message = _emailService.CreateMessage(model.Email, "Confirm your account", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
-            addNewEmailMessage.Invoke(mappedMessage);
+            _addNewEmailMessage.Invoke(mappedMessage);
             Alert.Success("Check your inbox");
 
             return RedirectToAction("Login");
@@ -301,7 +301,7 @@ namespace BriskChat.Web.Controllers
         [HttpGet("{domainName}/resetpassword")]
         public IActionResult ResetPasswordInitiation(string domainName)
         {
-            if (checkDomainExistsByName.Invoke(domainName))
+            if (_checkDomainExistsByName.Invoke(domainName))
             {
                 return View();
             }
@@ -321,7 +321,7 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getUserByEmail.Invoke(model.Email, model.DomainName);
+            var user = _getUserByEmail.Invoke(model.Email, model.DomainName);
 
             if (user == null)
             {
@@ -330,15 +330,15 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var token = addUserTokenToUser.Invoke(user.Id);
+            var token = _addUserTokenToUser.Invoke(user.Id);
             var callbackUrl = Url.Action("ResetPasswordByToken", "Auth", new { token },
                 Request.Scheme);
             var emailInfo = new EmailBodyHelper().GetResetPasswordBodyModel(callbackUrl);
             var stringView = RenderViewToString("EmailTemplate", emailInfo);
-            var message = emailService.CreateMessage(model.Email, "Reset your password", stringView);
+            var message = _emailService.CreateMessage(model.Email, "Reset your password", stringView);
             var mappedMessage = AutoMapper.Mapper.Map<EmailMessageModel>(message);
 
-            addNewEmailMessage.Invoke(mappedMessage);
+            _addNewEmailMessage.Invoke(mappedMessage);
             Alert.Success("Email will be sent to your account shortly");
 
             return RedirectToAction("Login");
@@ -355,7 +355,7 @@ namespace BriskChat.Web.Controllers
                 return View();
             }
 
-            var user = getUserByToken.Invoke(token);
+            var user = _getUserByToken.Invoke(token);
 
             if (user == null)
             {
@@ -382,7 +382,7 @@ namespace BriskChat.Web.Controllers
                 return View(model);
             }
 
-            var user = getUserByToken.Invoke(model.Token);
+            var user = _getUserByToken.Invoke(model.Token);
 
             if (user == null)
             {
@@ -391,7 +391,7 @@ namespace BriskChat.Web.Controllers
                 return RedirectToAction("ChooseDomain", "Auth");
             }
 
-            var result = editUserPassword.Invoke(user.Id, model.Password);
+            var result = _editUserPassword.Invoke(user.Id, model.Password);
 
             if (!result)
             {

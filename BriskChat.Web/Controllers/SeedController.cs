@@ -7,18 +7,18 @@ namespace BriskChat.Web.Controllers
     [Route("[controller]")]
     public class SeedController : Controller
     {
-        private readonly IDbContextSeeder dbContextSeeder;
+        private readonly IDbContextSeeder _dbContextSeeder;
 
         public SeedController(IDbContextSeeder dbContextSeeder)
         {
-            this.dbContextSeeder = dbContextSeeder;
+            _dbContextSeeder = dbContextSeeder;
         }
 
         [HttpGet("seedall")]
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var isSeeded = dbContextSeeder.Seed();
+            var isSeeded = _dbContextSeeder.Seed();
 
             return Json(isSeeded ? "Database seeded" : "Some errors when seeding database :(");
         }

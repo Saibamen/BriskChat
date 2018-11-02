@@ -9,18 +9,18 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class AddUserTokenToUser : IAddUserTokenToUser
     {
-        private readonly IUserTokenRepository userTokenRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IHasher hasher;
+        private readonly IUserTokenRepository _userTokenRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IHasher _hasher;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddUserTokenToUser(IUserTokenRepository userTokenRepository,
             IUserRepository userRepository, IUnitOfWork unitOfWork, IHasher hasher = null)
         {
-            this.userTokenRepository = userTokenRepository;
-            this.userRepository = userRepository;
+            _userTokenRepository = userTokenRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
-            this.hasher = hasher ?? new Hasher();
+            _hasher = hasher ?? new Hasher();
         }
 
         public string Invoke(Guid userId)
@@ -30,27 +30,27 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
                 return string.Empty;
             }
 
-            var user = userRepository.GetById(userId);
+            var user = _userRepository.GetById(userId);
 
             if (user == null)
             {
                 return string.Empty;
             }
 
-            var token = userTokenRepository.GetById(userId);
+            var token = _userTokenRepository.GetById(userId);
 
             if (token != null)
             {
-                userTokenRepository.Delete(token);
+                _userTokenRepository.Delete(token);
             }
 
             var userToken = new DataAccess.Models.UserToken
             {
                 User = user,
-                SecretToken = hasher.GenerateRandomGuid()
+                SecretToken = _hasher.GenerateRandomGuid()
             };
 
-            userTokenRepository.Add(userToken);
+            _userTokenRepository.Add(userToken);
             _unitOfWork.Save();
 
             return userToken.SecretToken;

@@ -7,13 +7,13 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserByEmail : IGetUserByEmail
     {
-        private readonly IUserRepository userRepository;
-        private readonly IDomainRepository domainRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IDomainRepository _domainRepository;
 
         public GetUserByEmail(IUserRepository userRepository, IDomainRepository domainRepository)
         {
-            this.userRepository = userRepository;
-            this.domainRepository = domainRepository;
+            _userRepository = userRepository;
+            _domainRepository = domainRepository;
         }
 
         public UserModel Invoke(string email, string domainName)
@@ -23,14 +23,18 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var domain = domainRepository.FindBy(x => x.Name == domainName).FirstOrDefault();
+            var domain = _domainRepository
+                .FindBy(x => x.Name == domainName)
+                .FirstOrDefault();
 
             if (domain == null)
             {
                 return null;
             }
 
-            var dbUser = userRepository.FindBy(x => x.Email == email && x.Domain == domain).FirstOrDefault();
+            var dbUser = _userRepository
+                .FindBy(x => x.Email == email && x.Domain == domain)
+                .FirstOrDefault();
 
             if (dbUser == null)
             {

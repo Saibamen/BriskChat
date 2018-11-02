@@ -8,11 +8,11 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
 {
     public class GetRoomByName : IGetRoomByName
     {
-        private readonly IRoomRepository roomRepository;
+        private readonly IRoomRepository _roomRepository;
 
         public GetRoomByName(IRoomRepository roomRepository)
         {
-            this.roomRepository = roomRepository;
+            _roomRepository = roomRepository;
         }
 
         public RoomModel Invoke(string roomName, Guid domainId)
@@ -22,7 +22,9 @@ namespace BriskChat.BusinessLogic.Actions.Room.Implementations
                 return null;
             }
 
-            var dbRoom = roomRepository.FindBy(x => x.Name == roomName && x.Domain.Id == domainId).FirstOrDefault();
+            var dbRoom = _roomRepository
+                .FindBy(x => x.Name == roomName && x.Domain.Id == domainId)
+                .FirstOrDefault();
 
             if (dbRoom == null)
             {

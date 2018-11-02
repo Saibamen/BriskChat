@@ -7,11 +7,11 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
 {
     public class GetUserById : IGetUserById
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserRepository _userRepository;
 
         public GetUserById(IUserRepository userRepository)
         {
-            this.userRepository = userRepository;
+            _userRepository = userRepository;
         }
 
         public UserModel Invoke(Guid id)
@@ -21,7 +21,7 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var dbUser = userRepository.GetById(id);
+            var dbUser = _userRepository.GetById(id);
 
             if (dbUser == null)
             {

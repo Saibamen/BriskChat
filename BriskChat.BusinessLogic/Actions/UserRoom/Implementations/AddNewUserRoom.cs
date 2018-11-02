@@ -9,18 +9,18 @@ namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
 {
     public class AddNewUserRoom : IAddNewUserRoom
     {
-        private readonly IRoomRepository roomRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IUserRoomRepository userRoomRepository;
+        private readonly IRoomRepository _roomRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserRoomRepository _userRoomRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddNewUserRoom(IRoomRepository roomRepository,
             IUserRepository userRepository,
             IUserRoomRepository userRoomRepository, IUnitOfWork unitOfWork)
         {
-            this.roomRepository = roomRepository;
-            this.userRepository = userRepository;
-            this.userRoomRepository = userRoomRepository;
+            _roomRepository = roomRepository;
+            _userRepository = userRepository;
+            _userRoomRepository = userRoomRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -28,12 +28,12 @@ namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
         {
             if (roomId == Guid.Empty || users.Count <= 0 || users.Any(x => x == Guid.Empty) ||
                 // Check for existing userRoom
-                userRoomRepository.FindBy(x => x.Room.Id == roomId && users.Any(y => y == x.User.Id)).Count() > 0)
+                _userRoomRepository.FindBy(x => x.Room.Id == roomId && users.Any(y => y == x.User.Id)).Count() > 0)
             {
                 return false;
             }
 
-            var room = roomRepository.GetById(roomId);
+            var room = _roomRepository.GetById(roomId);
 
             if (room == null || !room.IsPublic && !invite)
             {
@@ -42,7 +42,7 @@ namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
 
             foreach (var user in users)
             {
-                var userFromDb = userRepository.GetById(user);
+                var userFromDb = _userRepository.GetById(user);
 
                 if (userFromDb == null)
                 {
@@ -51,7 +51,7 @@ namespace BriskChat.BusinessLogic.Actions.UserRoom.Implementations
 
                 var userRoomToAdd = new DataAccess.Models.UserRoom { User = userFromDb, Room = room };
 
-                userRoomRepository.Add(userRoomToAdd);
+                _userRoomRepository.Add(userRoomToAdd);
             }
 
             _unitOfWork.Save();

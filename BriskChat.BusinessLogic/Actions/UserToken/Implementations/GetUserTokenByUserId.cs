@@ -9,11 +9,11 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
 {
     public class GetUserTokenByUserId : IGetUserTokenByUserId
     {
-        private readonly IUserTokenRepository userTokenRepository;
+        private readonly IUserTokenRepository _userTokenRepository;
 
         public GetUserTokenByUserId(IUserTokenRepository userTokenRepository)
         {
-            this.userTokenRepository = userTokenRepository;
+            _userTokenRepository = userTokenRepository;
         }
 
         public UserTokenModel Invoke(Guid userId)
@@ -23,7 +23,9 @@ namespace BriskChat.BusinessLogic.Actions.UserToken.Implementations
                 return null;
             }
 
-            var token = userTokenRepository.FindBy(x => x.User.Id == userId).FirstOrDefault();
+            var token = _userTokenRepository
+                .FindBy(x => x.User.Id == userId)
+                .FirstOrDefault();
 
             if (token == null)
             {
