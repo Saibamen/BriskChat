@@ -5,16 +5,16 @@ namespace BriskChat.BusinessLogic.Configuration.Implementations
 {
     public class MigrationHelper : IMigrationHelper
     {
-        private readonly ITrollChatDbContext dbContext;
+        private readonly ITrollChatDbContext _dbContext;
 
         public MigrationHelper(ITrollChatDbContext dbContext)
         {
-            this.dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
         public void Migrate()
         {
-            dbContext.PerformMigration();
+            _dbContext.PerformMigration();
         }
     }
 }

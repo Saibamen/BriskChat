@@ -12,17 +12,17 @@ namespace BriskChat.DataAccess.Repositories.Implementations
     {
         public IQueryable<T> DbSet
         {
-            get { return dbSet.Where(e => e.DeletedOn == null); }
+            get { return _dbSet.Where(e => e.DeletedOn == null); }
         }
 
-        private readonly DbSet<T> dbSet;
+        private readonly DbSet<T> _dbSet;
         protected ITrollChatDbContext Context;
 
         protected GenericRepository(ITrollChatDbContext context)
         {
             Context = context;
 
-            dbSet = context.Set<T>();
+            _dbSet = context.Set<T>();
         }
 
         public virtual void Add(T entity)
@@ -32,7 +32,7 @@ namespace BriskChat.DataAccess.Repositories.Implementations
             entity.Id = new Guid();
             entity.ModifiedOn = timeNow;
             entity.CreatedOn = timeNow;
-            dbSet.Add(entity);
+            _dbSet.Add(entity);
         }
 
         public virtual void Delete(T entity)
@@ -42,7 +42,7 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate)
         {
-            IQueryable<T> query = Context.Set<T>()
+            var query = Context.Set<T>()
                 .Where(predicate)
                 .Where(x => x.DeletedOn == null);
 
@@ -56,7 +56,7 @@ namespace BriskChat.DataAccess.Repositories.Implementations
 
         public IQueryable<T> Include(params Expression<Func<T, object>>[] includeExpressions)
         {
-            DbSet<T> dbSet = Context.Set<T>();
+            var dbSet = Context.Set<T>();
 
             IQueryable<T> query = null;
 

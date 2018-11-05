@@ -8,12 +8,12 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class AddNewMessage : IAddNewMessage
     {
-        private readonly IMessageRepository messageRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddNewMessage(IMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
-            this.messageRepository = messageRepository;
+            _messageRepository = messageRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -26,7 +26,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 
             var dbMessage = AutoMapper.Mapper.Map<DataAccess.Models.Message>(message);
 
-            messageRepository.Add(dbMessage);
+            _messageRepository.Add(dbMessage);
             _unitOfWork.Save();
 
             return dbMessage.Id;

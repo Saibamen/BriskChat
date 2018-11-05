@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class EditMessageById : IEditMessageById
     {
-        private readonly IMessageRepository messageRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public EditMessageById(IMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
-            this.messageRepository = messageRepository;
+            _messageRepository = messageRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,7 +23,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return false;
             }
 
-            var messageToEdit = messageRepository.GetById(messageId);
+            var messageToEdit = _messageRepository.GetById(messageId);
 
             if (messageToEdit == null)
             {
@@ -32,7 +32,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 
             messageToEdit.Text = messageText;
 
-            messageRepository.Edit(messageToEdit);
+            _messageRepository.Edit(messageToEdit);
             _unitOfWork.Save();
 
             return true;

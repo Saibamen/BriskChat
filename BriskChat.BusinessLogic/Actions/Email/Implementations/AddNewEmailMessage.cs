@@ -8,12 +8,12 @@ namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class AddNewEmailMessage : IAddNewEmailMessage
     {
-        private readonly IEmailRepository emailRepository;
+        private readonly IEmailRepository _emailRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public AddNewEmailMessage(IEmailRepository emailRepository, IUnitOfWork unitOfWork)
         {
-            this.emailRepository = emailRepository;
+            _emailRepository = emailRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -26,7 +26,7 @@ namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 
             var dbMessage = AutoMapper.Mapper.Map<EmailMessage>(email);
 
-            emailRepository.Add(dbMessage);
+            _emailRepository.Add(dbMessage);
             _unitOfWork.Save();
 
             return true;

@@ -6,11 +6,11 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class CheckDomainExistsByName : ICheckDomainExistsByName
     {
-        private readonly IDomainRepository domainRepository;
+        private readonly IDomainRepository _domainRepository;
 
         public CheckDomainExistsByName(IDomainRepository domainRepository)
         {
-            this.domainRepository = domainRepository;
+            _domainRepository = domainRepository;
         }
 
         public bool Invoke(string name)
@@ -20,7 +20,7 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
                 return false;
             }
 
-            var result = domainRepository.FindBy(x => x.Name == name);
+            var result = _domainRepository.FindBy(x => x.Name == name);
 
             return result.Count() > 0;
         }

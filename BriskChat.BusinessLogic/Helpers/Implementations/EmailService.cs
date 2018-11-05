@@ -11,26 +11,26 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
 {
     public class EmailService : IEmailService
     {
-        private readonly SmtpClient client;
-        private readonly IOptions<EmailServiceCredentials> settings;
+        private readonly SmtpClient _client;
+        private readonly IOptions<EmailServiceCredentials> _settings;
 
         public EmailService(IOptions<EmailServiceCredentials> settings)
         {
-            this.settings = settings;
-            client = new SmtpClient
+            _settings = settings;
+            _client = new SmtpClient
             {
                 ServerCertificateValidationCallback = (s, c, h, e) => true
             };
 
             // Note: since we don't have an OAuth2 token, disable
             // the XOAUTH2 authentication mechanism.
-            client.AuthenticationMechanisms.Remove("XOAUTH2");
+            _client.AuthenticationMechanisms.Remove("XOAUTH2");
         }
 
         public MimeMessage CreateMessage(string emailAddress, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("BriskChat", settings.Value.Login));
+            emailMessage.From.Add(new MailboxAddress("BriskChat", _settings.Value.Login));
             emailMessage.To.Add(new MailboxAddress("", emailAddress));
             emailMessage.Subject = subject;
 
@@ -48,9 +48,9 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
         {
             try
             {
-                client.Connect(settings.Value.Host, settings.Value.Port, settings.Value.UseSsl);
+                _client.Connect(_settings.Value.Host, _settings.Value.Port, _settings.Value.UseSsl);
                 // Note: only needed if the SMTP server requires authentication
-                client.Authenticate(settings.Value.Login, settings.Value.Password);
+                _client.Authenticate(_settings.Value.Login, _settings.Value.Password);
 
                 return Task.FromResult(true);
             }
@@ -64,7 +64,7 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
         {
             try
             {
-                await client.DisconnectAsync(true);
+                await _client.DisconnectAsync(true);
 
                 return true;
             }
@@ -78,7 +78,7 @@ namespace BriskChat.BusinessLogic.Helpers.Implementations
         {
             try
             {
-                await client.SendAsync(emailMessage);
+                await _client.SendAsync(emailMessage);
 
                 return true;
             }

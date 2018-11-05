@@ -7,14 +7,14 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class SetDomainOwner : ISetDomainOwner
     {
-        private readonly IDomainRepository domainRepository;
-        private readonly IUserRepository userRepository;
+        private readonly IDomainRepository _domainRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public SetDomainOwner(IDomainRepository domainRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
-            this.domainRepository = domainRepository;
-            this.userRepository = userRepository;
+            _domainRepository = domainRepository;
+            _userRepository = userRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -25,14 +25,14 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
                 return false;
             }
 
-            var user = userRepository.GetById(userId);
+            var user = _userRepository.GetById(userId);
 
             if (user == null)
             {
                 return false;
             }
 
-            var domain = domainRepository.GetById(domainId);
+            var domain = _domainRepository.GetById(domainId);
 
             if (domain == null)
             {
@@ -41,7 +41,7 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 
             domain.Owner = user;
 
-            domainRepository.Edit(domain);
+            _domainRepository.Edit(domain);
             _unitOfWork.Save();
 
             return true;

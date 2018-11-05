@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class DeleteMessageById : IDeleteMessageById
     {
-        private readonly IMessageRepository messageRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteMessageById(IMessageRepository messageRepository, IUnitOfWork unitOfWork)
         {
-            this.messageRepository = messageRepository;
+            _messageRepository = messageRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,15 +23,15 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return false;
             }
 
-            var messageToDelete = messageRepository.GetById(messageId);
+            var messageToDelete = _messageRepository.GetById(messageId);
 
             if (messageToDelete == null)
             {
                 return false;
             }
-            messageRepository.Delete(messageToDelete);
+            _messageRepository.Delete(messageToDelete);
             _unitOfWork.Save();
-            
+
             return true;
         }
     }

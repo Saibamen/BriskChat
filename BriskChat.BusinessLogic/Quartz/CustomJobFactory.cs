@@ -6,16 +6,16 @@ namespace BriskChat.BusinessLogic.Quartz
 {
     public class CustomJobFactory : IJobFactory
     {
-        private readonly IServiceProvider container;
+        private readonly IServiceProvider _container;
 
         public CustomJobFactory(IServiceProvider container)
         {
-            this.container = container;
+            _container = container;
         }
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            var item = container.GetService(bundle.JobDetail.JobType) as IJob;
+            var item = _container.GetService(bundle.JobDetail.JobType) as IJob;
 
             return item;
         }

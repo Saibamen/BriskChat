@@ -9,11 +9,11 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class GetMessagesOffsetByRoomId : IGetMessagesOffsetByRoomId
     {
-        private readonly IMessageRepository messageRepository;
+        private readonly IMessageRepository _messageRepository;
 
         public GetMessagesOffsetByRoomId(IMessageRepository messageRepository)
         {
-            this.messageRepository = messageRepository;
+            _messageRepository = messageRepository;
         }
 
         public List<MessageModel> Invoke(Guid roomId, Guid lastMessageId, int limit)
@@ -23,14 +23,14 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return null;
             }
 
-            var lastMessage = messageRepository.GetById(lastMessageId);
+            var lastMessage = _messageRepository.GetById(lastMessageId);
 
             if (lastMessage == null)
             {
                 return null;
             }
 
-            var dbMessages = messageRepository.GetRoomMessagesOffset(roomId, lastMessage.CreatedOn, limit);
+            var dbMessages = _messageRepository.GetRoomMessagesOffset(roomId, lastMessage.CreatedOn, limit);
 
             if (dbMessages.Count() <= 0)
             {

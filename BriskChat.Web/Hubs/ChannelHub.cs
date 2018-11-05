@@ -21,29 +21,29 @@ namespace BriskChat.Web.Hubs
     [Authorize(Roles = "User")]
     public class ChannelHub : Hub
     {
-        private readonly IAddNewRoom addNewRoom;
-        private readonly IAddNewMessage addNewMessage;
-        private readonly IGetUserRooms getUserRooms;
-        private readonly IGetUserRoomByIds getUserRoomByIds;
-        private readonly IAddNewPrivateConversation addNewPrivateConversation;
-        private readonly IGetUsersByDomainId getUsersByDomainId;
-        private readonly IGetUserPrivateConversations getUserPrivateConversations;
-        private readonly IDeleteMessageById deleteMessageById;
-        private readonly IGetMessageById getMessageById;
-        private readonly IEditMessageById editMessageById;
-        private readonly IGetRoomUsers getRoomUsers;
-        private readonly IGetDomainPublicAndUserRooms getDomainPublicAndUserRooms;
-        private readonly IGetRoomInformation getRoomInformation;
-        private readonly IAddNewUserRoom addNewUserRoom;
-        private readonly IGetLastMessagesByRoomId getLastMessagesByRoomId;
-        private readonly IEditRoomCustomization editRoomCustomization;
-        private readonly IEditRoomName editRoomName;
-        private readonly IEditRoomDescription editRoomDescription;
-        private readonly IEditRoomTopic editRoomTopic;
-        private readonly IGetMessagesOffsetByRoomId getMessagesOffsetByRoomId;
-        private readonly IGetRoomUsersCount getRoomUsersCount;
-        private readonly IGetRoomByName getRoomByName;
-        private readonly IGetNotInvitedUsers getNotInvitedUsers;
+        private readonly IAddNewRoom _addNewRoom;
+        private readonly IAddNewMessage _addNewMessage;
+        private readonly IGetUserRooms _getUserRooms;
+        private readonly IGetUserRoomByIds _getUserRoomByIds;
+        private readonly IAddNewPrivateConversation _addNewPrivateConversation;
+        private readonly IGetUsersByDomainId _getUsersByDomainId;
+        private readonly IGetUserPrivateConversations _getUserPrivateConversations;
+        private readonly IDeleteMessageById _deleteMessageById;
+        private readonly IGetMessageById _getMessageById;
+        private readonly IEditMessageById _editMessageById;
+        private readonly IGetRoomUsers _getRoomUsers;
+        private readonly IGetDomainPublicAndUserRooms _getDomainPublicAndUserRooms;
+        private readonly IGetRoomInformation _getRoomInformation;
+        private readonly IAddNewUserRoom _addNewUserRoom;
+        private readonly IGetLastMessagesByRoomId _getLastMessagesByRoomId;
+        private readonly IEditRoomCustomization _editRoomCustomization;
+        private readonly IEditRoomName _editRoomName;
+        private readonly IEditRoomDescription _editRoomDescription;
+        private readonly IEditRoomTopic _editRoomTopic;
+        private readonly IGetMessagesOffsetByRoomId _getMessagesOffsetByRoomId;
+        private readonly IGetRoomUsersCount _getRoomUsersCount;
+        private readonly IGetRoomByName _getRoomByName;
+        private readonly IGetNotInvitedUsers _getNotInvitedUsers;
 
         private const string TimeStampRepresentation = "HH:mm";
         private const string TimeStampRepresentationCreatedOn = "MMMM d, yyyy";
@@ -74,29 +74,29 @@ namespace BriskChat.Web.Hubs
             IGetRoomByName getRoomByName,
             IGetNotInvitedUsers getNotInvitedUsers)
         {
-            this.addNewRoom = addNewRoom;
-            this.addNewMessage = addNewMessage;
-            this.getUserRooms = getUserRooms;
-            this.getUserRoomByIds = getUserRoomByIds;
-            this.addNewPrivateConversation = addNewPrivateConversation;
-            this.getUsersByDomainId = getUsersByDomainId;
-            this.getUserPrivateConversations = getUserPrivateConversations;
-            this.deleteMessageById = deleteMessageById;
-            this.getMessageById = getMessageById;
-            this.editMessageById = editMessageById;
-            this.getRoomUsers = getRoomUsers;
-            this.getDomainPublicAndUserRooms = getDomainPublicAndUserRooms;
-            this.getRoomInformation = getRoomInformation;
-            this.addNewUserRoom = addNewUserRoom;
-            this.getLastMessagesByRoomId = getLastMessagesByRoomId;
-            this.editRoomCustomization = editRoomCustomization;
-            this.editRoomName = editRoomName;
-            this.editRoomDescription = editRoomDescription;
-            this.editRoomTopic = editRoomTopic;
-            this.getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
-            this.getRoomUsersCount = getRoomUsersCount;
-            this.getRoomByName = getRoomByName;
-            this.getNotInvitedUsers = getNotInvitedUsers;
+            _addNewRoom = addNewRoom;
+            _addNewMessage = addNewMessage;
+            _getUserRooms = getUserRooms;
+            _getUserRoomByIds = getUserRoomByIds;
+            _addNewPrivateConversation = addNewPrivateConversation;
+            _getUsersByDomainId = getUsersByDomainId;
+            _getUserPrivateConversations = getUserPrivateConversations;
+            _deleteMessageById = deleteMessageById;
+            _getMessageById = getMessageById;
+            _editMessageById = editMessageById;
+            _getRoomUsers = getRoomUsers;
+            _getDomainPublicAndUserRooms = getDomainPublicAndUserRooms;
+            _getRoomInformation = getRoomInformation;
+            _addNewUserRoom = addNewUserRoom;
+            _getLastMessagesByRoomId = getLastMessagesByRoomId;
+            _editRoomCustomization = editRoomCustomization;
+            _editRoomName = editRoomName;
+            _editRoomDescription = editRoomDescription;
+            _editRoomTopic = editRoomTopic;
+            _getMessagesOffsetByRoomId = getMessagesOffsetByRoomId;
+            _getRoomUsersCount = getRoomUsersCount;
+            _getRoomByName = getRoomByName;
+            _getNotInvitedUsers = getNotInvitedUsers;
         }
 
         public override Task OnConnected()
@@ -127,7 +127,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("GetPreviousMessages");
 
-            var messagesFromDb = getMessagesOffsetByRoomId.Invoke(new Guid(roomId), new Guid(lastMessageId), MessagesToLoad);
+            var messagesFromDb = _getMessagesOffsetByRoomId.Invoke(new Guid(roomId), new Guid(lastMessageId), MessagesToLoad);
 
             if (messagesFromDb == null || messagesFromDb.Count <= 0)
             {
@@ -152,30 +152,30 @@ namespace BriskChat.Web.Hubs
         public void GetRooms()
         {
             MiniProfiler.Current.Step("GetRooms");
-            var roomList = getUserRooms.Invoke(Context.UserId(), false);
+            var roomList = _getUserRooms.Invoke(Context.UserId(), false);
 
             if (roomList.Count <= 0)
             {
                 // TODO: Revisit here after domain refactoring
-                var generalRoom = getRoomByName.Invoke("general", Context.DomainId());
+                var generalRoom = _getRoomByName.Invoke("general", Context.DomainId());
 
                 if (generalRoom == null)
                 {
-                    RoomModel generalRoomModel = new RoomModel
+                    var generalRoomModel = new RoomModel
                     {
                         Name = "general",
                         IsPublic = true,
                         IsPrivateConversation = false
                     };
 
-                    var newGeneralRoomId = addNewRoom.Invoke(generalRoomModel, Context.UserId(), Context.DomainId());
+                    var newGeneralRoomId = _addNewRoom.Invoke(generalRoomModel, Context.UserId(), Context.DomainId());
                     generalRoomModel.Id = newGeneralRoomId;
 
                     roomList.Add(generalRoomModel);
                 }
                 else
                 {
-                    var newUserRoom = addNewUserRoom.Invoke(generalRoom.Id, new List<Guid> { Context.UserId() });
+                    var newUserRoom = _addNewUserRoom.Invoke(generalRoom.Id, new List<Guid> { Context.UserId() });
 
                     if (!newUserRoom)
                     {
@@ -195,7 +195,7 @@ namespace BriskChat.Web.Hubs
         public void GetDomainPublicAndUserRooms()
         {
             MiniProfiler.Current.Step("GetDomainPublicAndUserRooms");
-            var roomList = getDomainPublicAndUserRooms.Invoke(Context.DomainId(), Context.UserId());
+            var roomList = _getDomainPublicAndUserRooms.Invoke(Context.DomainId(), Context.UserId());
 
             if (roomList.Count > 0)
             {
@@ -218,7 +218,7 @@ namespace BriskChat.Web.Hubs
         public void GetPrivateConversations()
         {
             MiniProfiler.Current.Step("GetPrivateConversations");
-            var roomList = getUserPrivateConversations.Invoke(Context.UserId());
+            var roomList = _getUserPrivateConversations.Invoke(Context.UserId());
 
             if (roomList != null)
             {
@@ -244,11 +244,11 @@ namespace BriskChat.Web.Hubs
             MiniProfiler.Current.Step("JoinRoom");
 
             // Check if user has access to room (have userRoom in DB) and add if not (only on public rooms)
-            var userRoom = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+            var userRoom = _getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
 
             if (userRoom == null)
             {
-                var newUserRoom = addNewUserRoom.Invoke(new Guid(roomId), new List<Guid> { Context.UserId() });
+                var newUserRoom = _addNewUserRoom.Invoke(new Guid(roomId), new List<Guid> { Context.UserId() });
 
                 if (!newUserRoom)
                 {
@@ -259,10 +259,10 @@ namespace BriskChat.Web.Hubs
 
             await Groups.Add(Context.ConnectionId, roomId);
 
-            var roomUsersCount = getRoomUsersCount.Invoke(new Guid(roomId));
+            var roomUsersCount = _getRoomUsersCount.Invoke(new Guid(roomId));
             Clients.Caller.updateRoomUsersCount(roomUsersCount);
 
-            var messagesFromDb = getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
+            var messagesFromDb = _getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
 
             if (messagesFromDb != null && messagesFromDb.Count > 0)
             {
@@ -326,7 +326,7 @@ namespace BriskChat.Web.Hubs
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // Add to database
-            var userRoomModel = getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
+            var userRoomModel = _getUserRoomByIds.Invoke(new Guid(roomId), Context.UserId());
 
             if (userRoomModel == null)
             {
@@ -341,7 +341,7 @@ namespace BriskChat.Web.Hubs
                 UserRoom = userRoomModel
             };
 
-            var dbMessageId = addNewMessage.Invoke(messageModel);
+            var dbMessageId = _addNewMessage.Invoke(messageModel);
 
             if (dbMessageId != Guid.Empty)
             {
@@ -361,7 +361,7 @@ namespace BriskChat.Web.Hubs
             MiniProfiler.Current.Step("CreateNewChannel");
 
             var roomModel = AutoMapper.Mapper.Map<RoomModel>(model);
-            var room = addNewRoom.Invoke(roomModel, Context.UserId(), Context.DomainId());
+            var room = _addNewRoom.Invoke(roomModel, Context.UserId(), Context.DomainId());
 
             if (room != Guid.Empty)
             {
@@ -371,7 +371,7 @@ namespace BriskChat.Web.Hubs
             MiniProfiler.Current.Stop();
         }
 
-        public static bool IsConnected(string connectionid, Guid userid)
+        public static bool IsConnected(string connectionId, Guid userid)
         {
             return ConnectedClients.Any(x => x.UserId == userid);
         }
@@ -400,7 +400,7 @@ namespace BriskChat.Web.Hubs
         public void GetUsersFromDomain()
         {
             MiniProfiler.Current.Step("GetUsersFromDomain");
-            var userList = getUsersByDomainId.Invoke(Context.DomainId());
+            var userList = _getUsersByDomainId.Invoke(Context.DomainId());
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
             if (userList.Count > 0)
@@ -422,7 +422,7 @@ namespace BriskChat.Web.Hubs
         public void GetNotInvitedUsers(string roomId)
         {
             MiniProfiler.Current.Step("GetNotInvitedUsers");
-            var userList = getNotInvitedUsers.Invoke(Context.DomainId(), new Guid(roomId));
+            var userList = _getNotInvitedUsers.Invoke(Context.DomainId(), new Guid(roomId));
             userList.Remove(userList.FirstOrDefault(x => x.Id == Context.UserId()));
 
             if (userList.Count > 0)
@@ -450,7 +450,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("GetRoomInformation");
 
-            var roomInformation = getRoomInformation.Invoke(new Guid(roomId));
+            var roomInformation = _getRoomInformation.Invoke(new Guid(roomId));
             var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roomInformation);
             var createdOn = informationR.CreatedOn.ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture);
 
@@ -467,7 +467,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("GetRoomUsers");
 
-            var roomUserList = getRoomUsers.Invoke(new Guid(roomId));
+            var roomUserList = _getRoomUsers.Invoke(new Guid(roomId));
 
             var userList = roomUserList.Select(item => new UserViewModel
             {
@@ -491,7 +491,7 @@ namespace BriskChat.Web.Hubs
                 return;
             }
 
-            var room = addNewPrivateConversation.Invoke(Context.UserId(), users);
+            var room = _addNewPrivateConversation.Invoke(Context.UserId(), users);
 
             if (room == null)
             {
@@ -514,7 +514,7 @@ namespace BriskChat.Web.Hubs
                 return;
             }
 
-            var added = addNewUserRoom.Invoke(new Guid(roomId), users, true);
+            var added = _addNewUserRoom.Invoke(new Guid(roomId), users, true);
 
             if (!added)
             {
@@ -542,7 +542,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("EditMessage");
 
-            var messageFromDb = getMessageById.Invoke(new Guid(messageId));
+            var messageFromDb = _getMessageById.Invoke(new Guid(messageId));
 
             if (messageFromDb == null || messageFromDb.UserRoom.User.Id != Context.UserId())
             {
@@ -550,7 +550,7 @@ namespace BriskChat.Web.Hubs
                 return;
             }
 
-            var edited = editMessageById.Invoke(new Guid(messageId), messageText);
+            var edited = _editMessageById.Invoke(new Guid(messageId), messageText);
 
             if (edited)
             {
@@ -569,7 +569,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("EditRoomCustomization");
 
-            var edited = editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
+            var edited = _editRoomCustomization.Invoke(new Guid(roomId), roomCustomization);
 
             if (edited)
             {
@@ -588,7 +588,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("EditRoomName");
 
-            var edited = editRoomName.Invoke(new Guid(roomId), roomName);
+            var edited = _editRoomName.Invoke(new Guid(roomId), roomName);
 
             if (edited)
             {
@@ -608,7 +608,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("EditRoomDescription");
 
-            var edited = editRoomDescription.Invoke(new Guid(roomId), roomDescription);
+            var edited = _editRoomDescription.Invoke(new Guid(roomId), roomDescription);
 
             if (edited)
             {
@@ -627,7 +627,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("EditRoomTopic");
 
-            var edited = editRoomTopic.Invoke(new Guid(roomId), roomTopic);
+            var edited = _editRoomTopic.Invoke(new Guid(roomId), roomTopic);
 
             if (edited)
             {
@@ -646,7 +646,7 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("DeleteMessage");
 
-            var message = getMessageById.Invoke(new Guid(messageId));
+            var message = _getMessageById.Invoke(new Guid(messageId));
 
             if (message == null || message.UserRoom.User.Id != Context.UserId())
             {
@@ -654,7 +654,7 @@ namespace BriskChat.Web.Hubs
                 return;
             }
 
-            var deleted = deleteMessageById.Invoke(new Guid(messageId));
+            var deleted = _deleteMessageById.Invoke(new Guid(messageId));
 
             if (deleted)
             {

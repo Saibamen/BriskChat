@@ -7,11 +7,11 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class GetDomainByName : IGetDomainByName
     {
-        private readonly IDomainRepository domainRepository;
+        private readonly IDomainRepository _domainRepository;
 
         public GetDomainByName(IDomainRepository domainRepository)
         {
-            this.domainRepository = domainRepository;
+            _domainRepository = domainRepository;
         }
 
         public DomainModel Invoke(string name)
@@ -21,7 +21,7 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
                 return null;
             }
 
-            var result = domainRepository.FindBy(x => x.Name == name).FirstOrDefault();
+            var result = _domainRepository.FindBy(x => x.Name == name).FirstOrDefault();
 
             if (result == null)
             {

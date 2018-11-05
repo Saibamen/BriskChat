@@ -8,11 +8,11 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class GetDomainByUserId : IGetDomainByUserId
     {
-        private readonly IDomainRepository domainRepository;
+        private readonly IDomainRepository _domainRepository;
 
         public GetDomainByUserId(IDomainRepository domainRepository)
         {
-            this.domainRepository = domainRepository;
+            _domainRepository = domainRepository;
         }
 
         public DomainModel Invoke(Guid userGuid)
@@ -22,7 +22,9 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
                 return null;
             }
 
-            var result = domainRepository.FindBy(x => x.Users.Any(y => y.Id == userGuid)).FirstOrDefault();
+            var result = _domainRepository
+                .FindBy(x => x.Users.Any(y => y.Id == userGuid))
+                .FirstOrDefault();
 
             if (result == null)
             {

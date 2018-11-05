@@ -456,12 +456,12 @@ myHub.client.broadcastMessage = function (userName, userId, messageId, messageTe
         messageHtml += "</span></div></div>";
     }
 
-    var chat_messages = $("#chat_messages");
-    chat_messages.append(messageHtml);
+    var chatMessages = $("#chat_messages");
+    chatMessages.append(messageHtml);
 
     // Scroll #chat_messages
-    chat_messages.clearQueue();
-    chat_messages.animate({ scrollTop: chat_messages[0].scrollHeight }, "slow");
+    chatMessages.clearQueue();
+    chatMessages.animate({ scrollTop: chatMessages[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
 };
@@ -567,10 +567,10 @@ myHub.client.parseLastMessages = function (result) {
     });
 
     // Scroll #chat_messages
-    var chat_messages = $("#chat_messages");
+    var chatMessages = $("#chat_messages");
     $(".ui.main.container").css("display", "block");
-    chat_messages.clearQueue();
-    chat_messages.animate({ scrollTop: chat_messages[0].scrollHeight }, "slow");
+    chatMessages.clearQueue();
+    chatMessages.animate({ scrollTop: chatMessages[0].scrollHeight }, "slow");
     addActionsToMessages();
     $(document).trigger("reloadPopups");
 };
@@ -863,7 +863,7 @@ $("#private_inputtext").keyup(function() {
 
 function searchPrivateModal(value) {
     var items = $(".private-conversation-row[data-is-selected='false']");
-    
+
     modalListSearch(value, items);
 }
 
@@ -873,14 +873,14 @@ $("#invite_inputtext").keyup(function() {
 
 function searchInviteModal(value) {
     var items = $(".invite-users-row[data-is-selected='false']");
-    
+
     modalListSearch(value, items);
 }
 
 $("#findChannelName").keyup(function() {
     var value = $(this).val();
     var items = $(".browse-room-row");
-    
+
     modalListSearch(value, items);
 });
 
@@ -889,7 +889,7 @@ function modalListSearch(value, items) {
         items.show();
         return;
     }
-    
+
     var exp = new RegExp(value, "i");
 
     items.each(function() {
@@ -1255,14 +1255,14 @@ function selectTheme(sel) {
 }
 
 function changeChannelSettingsPopup(tip) {
-    $("#channel_settings_toggle").attr({ 
+    $("#channel_settings_toggle").attr({
         "data-content": tip + " Channel Settings",
         "aria-label": tip + " Channel Settings"
     });
 }
 
 function changeChannelDetailsPopup(tip) {
-    $("#channel_details_toggle").attr({ 
+    $("#channel_details_toggle").attr({
         "data-content": tip + " Channel Details",
         "aria-label": tip + " Channel Details"
     });
@@ -1421,7 +1421,7 @@ myHub.client.roomInfo = function (result, createdOn) {
                 var inviteButton = '<div class="ui two column centered grid" id="inviteButtonContainer">\
                     <button class="primary ui button" id="inviteButton" onclick="inviteUsers();">Invite users</button>\
                     </div>';
-                
+
                 $(".ui.styled.accordion").append(inviteButton);
             } else {
                 $("#inviteButtonContainer").remove();

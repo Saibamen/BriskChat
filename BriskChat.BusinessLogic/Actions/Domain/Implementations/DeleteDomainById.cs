@@ -7,12 +7,12 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
 {
     public class DeleteDomainById : IDeleteDomainById
     {
-        private readonly IDomainRepository domainRepository;
+        private readonly IDomainRepository _domainRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public DeleteDomainById(IDomainRepository domainRepository, IUnitOfWork unitOfWork)
         {
-            this.domainRepository = domainRepository;
+            _domainRepository = domainRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -23,14 +23,14 @@ namespace BriskChat.BusinessLogic.Actions.Domain.Implementations
                 return false;
             }
 
-            var domainToDelete = domainRepository.GetById(domainId);
+            var domainToDelete = _domainRepository.GetById(domainId);
 
             if (domainToDelete == null)
             {
                 return false;
             }
 
-            domainRepository.Delete(domainToDelete);
+            _domainRepository.Delete(domainToDelete);
             _unitOfWork.Save();
 
             return true;

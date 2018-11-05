@@ -103,7 +103,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.User
         public void Verify_EmailAlreadyConfirmed_SaveNorEditCalled()
         {
             // prepare
-            DateTime dateNow = DateTime.UtcNow;
+            var dateNow = DateTime.UtcNow;
             var guid = new Guid();
             var userFromDb = new DataAccess.Models.User
             {

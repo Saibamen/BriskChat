@@ -8,16 +8,16 @@ namespace BriskChat.BusinessLogic.Actions.Email.Implementations
 {
     public class GetEmailMessages : IGetEmailMessages
     {
-        private readonly IEmailRepository emailRepository;
+        private readonly IEmailRepository _emailRepository;
 
         public GetEmailMessages(IEmailRepository emailRepository)
         {
-            this.emailRepository = emailRepository;
+            _emailRepository = emailRepository;
         }
 
         public List<EmailMessage> Invoke(int count)
         {
-            return emailRepository.FindBy(x => x.Message != null).Take(count).ToList();
+            return _emailRepository.FindBy(x => x.Message != null).Take(count).ToList();
         }
     }
 }

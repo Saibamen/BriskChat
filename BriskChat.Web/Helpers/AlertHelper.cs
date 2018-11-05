@@ -5,16 +5,16 @@ namespace BriskChat.Web.Helpers
 {
     public class AlertHelper
     {
-        private readonly List<AlertModel> alerts = new List<AlertModel>();
+        private readonly List<AlertModel> _alerts = new List<AlertModel>();
 
         public List<AlertModel> GetAlerts()
         {
-            return alerts;
+            return _alerts;
         }
 
         public void Success(string message = "Action completed", string moreInfo = null)
         {
-            alerts.Add(new AlertModel
+            _alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -24,7 +24,7 @@ namespace BriskChat.Web.Helpers
 
         public void Info(string message, string moreInfo = null)
         {
-            alerts.Add(new AlertModel
+            _alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -34,7 +34,7 @@ namespace BriskChat.Web.Helpers
 
         public void Warning(string message = "Your data is invalid", string moreInfo = null)
         {
-            alerts.Add(new AlertModel
+            _alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,
@@ -44,7 +44,7 @@ namespace BriskChat.Web.Helpers
 
         public void Danger(string message, string moreInfo = null)
         {
-            alerts.Add(new AlertModel
+            _alerts.Add(new AlertModel
             {
                 Message = message,
                 MoreInfo = moreInfo,

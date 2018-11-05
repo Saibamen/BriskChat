@@ -10,22 +10,22 @@ namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
     [DisallowConcurrentExecution]
     public class EmailUsersJob : IJob
     {
-        private readonly IEmailService emailService;
-        private readonly IGetEmailMessages getEmailMessages;
-        private readonly IDeleteEmailMessageById deleteEmailMessageById;
+        private readonly IEmailService _emailService;
+        private readonly IGetEmailMessages _getEmailMessages;
+        private readonly IDeleteEmailMessageById _deleteEmailMessageById;
 
         public EmailUsersJob(IGetEmailMessages getEmailMessages,
             IEmailService emailService,
             IDeleteEmailMessageById deleteEmailMessageById)
         {
-            this.emailService = emailService;
-            this.getEmailMessages = getEmailMessages;
-            this.deleteEmailMessageById = deleteEmailMessageById;
+            _emailService = emailService;
+            _getEmailMessages = getEmailMessages;
+            _deleteEmailMessageById = deleteEmailMessageById;
         }
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var emailList = getEmailMessages.Invoke(10);
+            var emailList = _getEmailMessages.Invoke(10);
 
             if (!(emailList.Count > 0))
             {
@@ -33,7 +33,7 @@ namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
                 return;
             }
 
-            var connectionResult = await emailService.ConnectClient();
+            var connectionResult = await _emailService.ConnectClient();
 
             if (!connectionResult)
             {
@@ -43,12 +43,12 @@ namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
 
             await emailList.ForEachAsync(async email =>
             {
-                var messageToSend = emailService.CreateMessage(email.Recipient, email.Subject, email.Message);
-                var sendResult = await emailService.SendEmailAsync(messageToSend);
+                var messageToSend = _emailService.CreateMessage(email.Recipient, email.Subject, email.Message);
+                var sendResult = await _emailService.SendEmailAsync(messageToSend);
 
                 if (sendResult)
                 {
-                    deleteEmailMessageById.Invoke(email.Id);
+                    _deleteEmailMessageById.Invoke(email.Id);
                 }
                 else
                 {
@@ -56,7 +56,7 @@ namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
                 }
             });
 
-            await emailService.DisconnectClient();
+            await _emailService.DisconnectClient();
         }
     }
 }

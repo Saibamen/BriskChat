@@ -7,11 +7,11 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
     public class GetMessageById : IGetMessageById
     {
-        private readonly IMessageRepository messageRepository;
+        private readonly IMessageRepository _messageRepository;
 
         public GetMessageById(IMessageRepository messageRepository)
         {
-            this.messageRepository = messageRepository;
+            _messageRepository = messageRepository;
         }
 
         public MessageModel Invoke(Guid id)
@@ -21,7 +21,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return null;
             }
 
-            var dbMessage = messageRepository.GetById(id);
+            var dbMessage = _messageRepository.GetById(id);
 
             if (dbMessage == null)
             {
