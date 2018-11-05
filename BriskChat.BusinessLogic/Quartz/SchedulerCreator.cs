@@ -6,7 +6,7 @@ using Quartz.Spi;
 
 namespace BriskChat.BusinessLogic.Quartz
 {
-    public static class ShedulerCreator
+    public static class SchedulerCreator
     {
         public static IScheduler CreateScheduler(IApplicationBuilder app)
         {
