@@ -13,14 +13,14 @@ using BriskChat.BusinessLogic.Models;
 using BriskChat.Web.Helpers;
 using BriskChat.Web.Models.Message;
 using BriskChat.Web.Models.Room;
-using Microsoft.AspNetCore.SignalR;
+//using Microsoft.AspNetCore.SignalR;
 using StackExchange.Profiling;
 
 namespace BriskChat.Web.Hubs
 {
-    [Authorize(Roles = "User")]
-    public class ChannelHub : Hub
-    {
+    //[Authorize(Roles = "User")]
+    public class ChannelHub //: Hub
+    {/*
         private readonly IAddNewRoom _addNewRoom;
         private readonly IAddNewMessage _addNewMessage;
         private readonly IGetUserRooms _getUserRooms;
@@ -663,5 +663,5 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Stop();
         }
-    }
+    */}
 }

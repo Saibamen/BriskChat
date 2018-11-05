@@ -19,17 +19,12 @@ namespace BriskChat.Web
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,7 +32,8 @@ namespace BriskChat.Web
             // Add framework services.
             services.AddMvc();
 
-            services.AddEntityFramework().AddDbContext<TrollChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<TrollChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
 
             services.AddSession();
 
@@ -49,11 +45,22 @@ namespace BriskChat.Web
 
             services.Configure<EmailServiceCredentials>(Configuration.GetSection(nameof(EmailServiceCredentials)));
 
-            services.AddSignalR(options =>
+            // TODO: core 2.1
+            /*services.AddSignalR(options =>
             {
                 options.Hubs.EnableDetailedErrors = true;
                 options.Hubs.EnableJavaScriptProxies = true;
-            });
+            });*/
+
+            // If you don't want the cookie to be automatically authenticated and assigned to HttpContext.User,
+            // remove the CookieAuthenticationDefaults.AuthenticationScheme parameter passed to AddAuthentication.
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Auth/SignIn";
+                    options.LogoutPath = "/Account/LogOff";
+                    options.AccessDeniedPath = new PathString("/Home/AccessDenied");
+                });
 
             services.AddAuthorization(options =>
             {
@@ -109,17 +116,10 @@ namespace BriskChat.Web
 
             app.UseWebSockets();
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                CookieName = CookieAuthenticationDefaults.AuthenticationScheme,
-                AuthenticationScheme = CookieAuthenticationDefaults.AuthenticationScheme,
-                LoginPath = new PathString("/Auth/SignIn"),
-                AccessDeniedPath = new PathString("/Home/AccessDenied"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });
+            app.UseAuthentication();
 
-            app.UseSignalR();
+            // TODO: core 2.1
+            //app.UseSignalR();
 
             app.UseMvc(routes =>
             {

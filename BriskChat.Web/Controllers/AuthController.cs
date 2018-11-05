@@ -15,6 +15,7 @@ using BriskChat.Web.Authorization;
 using BriskChat.Web.Constants;
 using BriskChat.Web.Helpers;
 using BriskChat.Web.Models.Auth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -197,7 +198,7 @@ namespace BriskChat.Web.Controllers
             var claimsIdentity = new ClaimsIdentity(claims, "Claims");
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
-            await HttpContext.Authentication.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrinciple);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrinciple);
 
             if (string.IsNullOrWhiteSpace(returnUrl))
             {
@@ -211,7 +212,7 @@ namespace BriskChat.Web.Controllers
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             Alert.Success("Logged out");
 
