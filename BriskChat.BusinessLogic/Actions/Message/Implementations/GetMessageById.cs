@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using BriskChat.BusinessLogic.Actions.Message.Interfaces;
 using BriskChat.BusinessLogic.Models;
 using BriskChat.DataAccess.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BriskChat.BusinessLogic.Actions.Message.Implementations
 {
@@ -21,8 +23,10 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return null;
             }
 
-            // TODO: Join UserRoom
-            var dbMessage = _messageRepository.GetById(id);
+            var dbMessage = _messageRepository
+                .FindBy(x => x.Id == id)
+                .Include(x => x.UserRoom.User)
+                .FirstOrDefault();
 
             if (dbMessage == null)
             {

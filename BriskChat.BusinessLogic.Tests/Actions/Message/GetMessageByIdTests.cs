@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using BriskChat.BusinessLogic.Actions.Message.Implementations;
 using BriskChat.DataAccess.Repositories.Interfaces;
 using Moq;
@@ -21,9 +24,11 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
             };
 
             // prepare
+            var findByResult = new List<DataAccess.Models.Message> { messageFromDb };
+
             var mockedMessageRepository = new Mock<IMessageRepository>();
-            mockedMessageRepository.Setup(r => r.GetById(It.IsAny<Guid>()))
-                .Returns(messageFromDb);
+            mockedMessageRepository.Setup(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Message, bool>>>()))
+                .Returns(findByResult.AsQueryable());
             var action = new GetMessageById(mockedMessageRepository.Object);
 
             // action
@@ -34,7 +39,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
             Assert.Equal(guid, message.Id);
             Assert.Equal("Testowa wiadomość", message.Text);
             Assert.Null(message.DeletedOn);
-            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Message, bool>>>()), Times.Once);
         }
 
         [Fact]
@@ -49,7 +54,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
 
             // check
             Assert.Null(message);
-            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Once);
+            mockedMessageRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Message, bool>>>()), Times.Once);
         }
 
         [Fact]
@@ -64,7 +69,7 @@ namespace BriskChat.BusinessLogic.Tests.Actions.Message
 
             // check
             Assert.Null(message);
-            mockedMessageRepository.Verify(r => r.GetById(It.IsAny<Guid>()), Times.Never);
+            mockedMessageRepository.Verify(r => r.FindBy(It.IsAny<Expression<Func<DataAccess.Models.Message, bool>>>()), Times.Never);
         }
     }
 }
