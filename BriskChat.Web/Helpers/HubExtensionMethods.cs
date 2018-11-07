@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
-//using Microsoft.AspNetCore.SignalR.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BriskChat.Web.Helpers
 {
     public static class HubExtensionMethods
     {
-        /*public static Guid UserId(this HubCallerContext hubContext)
+        public static Guid UserId(this HubCallerContext hubContext)
         {
             var userIdentity = (ClaimsIdentity)hubContext.User.Identity;
 
@@ -33,6 +33,6 @@ namespace BriskChat.Web.Helpers
             var userIdentity = (ClaimsIdentity)hubContext.User.Identity;
 
             return new Guid(userIdentity.Claims.FirstOrDefault(x => x.Type == Constants.ClaimTypesConstants.DomainId).Value);
-        }*/
+        }
     }
 }

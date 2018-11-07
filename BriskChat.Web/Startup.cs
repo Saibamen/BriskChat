@@ -4,10 +4,12 @@ using BriskChat.BusinessLogic.Configuration.Implementations;
 using BriskChat.BusinessLogic.Configuration.Interfaces;
 using BriskChat.BusinessLogic.Quartz;
 using BriskChat.DataAccess.Context;
+using BriskChat.Web.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,8 +30,16 @@ namespace BriskChat.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddEntityFrameworkSqlServer()
                 .AddDbContext<TrollChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Database")));
@@ -44,12 +54,10 @@ namespace BriskChat.Web
 
             services.Configure<EmailServiceCredentials>(Configuration.GetSection(nameof(EmailServiceCredentials)));
 
-            // TODO: core 2.1
-            /*services.AddSignalR(options =>
+            services.AddSignalR(options =>
             {
-                options.Hubs.EnableDetailedErrors = true;
-                options.Hubs.EnableJavaScriptProxies = true;
-            });*/
+                options.EnableDetailedErrors = true;
+            });
 
             // If you don't want the cookie to be automatically authenticated and assigned to HttpContext.User,
             // remove the CookieAuthenticationDefaults.AuthenticationScheme parameter passed to AddAuthentication.
@@ -108,8 +116,10 @@ namespace BriskChat.Web
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
 
@@ -117,8 +127,10 @@ namespace BriskChat.Web
 
             app.UseAuthentication();
 
-            // TODO: core 2.1
-            //app.UseSignalR();
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChannelHub>("/signalr/hubs");
+            });
 
             app.UseMvc(routes =>
             {

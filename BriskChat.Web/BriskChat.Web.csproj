@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <Authors>Adam Stachowicz</Authors>
     <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
@@ -11,14 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--PackageReference Include="Gray.Microsoft.AspNetCore.SignalR.Server" Version="0.2.0-alpha1" /-->
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.WebSockets" Version="2.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="2.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="4.0.138" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="4.0.138" />
     <PackageReference Include="PreMailer.Net" Version="2.0.0" />

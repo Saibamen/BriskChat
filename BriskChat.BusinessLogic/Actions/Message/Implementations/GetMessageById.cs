@@ -21,6 +21,7 @@ namespace BriskChat.BusinessLogic.Actions.Message.Implementations
                 return null;
             }
 
+            // TODO: Join UserRoom
             var dbMessage = _messageRepository.GetById(id);
 
             if (dbMessage == null)

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Adam Stachowicz</Authors>
     <Description>ASP.NET Core web app for realtime communication with SignalR</Description>
     <Copyright>2018</Copyright>
@@ -11,8 +11,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="MailKit" Version="2.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.0.3" />
-    <PackageReference Include="Quartz" Version="3.0.0-alpha3" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
   </ItemGroup>
 
   <ItemGroup>

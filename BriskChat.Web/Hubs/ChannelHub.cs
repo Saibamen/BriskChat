@@ -13,14 +13,15 @@ using BriskChat.BusinessLogic.Models;
 using BriskChat.Web.Helpers;
 using BriskChat.Web.Models.Message;
 using BriskChat.Web.Models.Room;
-//using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using StackExchange.Profiling;
 
 namespace BriskChat.Web.Hubs
 {
-    //[Authorize(Roles = "User")]
-    public class ChannelHub //: Hub
-    {/*
+    [Authorize(Roles = "User")]
+    public class ChannelHub : Hub
+    {
         private readonly IAddNewRoom _addNewRoom;
         private readonly IAddNewMessage _addNewMessage;
         private readonly IGetUserRooms _getUserRooms;
@@ -99,23 +100,23 @@ namespace BriskChat.Web.Hubs
             _getNotInvitedUsers = getNotInvitedUsers;
         }
 
-        public override Task OnConnected()
+        public override async Task OnConnectedAsync()
         {
-            Groups.Add(Context.ConnectionId, Context.DomainId().ToString());
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.DomainId().ToString());
             ConnectedClients.Add(new UserConnection { ConnectionId = Context.ConnectionId, UserId = Context.UserId(), DomainId = Context.DomainId() });
 
-            Clients.Caller.setDomainInformation(Context.DomainName(), Context.UserName(), Context.UserId());
+            await Clients.Caller.SendAsync("setDomainInformation", Context.DomainName(), Context.UserName(), Context.UserId());
 
-            return base.OnConnected();
+            await base.OnConnectedAsync();
         }
 
-        public override Task OnDisconnected(bool stopCalled)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
-            Groups.Remove(Context.ConnectionId, Context.DomainId().ToString());
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, Context.DomainId().ToString());
             var userToDelete = ConnectedClients.FirstOrDefault(x => x.UserId == Context.UserId() && x.DomainId == Context.DomainId());
             ConnectedClients.Remove(userToDelete);
 
-            return base.OnDisconnected(stopCalled);
+            await base.OnDisconnectedAsync(exception);
         }
 
         public void GetPreviousMessages(string roomId, string lastMessageId)
@@ -145,7 +146,7 @@ namespace BriskChat.Web.Hubs
                 EmailHash = GetMd5Hash(item.UserRoom.User.Email)
             });
 
-            Clients.Caller.parseOffsetMessages(viewList);
+            Clients.Caller.SendAsync("parseOffsetMessages", viewList);
             MiniProfiler.Current.Stop();
         }
 
@@ -187,7 +188,7 @@ namespace BriskChat.Web.Hubs
                 }
             }
 
-            Clients.Caller.loadRooms(roomList);
+            Clients.Caller.SendAsync("loadRooms", roomList);
 
             MiniProfiler.Current.Stop();
         }
@@ -209,7 +210,7 @@ namespace BriskChat.Web.Hubs
                     CreatedOn = item.CreatedOn.ToLocalTime().ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture)
                 }).ToList();
 
-                Clients.Caller.loadDomainPublicAndUserRooms(viewList);
+                Clients.Caller.SendAsync("loadDomainPublicAndUserRooms", viewList);
             }
 
             MiniProfiler.Current.Stop();
@@ -228,7 +229,7 @@ namespace BriskChat.Web.Hubs
                     Name = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), item.Room.Name)
                 }).ToList();
 
-                Clients.Caller.loadPrivateConversations(viewList);
+                Clients.Caller.SendAsync("loadPrivateConversations", viewList);
             }
 
             MiniProfiler.Current.Stop();
@@ -257,10 +258,10 @@ namespace BriskChat.Web.Hubs
                 }
             }
 
-            await Groups.Add(Context.ConnectionId, roomId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
 
             var roomUsersCount = _getRoomUsersCount.Invoke(new Guid(roomId));
-            Clients.Caller.updateRoomUsersCount(roomUsersCount);
+            await Clients.Caller.SendAsync("updateRoomUsersCount", roomUsersCount);
 
             var messagesFromDb = _getLastMessagesByRoomId.Invoke(new Guid(roomId), MessagesToLoad);
 
@@ -276,14 +277,14 @@ namespace BriskChat.Web.Hubs
                     EmailHash = GetMd5Hash(item.UserRoom.User.Email)
                 });
 
-                Clients.Caller.parseLastMessages(viewList);
+                await Clients.Caller.SendAsync("parseLastMessages", viewList);
             }
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
+            await Clients.Group(roomId).SendAsync("broadcastMessage", "BriskChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
@@ -296,13 +297,13 @@ namespace BriskChat.Web.Hubs
 
             MiniProfiler.Current.Step("LeaveRoom");
 
-            await Groups.Remove(Context.ConnectionId, roomId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
 
             var timestamp = DateTime.UtcNow;
             var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
 
             // DEBUG
-            Clients.Group(roomId).broadcastMessage("BriskChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
+            await Clients.Group(roomId).SendAsync("broadcastMessage", "BriskChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
@@ -345,7 +346,7 @@ namespace BriskChat.Web.Hubs
 
             if (dbMessageId != Guid.Empty)
             {
-                Clients.Group(roomId).broadcastMessage(Context.UserName(), Context.UserId(), dbMessageId, message, chatTime, GetMd5Hash(messageModel.UserRoom.User.Email));
+                Clients.Group(roomId).SendAsync("broadcastMessage", Context.UserName(), Context.UserId(), dbMessageId, message, chatTime, GetMd5Hash(messageModel.UserRoom.User.Email));
             }
 
             MiniProfiler.Current.Stop();
@@ -365,7 +366,7 @@ namespace BriskChat.Web.Hubs
 
             if (room != Guid.Empty)
             {
-                Clients.Caller.channelAddedAction(model.Name, room, model.IsPublic);
+                Clients.Caller.SendAsync("channelAddedAction", model.Name, room, model.IsPublic);
             }
 
             MiniProfiler.Current.Stop();
@@ -413,7 +414,7 @@ namespace BriskChat.Web.Hubs
                     EmailHash = GetMd5Hash(item.Email)
                 });
 
-                Clients.Caller.privateConversationsUsersLoadedAction(viewList);
+                Clients.Caller.SendAsync("privateConversationsUsersLoadedAction", viewList);
             }
 
             MiniProfiler.Current.Stop();
@@ -435,7 +436,7 @@ namespace BriskChat.Web.Hubs
                     EmailHash = GetMd5Hash(item.Email)
                 });
 
-                Clients.Caller.notInvitedUsersLoadedAction(viewList);
+                Clients.Caller.SendAsync("notInvitedUsersLoadedAction", viewList);
             }
 
             MiniProfiler.Current.Stop();
@@ -454,7 +455,7 @@ namespace BriskChat.Web.Hubs
             var informationR = AutoMapper.Mapper.Map<GetRoomInformationViewModel>(roomInformation);
             var createdOn = informationR.CreatedOn.ToString(TimeStampRepresentationCreatedOn, CultureInfo.InvariantCulture);
 
-            Clients.Caller.RoomInfo(informationR, createdOn);
+            Clients.Caller.SendAsync("RoomInfo", informationR, createdOn);
             MiniProfiler.Current.Stop();
         }
 
@@ -477,7 +478,7 @@ namespace BriskChat.Web.Hubs
                 EmailHash = GetMd5Hash(item.Email)
             });
 
-            Clients.Caller.UsersInRoom(userList);
+            Clients.Caller.SendAsync("UsersInRoom", userList);
             MiniProfiler.Current.Stop();
         }
 
@@ -500,7 +501,7 @@ namespace BriskChat.Web.Hubs
             }
 
             var tempName = StringSeparatorHelper.RemoveUserFromString(Context.UserName(), room.Name);
-            Clients.Caller.privateConversationAddedAction(new PrivateConversationViewModel { Id = room.Id, Name = tempName });
+            Clients.Caller.SendAsync("privateConversationAddedAction", new PrivateConversationViewModel { Id = room.Id, Name = tempName });
             MiniProfiler.Current.Stop();
         }
 
@@ -522,7 +523,7 @@ namespace BriskChat.Web.Hubs
                 return;
             }
 
-            Clients.Caller.inviteUsersAddedAction();
+            Clients.Caller.SendAsync("inviteUsersAddedAction");
             MiniProfiler.Current.Stop();
         }
 
@@ -554,7 +555,7 @@ namespace BriskChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedMessage(messageId, messageText);
+                Clients.Group(roomId).SendAsync("broadcastEditedMessage", messageId, messageText);
             }
 
             MiniProfiler.Current.Stop();
@@ -573,7 +574,7 @@ namespace BriskChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomCustomization(roomCustomization);
+                Clients.Group(roomId).SendAsync("broadcastEditedRoomCustomization", roomCustomization);
             }
 
             MiniProfiler.Current.Stop();
@@ -592,8 +593,8 @@ namespace BriskChat.Web.Hubs
 
             if (edited)
             {
-                Clients.All.broadcastDomainEditedRoomName(roomId, roomName);
-                Clients.Group(roomId).broadcastEditedActiveRoomName(roomName);
+                Clients.All.SendAsync("broadcastDomainEditedRoomName", roomId, roomName);
+                Clients.Group(roomId).SendAsync("broadcastEditedActiveRoomName", roomName);
             }
 
             MiniProfiler.Current.Stop();
@@ -612,7 +613,7 @@ namespace BriskChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomDescription(roomDescription);
+                Clients.Group(roomId).SendAsync("broadcastEditedRoomDescription", roomDescription);
             }
 
             MiniProfiler.Current.Stop();
@@ -631,7 +632,7 @@ namespace BriskChat.Web.Hubs
 
             if (edited)
             {
-                Clients.Group(roomId).broadcastEditedRoomTopic(roomTopic);
+                Clients.Group(roomId).SendAsync("broadcastEditedRoomTopic", roomTopic);
             }
 
             MiniProfiler.Current.Stop();
@@ -658,10 +659,10 @@ namespace BriskChat.Web.Hubs
 
             if (deleted)
             {
-                Clients.Group(roomId).deleteMessage(messageId);
+                Clients.Group(roomId).SendAsync("deleteMessage", messageId);
             }
 
             MiniProfiler.Current.Stop();
         }
-    */}
+    }
 }
