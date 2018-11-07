@@ -23,20 +23,21 @@ namespace BriskChat.BusinessLogic.Actions.User.Implementations
                 return null;
             }
 
-            var dbUser = _userRepository.GetUserRooms(userId, isPrivateConversation);
+            var dbRooms = _userRepository.GetUserRooms(userId, isPrivateConversation);
 
-            if (dbUser == null)
+            if (dbRooms == null)
             {
                 return null;
             }
 
-            var returnList = dbUser.ToList().Select(item => new RoomModel
+            var returnList = dbRooms.ToList().Select(item => new RoomModel
             {
                 Id = item.Id,
                 Name = item.Name,
                 IsPublic = item.IsPublic,
                 IsPrivateConversation = item.IsPrivateConversation
-            }).ToList();
+            }).OrderBy(x => x.Name)
+            .ToList();
 
             return returnList;
         }
