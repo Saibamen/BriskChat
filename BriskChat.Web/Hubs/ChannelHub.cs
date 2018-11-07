@@ -280,11 +280,6 @@ namespace BriskChat.Web.Hubs
                 await Clients.Caller.SendAsync("parseLastMessages", viewList);
             }
 
-            var timestamp = DateTime.UtcNow;
-            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
-
-            // DEBUG
-            await Clients.Group(roomId).SendAsync("broadcastMessage", "BriskChat", new Guid(), new Guid(), $"{Context.UserName()} joined to this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
@@ -299,11 +294,6 @@ namespace BriskChat.Web.Hubs
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomId);
 
-            var timestamp = DateTime.UtcNow;
-            var chatTime = timestamp.ToLocalTime().ToString(TimeStampRepresentation, CultureInfo.InvariantCulture);
-
-            // DEBUG
-            await Clients.Group(roomId).SendAsync("broadcastMessage", "BriskChat", new Guid(), new Guid(), $"{Context.UserName()} left this channel ({roomId})", chatTime);
             MiniProfiler.Current.Stop();
         }
 
