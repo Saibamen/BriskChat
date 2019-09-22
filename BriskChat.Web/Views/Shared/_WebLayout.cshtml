@@ -30,7 +30,7 @@
     <div class="body-content">
         @if (TempData.ContainsKey("alertMessages"))
         {
-            @Html.Partial("_AlertsPartial")
+            @await Html.PartialAsync("_AlertsPartial")
         }
     </div>
 }

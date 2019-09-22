@@ -119,8 +119,8 @@
 @section Pre_Body
     {
     <div id="client_container">
-        @Html.Partial("_LeftSidebarPartial")
-        @Html.Partial("_RightSidebarPartial")
+        @await Html.PartialAsync("_LeftSidebarPartial")
+        @await Html.PartialAsync("_RightSidebarPartial")
 
         <div class="ui active dimmer">
             <div class="ui text loader">Loading</div>
@@ -129,7 +129,7 @@
         <div class="ui main container" style="display:none;">
             @if (TempData.ContainsKey("alertMessages"))
             {
-                @Html.Partial("_AlertsPartial")
+                @await Html.PartialAsync("_AlertsPartial")
             }
 
             <header id="chat_header">
@@ -236,6 +236,6 @@
 @await Component.InvokeAsync("CreatePrivateConversation")
 @await Component.InvokeAsync("BrowseRooms")
 @await Component.InvokeAsync("InviteUsers")
-@Html.Partial("_DeleteModalPartial")
+@await Html.PartialAsync("_DeleteModalPartial")
 
 @RenderBody()

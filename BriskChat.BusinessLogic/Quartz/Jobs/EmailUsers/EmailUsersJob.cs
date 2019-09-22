@@ -14,8 +14,8 @@ namespace BriskChat.BusinessLogic.Quartz.Jobs.EmailUsers
         private readonly IGetEmailMessages _getEmailMessages;
         private readonly IDeleteEmailMessageById _deleteEmailMessageById;
 
-        public EmailUsersJob(IGetEmailMessages getEmailMessages,
-            IEmailService emailService,
+        public EmailUsersJob(IEmailService emailService,
+            IGetEmailMessages getEmailMessages,
             IDeleteEmailMessageById deleteEmailMessageById)
         {
             _emailService = emailService;

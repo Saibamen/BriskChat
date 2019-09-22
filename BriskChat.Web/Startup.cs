@@ -101,7 +101,7 @@ namespace BriskChat.Web
             var debugValue = Configuration.GetSection("Logging:Loglevel:Default").Value;
             var logLevelParsed = (LogLevel)Enum.Parse(typeof(LogLevel), debugValue);
 
-            // I'm gonna leave it as string array becase we might want to add some log modules later
+            // I'm gonna leave it as string array because we might want to add some log modules later
             string[] logOnlyThese = { }; // or reverse string[] dontlong = {"ObjectResultExecutor", "JsonResultExecutor"};
 
             loggerFactory.AddDebug((category, logLevel) => !logOnlyThese.Any(category.Contains) && logLevel >= logLevelParsed);
